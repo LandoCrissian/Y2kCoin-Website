@@ -6,6 +6,7 @@
     <title>Y2KCoin - A digital revolution inspired by the past, built for the future</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency project that blends nostalgia with blockchain innovation, offering staking rewards, collectibles, and a future marketplace.">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --neon-pink: #ff6ec7;
@@ -27,7 +28,7 @@
             background-color: var(--background);
             color: var(--text);
             line-height: 1.6;
-            overflow: hidden;
+            overflow-x: hidden; /* Allows vertical scrolling */
             text-shadow: 0px 0px 5px var(--neon-cyan);
             position: relative;
         }
@@ -42,12 +43,12 @@
             height: 100%;
             background: repeating-linear-gradient(
                 rgba(0, 0, 0, 0) 0px, 
-                rgba(0, 0, 0, 0.1) 2px, 
+                rgba(0, 0, 0, 0.2) 2px, 
                 rgba(0, 0, 0, 0) 4px
             );
             pointer-events: none;
             z-index: 100;
-            animation: flicker 0.2s infinite;
+            animation: flicker 0.2s infinite alternate;
         }
 
         /* CRT Glitch Animation */
