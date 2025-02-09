@@ -6,145 +6,22 @@
     <title>Y2KCoin - A digital revolution inspired by the past, built for the future</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency project that blends nostalgia with blockchain innovation, offering staking rewards, collectibles, and a future marketplace.">
     <style>
-        :root {
-            --neon-pink: #ff6ec7;
-            --neon-cyan: #00ffff;
-            --neon-purple: #8a2be2;
-            --neon-orange: #ff8c00;
-            --background: #121212;
-            --text: #ffffff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* CRT Screen Effect */
-        #crt-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.1);
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: overlay;
-        }
-
-        @keyframes scanlines {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100vh; }
-        }
-
-        /* Old School Scanline Effect */
-        #crt-effect::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 0px, rgba(0, 0, 0, 0.02) 2px);
-            animation: scanlines 1.5s linear infinite;
-        }
-
-        /* Flicker Effect */
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .flicker {
-            animation: flicker 0.2s infinite alternate;
-        }
-
-        /* Styling */
-        header {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-
-        h1 {
-            font-size: 3rem;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        h2 {
-            font-size: 2rem;
-            color: var(--neon-pink);
-        }
-
-        img {
-            max-width: 180px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            border-radius: 15px;
-        }
-
-        .cta-buttons, .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .button, .social-button {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .button {
-            background-color: var(--neon-purple);
-            color: var(--text);
-        }
-
-        .button:hover {
-            background-color: var(--neon-orange);
-            box-shadow: 0 0 15px var(--neon-orange);
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
+        /* Your existing CSS styles here */
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="crt-effect"></div>
-
-    <header>
+    <header style="text-align: center;">
         <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
-             alt="Y2KCoin Logo">
+             alt="Y2KCoin Logo" 
+             style="max-width: 180px; height: auto; display: block; margin: 0 auto; border-radius: 15px;">
         <h1>Y2KCoin</h1>
         <p>A digital revolution inspired by the past, built for the future</p>
     </header>
 
     <main>
-        <section id="landing">
-            <div class="cta-buttons">
-                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="button">Buy Y2KCoin</a>
-                <a href="https://discord.gg/jpFbSapSAh" target="_blank" class="button">Join Our Discord</a>
-            </div>
-        </section>
+        <!-- Your existing main content here -->
     </main>
 
     <footer>
@@ -154,17 +31,87 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // CRT Flicker Effect
-            const elementsToFlicker = document.querySelectorAll('h1, h2, p');
+            const flickerElements = document.querySelectorAll('body, h1, h2, p');
 
             function triggerFlicker() {
-                const randomIndex = Math.floor(Math.random() * elementsToFlicker.length);
-                const element = elementsToFlicker[randomIndex];
+                const randomIndex = Math.floor(Math.random() * flickerElements.length);
+                const element = flickerElements[randomIndex];
 
                 element.classList.add('flicker');
                 setTimeout(() => element.classList.remove('flicker'), 150);
             }
 
-            setInterval(triggerFlicker, Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000);
+            setInterval(triggerFlicker, Math.floor(Math.random() * (4000 - 2000 + 1)) + 2000);
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Disable staking buttons and add "Coming Soon" tooltip
+            const stakingButtons = document.querySelectorAll('.staking-buttons button');
+            stakingButtons.forEach(button => {
+                button.disabled = true;
+                button.title = 'Coming Soon';
+            });
+
+            // Add flashing effect to "Coming Soon" text
+            const comingSoonElements = document.querySelectorAll('.coming-soon');
+            setInterval(() => {
+                comingSoonElements.forEach(el => {
+                    el.style.opacity = el.style.opacity === '1' ? '0.5' : '1';
+                });
+            }, 1000);
+
+            // Add touch event listeners for mobile devices
+            document.addEventListener('touchstart', handleTouchStart, false);
+            document.addEventListener('touchmove', handleTouchMove, false);
+
+            let xDown = null;
+            let yDown = null;
+
+            function handleTouchStart(evt) {
+                xDown = evt.touches[0].clientX;
+                yDown = evt.touches[0].clientY;
+            }
+
+            function handleTouchMove(evt) {
+                if (!xDown || !yDown) {
+                    return;
+                }
+
+                const xUp = evt.touches[0].clientX;
+                const yUp = evt.touches[0].clientY;
+
+                const xDiff = xDown - xUp;
+                const yDiff = yDown - yUp;
+
+                if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                    if (xDiff > 0) {
+                        // Left swipe
+                        console.log('Swiped left');
+                    } else {
+                        // Right swipe
+                        console.log('Swiped right');
+                    }
+                } else {
+                    if (yDiff > 0) {
+                        // Up swipe
+                        console.log('Swiped up');
+                    } else {
+                        // Down swipe
+                        console.log('Swiped down');
+                    }
+                }
+
+                xDown = null;
+                yDown = null;
+            }
         });
     </script>
 </body>
