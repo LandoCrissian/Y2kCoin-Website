@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Y2KCoin - A digital revolution inspired by the past, built for the future</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency project that blends nostalgia with blockchain innovation, offering staking rewards, collectibles, and a future marketplace.">
-    
+
     <style>
         :root {
             --neon-pink: #ff6ec7;
@@ -27,46 +27,8 @@
             background-color: var(--background);
             color: var(--text);
             line-height: 1.6;
-            position: relative;
         }
 
-        /* CRT Scanline Effect */
-        #crt-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-            z-index: 999;
-        }
-
-        @keyframes scanlines {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100vh; }
-        }
-
-        #crt-effect::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 0px, rgba(0, 0, 0, 0.02) 2px);
-            animation: scanlines 1.5s linear infinite;
-        }
-
-        /* Flicker Effect */
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .flicker {
-            animation: flicker 0.2s infinite alternate;
-        }
-
-        /* Header */
         header {
             text-align: center;
             padding: 2rem 1rem;
@@ -91,7 +53,6 @@
             border-radius: 15px;
         }
 
-        /* Buttons */
         .cta-buttons, .social-buttons {
             display: flex;
             justify-content: center;
@@ -131,19 +92,28 @@
             box-shadow: 0 0 15px var(--neon-cyan);
         }
 
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
         /* Footer */
         footer {
             text-align: center;
             padding: 1rem;
             background-color: rgba(0, 0, 0, 0.5);
         }
-
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="crt-effect"></div>
-
     <header>
         <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
              alt="Y2KCoin Logo">
@@ -158,25 +128,40 @@
                 <a href="https://discord.gg/jpFbSapSAh" target="_blank" class="button">Join Our Discord</a>
             </div>
         </section>
+
+        <section id="about">
+            <h2>What is Y2K?</h2>
+            <p>Y2KCoin is a cryptocurrency project that combines nostalgia with modern blockchain technology, offering a community-driven experience where holders can stake, earn rewards, and collect unique digital assets.</p>
+        </section>
+
+        <section id="mission">
+            <h2>Our Mission</h2>
+            <p>At Y2KCoin, our mission is to create an interactive ecosystem with staking rewards, collectible cards, an upcoming marketplace, and AR/VR integrations, fostering long-term value and engagement.</p>
+            <h3>Goals:</h3>
+            <ul>
+                <li>Staking Rewards: Earn POGs by staking Y2K.</li>
+                <li>Y2K Marketplace: A dedicated platform where users can buy, sell, and trade Y2K-related digital assets.</li>
+                <li>Digital Collectibles: Unlock and trade unique NFTs.</li>
+                <li>Future Expansion: Integrate AR/VR for immersive experiences.</li>
+                <li>Community Focus: Empower holders to shape the project's growth.</li>
+            </ul>
+        </section>
+
+        <section id="staking">
+            <h2>Staking DApp</h2>
+            <p class="coming-soon">Coming Soon</p>
+            <p>Staking Y2K allows users to earn POGs, which can be used to unlock digital card packs and participate in ecosystem activities.</p>
+            <div class="cta-buttons">
+                <a href="#" class="button">Connect Wallet</a>
+                <a href="#" class="button">Stake Y2K</a>
+                <a href="#" class="button">Unstake Y2K</a>
+                <a href="#" class="button">Claim Rewards</a>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2025 Y2KCoin. All Rights Reserved.</p>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // CRT Flicker Effect
-            const elementsToFlicker = document.querySelectorAll('h1, h2, p');
-
-            function triggerFlicker() {
-                const randomIndex = Math.floor(Math.random() * elementsToFlicker.length);
-                const element = elementsToFlicker[randomIndex];
-
-                element.classList.add('flicker');
-                setTimeout(() => element.classList.remove('flicker'), 150);
-            }
-
-            setInterval(triggerFlicker, Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000);
-        });
-    </script>
+</body>
+</html>
