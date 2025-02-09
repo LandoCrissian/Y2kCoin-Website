@@ -13,7 +13,7 @@
             --neon-cyan: #00ffff;
             --neon-purple: #8a2be2;
             --neon-orange: #ff8c00;
-            --background: #000;
+            --background: #121212;
             --text: #ffffff;
         }
 
@@ -28,7 +28,7 @@
             background-color: var(--background);
             color: var(--text);
             line-height: 1.6;
-            overflow-x: hidden; /* Allows vertical scrolling */
+            overflow-x: hidden; /* Allows scrolling */
             text-shadow: 0px 0px 5px var(--neon-cyan);
             position: relative;
         }
@@ -51,13 +51,12 @@
             animation: flicker 0.2s infinite alternate;
         }
 
-        /* CRT Glitch Animation */
         @keyframes flicker {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.9; }
         }
 
-        /* Header Styling */
+        /* Header */
         header {
             text-align: center;
             padding: 2rem 1rem;
@@ -73,7 +72,7 @@
             color: var(--neon-pink);
         }
 
-        /* Image Styling */
+        /* Logo */
         .logo {
             max-width: 180px;
             height: auto;
@@ -191,6 +190,11 @@
             </div>
         </section>
 
+        <section id="about">
+            <h2>What is Y2K?</h2>
+            <p>Y2KCoin is a cryptocurrency project that combines nostalgia with modern blockchain technology, offering a community-driven experience where holders can stake, earn rewards, and collect unique digital assets.</p>
+        </section>
+
         <section id="staking">
             <h2>Staking DApp</h2>
             <p class="coming-soon">Coming Soon</p>
@@ -207,22 +211,5 @@
     <footer>
         <p>&copy; 2025 Y2KCoin. All Rights Reserved.</p>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Disable staking buttons
-            document.querySelectorAll('.staking-buttons button').forEach(button => {
-                button.disabled = true;
-                button.title = 'Coming Soon';
-            });
-
-            // Flickering effect for "Coming Soon"
-            setInterval(() => {
-                document.querySelectorAll('.coming-soon').forEach(el => {
-                    el.style.opacity = el.style.opacity === '1' ? '0.5' : '1';
-                });
-            }, 1000);
-        });
-    </script>
 </body>
 </html>
