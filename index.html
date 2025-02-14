@@ -255,20 +255,3 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-
-    // Disable staking buttons and add "Coming Soon" tooltip
-    const stakingButtons = document.querySelectorAll('.staking-buttons button');
-    stakingButtons.forEach(button => {
-        button.disabled = true;
-        button.title = 'Coming Soon';
-    });
-
-    // Add flashing effect to "Coming Soon" text
-    const comingSoonElements = document.querySelectorAll('.coming-soon');
-    setInterval(() => {
-        comingSoonElements.forEach(el => {
-            el.style.opacity = el.style.opacity === '1' ? '0.5' : '1';
-        });
-    }, 1000);
-});
-</script>
