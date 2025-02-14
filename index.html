@@ -5,253 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Y2KCoin - A digital revolution inspired by the past, built for the future</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency project that blends nostalgia with blockchain innovation, offering staking rewards, collectibles, and a future marketplace.">
+
+    <!-- ✅ Load Ethers.js (REQUIRED for Web3 functionality) -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
     <style>
-:root {
-    --neon-pink: #ff6ec7;
-    --neon-cyan: #00ffff;
-    --neon-purple: #8a2be2;
-    --neon-orange: #ff8c00;
-    --background: #121212;
-    --text: #ffffff;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--background);
-    color: var(--text);
-    line-height: 1.6;
-}
-
-header {
-    text-align: center;
-    padding: 2rem 1rem;
-}
-
-h1, h2, h3 {
-    font-family: 'Montserrat', sans-serif;
-    margin-bottom: 1rem;
-}
-
-h1 {
-    font-size: 3rem;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 10px var(--neon-cyan);
-}
-
-h2 {
-    font-size: 2rem;
-    color: var(--neon-pink);
-}
-
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-}
-
-section {
-    margin-bottom: 3rem;
-}
-
-.cta-buttons, .social-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.button, .social-button {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.button {
-    background-color: var(--neon-purple);
-    color: var(--text);
-}
-
-.button:hover {
-    background-color: var(--neon-orange);
-    box-shadow: 0 0 15px var(--neon-orange);
-}
-
-.social-button {
-    background-color: transparent;
-    border: 2px solid var(--neon-cyan);
-    color: var(--neon-cyan);
-}
-
-.social-button:hover {
-    background-color: var(--neon-cyan);
-    color: var(--background);
-    box-shadow: 0 0 15px var(--neon-cyan);
-}
-
-ul {
-    list-style-type: none;
-    padding-left: 1rem;
-}
-
-li::before {
-    content: "•";
-    color: var(--neon-orange);
-    display: inline-block;
-    width: 1em;
-    margin-left: -1em;
-}
-
-.coming-soon {
-    font-weight: bold;
-    color: var(--neon-orange);
-    animation: flash 1s infinite;
-}
-
-.staking-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.staking-buttons button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color: var(--neon-purple);
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.staking-buttons button:hover {
-    background-color: var(--neon-pink);
-    box-shadow: 0 0 15px var(--neon-pink);
-}
-
-footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-@keyframes flash {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-@media screen and (max-width: 768px) {
-    .cta-buttons, .social-buttons {
-        flex-direction: column;
-    }
-
-    .button, .social-button {
-        width: 100%;
-        text-align: center;
-    }
-
-    .staking-buttons {
-        flex-direction: column;
-    }
-
-    .staking-buttons button {
-        width: 100%;
-    }
-}
-
-</style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+        :root {
+            --neon-pink: #ff6ec7;
+            --neon-cyan: #00ffff;
+            --neon-purple: #8a2be2;
+            --neon-orange: #ff8c00;
+            --background: #121212;
+            --text: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        header {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 3rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        h2 {
+            font-size: 2rem;
+            color: var(--neon-pink);
+        }
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .staking-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .staking-buttons button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--neon-purple);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .staking-buttons button:hover {
+            background-color: var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+    </style>
 </head>
 <body>
-    <header style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
-         alt="Y2KCoin Logo" 
-         style="max-width: 180px; height: auto; display: block; margin: 0 auto; border-radius: 15px;">
-    <h1>Y2KCoin</h1>
-    <p>A digital revolution inspired by the past, built for the future</p>
-</header>
+    <header>
+        <h1>Y2KCoin</h1>
+        <p>A digital revolution inspired by the past, built for the future</p>
+    </header>
 
     <main>
-        <section id="landing">
-            <div class="cta-buttons">
-                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="button">Buy Y2KCoin</a>
-                <a href="https://discord.gg/jpFbSapSAh" target="_blank" class="button">Join Our Discord</a>
-            </div>
-            <div class="social-buttons">
-                <a href="https://x.com/y2kc0in?s=21" target="_blank" class="social-button">𝕏</a>
-                <a href="https://www.instagram.com/y2kcoin" target="_blank" class="social-button">Instagram</a>
-                <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="social-button">Reddit</a>
-            </div>
-        </section>
-
-        <section id="about">
-            <h2>What is Y2K?</h2>
-            <p>Y2KCoin is a cryptocurrency project that combines nostalgia with modern blockchain technology, offering a community-driven experience where holders can stake, earn rewards, and collect unique digital assets.</p>
-        </section>
-
-        <section id="mission">
-            <h2>Our Mission</h2>
-            <p>At Y2KCoin, our mission is to create an interactive ecosystem with staking rewards, collectible cards, an upcoming marketplace, and AR/VR integrations, fostering long-term value and engagement.</p>
-            <h3>Goals:</h3>
-            <ul>
-                <li>Staking Rewards: Earn POGs by staking Y2K.</li>
-                <li>Y2K Marketplace: A dedicated platform where users can buy, sell, and trade Y2K-related digital assets.</li>
-                <li>Digital Collectibles: Unlock and trade unique NFTs.</li>
-                <li>Future Expansion: Integrate AR/VR for immersive experiences.</li>
-                <li>Community Focus: Empower holders to shape the project's growth.</li>
-            </ul>
-        </section>
-
-        <section id="marketplace">
-            <h2>Y2K Marketplace</h2>
-            <p class="coming-soon">Coming Soon</p>
-            <p>The Y2K Marketplace is an upcoming feature that will allow users to buy, sell, and trade assets within the Y2K ecosystem.</p>
-            <h3>Planned Features:</h3>
-            <ul>
-                <li>Tokenized collectibles and items.</li>
-                <li>User-friendly browsing experience.</li>
-                <li>Secure and transparent transactions.</li>
-                <li>Community-driven content and listings.</li>
-            </ul>
-            <p>The Y2K Marketplace is currently under development and will be integrated in a future update.</p>
-        </section>
-
         <section id="staking">
-    <h2>Y2K Staking DApp</h2>
-    <p>Stake Y2K to earn POGs rewards!</p>
-    <div class="staking-buttons">
-        <button class="connect-wallet">Connect Wallet</button>
-        <button class="stake">Stake Y2K</button>
-        <button class="unstake">Unstake Y2K</button>
-        <button class="claim">Claim Rewards</button>
-    </div>
-</section>
-
-<!-- Link the staking script -->
-<script src="staking.js"></script>
+            <h2>Y2K Staking DApp</h2>
+            <p>Stake Y2K to earn POGs rewards!</p>
+            <div class="staking-buttons">
+                <button onclick="connectWallet()">Connect Wallet</button>
+                <button onclick="stakeTokens()">Stake Y2K</button>
+                <button onclick="unstakeTokens()">Unstake Y2K</button>
+                <button onclick="claimRewards()">Claim Rewards</button>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2025 Y2KCoin. All Rights Reserved.</p>
     </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
+    <!-- ✅ Link the staking script -->
+    <script src="staking.js"></script>
+</body>
+</html>
