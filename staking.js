@@ -6,13 +6,43 @@ let stakingContract;
 // ✅ Staking Contract Address (Cronos Mainnet)
 const stakingContractAddress = "0x2A1C780f6A02B0a5Fcaa51a3110B27dc6c15E1f6";
 
-// ✅ Staking Contract ABI (FIXED)
-const stakingABI = [{"inputs":[{"internalType":"address","name":"_y2kToken","type":"address"},
-{"internalType":"address","name":"_pogsToken","type":"address"},{"internalType":"uint256","name":"_rewardRate","type":"uint256"},
-{"internalType":"address","name":"_initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},
-{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"uint256","name":"_lockPeriod","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},
-{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},
-{"inputs":[],"name":"claimReward","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+// ✅ Staking Contract ABI (Fixed Format)
+const stakingABI = [
+    {
+        "inputs": [
+            { "internalType": "address", "name": "_y2kToken", "type": "address" },
+            { "internalType": "address", "name": "_pogsToken", "type": "address" },
+            { "internalType": "uint256", "name": "_rewardRate", "type": "uint256" },
+            { "internalType": "address", "name": "_initialOwner", "type": "address" }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+            { "internalType": "uint256", "name": "_lockPeriod", "type": "uint256" }
+        ],
+        "name": "stake",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }],
+        "name": "unstake",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimReward",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+];
 
 // ✅ Connect Wallet
 async function connectWallet() {
@@ -26,13 +56,19 @@ async function connectWallet() {
     }
 }
 
-// ✅ Stake Tokens
+// ✅ Stake Tokens (Fixed Validation)
 async function stakeTokens() {
-    const amount = prompt("Enter amount of Y2K to stake:");
-    if (!amount || isNaN(amount) || amount <= 0) return alert("Enter a valid amount.");
-    
+    const amountInput = prompt("Enter amount of Y2K to stake:");
+    if (!amountInput) return alert("You must enter an amount.");
+
+    // Convert input to number and validate
+    const amount = parseFloat(amountInput);
+    if (isNaN(amount) || amount <= 0) {
+        return alert("Invalid amount. Please enter a positive number.");
+    }
+
     try {
-        const tx = await stakingContract.stake(ethers.utils.parseUnits(amount, 18), 30 * 24 * 60 * 60);
+        const tx = await stakingContract.stake(ethers.utils.parseUnits(amount.toString(), 18), 30 * 24 * 60 * 60);
         await tx.wait();
         alert("Staked successfully!");
     } catch (error) {
@@ -43,11 +79,16 @@ async function stakeTokens() {
 
 // ✅ Unstake Tokens
 async function unstakeTokens() {
-    const amount = prompt("Enter amount of Y2K to unstake:");
-    if (!amount || isNaN(amount) || amount <= 0) return alert("Enter a valid amount.");
-    
+    const amountInput = prompt("Enter amount of Y2K to unstake:");
+    if (!amountInput) return alert("You must enter an amount.");
+
+    const amount = parseFloat(amountInput);
+    if (isNaN(amount) || amount <= 0) {
+        return alert("Invalid amount. Please enter a positive number.");
+    }
+
     try {
-        const tx = await stakingContract.unstake(ethers.utils.parseUnits(amount, 18));
+        const tx = await stakingContract.unstake(ethers.utils.parseUnits(amount.toString(), 18));
         await tx.wait();
         alert("Unstaked successfully!");
     } catch (error) {
