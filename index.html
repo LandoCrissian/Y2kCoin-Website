@@ -7,10 +7,11 @@
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency project that blends nostalgia with blockchain innovation, offering staking rewards, collectibles, and a future marketplace.">
     
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
         :root {
             --neon-pink: #ff6ec7;
             --neon-cyan: #00ffff;
-            --neon-purple: #8a2be2;
+            --neon-green: #00ff00;
             --neon-orange: #ff8c00;
             --background: #121212;
             --text: #ffffff;
@@ -23,7 +24,7 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             background-color: var(--background);
             color: var(--text);
             line-height: 1.6;
@@ -43,7 +44,7 @@
         }
 
         h1, h2, h3 {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             margin-bottom: 1rem;
         }
 
@@ -86,7 +87,7 @@
         }
 
         .button {
-            background-color: var(--neon-purple);
+            background-color: var(--neon-pink);
             color: var(--text);
         }
 
@@ -107,46 +108,41 @@
             box-shadow: 0 0 15px var(--neon-cyan);
         }
 
-        .coming-soon {
-            font-size: 1.1rem;
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--neon-green);
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .cybr-btn {
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 10px;
+            width: 100%;
             font-weight: bold;
-            color: var(--neon-orange);
+            font-size: 16px;
             text-transform: uppercase;
-            display: block;
-            margin-top: 5px;
+            transition: 0.3s;
         }
 
-        .marketplace-list {
-            list-style: none;
-            padding-left: 0;
+        .cybr-btn:hover {
+            background-color: var(--neon-green);
+            color: black;
+            box-shadow: 0 0 10px var(--neon-green);
         }
 
-        .marketplace-list li {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .marketplace-list li::before {
-            content: "🔹";
-            margin-right: 8px;
-            color: var(--neon-pink);
-        }
-
-        #marketplace, #staking {
-            margin-bottom: 3rem;
-        }
-
-        #staking h2 {
-            font-size: 2rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: rgba(0, 0, 0, 0.5);
+        .cyber-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: black;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
         }
 
         @media screen and (max-width: 768px) {
@@ -161,14 +157,11 @@
             }
         }
     </style>
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
-             alt="Y2KCoin Logo">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo">
         <h1>Y2KCoin</h1>
         <p>A digital revolution inspired by the past, built for the future</p>
     </header>
@@ -186,37 +179,40 @@
             </div>
         </section>
 
-        <section id="about">
-            <h2>What is Y2K?</h2>
-            <p>Y2KCoin is a cryptocurrency project that combines nostalgia with modern blockchain technology, offering a community-driven experience where holders can stake, earn rewards, and collect unique digital assets.</p>
-        </section>
-
-        <section id="mission">
-            <h2>Our Mission</h2>
-            <p>At Y2KCoin, our mission is to create an interactive ecosystem with staking rewards, collectible cards, an upcoming marketplace, and AR/VR integrations, fostering long-term value and engagement.</p>
-        </section>
-
-        <section id="marketplace">
-            <h2>Y2K Marketplace</h2>
-            <p class="coming-soon">Coming Soon</p>
-            <p>The Y2K Marketplace is an upcoming feature that will allow users to buy, sell, and trade assets within the Y2K ecosystem.</p>
-
-            <h3>Planned Features:</h3>
-            <ul class="marketplace-list">
-                <li><strong>Tokenized collectibles and items</strong></li>
-                <li><strong>User-friendly browsing experience</strong></li>
-                <li><strong>Secure and transparent transactions</strong></li>
-                <li><strong>Community-driven content and listings</strong></li>
-            </ul>
-        </section>
-
         <section id="staking">
-            <h2>Y2K Staking <span class="coming-soon">(Coming Soon)</span></h2>
+            <div class="container">
+                <h2>Y2K Staking</h2>
+                <button id="connect-wallet" class="cybr-btn">Connect Wallet</button>
+                <p>Staked Balance: <span id="staked-balance">0</span> Y2K</p>
+                <p>Unclaimed Reward: <span id="reward">0</span> Y2K</p>
+                <input type="number" id="stake-amount" placeholder="Amount to stake" class="cyber-input">
+                <button id="stake-btn" class="cybr-btn">Stake</button>
+                <button id="unstake-btn" class="cybr-btn">Unstake</button>
+                <button id="claim-btn" class="cybr-btn">Claim Rewards</button>
+            </div>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2025 Y2KCoin. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        document.getElementById("connect-wallet").addEventListener("click", () => {
+            alert("Wallet connection coming soon!");
+        });
+
+        document.getElementById("stake-btn").addEventListener("click", () => {
+            alert("Staking feature coming soon!");
+        });
+
+        document.getElementById("unstake-btn").addEventListener("click", () => {
+            alert("Unstaking feature coming soon!");
+        });
+
+        document.getElementById("claim-btn").addEventListener("click", () => {
+            alert("Claiming rewards feature coming soon!");
+        });
+    </script>
 </body>
 </html>
