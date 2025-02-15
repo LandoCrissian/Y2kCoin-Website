@@ -53,6 +53,7 @@
         h2 {
             font-size: 2rem;
             color: var(--neon-pink);
+            margin-top: 20px;
         }
 
         main {
@@ -99,6 +100,10 @@
             background-color: var(--neon-cyan);
             color: var(--background);
             box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        section {
+            margin-bottom: 3rem;
         }
 
         /* Staking Container */
@@ -177,6 +182,29 @@
             </div>
         </section>
 
+        <section id="about">
+            <h2>What is Y2K?</h2>
+            <p>Y2KCoin is a cryptocurrency project that combines nostalgia with modern blockchain technology, offering a community-driven experience where holders can stake, earn rewards, and collect unique digital assets.</p>
+        </section>
+
+        <section id="mission">
+            <h2>Our Mission</h2>
+            <p>At Y2KCoin, our mission is to create an interactive ecosystem with staking rewards, collectible cards, an upcoming marketplace, and AR/VR integrations, fostering long-term value and engagement.</p>
+        </section>
+
+        <section id="marketplace">
+            <h2>Y2K Marketplace</h2>
+            <p style="color: var(--neon-orange); font-weight: bold;">Coming Soon</p>
+            <p>The Y2K Marketplace is an upcoming feature that will allow users to buy, sell, and trade assets within the Y2K ecosystem.</p>
+            <h3>Planned Features:</h3>
+            <ul>
+                <li>Tokenized collectibles and items.</li>
+                <li>User-friendly browsing experience.</li>
+                <li>Secure and transparent transactions.</li>
+                <li>Community-driven content and listings.</li>
+            </ul>
+        </section>
+
         <section id="staking">
             <div class="staking-container">
                 <h2>Y2K Staking</h2>
@@ -185,32 +213,8 @@
                 <p>Unclaimed Reward: <span id="reward">0</span> Y2K</p>
                 <input type="number" id="stake-amount" placeholder="Amount to stake" class="cyber-input">
                 <button id="stake-btn" class="cyber-btn">Stake</button>
-                <button id="unstake-btn" class="cyber-btn">Unstake</button>
-                <button id="claim-btn" class="cyber-btn">Claim Rewards</button>
             </div>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; 2025 Y2KCoin. All Rights Reserved.</p>
-    </footer>
-
-    <script>
-        document.getElementById("connect-wallet").addEventListener("click", () => {
-            alert("Wallet connection coming soon!");
-        });
-
-        document.getElementById("stake-btn").addEventListener("click", () => {
-            alert("Staking feature coming soon!");
-        });
-
-        document.getElementById("unstake-btn").addEventListener("click", () => {
-            alert("Unstaking feature coming soon!");
-        });
-
-        document.getElementById("claim-btn").addEventListener("click", () => {
-            alert("Claiming rewards feature coming soon!");
-        });
-    </script>
 </body>
 </html>
