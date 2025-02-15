@@ -88,22 +88,17 @@
             padding: 1rem;
         }
 
-        .staking-buttons button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            background-color: var(--neon-purple);
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .coming-soon {
+            font-weight: bold;
+            color: var(--neon-orange);
+            animation: flash 1s infinite;
         }
 
-        .staking-buttons button:hover {
-            background-color: var(--neon-pink);
-            box-shadow: 0 0 15px var(--neon-pink);
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 </head>
 <body>
     <header>
@@ -137,7 +132,20 @@
             <p>At Y2KCoin, our mission is to create an interactive ecosystem with staking rewards, collectible cards, an upcoming marketplace, and AR/VR integrations, fostering long-term value and engagement.</p>
         </section>
 
-        <!-- ✅ Staking Section (Will Reintegrate Later) -->
+        <section id="marketplace">
+            <h2>Y2K Marketplace</h2>
+            <p class="coming-soon">Coming Soon</p>
+            <p>The Y2K Marketplace is an upcoming feature that will allow users to buy, sell, and trade assets within the Y2K ecosystem.</p>
+            <h3>Planned Features:</h3>
+            <ul>
+                <li>Tokenized collectibles and items.</li>
+                <li>User-friendly browsing experience.</li>
+                <li>Secure and transparent transactions.</li>
+                <li>Community-driven content and listings.</li>
+            </ul>
+            <p>The Y2K Marketplace is currently under development and will be integrated in a future update.</p>
+        </section>
+
         <section id="staking">
             <h2>Y2K Staking (Coming Soon)</h2>
         </section>
