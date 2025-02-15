@@ -34,6 +34,19 @@
             padding: 2rem 1rem;
         }
 
+        header img {
+            max-width: 180px;
+            height: auto;
+            display: block;
+            margin: 0 auto 1rem auto;
+            border-radius: 15px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1rem;
+        }
+
         h1 {
             font-size: 3rem;
             color: var(--neon-cyan);
@@ -45,11 +58,22 @@
             color: var(--neon-pink);
         }
 
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
         .cta-buttons, .social-buttons {
             display: flex;
             justify-content: center;
             gap: 1rem;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .button, .social-button {
@@ -83,28 +107,68 @@
             box-shadow: 0 0 15px var(--neon-cyan);
         }
 
-        section {
-            margin-bottom: 3rem;
-            padding: 1rem;
-        }
-
         .coming-soon {
+            font-size: 1.1rem;
             font-weight: bold;
             color: var(--neon-orange);
-            animation: flash 1s infinite;
+            text-transform: uppercase;
+            display: block;
+            margin-top: 5px;
         }
 
-        @keyframes flash {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .marketplace-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .marketplace-list li {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .marketplace-list li::before {
+            content: "🔹";
+            margin-right: 8px;
+            color: var(--neon-pink);
+        }
+
+        #marketplace, #staking {
+            margin-bottom: 3rem;
+        }
+
+        #staking h2 {
+            font-size: 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        @media screen and (max-width: 768px) {
+            .cta-buttons, .social-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .button, .social-button {
+                width: 90%;
+                text-align: center;
+            }
         }
     </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
-             alt="Y2KCoin Logo" 
-             style="max-width: 180px; height: auto; display: block; margin: 0 auto; border-radius: 15px;">
+             alt="Y2KCoin Logo">
         <h1>Y2KCoin</h1>
         <p>A digital revolution inspired by the past, built for the future</p>
     </header>
@@ -136,18 +200,18 @@
             <h2>Y2K Marketplace</h2>
             <p class="coming-soon">Coming Soon</p>
             <p>The Y2K Marketplace is an upcoming feature that will allow users to buy, sell, and trade assets within the Y2K ecosystem.</p>
+
             <h3>Planned Features:</h3>
-            <ul>
-                <li>Tokenized collectibles and items.</li>
-                <li>User-friendly browsing experience.</li>
-                <li>Secure and transparent transactions.</li>
-                <li>Community-driven content and listings.</li>
+            <ul class="marketplace-list">
+                <li><strong>Tokenized collectibles and items</strong></li>
+                <li><strong>User-friendly browsing experience</strong></li>
+                <li><strong>Secure and transparent transactions</strong></li>
+                <li><strong>Community-driven content and listings</strong></li>
             </ul>
-            <p>The Y2K Marketplace is currently under development and will be integrated in a future update.</p>
         </section>
 
         <section id="staking">
-            <h2>Y2K Staking (Coming Soon)</h2>
+            <h2>Y2K Staking <span class="coming-soon">(Coming Soon)</span></h2>
         </section>
     </main>
 
