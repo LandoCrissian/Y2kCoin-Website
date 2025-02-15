@@ -8,6 +8,7 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
         :root {
             --neon-pink: #ff6ec7;
             --neon-cyan: #00ffff;
@@ -27,8 +28,8 @@
             font-family: 'Orbitron', sans-serif;
             background-color: var(--background);
             color: var(--text);
-            line-height: 1.6;
             text-align: center;
+            padding-bottom: 50px;
         }
 
         header {
@@ -41,11 +42,6 @@
             display: block;
             margin: 0 auto 1rem auto;
             border-radius: 15px;
-        }
-
-        h1, h2, h3 {
-            font-family: 'Orbitron', sans-serif;
-            margin-bottom: 1rem;
         }
 
         h1 {
@@ -65,10 +61,6 @@
             padding: 2rem 1rem;
         }
 
-        section {
-            margin-bottom: 3rem;
-        }
-
         .cta-buttons, .social-buttons {
             display: flex;
             justify-content: center;
@@ -83,7 +75,9 @@
             border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
+            font-size: 16px;
             transition: all 0.3s ease;
+            border: 2px solid var(--neon-cyan);
         }
 
         .button {
@@ -98,7 +92,6 @@
 
         .social-button {
             background-color: transparent;
-            border: 2px solid var(--neon-cyan);
             color: var(--neon-cyan);
         }
 
@@ -108,17 +101,21 @@
             box-shadow: 0 0 15px var(--neon-cyan);
         }
 
-        .container {
+        /* Staking Container */
+        .staking-container {
             background-color: rgba(0, 0, 0, 0.8);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 20px var(--neon-green);
-            max-width: 500px;
-            width: 100%;
-            margin: auto;
+            max-width: 450px;
+            margin: 20px auto;
         }
 
-        .cybr-btn {
+        .staking-container h2 {
+            color: var(--neon-pink);
+        }
+
+        .cyber-btn {
             background: transparent;
             border: 2px solid var(--neon-green);
             color: var(--neon-green);
@@ -127,10 +124,11 @@
             font-weight: bold;
             font-size: 16px;
             text-transform: uppercase;
+            margin-top: 10px;
             transition: 0.3s;
         }
 
-        .cybr-btn:hover {
+        .cyber-btn:hover {
             background-color: var(--neon-green);
             color: black;
             box-shadow: 0 0 10px var(--neon-green);
@@ -139,7 +137,7 @@
         .cyber-input {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
+            margin-top: 10px;
             background-color: black;
             color: var(--neon-green);
             border: 2px solid var(--neon-green);
@@ -180,15 +178,15 @@
         </section>
 
         <section id="staking">
-            <div class="container">
+            <div class="staking-container">
                 <h2>Y2K Staking</h2>
-                <button id="connect-wallet" class="cybr-btn">Connect Wallet</button>
+                <button id="connect-wallet" class="cyber-btn">Connect Wallet</button>
                 <p>Staked Balance: <span id="staked-balance">0</span> Y2K</p>
                 <p>Unclaimed Reward: <span id="reward">0</span> Y2K</p>
                 <input type="number" id="stake-amount" placeholder="Amount to stake" class="cyber-input">
-                <button id="stake-btn" class="cybr-btn">Stake</button>
-                <button id="unstake-btn" class="cybr-btn">Unstake</button>
-                <button id="claim-btn" class="cybr-btn">Claim Rewards</button>
+                <button id="stake-btn" class="cyber-btn">Stake</button>
+                <button id="unstake-btn" class="cyber-btn">Unstake</button>
+                <button id="claim-btn" class="cyber-btn">Claim Rewards</button>
             </div>
         </section>
     </main>
