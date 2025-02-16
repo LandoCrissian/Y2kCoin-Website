@@ -130,7 +130,7 @@ async function unstake() {
   }
 }
 
-// ✅ Claim Rewards Function
+// ✅ Claim Rewards Function (Updated)
 async function claimRewards() {
   if (!web3 || !stakingContract) return;
 
@@ -138,13 +138,30 @@ async function claimRewards() {
   const userAddress = accounts[0];
 
   try {
+    console.log("🔹 Checking available rewards...");
+
+    // Fetch calculated rewards
+    const rewards = await stakingContract.methods.calculateReward(userAddress).call();
+    const formattedRewards = web3.utils.fromWei(rewards, "ether");
+
+    console.log(`✅ Available Rewards: ${formattedRewards} POGs`);
+
+    if (formattedRewards <= 0) {
+      alert("⚠️ No rewards available to claim.");
+      return;
+    }
+
+    // Execute the claim transaction
+    console.log("🔹 Sending claim transaction...");
     await stakingContract.methods.claimReward().send({ from: userAddress });
 
     alert("✅ Rewards Claimed!");
+    
+    // 🔄 Refresh UI after claiming
     setTimeout(updateStakingInfo, 3000);
   } catch (error) {
-    console.error("Claiming rewards failed:", error);
-    alert("❌ Claiming rewards failed. Please check if you have any rewards to claim.");
+    console.error("❌ Claiming rewards failed:", error);
+    alert("❌ Claiming rewards failed. Ensure you have rewards to claim.");
   }
 }
 
