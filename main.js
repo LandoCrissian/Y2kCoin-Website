@@ -5,6 +5,7 @@ const stakingABI = [
   // Staking contract ABI here
 ];
 
+// DOM Elements
 const connectWalletBtn = document.getElementById("connect-wallet");
 const walletAddressElement = document.getElementById("wallet-address");
 const stakeAmountInput = document.getElementById("stake-amount");
@@ -23,9 +24,9 @@ async function connectWallet() {
       const accounts = await web3.eth.getAccounts();
       const userAddress = accounts[0];
       walletAddressElement.textContent = `Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(38)}`;
-      
+
       stakingContract = new web3.eth.Contract(stakingABI, stakingContractAddress);
-      
+
       updateStakingInfo();
     } catch (error) {
       console.error("Failed to connect wallet:", error);
@@ -61,13 +62,24 @@ async function stake() {
   const accounts = await web3.eth.getAccounts();
   const userAddress = accounts[0];
   const amount = web3.utils.toWei(stakeAmountInput.value, "ether");
-  const lockPeriod = lockPeriodInput.value;
+  const lockPeriod = parseInt(lockPeriodInput.value); // Ensure it's an integer
+
+  console.log("Staking Y2K: ", amount, " Lock Period: ", lockPeriod);
 
   try {
+    // 1️⃣ **Approve the staking contract to spend the tokens**
+    console.log("Approving staking contract...");
+    await stakingContract.methods.approve(stakingContractAddress, amount).send({ from: userAddress });
+
+    // 2️⃣ **Stake the tokens after approval**
+    console.log("Staking now...");
     await stakingContract.methods.stake(amount, lockPeriod).send({ from: userAddress });
+
+    console.log("Staking successful!");
     updateStakingInfo();
   } catch (error) {
-    console.error("Staking failed:", error);
+    console.error("❌ Staking failed:", error);
+    alert("Staking transaction failed. Check console for details.");
   }
 }
 
@@ -78,10 +90,14 @@ async function unstake() {
   const userAddress = accounts[0];
 
   try {
+    console.log("Unstaking now...");
     await stakingContract.methods.unstake().send({ from: userAddress });
+
+    console.log("Unstaking successful!");
     updateStakingInfo();
   } catch (error) {
-    console.error("Unstaking failed:", error);
+    console.error("❌ Unstaking failed:", error);
+    alert("Unstaking transaction failed.");
   }
 }
 
@@ -92,13 +108,18 @@ async function claimRewards() {
   const userAddress = accounts[0];
 
   try {
+    console.log("Claiming rewards...");
     await stakingContract.methods.claimReward().send({ from: userAddress });
+
+    console.log("Rewards claimed successfully!");
     updateStakingInfo();
   } catch (error) {
-    console.error("Claiming rewards failed:", error);
+    console.error("❌ Claiming rewards failed:", error);
+    alert("Claiming rewards transaction failed.");
   }
 }
 
+// Event Listeners
 connectWalletBtn.addEventListener("click", connectWallet);
 stakeButton.addEventListener("click", stake);
 unstakeButton.addEventListener("click", unstake);
