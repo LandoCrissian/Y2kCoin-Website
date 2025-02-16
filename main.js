@@ -52,7 +52,7 @@ async function connectWallet() {
   }
 }
 
-// ✅ Update Staking Info
+// ✅ Update Staking Info (Including Rewards)
 async function updateStakingInfo() {
   if (!web3 || !stakingContract) return;
 
@@ -64,7 +64,12 @@ async function updateStakingInfo() {
     const rewards = await stakingContract.methods.calculateReward(userAddress).call();
 
     stakedAmountElement.textContent = web3.utils.fromWei(stakeInfo.amount, "ether");
-    rewardsEarnedElement.textContent = web3.utils.fromWei(rewards, "ether");
+    
+    // Display rewards correctly
+    const rewardAmount = web3.utils.fromWei(rewards, "ether");
+    rewardsEarnedElement.textContent = rewardAmount;
+
+    console.log("Updated UI - Staked:", stakeInfo.amount, "Rewards:", rewardAmount);
   } catch (error) {
     console.error("Failed to update staking info:", error);
   }
@@ -77,7 +82,7 @@ async function stake() {
   const accounts = await web3.eth.getAccounts();
   const userAddress = accounts[0];
   const amount = stakeAmountInput.value;
-  const lockPeriod = parseInt(lockPeriodSelect.value); // Ensure it's a valid number
+  const lockPeriod = parseInt(lockPeriodSelect.value);
 
   if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
     alert("Please enter a valid stake amount.");
@@ -92,7 +97,7 @@ async function stake() {
     await stakingContract.methods.stake(weiAmount, lockPeriod).send({ from: userAddress });
 
     alert("✅ Staking Successful!");
-    setTimeout(updateStakingInfo, 3000); // Wait 3 sec, then refresh UI
+    setTimeout(updateStakingInfo, 3000);
   } catch (error) {
     console.error("Staking failed:", error);
     alert("❌ Staking transaction failed. Please check your balance and try again.");
