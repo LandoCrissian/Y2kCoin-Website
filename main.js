@@ -13,10 +13,11 @@ const y2kTokenABI = [/* YOUR Y2K TOKEN ABI HERE */];
 const connectWalletBtn = document.getElementById("connect-wallet");
 const walletAddressElement = document.getElementById("wallet-address");
 const stakeAmountInput = document.getElementById("stake-amount");
-const lockPeriodSelect = document.getElementById("lock-period"); // Lock period dropdown
+const lockPeriodSelect = document.getElementById("lock-period"); // Dropdown for lock period
 const stakeButton = document.getElementById("stake-button");
 const unstakeButton = document.getElementById("unstake-button");
 const claimRewardsButton = document.getElementById("claim-rewards");
+const refreshButton = document.getElementById("refresh-button");
 const stakedAmountElement = document.getElementById("staked-amount");
 const rewardsEarnedElement = document.getElementById("rewards-earned");
 
@@ -33,9 +34,10 @@ async function connectWallet() {
       stakingContract = new web3.eth.Contract(stakingABI, stakingContractAddress);
       y2kTokenContract = new web3.eth.Contract(y2kTokenABI, y2kTokenAddress);
 
-      updateStakingInfo(); // Fetch staked balance & rewards on connection
+      updateStakingInfo();
     } catch (error) {
       console.error("Failed to connect wallet:", error);
+      alert("Failed to connect wallet. Please try again.");
     }
   } else {
     alert("Please install MetaMask!");
@@ -50,6 +52,7 @@ async function updateStakingInfo() {
   const userAddress = accounts[0];
 
   try {
+    showLoading(true);
     const stakeInfo = await stakingContract.methods.stakes(userAddress).call();
     const rewards = await stakingContract.methods.calculateReward(userAddress).call();
 
@@ -57,6 +60,9 @@ async function updateStakingInfo() {
     rewardsEarnedElement.textContent = web3.utils.fromWei(rewards, "ether");
   } catch (error) {
     console.error("Failed to update staking info:", error);
+    alert("Failed to fetch staking information. Please try again.");
+  } finally {
+    showLoading(false);
   }
 }
 
@@ -66,18 +72,28 @@ async function stake() {
 
   const accounts = await web3.eth.getAccounts();
   const userAddress = accounts[0];
-  const amount = web3.utils.toWei(stakeAmountInput.value, "ether");
-  const lockPeriod = parseInt(lockPeriodSelect.value); // Get lock period from dropdown
+  const amount = stakeAmountInput.value;
+
+  if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+    alert("Please enter a valid stake amount.");
+    return;
+  }
+
+  const weiAmount = web3.utils.toWei(amount, "ether");
+  const lockPeriod = parseInt(lockPeriodSelect.value);
 
   try {
-    await y2kTokenContract.methods.approve(stakingContractAddress, amount).send({ from: userAddress });
-    await stakingContract.methods.stake(amount, lockPeriod).send({ from: userAddress });
+    showLoading(true);
+    await y2kTokenContract.methods.approve(stakingContractAddress, weiAmount).send({ from: userAddress });
+    await stakingContract.methods.stake(weiAmount, lockPeriod).send({ from: userAddress });
 
     alert("✅ Staking Successful!");
-    updateStakingInfo(); // Refresh staked balance & rewards
+    updateStakingInfo();
   } catch (error) {
     console.error("Staking failed:", error);
-    alert("❌ Staking transaction failed. Check console for details.");
+    alert("❌ Staking transaction failed. Please check your balance and try again.");
+  } finally {
+    showLoading(false);
   }
 }
 
@@ -89,13 +105,16 @@ async function unstake() {
   const userAddress = accounts[0];
 
   try {
+    showLoading(true);
     await stakingContract.methods.unstake().send({ from: userAddress });
 
     alert("✅ Unstaking Successful!");
     updateStakingInfo();
   } catch (error) {
     console.error("Unstaking failed:", error);
-    alert("❌ Unstaking failed. Check console for details.");
+    alert("❌ Unstaking failed. Please check if your lock period has ended.");
+  } finally {
+    showLoading(false);
   }
 }
 
@@ -107,13 +126,46 @@ async function claimRewards() {
   const userAddress = accounts[0];
 
   try {
+    showLoading(true);
     await stakingContract.methods.claimReward().send({ from: userAddress });
 
     alert("✅ Rewards Claimed!");
     updateStakingInfo();
   } catch (error) {
     console.error("Claiming rewards failed:", error);
-    alert("❌ Claiming rewards failed. Check console for details.");
+    alert("❌ Claiming rewards failed. Please check if you have any rewards to claim.");
+  } finally {
+    showLoading(false);
+  }
+}
+
+// ✅ Refresh Button Function
+refreshButton.addEventListener("click", updateStakingInfo);
+
+// ✅ Show/Hide Loading Indicator
+function showLoading(isLoading) {
+  stakeButton.disabled = isLoading;
+  unstakeButton.disabled = isLoading;
+  claimRewardsButton.disabled = isLoading;
+  refreshButton.disabled = isLoading;
+}
+
+// ✅ Setup Event Listeners
+function setupEventListeners() {
+  if (window.ethereum) {
+    window.ethereum.on('accountsChanged', (accounts) => {
+      if (accounts.length > 0) {
+        connectWallet();
+      } else {
+        walletAddressElement.textContent = "Wallet disconnected";
+        stakedAmountElement.textContent = "0";
+        rewardsEarnedElement.textContent = "0";
+      }
+    });
+
+    window.ethereum.on('chainChanged', () => {
+      window.location.reload();
+    });
   }
 }
 
