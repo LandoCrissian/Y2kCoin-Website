@@ -25,7 +25,7 @@ const stakeAmountInput = document.getElementById("stake-amount");
 const lockPeriodSelect = document.getElementById("lock-period");
 const stakeButton = document.getElementById("stake-button");
 const unstakeButton = document.getElementById("unstake-button");
-const claimRewardsButton = document.getElementById("claim-rewards");
+
 const stakedAmountElement = document.getElementById("staked-amount");
 const rewardsEarnedElement = document.getElementById("rewards-earned");
 
@@ -131,25 +131,7 @@ async function unstake() {
 }
 
 // ✅ Claim Rewards Function (Updated)
-async function claimRewards() {
-  if (!web3 || !stakingContract) return;
 
-  const accounts = await web3.eth.getAccounts();
-  const userAddress = accounts[0];
-
-  try {
-    console.log("🔹 Checking available rewards...");
-
-    // Fetch calculated rewards
-    const rewards = await stakingContract.methods.calculateReward(userAddress).call();
-    const formattedRewards = web3.utils.fromWei(rewards, "ether");
-
-    console.log(`✅ Available Rewards: ${formattedRewards} POGs`);
-
-    if (formattedRewards <= 0) {
-      alert("⚠️ No rewards available to claim.");
-      return;
-    }
 
     // Execute the claim transaction
     console.log("🔹 Sending claim transaction...");
@@ -169,7 +151,7 @@ async function claimRewards() {
 connectWalletBtn.addEventListener("click", connectWallet);
 stakeButton.addEventListener("click", stake);
 unstakeButton.addEventListener("click", unstake);
-claimRewardsButton.addEventListener("click", claimRewards);
+
 
 // ✅ Auto Fetch Data on Page Load if Wallet is Connected
 window.onload = async () => {
