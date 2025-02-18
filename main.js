@@ -14,7 +14,7 @@ const stakedAmountElement = document.getElementById("staked-amount");
 const rewardsEarnedElement = document.getElementById("rewards-earned");
 
 // Contract address
-const stakingContractAddress = "YOUR_STAKING_CONTRACT_ADDRESS"; // Replace with actual address
+const stakingContractAddress = "0x31a96047666335bf629F68796dd0fCBF46B7C8ca"; // Replace with actual address
 
 // Initialize SDK and contract
 async function initializeSDK() {
