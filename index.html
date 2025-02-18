@@ -1,118 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Y2KCoin - A Digital Revolution</title>
-    <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <!-- ... (previous head content remains the same) ... -->
     <style>
-        body {
-            font-family: 'Orbitron', sans-serif;
-            background-color: #0a0a0a;
-            color: #e2e8f0;
+        /* ... (previous styles remain the same) ... */
+        .tab-content {
+            display: none;
         }
-        .glow-text { text-shadow: 0px 0px 8px cyan; }
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            transition: all 0.3s ease-in-out;
+        .tab-content.active {
+            display: block;
         }
-        .btn-primary { background-color: #00e6e6; color: #0a0a0a; }
-        .btn-primary:hover { background-color: #009999; }
-        .btn-secondary { background-color: #ff007f; color: #fff; }
-        .btn-secondary:hover { background-color: #cc0066; }
+        .tab-btn.active {
+            color: #00e6e6;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center text-center px-4">
+    <div id="particles-js"></div>
 
     <!-- Header -->
     <header class="w-full py-4 bg-gray-900">
         <nav class="flex justify-between items-center max-w-5xl mx-auto">
             <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
-            <button id="menu-btn" class="sm:hidden text-3xl">&#9776;</button>
-            <ul id="menu" class="hidden sm:flex gap-4">
-                <li><a href="#about" class="hover:text-cyan-400">About</a></li>
-                <li><a href="#mission" class="hover:text-cyan-400">Mission</a></li>
-                <li><a href="#marketplace" class="hover:text-cyan-400">Marketplace</a></li>
-                <li><a href="#nfts" class="hover:text-cyan-400">NFTs</a></li>
-                <li><a href="#staking" class="hover:text-cyan-400">Staking</a></li>
-                <li><a href="#gaming" class="hover:text-cyan-400">Gaming</a></li>
-                <li><a href="#socials" class="hover:text-cyan-400">Socials</a></li>
+            <ul class="flex flex-wrap justify-center gap-4">
+                <li><button class="tab-btn hover:text-cyan-400 active" data-tab="about">About</button></li>
+                <li><button class="tab-btn hover:text-cyan-400" data-tab="mission">Mission</button></li>
+                <li><button class="tab-btn hover:text-cyan-400" data-tab="marketplace">Marketplace</button></li>
+                <li><button class="tab-btn hover:text-cyan-400" data-tab="nfts">NFTs</button></li>
+                <li><button class="tab-btn hover:text-cyan-400" data-tab="staking">Staking</button></li>
+                <li><button class="tab-btn hover:text-cyan-400" data-tab="gaming">Gaming</button></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="w-full max-w-4xl py-20">
-        <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
-        <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-            <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn btn-primary">Buy Y2K</a>
-            <a href="https://discord.gg/jpFbSapSAh" class="btn btn-secondary">Join Discord</a>
-        </div>
-    </section>
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl py-10">
+        <!-- ... (hero section and price ticker remain the same) ... -->
 
-    <!-- About Section -->
-    <section id="about" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
-        <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
-    </section>
+        <!-- Tab Content -->
+        <section id="tab-content" class="mt-8">
+            <div id="about" class="tab-content active">
+                <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
+                <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
+            </div>
 
-    <!-- Mission Section -->
-    <section id="mission" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
-        <p class="mt-4 text-gray-400">We aim to build a sustainable digital economy inspired by the Y2K era, powered by DeFi, NFTs, and staking rewards.</p>
-    </section>
+            <div id="mission" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
+                <p class="mt-4 text-gray-400">We aim to build a sustainable digital economy inspired by the Y2K era, powered by DeFi, NFTs, and staking rewards.</p>
+            </div>
 
-    <!-- Marketplace Section -->
-    <section id="marketplace" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
-        <p class="mt-4 text-gray-400">Trade NFTs, digital collectibles, and in-game assets in our upcoming marketplace.</p>
-    </section>
+            <div id="marketplace" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
+                <p class="mt-4 text-gray-400">Trade NFTs, digital collectibles, and in-game assets in our upcoming marketplace.</p>
+            </div>
 
-    <!-- NFTs Section -->
-    <section id="nfts" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Y2K NFT Collection</h2>
-        <p class="mt-4 text-gray-400">Explore rare and exclusive digital collectibles, including NeoBot designs and horror-themed NFTs.</p>
-    </section>
+            <div id="nfts" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Y2K NFT Collection</h2>
+                <p class="mt-4 text-gray-400">Explore rare and exclusive digital collectibles, including NeoBot designs and horror-themed NFTs.</p>
+            </div>
 
-    <!-- Staking Section -->
-    <section id="staking" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
-        <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
-    </section>
+            <div id="staking" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
+                <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
+            </div>
 
-    <!-- Gaming Section -->
-    <section id="gaming" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Gaming & Interactive Elements</h2>
-        <p class="mt-4 text-gray-400">Risk-inspired battles, slot machine games, and tokenized rewards that make holding Y2K an interactive experience.</p>
-    </section>
+            <div id="gaming" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Gaming & Interactive Elements</h2>
+                <p class="mt-4 text-gray-400">Risk-inspired battles, slot machine games, and tokenized rewards that make holding Y2K an interactive experience.</p>
+            </div>
+        </section>
 
-    <!-- Socials Section -->
-    <section id="socials" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Join Our Community</h2>
-        <div class="flex justify-center gap-6 mt-4">
-            <a href="https://x.com/y2kc0in?s=21" target="_blank" class="text-cyan-400 hover:underline">𝕏</a>
-            <a href="https://www.instagram.com/y2kcoin" target="_blank" class="text-pink-400 hover:underline">Instagram</a>
-            <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="text-red-400 hover:underline">Reddit</a>
-        </div>
-    </section>
+        <!-- ... (socials section remains the same) ... -->
+    </main>
 
-    <!-- Footer -->
-    <footer class="w-full py-6 bg-gray-900">
-        <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
-    </footer>
+    <!-- ... (footer remains the same) ... -->
 
     <script>
-        // Mobile Menu Toggle
-        document.getElementById('menu-btn').addEventListener('click', () => {
-            document.getElementById('menu').classList.toggle('hidden');
+        // Simulated Token Price Ticker
+        const y2kPriceElement = document.getElementById("y2k-price");
+        setInterval(() => {
+            const price = (Math.random() * (0.1 - 0.001) + 0.001).toFixed(6);
+            y2kPriceElement.textContent = `$${price}`;
+        }, 5000);
+
+        // Particle.js
+        particlesJS.load('particles-js', 'assets/particles.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
+
+        // Tab Functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
         });
     </script>
-
 </body>
 </html>
