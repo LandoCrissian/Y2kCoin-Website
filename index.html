@@ -25,32 +25,6 @@
         .btn-primary:hover { background-color: #009999; }
         .btn-secondary { background-color: #ff007f; color: #fff; }
         .btn-secondary:hover { background-color: #cc0066; }
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .tab {
-            flex: 1;
-            min-width: 120px;
-            text-align: center;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #1a1a1a;
-        }
-        .tab.active {
-            background: #00e6e6;
-            color: #0a0a0a;
-        }
-        .content-section {
-            display: none;
-        }
-        .content-section.active {
-            display: block;
-        }
     </style>
 </head>
 <body class="flex flex-col items-center text-center px-4">
@@ -60,48 +34,72 @@
         <nav class="flex justify-between items-center max-w-5xl mx-auto">
             <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
             <button id="menu-btn" class="sm:hidden text-3xl">&#9776;</button>
+            <ul id="menu" class="hidden sm:flex gap-4">
+                <li><a href="#about" class="hover:text-cyan-400">About</a></li>
+                <li><a href="#mission" class="hover:text-cyan-400">Mission</a></li>
+                <li><a href="#marketplace" class="hover:text-cyan-400">Marketplace</a></li>
+                <li><a href="#nfts" class="hover:text-cyan-400">NFTs</a></li>
+                <li><a href="#staking" class="hover:text-cyan-400">Staking</a></li>
+                <li><a href="#gaming" class="hover:text-cyan-400">Gaming</a></li>
+                <li><a href="#socials" class="hover:text-cyan-400">Socials</a></li>
+            </ul>
         </nav>
     </header>
 
-    <!-- Tabs for Navigation -->
-    <div class="tabs">
-        <div class="tab active" data-tab="about">About</div>
-        <div class="tab" data-tab="mission">Mission</div>
-        <div class="tab" data-tab="marketplace">Marketplace</div>
-        <div class="tab" data-tab="nfts">NFTs</div>
-        <div class="tab" data-tab="staking">Staking</div>
-        <div class="tab" data-tab="gaming">Gaming</div>
-    </div>
+    <!-- Hero Section -->
+    <section id="hero" class="w-full max-w-4xl py-20">
+        <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
+        <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+            <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn btn-primary">Buy Y2K</a>
+            <a href="https://discord.gg/jpFbSapSAh" class="btn btn-secondary">Join Discord</a>
+        </div>
+    </section>
 
-    <!-- Content Sections -->
-    <section id="about" class="content-section active">
+    <!-- About Section -->
+    <section id="about" class="w-full max-w-3xl py-16">
         <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
         <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
     </section>
 
-    <section id="mission" class="content-section">
+    <!-- Mission Section -->
+    <section id="mission" class="w-full max-w-3xl py-16">
         <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
         <p class="mt-4 text-gray-400">We aim to build a sustainable digital economy inspired by the Y2K era, powered by DeFi, NFTs, and staking rewards.</p>
     </section>
 
-    <section id="marketplace" class="content-section">
+    <!-- Marketplace Section -->
+    <section id="marketplace" class="w-full max-w-3xl py-16">
         <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
         <p class="mt-4 text-gray-400">Trade NFTs, digital collectibles, and in-game assets in our upcoming marketplace.</p>
     </section>
 
-    <section id="nfts" class="content-section">
+    <!-- NFTs Section -->
+    <section id="nfts" class="w-full max-w-3xl py-16">
         <h2 class="text-3xl font-bold glow-text">Y2K NFT Collection</h2>
         <p class="mt-4 text-gray-400">Explore rare and exclusive digital collectibles, including NeoBot designs and horror-themed NFTs.</p>
     </section>
 
-    <section id="staking" class="content-section">
+    <!-- Staking Section -->
+    <section id="staking" class="w-full max-w-3xl py-16">
         <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
         <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
     </section>
 
-    <section id="gaming" class="content-section">
+    <!-- Gaming Section -->
+    <section id="gaming" class="w-full max-w-3xl py-16">
         <h2 class="text-3xl font-bold glow-text">Gaming & Interactive Elements</h2>
         <p class="mt-4 text-gray-400">Risk-inspired battles, slot machine games, and tokenized rewards that make holding Y2K an interactive experience.</p>
+    </section>
+
+    <!-- Socials Section -->
+    <section id="socials" class="w-full max-w-3xl py-16">
+        <h2 class="text-3xl font-bold glow-text">Join Our Community</h2>
+        <div class="flex justify-center gap-6 mt-4">
+            <a href="https://x.com/y2kc0in?s=21" target="_blank" class="text-cyan-400 hover:underline">𝕏</a>
+            <a href="https://www.instagram.com/y2kcoin" target="_blank" class="text-pink-400 hover:underline">Instagram</a>
+            <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="text-red-400 hover:underline">Reddit</a>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -110,13 +108,9 @@
     </footer>
 
     <script>
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
-            });
+        // Mobile Menu Toggle
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('menu').classList.toggle('hidden');
         });
     </script>
 
