@@ -1,12 +1,10 @@
-// Initialize Thirdweb SDK
-const { ThirdwebSDK } = window.thirdweb;
+import { ThirdwebSDK } from "https://unpkg.com/@thirdweb-dev/sdk@latest/dist/index.mjs";
 
-// Connect to Cronos Mainnet
 const sdk = new ThirdwebSDK("cronos");
 
-// Staking Contract Address (Update this)
+// ✅ Update with your actual staking contract address
 const stakingContractAddress = "YOUR_STAKING_CONTRACT_ADDRESS";
-const stakingContract = sdk.getContract(stakingContractAddress);
+const stakingContract = await sdk.getContract(stakingContractAddress);
 
 // DOM Elements
 const connectWalletBtn = document.getElementById("connect-wallet");
@@ -18,16 +16,16 @@ const unstakeBtn = document.getElementById("unstake-button");
 // ✅ Connect Wallet
 async function connectWallet() {
     try {
-        const provider = await sdk.wallet.connect("injected"); // MetaMask, WalletConnect, etc.
+        const provider = await sdk.wallet.connect();
         const address = await provider.getAddress();
         walletAddressElement.textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
-        
+
         connectWalletBtn.style.display = "none";
         disconnectWalletBtn.style.display = "block";
 
-        updateStakingInfo(address);
+        updateStakingInfo();
     } catch (error) {
-        console.error("Wallet Connection Failed:", error);
+        console.error("❌ Wallet Connection Failed:", error);
     }
 }
 
@@ -49,7 +47,8 @@ async function stakeTokens() {
     }
     
     try {
-        await stakingContract.call("stake", [amount]);
+        const transaction = await stakingContract.prepare("stake", [amount]);
+        await sdk.wallet.sendTransaction(transaction);
         alert(`✅ Successfully Staked ${amount} Y2K!`);
         updateStakingInfo();
     } catch (error) {
@@ -67,7 +66,8 @@ async function unstakeTokens() {
     }
 
     try {
-        await stakingContract.call("withdraw", [amount]);
+        const transaction = await stakingContract.prepare("withdraw", [amount]);
+        await sdk.wallet.sendTransaction(transaction);
         alert(`✅ Successfully Unstaked ${amount} Y2K!`);
         updateStakingInfo();
     } catch (error) {
@@ -76,31 +76,15 @@ async function unstakeTokens() {
     }
 }
 
-// ✅ Update Staking Info
-async function updateStakingInfo() {
-    try {
-        const provider = await sdk.wallet.getProvider();
-        if (!provider) return;
-
-        const address = await provider.getAddress();
-        const { _tokensStaked, _rewards } = await stakingContract.call("getStakeInfo", [address]);
-
-        document.getElementById("staked-amount").textContent = _tokensStaked;
-        document.getElementById("rewards-earned").textContent = _rewards;
-    } catch (error) {
-        console.error("Failed to fetch staking info:", error);
-    }
-}
-
-// ✅ Event Listeners
-connectWalletBtn.addEventListener("click", connectWallet);
-disconnectWalletBtn.addEventListener("click", disconnectWallet);
-stakeBtn.addEventListener("click", stakeTokens);
-unstakeBtn.addEventListener("click", unstakeTokens);
-
 // ✅ Auto Fetch Data on Page Load if Wallet is Connected
 window.onload = async () => {
     if (await sdk.wallet.isConnected()) {
         connectWallet();
     }
 };
+
+// ✅ Event Listeners
+connectWalletBtn.addEventListener("click", connectWallet);
+disconnectWalletBtn.addEventListener("click", disconnectWallet);
+stakeBtn.addEventListener("click", stakeTokens);
+unstakeBtn.addEventListener("click", unstakeTokens);
