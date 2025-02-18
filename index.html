@@ -9,7 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    
+    <!-- Thirdweb SDK -->
+    <script src="https://unpkg.com/@thirdweb-dev/sdk@latest"></script>
 </head>
 <body>
     <header>
@@ -39,44 +41,29 @@
             </div>
         </section>
 
-        <section id="about">
-            <h2>What is Y2KCoin?</h2>
-            <p>Y2KCoin is a community-driven cryptocurrency project that blends nostalgia with modern blockchain innovation. Inspired by the Y2K era, we merge retro aesthetics with cutting-edge Web3 technology, building a unique digital ecosystem where users can stake, earn, collect, and engage in various blockchain-based activities.</p>
-        </section>
+        <section id="staking">
+            <h2>Y2K Staking DApp</h2>
+            <div id="wallet-connection">
+                <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
+                <button id="disconnect-wallet" class="btn btn-secondary" style="display: none;">Disconnect Wallet</button>
+                <p id="wallet-address"></p>
+            </div>
 
-        <section id="mission">
-            <h2>Our Mission</h2>
-            <p>At Y2KCoin, we're different. We're building a future where the past meets the present, creating a vibrant ecosystem that includes:</p>
-            <ul>
-                <li>A robust staking system</li>
-                <li>Unique, collectible NFTs</li>
-                <li>A decentralized marketplace</li>
-                <li>Blockchain-based gaming</li>
-                <li>AR/VR integration</li>
-            </ul>
-        </section>
+            <div id="staking-interface">
+                <input type="number" id="stake-amount" placeholder="Amount to stake">
+                <button id="stake-button" class="btn btn-secondary">Stake Y2K</button>
+                <button id="unstake-button" class="btn btn-secondary">Unstake Y2K</button>
+            </div>
 
-        <section id="marketplace">
-            <h2>Y2K Marketplace (Coming Soon)</h2>
-            <p>Our decentralized marketplace will revolutionize how you interact with digital assets:</p>
-            <ul>
-                <li>Buy and sell tokenized collectibles and NFTs</li>
-                <li>Trade Y2KCoin, POGs, and other assets</li>
-                <li>Engage with community-driven content and listings</li>
-            </ul>
+            <div id="staking-info">
+                <p>Your Staked Y2K: <span id="staked-amount">0</span></p>
+                <p>Rewards Earned (POGs on Unstake): <span id="rewards-earned">0</span> POGs</p>
+            </div>
         </section>
-
-        
     </main>
 
     <footer>
         <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
-        <div class="community-links">
-            <a href="https://discord.gg/jpFbSapSAh" target="_blank" rel="noopener noreferrer">Discord</a>
-            <a href="https://x.com/y2kc0in?s=21" target="_blank" rel="noopener noreferrer">𝕏</a>
-            <a href="https://www.instagram.com/y2kcoin" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" rel="noopener noreferrer">Reddit</a>
-        </div>
     </footer>
 
     <script src="main.js"></script>
