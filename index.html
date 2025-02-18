@@ -10,8 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Load Thirdweb SDK before any scripts -->
-    <script src="https://unpkg.com/@thirdweb-dev/sdk@latest"></script>
+    <!-- Correct Thirdweb SDK Import -->
+    <script type="module">
+        import { ThirdwebSDK } from "https://unpkg.com/@thirdweb-dev/sdk@latest/dist/index.mjs";
+        window.ThirdwebSDK = ThirdwebSDK;
+    </script>
 </head>
 <body>
     <header>
@@ -66,7 +69,6 @@
         <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
     </footer>
 
-    <!-- Load main.js AFTER SDK -->
-    <script src="main.js"></script>
+    <script src="main.js" type="module"></script>
 </body>
 </html>
