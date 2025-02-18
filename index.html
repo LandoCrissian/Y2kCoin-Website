@@ -25,7 +25,8 @@
         .btn-primary:hover { background-color: #009999; }
         .btn-secondary { background-color: #ff007f; color: #fff; }
         .btn-secondary:hover { background-color: #cc0066; }
-        ul { list-style-type: disc; padding-left: 20px; margin-top: 10px; }
+        .hidden { display: none; }
+        .active-tab { background-color: #00e6e6; color: #0a0a0a; }
     </style>
 </head>
 <body class="flex flex-col items-center text-center px-4">
@@ -34,20 +35,11 @@
     <header class="w-full py-4 bg-gray-900">
         <nav class="flex justify-between items-center max-w-5xl mx-auto">
             <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
-            <button id="menu-btn" class="sm:hidden text-3xl">&#9776;</button>
-            <ul id="menu" class="hidden sm:flex gap-4">
-                <li><a href="#about" class="hover:text-cyan-400">About</a></li>
-                <li><a href="#mission" class="hover:text-cyan-400">Mission</a></li>
-                <li><a href="#marketplace" class="hover:text-cyan-400">Marketplace</a></li>
-                <li><a href="#nfts" class="hover:text-cyan-400">NFTs</a></li>
-                <li><a href="#staking" class="hover:text-cyan-400">Staking</a></li>
-                <li><a href="#socials" class="hover:text-cyan-400">Socials</a></li>
-            </ul>
         </nav>
     </header>
 
     <!-- Hero Section -->
-    <section id="hero" class="w-full max-w-4xl py-20">
+    <section id="hero" class="w-full max-w-4xl py-10">
         <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
         <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
@@ -56,66 +48,43 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="w-full max-w-3xl py-16">
+    <!-- Tabs for Sections -->
+    <div class="flex justify-center gap-4 mb-6">
+        <button class="btn tab-link active-tab" data-tab="about">About</button>
+        <button class="btn tab-link" data-tab="marketplace">Marketplace</button>
+        <button class="btn tab-link" data-tab="nfts">NFTs</button>
+        <button class="btn tab-link" data-tab="staking">Staking</button>
+        <button class="btn tab-link" data-tab="gaming">Gaming</button>
+    </div>
+
+    <!-- Tab Content Sections -->
+    <section id="about" class="tab-content w-full max-w-3xl py-8">
         <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
         <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
     </section>
 
-    <!-- Mission Section -->
-    <section id="mission" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
-        <p class="mt-4 text-gray-400">We aim to build a sustainable digital economy inspired by the Y2K era, powered by DeFi, NFTs, and staking rewards.</p>
-    </section>
-
-    <!-- Marketplace Section -->
-    <section id="marketplace" class="w-full max-w-3xl py-16">
+    <section id="marketplace" class="tab-content hidden w-full max-w-3xl py-8">
         <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
-        <p class="mt-4 text-gray-400">Trade NFTs, digital collectibles, and in-game assets in our upcoming marketplace.</p>
-        <ul>
-            <li>🔹 A Web3 throwback shop where POGs can be spent on collectibles, digital assets, and exclusive items.</li>
-        </ul>
+        <p class="mt-4 text-gray-400">A Web3 throwback shop where POGs can be spent on collectibles, digital assets, and exclusive items.</p>
     </section>
 
-    <!-- NFTs Section -->
-    <section id="nfts" class="w-full max-w-3xl py-16">
+    <section id="nfts" class="tab-content hidden w-full max-w-3xl py-8">
         <h2 class="text-3xl font-bold glow-text">Y2K NFT Collection</h2>
         <p class="mt-4 text-gray-400">Explore rare and exclusive digital collectibles, including NeoBot designs and horror-themed NFTs.</p>
-        <ul>
-            <li>🔹 Think retro gaming meets Web3, with NeoBot digital cards, AR integrations, and unique 90s-inspired NFTs.</li>
-        </ul>
     </section>
 
-    <!-- Staking Section -->
-    <section id="staking" class="w-full max-w-3xl py-16">
+    <section id="staking" class="tab-content hidden w-full max-w-3xl py-8">
         <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
-        <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
-        <ul>
-            <li>🔹 Earn POGs by staking Y2K and use them in our growing ecosystem.</li>
-        </ul>
+        <p class="mt-4 text-gray-400">Earn POGs by staking Y2K and use them in our growing ecosystem.</p>
     </section>
 
-    <!-- Community Section -->
-    <section id="community" class="w-full max-w-3xl py-16">
-        <h2 class="text-3xl font-bold glow-text">Community-Driven Experiences</h2>
-        <p class="mt-4 text-gray-400">Bringing Web3 culture and music together with our interactive events.</p>
-        <ul>
-            <li>🔹 Saturday Night ‘In the Mix’ events featuring Web3 culture and music.</li>
-            <li>🔹 Potential collaborations with nostalgic brands.</li>
-        </ul>
-    </section>
-
-    <!-- Gaming Section -->
-    <section id="gaming" class="w-full max-w-3xl py-16">
+    <section id="gaming" class="tab-content hidden w-full max-w-3xl py-8">
         <h2 class="text-3xl font-bold glow-text">Gaming & Interactive Elements</h2>
-        <p class="mt-4 text-gray-400">Engage with Risk-inspired battles, slot machine games, and tokenized rewards.</p>
-        <ul>
-            <li>🔹 Interactive staking elements that make holding Y2K an experience.</li>
-        </ul>
+        <p class="mt-4 text-gray-400">Risk-inspired battles, slot machine games, and tokenized rewards that make holding Y2K an interactive experience.</p>
     </section>
 
-    <!-- Socials Section -->
-    <section id="socials" class="w-full max-w-3xl py-16">
+    <!-- Social Links -->
+    <section id="socials" class="w-full max-w-3xl py-8">
         <h2 class="text-3xl font-bold glow-text">Join Our Community</h2>
         <div class="flex justify-center gap-6 mt-4">
             <a href="https://x.com/y2kc0in?s=21" target="_blank" class="text-cyan-400 hover:underline">𝕏</a>
@@ -130,11 +99,18 @@
     </footer>
 
     <script>
-        // Mobile Menu Toggle
-        document.getElementById('menu-btn').addEventListener('click', () => {
-            document.getElementById('menu').classList.toggle('hidden');
+        const tabs = document.querySelectorAll(".tab-link");
+        const contents = document.querySelectorAll(".tab-content");
+        
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                tabs.forEach(t => t.classList.remove("active-tab"));
+                contents.forEach(c => c.classList.add("hidden"));
+                
+                tab.classList.add("active-tab");
+                document.getElementById(tab.dataset.tab).classList.remove("hidden");
+            });
         });
     </script>
-
 </body>
 </html>
