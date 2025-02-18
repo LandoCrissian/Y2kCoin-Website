@@ -12,7 +12,6 @@
             font-family: 'Orbitron', sans-serif;
             background-color: #0a0a0a;
             color: #e2e8f0;
-            overflow: hidden;
         }
         .glow-text { text-shadow: 0px 0px 8px cyan; }
         .btn {
@@ -26,35 +25,11 @@
         .btn-primary:hover { background-color: #009999; }
         .btn-secondary { background-color: #ff007f; color: #fff; }
         .btn-secondary:hover { background-color: #cc0066; }
-
-        /* Background Snake Canvas */
-        canvas#snake-game {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            opacity: 0.2;
-        }
-
-        /* Glitch Animation */
-        @keyframes glitch {
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0, 0); }
-        }
-        .glitch {
-            animation: glitch 0.5s infinite;
-        }
     </style>
 </head>
 <body class="flex flex-col items-center text-center px-4">
-    <canvas id="snake-game"></canvas>
-    
+
+    <!-- Header -->
     <header class="w-full py-4 bg-gray-900">
         <nav class="flex justify-between items-center max-w-5xl mx-auto">
             <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
@@ -70,51 +45,67 @@
         </nav>
     </header>
 
+    <!-- Hero Section -->
     <section id="hero" class="w-full max-w-4xl py-20">
-        <h1 class="text-4xl sm:text-5xl font-bold glow-text glitch">Welcome to Y2KCoin</h1>
+        <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
         <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+            <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn btn-primary">Buy Y2K</a>
+            <a href="https://discord.gg/jpFbSapSAh" class="btn btn-secondary">Join Discord</a>
+        </div>
     </section>
 
+    <!-- About Section -->
+    <section id="about" class="w-full max-w-3xl py-16">
+        <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
+        <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="w-full max-w-3xl py-16">
+        <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
+        <p class="mt-4 text-gray-400">We aim to build a sustainable digital economy inspired by the Y2K era, powered by DeFi, NFTs, and staking rewards.</p>
+    </section>
+
+    <!-- Marketplace Section -->
+    <section id="marketplace" class="w-full max-w-3xl py-16">
+        <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
+        <p class="mt-4 text-gray-400">Trade NFTs, digital collectibles, and in-game assets in our upcoming marketplace.</p>
+    </section>
+
+    <!-- NFTs Section -->
+    <section id="nfts" class="w-full max-w-3xl py-16">
+        <h2 class="text-3xl font-bold glow-text">Y2K NFT Collection</h2>
+        <p class="mt-4 text-gray-400">Explore rare and exclusive digital collectibles, including NeoBot designs and horror-themed NFTs.</p>
+    </section>
+
+    <!-- Staking Section -->
+    <section id="staking" class="w-full max-w-3xl py-16">
+        <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
+        <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
+    </section>
+
+    <!-- Socials Section -->
+    <section id="socials" class="w-full max-w-3xl py-16">
+        <h2 class="text-3xl font-bold glow-text">Join Our Community</h2>
+        <div class="flex justify-center gap-6 mt-4">
+            <a href="https://x.com/y2kc0in?s=21" target="_blank" class="text-cyan-400 hover:underline">𝕏</a>
+            <a href="https://www.instagram.com/y2kcoin" target="_blank" class="text-pink-400 hover:underline">Instagram</a>
+            <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="text-red-400 hover:underline">Reddit</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 bg-gray-900">
+        <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
+    </footer>
+
     <script>
-        // Simple Snake Game Effect
-        const canvas = document.getElementById("snake-game");
-        const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        let snake = [{ x: 100, y: 100 }];
-        let direction = { x: 10, y: 0 };
-        let food = { x: 200, y: 200 };
-
-        function drawSnake() {
-            ctx.fillStyle = "lime";
-            snake.forEach(segment => ctx.fillRect(segment.x, segment.y, 10, 10));
-        }
-
-        function moveSnake() {
-            let newHead = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
-            if (newHead.x === food.x && newHead.y === food.y) {
-                snake.push({});
-                food = { x: Math.random() * canvas.width, y: Math.random() * canvas.height };
-            } else {
-                snake.pop();
-            }
-            snake.unshift(newHead);
-        }
-
-        function drawFood() {
-            ctx.fillStyle = "red";
-            ctx.fillRect(food.x, food.y, 10, 10);
-        }
-
-        function update() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawFood();
-            drawSnake();
-            moveSnake();
-        }
-
-        setInterval(update, 100);
+        // Mobile Menu Toggle
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('menu').classList.toggle('hidden');
+        });
     </script>
+
 </body>
 </html>
