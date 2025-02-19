@@ -71,33 +71,13 @@
                 <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
             </div>
 
-            <div id="mission" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
-                <p class="mt-4 text-gray-400">We aim to build a sustainable digital economy inspired by the Y2K era, powered by DeFi, NFTs, and staking rewards.</p>
-            </div>
-
-            <div id="marketplace" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
-                <p class="mt-4 text-gray-400">Trade NFTs, digital collectibles, and in-game assets in our upcoming marketplace.</p>
-            </div>
-
-            <div id="nfts" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K NFT Collection</h2>
-                <p class="mt-4 text-gray-400">Explore rare and exclusive digital collectibles, including NeoBot designs and horror-themed NFTs.</p>
-            </div>
-
             <div id="staking" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
                 <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
             </div>
-
-            <div id="gaming" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Gaming & Interactive Elements</h2>
-                <p class="mt-4 text-gray-400">Risk-inspired battles, slot machine games, and tokenized rewards that make holding Y2K an interactive experience.</p>
-            </div>
         </section>
 
-        <!-- Staking Section (Always Visible) -->
+        <!-- Staking Section -->
         <section id="staking-section" class="mt-10">
             <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
             <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
@@ -122,16 +102,6 @@
                 <p>Rewards Earned (POGs on Unstake): <span id="rewards-earned">0</span> POGs</p>
             </div>
         </section>
-
-        <!-- Socials Section -->
-        <section id="socials" class="mt-10">
-            <h2 class="text-3xl font-bold glow-text">Join Our Community</h2>
-            <div class="flex justify-center gap-6 mt-4">
-                <a href="https://x.com/y2kc0in?s=21" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">𝕏</a>
-                <a href="https://www.instagram.com/y2kcoin" target="_blank" rel="noopener noreferrer" class="text-pink-400 hover:underline">Instagram</a>
-                <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" rel="noopener noreferrer" class="text-red-400 hover:underline">Reddit</a>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
@@ -139,22 +109,28 @@
         <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
     </footer>
 
+    <!-- JavaScript -->
+    <script src="staking.js"></script>
     <script>
-        // Tab Functionality
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
+        document.addEventListener("DOMContentLoaded", async () => {
+            const tabButtons = document.querySelectorAll(".tab-btn");
+            const tabContents = document.querySelectorAll(".tab-content");
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const tabId = button.getAttribute('data-tab');
-                
-                // Remove active class from all buttons and contents
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                // Add active class to clicked button and corresponding content
-                button.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
+            tabButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const tabId = button.getAttribute("data-tab");
+                    const targetTab = document.getElementById(tabId);
+
+                    if (!targetTab) {
+                        console.error(`Tab ID '${tabId}' not found.`);
+                        return;
+                    }
+
+                    tabButtons.forEach(btn => btn.classList.remove("active"));
+                    tabContents.forEach(content => content.classList.remove("active"));
+                    button.classList.add("active");
+                    targetTab.classList.add("active");
+                });
             });
         });
     </script>
