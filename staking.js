@@ -6,19 +6,19 @@ import {
 } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
 
-// Create the Thirdweb client
+// ✅ Create the Thirdweb client
 const client = createThirdwebClient({
   clientId: "cb4c41b2ca4e8cfbc3a2f92d205a65cf",
 });
 
-// Connect to the staking contract on Cronos
+// ✅ Connect to the staking contract on Cronos
 const contract = getContract({
   client,
   chain: defineChain(25), // Cronos Mainnet
   address: "0x31a96047666335bf629F68796dd0fCBF46B7C8ca",
 });
 
-// DOM elements
+// ✅ DOM Elements
 const connectWalletBtn = document.getElementById("connect-wallet");
 const disconnectWalletBtn = document.getElementById("disconnect-wallet");
 const stakeBtn = document.getElementById("stake-button");
@@ -26,13 +26,18 @@ const unstakeBtn = document.getElementById("unstake-button");
 const claimRewardsBtn = document.getElementById("claim-rewards");
 const walletAddressElement = document.getElementById("wallet-address");
 
-// ✅ Connect Wallet
+// ✅ Connect Wallet (Supports Multiple Wallets)
 async function connectWallet() {
   try {
-    const wallet = await client.wallet.connect("injected"); // Fix destructuring issue
+    const { wallet } = await client.wallet.connect([
+      "injected",      // MetaMask, Rabby, Zerion
+      "coinbaseWallet", // Coinbase Wallet
+      "walletConnect", // Rainbow Wallet & others via WalletConnect
+    ]);
+
     const address = await wallet.getAddress();
     walletAddressElement.textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
-    
+
     connectWalletBtn.style.display = "none";
     disconnectWalletBtn.style.display = "block";
 
