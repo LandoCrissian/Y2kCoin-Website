@@ -64,8 +64,6 @@
             </div>
         </section>
 
-        
-
         <!-- Tab Content -->
         <section id="tab-content" class="mt-8">
             <div id="about" class="tab-content active">
@@ -99,6 +97,32 @@
             </div>
         </section>
 
+        <!-- Staking Section (Always Visible) -->
+        <section id="staking-section" class="mt-10">
+            <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
+            <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
+
+            <div id="wallet-connection" class="mt-6">
+                <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
+                <button id="disconnect-wallet" class="btn btn-secondary" style="display: none;">Disconnect Wallet</button>
+                <p id="wallet-address"></p>
+            </div>
+
+            <div id="staking-interface" class="mt-6">
+                <input type="number" id="stake-amount" placeholder="Amount to stake" class="p-2 text-black w-full rounded">
+                <div class="flex gap-4 mt-4">
+                    <button id="stake-button" class="btn btn-secondary">Stake Y2K</button>
+                    <button id="unstake-button" class="btn btn-secondary">Unstake Y2K</button>
+                    <button id="claim-rewards" class="btn btn-primary">Claim Rewards</button>
+                </div>
+            </div>
+
+            <div id="staking-info" class="mt-6">
+                <p>Your Staked Y2K: <span id="staked-amount">0</span></p>
+                <p>Rewards Earned (POGs on Unstake): <span id="rewards-earned">0</span> POGs</p>
+            </div>
+        </section>
+
         <!-- Socials Section -->
         <section id="socials" class="mt-10">
             <h2 class="text-3xl font-bold glow-text">Join Our Community</h2>
@@ -116,13 +140,6 @@
     </footer>
 
     <script>
-        // Simulated Token Price Ticker
-        const y2kPriceElement = document.getElementById("y2k-price");
-        setInterval(() => {
-            const price = (Math.random() * (0.1 - 0.001) + 0.001).toFixed(6);
-            y2kPriceElement.textContent = `$${price}`;
-        }, 5000);
-
         // Tab Functionality
         const tabButtons = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
