@@ -1,154 +1,143 @@
-import {
-  createThirdwebClient,
-  getContract,
-  prepareContractCall,
-  sendTransaction,
-} from "thirdweb";
-import { defineChain } from "thirdweb/chains";
+// Import Ethers.js (Include in your HTML: <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>)
+const contractAddress = "0x31a96047666335bf629F68796dd0fCBF46B7C8ca"; // Your staking contract address
+const abi = [ 
+    // Replace with your actual ABI
+    {
+        "inputs": [{"internalType": "uint256","name": "amount","type": "uint256"}],
+        "name": "stake",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"internalType": "uint256","name": "amount","type": "uint256"}],
+        "name": "withdraw",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimRewards",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"internalType": "address","name": "account","type": "address"}],
+        "name": "getStakeInfo",
+        "outputs": [{"internalType": "uint256","name": "staked","type": "uint256"},
+                    {"internalType": "uint256","name": "rewards","type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
 
-// ✅ Create the Thirdweb client
-const client = createThirdwebClient({
-  clientId: "cb4c41b2ca4e8cfbc3a2f92d205a65cf",
-});
-
-// ✅ Connect to the staking contract on Cronos
-const contract = getContract({
-  client,
-  chain: defineChain(25), // Cronos Mainnet
-  address: "0x31a96047666335bf629F68796dd0fCBF46B7C8ca",
-});
-
-// ✅ DOM elements
-const connectWalletBtn = document.getElementById("connect-wallet");
-const disconnectWalletBtn = document.getElementById("disconnect-wallet");
-const stakeBtn = document.getElementById("stake-button");
-const unstakeBtn = document.getElementById("unstake-button");
-const claimRewardsBtn = document.getElementById("claim-rewards");
-const walletAddressElement = document.getElementById("wallet-address");
+let provider, signer, contract;
 
 // ✅ Connect Wallet
 async function connectWallet() {
-  try {
-    const wallet = await client.wallet.connect("injected");
-    const address = await wallet.getAddress();
-    walletAddressElement.textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
-    
-    connectWalletBtn.style.display = "none";
-    disconnectWalletBtn.style.display = "block";
+    if (!window.ethereum) {
+        alert("MetaMask not detected. Please install MetaMask.");
+        return;
+    }
 
-    updateStakingInfo(address);
-  } catch (error) {
-    console.error("Wallet connection failed:", error);
-    alert("❌ Wallet connection failed. Please try again.");
-  }
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    contract = new ethers.Contract(contractAddress, abi, signer);
+
+    const address = await signer.getAddress();
+    document.getElementById("wallet-address").textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
+
+    document.getElementById("connect-wallet").style.display = "none";
+    document.getElementById("disconnect-wallet").style.display = "block";
+
+    updateStakingInfo();
 }
 
 // ✅ Disconnect Wallet
 async function disconnectWallet() {
-  try {
-    await client.wallet.disconnect();
-    walletAddressElement.textContent = "";
-    connectWalletBtn.style.display = "block";
-    disconnectWalletBtn.style.display = "none";
-  } catch (error) {
-    console.error("Wallet disconnection failed:", error);
-    alert("❌ Failed to disconnect wallet.");
-  }
+    document.getElementById("wallet-address").textContent = "";
+    document.getElementById("connect-wallet").style.display = "block";
+    document.getElementById("disconnect-wallet").style.display = "none";
 }
 
-// ✅ Stake Y2K Tokens
+// ✅ Stake Tokens
 async function stakeTokens() {
-  const amount = document.getElementById("stake-amount").value;
-  if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-    alert("❌ Enter a valid amount to stake.");
-    return;
-  }
+    if (!contract) return alert("Connect wallet first!");
 
-  try {
-    const transaction = await prepareContractCall({
-      contract,
-      method: "stake",
-      params: [BigInt(amount * 1e18)],
-    });
+    const amount = document.getElementById("stake-amount").value;
+    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+        alert("Enter a valid amount to stake.");
+        return;
+    }
 
-    await sendTransaction({ transaction });
-    alert(`✅ Successfully staked ${amount} Y2K!`);
-    updateStakingInfo();
-  } catch (error) {
-    console.error("Staking failed:", error);
-    alert("❌ Error staking tokens.");
-  }
+    try {
+        const tx = await contract.stake(ethers.utils.parseEther(amount));
+        await tx.wait();
+        alert(`✅ Successfully staked ${amount} Y2K!`);
+        updateStakingInfo();
+    } catch (error) {
+        console.error("Staking failed:", error);
+        alert("❌ Error staking tokens.");
+    }
 }
 
-// ✅ Unstake Y2K Tokens
+// ✅ Unstake Tokens
 async function unstakeTokens() {
-  const amount = document.getElementById("stake-amount").value;
-  if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-    alert("❌ Enter a valid amount to unstake.");
-    return;
-  }
+    if (!contract) return alert("Connect wallet first!");
 
-  try {
-    const transaction = await prepareContractCall({
-      contract,
-      method: "withdraw",
-      params: [BigInt(amount * 1e18)],
-    });
+    const amount = document.getElementById("stake-amount").value;
+    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+        alert("Enter a valid amount to unstake.");
+        return;
+    }
 
-    await sendTransaction({ transaction });
-    alert(`✅ Successfully unstaked ${amount} Y2K!`);
-    updateStakingInfo();
-  } catch (error) {
-    console.error("Unstaking failed:", error);
-    alert("❌ Error unstaking tokens.");
-  }
+    try {
+        const tx = await contract.withdraw(ethers.utils.parseEther(amount));
+        await tx.wait();
+        alert(`✅ Successfully unstaked ${amount} Y2K!`);
+        updateStakingInfo();
+    } catch (error) {
+        console.error("Unstaking failed:", error);
+        alert("❌ Error unstaking tokens.");
+    }
 }
 
 // ✅ Claim Staking Rewards
 async function claimRewards() {
-  try {
-    const transaction = await prepareContractCall({
-      contract,
-      method: "claimRewards",
-      params: [],
-    });
+    if (!contract) return alert("Connect wallet first!");
 
-    await sendTransaction({ transaction });
-    alert("✅ Successfully claimed rewards!");
-    updateStakingInfo();
-  } catch (error) {
-    console.error("Claiming rewards failed:", error);
-    alert("❌ Error claiming rewards.");
-  }
+    try {
+        const tx = await contract.claimRewards();
+        await tx.wait();
+        alert("✅ Successfully claimed rewards!");
+        updateStakingInfo();
+    } catch (error) {
+        console.error("Claiming rewards failed:", error);
+        alert("❌ Error claiming rewards.");
+    }
 }
 
 // ✅ Fetch Staking Info
 async function updateStakingInfo() {
-  try {
-    const provider = await client.wallet.getProvider();
-    if (!provider) return;
+    if (!contract) return;
 
-    const address = await provider.getAddress();
-    const { _tokensStaked, _rewards } = await contract.call("getStakeInfo", [address]);
+    try {
+        const address = await signer.getAddress();
+        const [staked, rewards] = await contract.getStakeInfo(address);
 
-    document.getElementById("staked-amount").textContent = (_tokensStaked / BigInt(1e18)).toString();
-    document.getElementById("rewards-earned").textContent = (_rewards / BigInt(1e18)).toString();
-  } catch (error) {
-    console.error("Failed to fetch staking info:", error);
-    alert("❌ Error fetching staking information.");
-  }
+        document.getElementById("staked-amount").textContent = ethers.utils.formatEther(staked);
+        document.getElementById("rewards-earned").textContent = ethers.utils.formatEther(rewards);
+    } catch (error) {
+        console.error("Failed to fetch staking info:", error);
+    }
 }
 
 // ✅ Event Listeners
-connectWalletBtn.addEventListener("click", connectWallet);
-disconnectWalletBtn.addEventListener("click", disconnectWallet);
-stakeBtn.addEventListener("click", stakeTokens);
-unstakeBtn.addEventListener("click", unstakeTokens);
-claimRewardsBtn.addEventListener("click", claimRewards);
-
-// ✅ Auto Fetch Data on Page Load if Wallet is Connected
-window.onload = async () => {
-  if (await client.wallet.isConnected()) {
-    connectWallet();
-  }
-};
+document.getElementById("connect-wallet").addEventListener("click", connectWallet);
+document.getElementById("disconnect-wallet").addEventListener("click", disconnectWallet);
+document.getElementById("stake-button").addEventListener("click", stakeTokens);
+document.getElementById("unstake-button").addEventListener("click", unstakeTokens);
+document.getElementById("claim-rewards").addEventListener("click", claimRewards);
