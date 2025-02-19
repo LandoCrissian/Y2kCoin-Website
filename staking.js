@@ -18,7 +18,7 @@ const contract = getContract({
   address: "0x31a96047666335bf629F68796dd0fCBF46B7C8ca",
 });
 
-// ✅ DOM Elements
+// ✅ DOM elements
 const connectWalletBtn = document.getElementById("connect-wallet");
 const disconnectWalletBtn = document.getElementById("disconnect-wallet");
 const stakeBtn = document.getElementById("stake-button");
@@ -26,18 +26,13 @@ const unstakeBtn = document.getElementById("unstake-button");
 const claimRewardsBtn = document.getElementById("claim-rewards");
 const walletAddressElement = document.getElementById("wallet-address");
 
-// ✅ Connect Wallet (Supports Multiple Wallets)
+// ✅ Connect Wallet
 async function connectWallet() {
   try {
-    const { wallet } = await client.wallet.connect([
-      "injected",      // MetaMask, Rabby, Zerion
-      "coinbaseWallet", // Coinbase Wallet
-      "walletConnect", // Rainbow Wallet & others via WalletConnect
-    ]);
-
+    const wallet = await client.wallet.connect("injected");
     const address = await wallet.getAddress();
     walletAddressElement.textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
-
+    
     connectWalletBtn.style.display = "none";
     disconnectWalletBtn.style.display = "block";
 
@@ -73,7 +68,7 @@ async function stakeTokens() {
     const transaction = await prepareContractCall({
       contract,
       method: "stake",
-      params: [BigInt(amount * 1e18)], // Convert to BigNumber for smart contracts
+      params: [BigInt(amount * 1e18)],
     });
 
     await sendTransaction({ transaction });
@@ -97,7 +92,7 @@ async function unstakeTokens() {
     const transaction = await prepareContractCall({
       contract,
       method: "withdraw",
-      params: [BigInt(amount * 1e18)], // Convert to BigNumber
+      params: [BigInt(amount * 1e18)],
     });
 
     await sendTransaction({ transaction });
