@@ -1,38 +1,15 @@
-// Import Ethers.js (Include in your HTML: <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>)
-const contractAddress = "0x31a96047666335bf629F68796dd0fCBF46B7C8ca"; // Your staking contract address
+// ✅ Import Ethers.js (Make sure this is included in your HTML file)
+// <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>
+
+// ✅ Define the staking contract address
+const contractAddress = "0x31a96047666335bf629F68796dd0fCBF46B7C8ca"; // Update if needed
+
+// ✅ Use the full, correct ABI you provided
 const abi = [ 
-    // Replace with your actual ABI
-    {
-        "inputs": [{"internalType": "uint256","name": "amount","type": "uint256"}],
-        "name": "stake",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{"internalType": "uint256","name": "amount","type": "uint256"}],
-        "name": "withdraw",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "claimRewards",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{"internalType": "address","name": "account","type": "address"}],
-        "name": "getStakeInfo",
-        "outputs": [{"internalType": "uint256","name": "staked","type": "uint256"},
-                    {"internalType": "uint256","name": "rewards","type": "uint256"}],
-        "stateMutability": "view",
-        "type": "function"
-    }
+  // Paste your entire ABI here
 ];
 
+// ✅ Global Variables
 let provider, signer, contract;
 
 // ✅ Connect Wallet
@@ -42,18 +19,23 @@ async function connectWallet() {
         return;
     }
 
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    signer = provider.getSigner();
-    contract = new ethers.Contract(contractAddress, abi, signer);
+    try {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
+        contract = new ethers.Contract(contractAddress, abi, signer);
 
-    const address = await signer.getAddress();
-    document.getElementById("wallet-address").textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
+        const address = await signer.getAddress();
+        document.getElementById("wallet-address").textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
 
-    document.getElementById("connect-wallet").style.display = "none";
-    document.getElementById("disconnect-wallet").style.display = "block";
+        document.getElementById("connect-wallet").style.display = "none";
+        document.getElementById("disconnect-wallet").style.display = "block";
 
-    updateStakingInfo();
+        updateStakingInfo();
+    } catch (error) {
+        console.error("Error connecting wallet:", error);
+        alert("❌ Error connecting to wallet. Check console for details.");
+    }
 }
 
 // ✅ Disconnect Wallet
@@ -74,13 +56,13 @@ async function stakeTokens() {
     }
 
     try {
-        const tx = await contract.stake(ethers.utils.parseEther(amount));
+        const tx = await contract.stake(ethers.utils.parseEther(amount), { value: ethers.utils.parseEther(amount) });
         await tx.wait();
         alert(`✅ Successfully staked ${amount} Y2K!`);
         updateStakingInfo();
     } catch (error) {
         console.error("Staking failed:", error);
-        alert("❌ Error staking tokens.");
+        alert("❌ Error staking tokens. Check console for details.");
     }
 }
 
@@ -101,7 +83,7 @@ async function unstakeTokens() {
         updateStakingInfo();
     } catch (error) {
         console.error("Unstaking failed:", error);
-        alert("❌ Error unstaking tokens.");
+        alert("❌ Error unstaking tokens. Check console for details.");
     }
 }
 
@@ -116,7 +98,7 @@ async function claimRewards() {
         updateStakingInfo();
     } catch (error) {
         console.error("Claiming rewards failed:", error);
-        alert("❌ Error claiming rewards.");
+        alert("❌ Error claiming rewards. Check console for details.");
     }
 }
 
