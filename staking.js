@@ -1,115 +1,43 @@
-// ✅ Import Ethers.js (Make sure this is included in your HTML file)
-// <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>
+// ✅ Load Ethers.js (Ensure this script is in your HTML: <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>)
 
-// ✅ Define the staking contract address
-const contractAddress = "0x31a96047666335bf629F68796dd0fCBF46B7C8ca"; // Update if needed
+// ✅ Define the contract address (Ensure this is correct)
+const contractAddress = "0x31a96047666335bf629F68796dd0fCBF46B7C8ca"; // Y2K Staking Contract Address
 
-// ✅ Use the correct ABI
-const abi = [
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_nativeTokenWrapper",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "inputs": [],
-    "name": "ContractMetadataUnauthorized",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "expected",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "actual",
-        "type": "uint256"
-      }
-    ],
-    "name": "CurrencyTransferLibMismatchedValue",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "claimRewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "stake",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_staker",
-        "type": "address"
-      }
-    ],
-    "name": "getStakeInfo",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tokensStaked",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_rewards",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  }
-];
+// ✅ ABI (Ensure this matches your contract)
+const abi = [ /* Paste the full ABI here */ ];
 
-// ✅ Global Variables
+const cronosMainnet = {
+    chainId: "0x19", // Chain ID for Cronos Mainnet
+    chainName: "Cronos",
+    nativeCurrency: {
+        name: "Cronos",
+        symbol: "CRO",
+        decimals: 18,
+    },
+    rpcUrls: ["https://evm.cronos.org"],
+    blockExplorerUrls: ["https://cronoscan.com/"],
+};
+
+// Global variables
 let provider, signer, contract;
 
-// ✅ Connect Wallet
+// ✅ Connect Wallet Function
 async function connectWallet() {
     if (!window.ethereum) {
-        alert("MetaMask not detected. Please install MetaMask.");
+        alert("❌ MetaMask not detected. Please install MetaMask.");
         return;
     }
 
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    
     try {
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
+        // Check if the network is Cronos, if not, request a switch
+        const { chainId } = await provider.getNetwork();
+        if (chainId !== parseInt(cronosMainnet.chainId, 16)) {
+            await switchToCronos();
+        }
+
+        await provider.send("eth_requestAccounts", []); // Request wallet connection
         signer = provider.getSigner();
         contract = new ethers.Contract(contractAddress, abi, signer);
 
@@ -119,48 +47,73 @@ async function connectWallet() {
         document.getElementById("connect-wallet").style.display = "none";
         document.getElementById("disconnect-wallet").style.display = "block";
 
-        updateStakingInfo();
+        updateStakingInfo(); // Fetch staking info after connecting
     } catch (error) {
-        console.error("Error connecting wallet:", error);
+        console.error("Wallet connection error:", error);
         alert("❌ Error connecting to wallet. Check console for details.");
     }
 }
 
+// ✅ Function to Switch to Cronos Mainnet
+async function switchToCronos() {
+    try {
+        await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [cronosMainnet],
+        });
+    } catch (error) {
+        console.error("Network switch error:", error);
+        alert("❌ Please switch to Cronos Mainnet in MetaMask.");
+    }
+}
+
 // ✅ Disconnect Wallet
-async function disconnectWallet() {
+function disconnectWallet() {
     document.getElementById("wallet-address").textContent = "";
     document.getElementById("connect-wallet").style.display = "block";
     document.getElementById("disconnect-wallet").style.display = "none";
 }
 
-// ✅ Stake Tokens
+// ✅ Stake Tokens Function
 async function stakeTokens() {
-    if (!contract) return alert("Connect wallet first!");
+    if (!contract) return alert("❌ Connect wallet first!");
 
     const amount = document.getElementById("stake-amount").value;
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-        alert("Enter a valid amount to stake.");
+        alert("❌ Enter a valid amount to stake.");
         return;
     }
 
     try {
-        const tx = await contract.stake(ethers.utils.parseEther(amount), { value: ethers.utils.parseEther(amount) });
+        // Approve Y2K contract to spend tokens before staking (only needed for ERC-20 tokens)
+        const y2kTokenAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d"; // Y2K Token contract
+        const y2kTokenAbi = [ 
+            { "name": "approve", "type": "function", "inputs": [ { "name": "spender", "type": "address" }, { "name": "amount", "type": "uint256" } ], "stateMutability": "nonpayable" }
+        ];
+
+        const y2kContract = new ethers.Contract(y2kTokenAddress, y2kTokenAbi, signer);
+        const approveTx = await y2kContract.approve(contractAddress, ethers.utils.parseEther(amount));
+        await approveTx.wait();
+
+        // Now stake tokens
+        const tx = await contract.stake(ethers.utils.parseEther(amount));
         await tx.wait();
+
         alert(`✅ Successfully staked ${amount} Y2K!`);
         updateStakingInfo();
     } catch (error) {
-        console.error("Staking failed:", error);
+        console.error("Staking error:", error);
         alert("❌ Error staking tokens. Check console for details.");
     }
 }
 
 // ✅ Unstake Tokens
 async function unstakeTokens() {
-    if (!contract) return alert("Connect wallet first!");
+    if (!contract) return alert("❌ Connect wallet first!");
 
     const amount = document.getElementById("stake-amount").value;
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-        alert("Enter a valid amount to unstake.");
+        alert("❌ Enter a valid amount to unstake.");
         return;
     }
 
@@ -170,14 +123,14 @@ async function unstakeTokens() {
         alert(`✅ Successfully unstaked ${amount} Y2K!`);
         updateStakingInfo();
     } catch (error) {
-        console.error("Unstaking failed:", error);
+        console.error("Unstaking error:", error);
         alert("❌ Error unstaking tokens. Check console for details.");
     }
 }
 
 // ✅ Claim Staking Rewards
 async function claimRewards() {
-    if (!contract) return alert("Connect wallet first!");
+    if (!contract) return alert("❌ Connect wallet first!");
 
     try {
         const tx = await contract.claimRewards();
@@ -185,7 +138,7 @@ async function claimRewards() {
         alert("✅ Successfully claimed rewards!");
         updateStakingInfo();
     } catch (error) {
-        console.error("Claiming rewards failed:", error);
+        console.error("Claim rewards error:", error);
         alert("❌ Error claiming rewards. Check console for details.");
     }
 }
