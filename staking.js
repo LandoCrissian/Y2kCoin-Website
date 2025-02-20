@@ -1,11 +1,82 @@
-// ✅ Load Ethers.js (Ensure this script is in your HTML: <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>)
+// ✅ Import Ethers.js (Ensure this script is included in your HTML file)
+// <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>
 
-// ✅ Define the contract address (Ensure this is correct)
+// ✅ Define the staking contract address
 const contractAddress = "0x31a96047666335bf629F68796dd0fCBF46B7C8ca"; // Y2K Staking Contract Address
 
-// ✅ ABI (Ensure this matches your contract)
-const abi = [ /* Paste the full ABI here */ ];
+// ✅ Paste Your Full ABI Below
+const abi = [
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_nativeTokenWrapper",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "claimRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "stake",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_staker",
+        "type": "address"
+      }
+    ],
+    "name": "getStakeInfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_tokensStaked",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_rewards",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+];
 
+// ✅ Cronos Mainnet Info
 const cronosMainnet = {
     chainId: "0x19", // Chain ID for Cronos Mainnet
     chainName: "Cronos",
@@ -29,25 +100,29 @@ async function connectWallet() {
     }
 
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    
+
     try {
-        // Check if the network is Cronos, if not, request a switch
+        // Request wallet connection
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
+
+        // Ensure Cronos network is selected
         const { chainId } = await provider.getNetwork();
         if (chainId !== parseInt(cronosMainnet.chainId, 16)) {
             await switchToCronos();
         }
 
-        await provider.send("eth_requestAccounts", []); // Request wallet connection
-        signer = provider.getSigner();
+        // Connect to the contract
         contract = new ethers.Contract(contractAddress, abi, signer);
 
+        // Get wallet address
         const address = await signer.getAddress();
         document.getElementById("wallet-address").textContent = `Connected: ${address.substring(0, 6)}...${address.slice(-4)}`;
 
         document.getElementById("connect-wallet").style.display = "none";
         document.getElementById("disconnect-wallet").style.display = "block";
 
-        updateStakingInfo(); // Fetch staking info after connecting
+        updateStakingInfo(); // Fetch staking info
     } catch (error) {
         console.error("Wallet connection error:", error);
         alert("❌ Error connecting to wallet. Check console for details.");
@@ -85,17 +160,7 @@ async function stakeTokens() {
     }
 
     try {
-        // Approve Y2K contract to spend tokens before staking (only needed for ERC-20 tokens)
-        const y2kTokenAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d"; // Y2K Token contract
-        const y2kTokenAbi = [ 
-            { "name": "approve", "type": "function", "inputs": [ { "name": "spender", "type": "address" }, { "name": "amount", "type": "uint256" } ], "stateMutability": "nonpayable" }
-        ];
-
-        const y2kContract = new ethers.Contract(y2kTokenAddress, y2kTokenAbi, signer);
-        const approveTx = await y2kContract.approve(contractAddress, ethers.utils.parseEther(amount));
-        await approveTx.wait();
-
-        // Now stake tokens
+        // Stake tokens
         const tx = await contract.stake(ethers.utils.parseEther(amount));
         await tx.wait();
 
