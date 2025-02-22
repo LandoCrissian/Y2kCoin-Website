@@ -6,6 +6,7 @@
     <title>Y2KCoin - A Digital Revolution</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -21,19 +22,106 @@
             font-weight: bold;
             transition: all 0.3s ease-in-out;
         }
-        .btn-primary { background-color: #00e6e6; color: #0a0a0a; }
-        .btn-primary:hover { background-color: #009999; }
-        .btn-secondary { background-color: #ff007f; color: #fff; }
-        .btn-secondary:hover { background-color: #cc0066; }
+        .btn-primary { 
+            background-color: #00e6e6; 
+            color: #0a0a0a; 
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
+        }
+        .btn-primary:hover { 
+            background-color: #009999; 
+            transform: translateY(-2px);
+        }
+        .btn-secondary { 
+            background-color: #ff007f; 
+            color: #fff; 
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+        }
+        .btn-secondary:hover { 
+            background-color: #cc0066; 
+            transform: translateY(-2px);
+        }
         .tab-content {
             display: none;
-        }
-        .tab-content.active {
-            display: block;
         }
         .tab-btn.active {
             color: #00e6e6;
             font-weight: bold;
+        }
+        .input-field {
+            background-color: #1a1a1a;
+            border: 2px solid #333;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        .input-field:focus {
+            border-color: #00e6e6;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 230, 230, 0.2);
+        }
+        .info-card {
+            background-color: #111;
+            padding: 24px;
+            border-radius: 16px;
+            margin: 12px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+        .info-card:hover {
+            transform: translateY(-2px);
+        }
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #2d2d2d;
+            transition: .3s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #00e6e6;
+            box-shadow: 0 0 10px rgba(0, 230, 230, 0.5);
+        }
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -52,8 +140,7 @@
             </ul>
         </nav>
     </header>
-
-    <!-- Main Content -->
+        <!-- Main Content -->
     <main class="w-full max-w-4xl py-10 flex-grow">
         <!-- Hero Section -->
         <section id="hero" class="mb-10">
@@ -67,31 +154,119 @@
 
         <!-- Tab Content -->
         <section id="tab-content" class="mt-8">
-            <div id="about" class="tab-content active">
+            <!-- About Tab -->
+            <div id="about" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
                 <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
             </div>
 
+            <!-- Mission Tab -->
             <div id="mission" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
                 <p class="mt-4 text-gray-400">We aim to build an engaging, sustainable digital ecosystem where holders benefit from staking, NFTs, and gaming.</p>
             </div>
 
+            <!-- Marketplace Tab -->
             <div id="marketplace" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
                 <p class="mt-4 text-gray-400">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
             </div>
 
+            <!-- NFTs Tab -->
             <div id="nfts" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K NFTs</h2>
                 <p class="mt-4 text-gray-400">Limited edition, community-driven digital collectibles with real utility.</p>
             </div>
 
+            <!-- Staking Tab -->
             <div id="staking" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
-                <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock rewards, and participate in our ecosystem.</p>
+                <h2 class="text-3xl font-bold glow-text mb-6">Y2K Staking</h2>
+                
+                <!-- Wallet Connection -->
+                <div id="wallet-connection" class="mb-8">
+                    <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
+                    <button id="disconnect-wallet" class="btn btn-secondary hidden">Disconnect Wallet</button>
+                    <p id="wallet-address" class="mt-4 font-mono text-cyan-400"></p>
+                </div>
+
+                <!-- Network Info -->
+                <div class="info-card mb-8">
+                    <p class="text-lg">Network: <span id="network-name" class="text-cyan-400">Not Connected</span></p>
+                    <p class="text-lg">Contract Status: <span id="contract-status" class="text-cyan-400">Not Connected</span></p>
+                </div>
+
+                <!-- Staking Interface -->
+                <div class="info-card mb-8">
+                    <div class="relative max-w-md mx-auto">
+                        <input type="number" id="stake-amount" placeholder="Amount to stake" 
+                            class="input-field"
+                            min="0" step="0.01">
+                        <button id="max-button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-cyan-400 hover:text-cyan-300">MAX</button>
+                    </div>
+                    <input type="text" id="referral-address" placeholder="Referral Address (optional)" 
+                        class="input-field mt-4 max-w-md mx-auto block">
+                    
+                    <div class="flex flex-wrap justify-center gap-4 mt-6">
+                        <button id="stake-button" class="btn btn-primary">Stake Y2K</button>
+                        <button id="unstake-button" class="btn btn-secondary">Unstake Y2K</button>
+                        <button id="claim-rewards" class="btn btn-primary">Claim Rewards</button>
+                    </div>
+                </div>
+
+                <!-- Staking Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Staking Info</h3>
+                        <p class="text-lg">Staked Y2K: <span id="staked-amount" class="font-mono text-cyan-400">0</span></p>
+                        <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">0</span> POGs</p>
+                        <p class="text-lg">Staking Since: <span id="staking-time" class="font-mono text-cyan-400">-</span></p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Referral Stats</h3>
+                        <p class="text-lg">Referral Rewards: <span id="referral-rewards" class="font-mono text-cyan-400">0</span> POGs</p>
+                        <p class="text-lg">Total Referrals: <span id="total-referrals" class="font-mono text-cyan-400">0</span></p>
+                    </div>
+                </div>
+
+                <!-- Protocol Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Protocol Info</h3>
+                        <p class="text-lg">Reward Rate: <span id="reward-rate" class="font-mono text-cyan-400">0</span></p>
+                        <p class="text-lg">Burn Rate: <span id="burn-rate" class="font-mono text-cyan-400">0</span>%</p>
+                        <p class="text-lg">Total Staked: <span id="total-staked" class="font-mono text-cyan-400">0</span> Y2K</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Lottery</h3>
+                        <p class="text-lg">Status: <span id="lottery-status" class="font-mono text-cyan-400">Disabled</span></p>
+                        <p class="text-lg">Next Draw: <span id="next-draw" class="font-mono text-cyan-400">-</span></p>
+                        <p class="text-lg">Prize Pool: <span id="prize-pool" class="font-mono text-cyan-400">0</span> POGs</p>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="flex flex-wrap justify-center gap-12 mb-8">
+                    <div class="flex items-center">
+                        <label class="text-lg mr-3">Auto-Compounding</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="auto-compound-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <label class="text-lg mr-3">Participate in Lottery</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="lottery-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
+            <!-- Gaming Tab -->
             <div id="gaming" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K Gaming</h2>
                 <p class="mt-4 text-gray-400">An immersive gaming experience that rewards players through blockchain mechanics.</p>
@@ -101,7 +276,6 @@
 
     <!-- Footer -->
     <footer class="w-full py-6 bg-[#0a0a0a]">
-        <!-- Social Links -->
         <section id="social-links" class="mb-6">
             <h2 class="text-2xl font-bold glow-text">Follow Us</h2>
             <div class="flex justify-center gap-4 mt-4">
@@ -115,22 +289,96 @@
 
     <!-- JavaScript -->
     <script>
+        // Tab Switching Logic
         document.addEventListener("DOMContentLoaded", () => {
             const tabButtons = document.querySelectorAll(".tab-btn");
             const tabContents = document.querySelectorAll(".tab-content");
 
-            tabButtons.forEach(button => {
-                button.addEventListener("click", () => {
-                    // Remove active state from all buttons & contents
-                    tabButtons.forEach(btn => btn.classList.remove("active"));
-                    tabContents.forEach(content => content.classList.remove("active"));
+            function showTab(tabId) {
+                tabContents.forEach(content => {
+                    content.style.display = 'none';
+                });
 
-                    // Activate the clicked tab
-                    button.classList.add("active");
-                    document.getElementById(button.getAttribute("data-tab")).classList.add("active");
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                const selectedTab = document.getElementById(tabId);
+                if (selectedTab) {
+                    selectedTab.style.display = 'block';
+                }
+
+                const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+            }
+
+            tabButtons.forEach(button => {
+                button.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const tabId = button.getAttribute("data-tab");
+                    showTab(tabId);
                 });
             });
+
+            // Show initial tab
+            showTab('about');
         });
+
+        // Staking Logic
+        let contract;
+        let signer;
+        let provider;
+        
+        const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS"; // Replace with your contract address
+        const CONTRACT_ABI = []; // Add your contract ABI here
+        
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask to use the staking feature');
+                    return;
+                }
+
+                const loadingBtn = document.getElementById("connect-wallet");
+                loadingBtn.textContent = 'Connecting...';
+                
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner();
+                
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                
+                const address = await signer.getAddress();
+                const network = await provider.getNetwork();
+                
+                document.getElementById("wallet-address").textContent = `Connected: ${address.substring(0, 6)}...${address.substring(38)}`;
+                document.getElementById("network-name").textContent = network.name;
+                document.getElementById("connect-wallet").classList.add('hidden');
+                document.getElementById("disconnect-wallet").classList.remove('hidden');
+                
+                await updateUI();
+                setupEventListeners();
+                
+                // Setup network change listener
+                window.ethereum.on('chainChanged', () => window.location.reload());
+                window.ethereum.on('accountsChanged', () => window.location.reload());
+                
+            } catch (error) {
+                console.error("Error connecting wallet:", error);
+                alert("Failed to connect wallet: " + error.message);
+            } finally {
+                const loadingBtn = document.getElementById("connect-wallet");
+                loadingBtn.textContent = 'Connect Wallet';
+            }
+        }
+
+        // Add event listener for wallet connection
+        document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
+
+        // Update UI every 30 seconds
+        setInterval(updateUI, 30000);
     </script>
 </body>
 </html>
