@@ -88,9 +88,85 @@
             </div>
 
             <div id="staking" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
-                <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock rewards, and participate in our ecosystem.</p>
+    <h2 class="text-3xl font-bold glow-text mb-6">Y2K Staking</h2>
+    
+    <!-- Staking DApp Container -->
+    <div class="container mx-auto">
+        <p class="mb-6">Stake Y2K tokens to earn POGs with auto-compounding rewards, referrals, and lottery features!</p>
+        
+        <div id="wallet-connection" class="mt-6">
+            <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
+            <button id="disconnect-wallet" class="btn btn-secondary" style="display: none;">Disconnect Wallet</button>
+            <p id="wallet-address" class="mt-2"></p>
+        </div>
+
+        <div id="network-info" class="info-card mt-4">
+            <p>Network: <span id="network-name">Not Connected</span></p>
+            <p>Contract Status: <span id="contract-status">Not Connected</span></p>
+        </div>
+        
+        <div id="staking-interface" class="mt-6">
+            <div class="info-card">
+                <input type="number" id="stake-amount" placeholder="Amount to stake" class="input-field">
+                <input type="text" id="referral-address" placeholder="Referral Address (optional)" class="input-field mt-2">
+                <div class="flex gap-4 mt-4 justify-center">
+                    <button id="stake-button" class="btn btn-secondary">Stake Y2K</button>
+                    <button id="unstake-button" class="btn btn-secondary">Unstake Y2K</button>
+                    <button id="claim-rewards" class="btn btn-primary">Claim Rewards</button>
+                </div>
             </div>
+        </div>
+        
+        <div id="staking-stats" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <div class="info-card">
+                <h3 class="text-xl mb-2">Your Staking Info</h3>
+                <p>Staked Y2K: <span id="staked-amount">0</span></p>
+                <p>Pending Rewards: <span id="pending-rewards">0</span> POGs</p>
+                <p>Staking Since: <span id="staking-time">-</span></p>
+            </div>
+            
+            <div class="info-card">
+                <h3 class="text-xl mb-2">Referral Stats</h3>
+                <p>Referral Rewards: <span id="referral-rewards">0</span> POGs</p>
+                <p>Total Referrals: <span id="total-referrals">0</span></p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <div class="info-card">
+                <h3 class="text-xl mb-2">Protocol Info</h3>
+                <p>Reward Rate: <span id="reward-rate">0</span></p>
+                <p>Burn Rate: <span id="burn-rate">0</span>%</p>
+                <p>Total Staked: <span id="total-staked">0</span> Y2K</p>
+            </div>
+            
+            <div class="info-card">
+                <h3 class="text-xl mb-2">Lottery</h3>
+                <p>Status: <span id="lottery-status">Disabled</span></p>
+                <p>Next Draw: <span id="next-draw">-</span></p>
+                <p>Prize Pool: <span id="prize-pool">0</span> POGs</p>
+            </div>
+        </div>
+        
+        <div class="mt-6 flex justify-center gap-8">
+            <div>
+                <label class="text-lg">Auto-Compounding</label>
+                <label class="toggle-switch ml-2">
+                    <input type="checkbox" id="auto-compound-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div>
+                <label class="text-lg">Participate in Lottery</label>
+                <label class="toggle-switch ml-2">
+                    <input type="checkbox" id="lottery-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
 
             <div id="gaming" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K Gaming</h2>
