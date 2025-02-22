@@ -131,6 +131,72 @@ p {
     background-color: #cc0066;
 }
 
+/* Staking DApp Specific Styles */
+.info-card {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+    border: 1px solid rgba(var(--neon-cyan), 0.2);
+}
+
+.input-field {
+    background-color: #2d2d2d;
+    border: 1px solid #404040;
+    color: white;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    width: 100%;
+    margin: 5px 0;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: gray;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--neon-cyan);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Layout Components */
 .cta-buttons {
     display: flex;
     justify-content: center;
@@ -138,7 +204,6 @@ p {
     margin-top: 20px;
 }
 
-/* Social Links */
 .social-links {
     display: flex;
     justify-content: center;
@@ -171,6 +236,7 @@ footer {
     margin-top: 40px;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
     nav ul {
         display: none;
@@ -186,28 +252,9 @@ footer {
 
     h2 {
         font-size: 2rem;
-        <style>
-    /* Add these to your existing styles */
-    .info-card { background-color: #1a1a1a; padding: 20px; border-radius: 12px; margin: 10px 0; }
-    .input-field { background-color: #2d2d2d; border: 1px solid #404040; color: white; padding: 10px; border-radius: 8px; width: 100%; margin: 5px 0; }
-    .toggle-switch { position: relative; display: inline-block; width: 50px; height: 24px; }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: gray; transition: .4s; border-radius: 34px; }
-    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-    input:checked + .slider { background-color: #00e6e6; }
-    input:checked + .slider:before { transform: translateX(26px); }
-</style>
-        <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.umd.min.js"></script>
-<script>
-    // Add the entire script section from the staking DApp here
-    let contract;
-    let signer;
-    let provider;
+    }
     
-    const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS";
-    const CONTRACT_ABI = []; // Add your contract ABI here
-    
-    // ... (rest of the staking DApp JavaScript code)
-</script>
+    .info-card {
+        margin: 10px;
     }
 }
