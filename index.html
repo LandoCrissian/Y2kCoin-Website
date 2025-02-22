@@ -140,7 +140,8 @@
             </ul>
         </nav>
     </header>
-        <!-- Main Content -->
+
+    <!-- Main Content -->
     <main class="w-full max-w-4xl py-10 flex-grow">
         <!-- Hero Section -->
         <section id="hero" class="mb-10">
@@ -177,91 +178,123 @@
                 <h2 class="text-3xl font-bold glow-text">Y2K NFTs</h2>
                 <p class="mt-4 text-gray-400">Limited edition, community-driven digital collectibles with real utility.</p>
             </div>
-
-            <!-- Staking Tab -->
+                        <!-- Staking Tab -->
             <div id="staking" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text mb-6">Y2K Staking</h2>
+                <h2 class="text-3xl font-bold glow-text mb-6">Y2K Staking Dashboard</h2>
                 
                 <!-- Wallet Connection -->
-                <div id="wallet-connection" class="mb-8">
+                <div id="wallet-section" class="mb-8">
                     <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
                     <button id="disconnect-wallet" class="btn btn-secondary hidden">Disconnect Wallet</button>
-                    <p id="wallet-address" class="mt-4 font-mono text-cyan-400"></p>
-                </div>
-
-                <!-- Network Info -->
-                <div class="info-card mb-8">
-                    <p class="text-lg">Network: <span id="network-name" class="text-cyan-400">Not Connected</span></p>
-                    <p class="text-lg">Contract Status: <span id="contract-status" class="text-cyan-400">Not Connected</span></p>
-                </div>
-
-                <!-- Staking Interface -->
-                <div class="info-card mb-8">
-                    <div class="relative max-w-md mx-auto">
-                        <input type="number" id="stake-amount" placeholder="Amount to stake" 
-                            class="input-field"
-                            min="0" step="0.01">
-                        <button id="max-button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-cyan-400 hover:text-cyan-300">MAX</button>
+                    <div id="network-info" class="mt-4 hidden">
+                        <p class="text-lg">Connected Wallet: <span id="wallet-address" class="font-mono text-cyan-400"></span></p>
+                        <p class="text-lg">Network: <span id="network-name" class="text-cyan-400">Not Connected</span></p>
                     </div>
-                    <input type="text" id="referral-address" placeholder="Referral Address (optional)" 
-                        class="input-field mt-4 max-w-md mx-auto block">
-                    
-                    <div class="flex flex-wrap justify-center gap-4 mt-6">
-                        <button id="stake-button" class="btn btn-primary">Stake Y2K</button>
-                        <button id="unstake-button" class="btn btn-secondary">Unstake Y2K</button>
+                </div>
+
+                <!-- Main Staking Interface - Hidden until wallet connected -->
+                <div id="staking-interface" class="hidden">
+                    <!-- Token Balances -->
+                    <div class="info-card mb-8">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Balances</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-lg">Y2K Balance: <span id="y2k-balance" class="font-mono text-cyan-400">0</span></p>
+                                <p class="text-lg">POGS Balance: <span id="pogs-balance" class="font-mono text-cyan-400">0</span></p>
+                            </div>
+                            <div>
+                                <p class="text-lg">Staked Y2K: <span id="staked-amount" class="font-mono text-cyan-400">0</span></p>
+                                <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Staking Actions -->
+                    <div class="info-card mb-8">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Stake/Unstake</h3>
+                        <div class="max-w-md mx-auto">
+                            <div class="relative mb-4">
+                                <input type="number" 
+                                       id="stake-amount" 
+                                       placeholder="Enter amount" 
+                                       class="input-field"
+                                       min="0" 
+                                       step="any">
+                                <button id="max-button" 
+                                        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-cyan-400 hover:text-cyan-300">
+                                    MAX
+                                </button>
+                            </div>
+                            <input type="text" 
+                                   id="referral-address" 
+                                   placeholder="Referral Address (optional)" 
+                                   class="input-field mb-4">
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <button id="approve-button" class="btn btn-primary">Approve Y2K</button>
+                                <button id="stake-button" class="btn btn-primary">Stake</button>
+                                <button id="unstake-button" class="btn btn-secondary">Unstake</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rewards Section -->
+                    <div class="info-card mb-8">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Rewards</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <p class="text-lg">Claimable POGS: <span id="claimable-rewards" class="font-mono text-cyan-400">0</span></p>
+                                <p class="text-lg">Last Claim: <span id="last-claim-time" class="font-mono text-cyan-400">Never</span></p>
+                            </div>
+                            <div>
+                                <p class="text-lg">Referral Rewards: <span id="referral-rewards" class="font-mono text-cyan-400">0</span></p>
+                                <p class="text-lg">Total Referred: <span id="total-referrals" class="font-mono text-cyan-400">0</span></p>
+                            </div>
+                        </div>
                         <button id="claim-rewards" class="btn btn-primary">Claim Rewards</button>
                     </div>
+
+                    <!-- Staking Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="info-card">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Staking Info</h3>
+                            <p class="text-lg">Staking Since: <span id="staking-time" class="font-mono text-cyan-400">-</span></p>
+                            <p class="text-lg">Lock Period: <span id="lock-period" class="font-mono text-cyan-400">-</span></p>
+                            <p class="text-lg">Next Unlock: <span id="next-unlock" class="font-mono text-cyan-400">-</span></p>
+                        </div>
+                        <div class="info-card">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-4">Protocol Stats</h3>
+                            <p class="text-lg">APR: <span id="current-apr" class="font-mono text-cyan-400">0%</span></p>
+                            <p class="text-lg">Total Staked: <span id="total-staked" class="font-mono text-cyan-400">0</span></p>
+                            <p class="text-lg">Burn Rate: <span id="burn-rate" class="font-mono text-cyan-400">0%</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Features Toggle -->
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Features</h3>
+                        <div class="flex flex-wrap justify-center gap-12">
+                            <div class="flex items-center">
+                                <label class="text-lg mr-3">Auto-Compound</label>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="auto-compound-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex items-center">
+                                <label class="text-lg mr-3">Lottery Entry</label>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="lottery-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Staking Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Staking Info</h3>
-                        <p class="text-lg">Staked Y2K: <span id="staked-amount" class="font-mono text-cyan-400">0</span></p>
-                        <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">0</span> POGs</p>
-                        <p class="text-lg">Staking Since: <span id="staking-time" class="font-mono text-cyan-400">-</span></p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Referral Stats</h3>
-                        <p class="text-lg">Referral Rewards: <span id="referral-rewards" class="font-mono text-cyan-400">0</span> POGs</p>
-                        <p class="text-lg">Total Referrals: <span id="total-referrals" class="font-mono text-cyan-400">0</span></p>
-                    </div>
-                </div>
-
-                <!-- Protocol Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Protocol Info</h3>
-                        <p class="text-lg">Reward Rate: <span id="reward-rate" class="font-mono text-cyan-400">0</span></p>
-                        <p class="text-lg">Burn Rate: <span id="burn-rate" class="font-mono text-cyan-400">0</span>%</p>
-                        <p class="text-lg">Total Staked: <span id="total-staked" class="font-mono text-cyan-400">0</span> Y2K</p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Lottery</h3>
-                        <p class="text-lg">Status: <span id="lottery-status" class="font-mono text-cyan-400">Disabled</span></p>
-                        <p class="text-lg">Next Draw: <span id="next-draw" class="font-mono text-cyan-400">-</span></p>
-                        <p class="text-lg">Prize Pool: <span id="prize-pool" class="font-mono text-cyan-400">0</span> POGs</p>
-                    </div>
-                </div>
-
-                <!-- Features -->
-                <div class="flex flex-wrap justify-center gap-12 mb-8">
-                    <div class="flex items-center">
-                        <label class="text-lg mr-3">Auto-Compounding</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="auto-compound-toggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="flex items-center">
-                        <label class="text-lg mr-3">Participate in Lottery</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="lottery-toggle">
-                            <span class="slider"></span>
-                        </label>
+                <!-- Transaction Status -->
+                <div id="tx-status" class="fixed bottom-4 right-4 hidden">
+                    <div class="bg-black border border-cyan-400 rounded-lg p-4 shadow-lg">
+                        <p id="tx-message" class="text-cyan-400"></p>
                     </div>
                 </div>
             </div>
@@ -273,8 +306,7 @@
             </div>
         </section>
     </main>
-
-    <!-- Footer -->
+        <!-- Footer -->
     <footer class="w-full py-6 bg-[#0a0a0a]">
         <section id="social-links" class="mb-6">
             <h2 class="text-2xl font-bold glow-text">Follow Us</h2>
@@ -289,6 +321,27 @@
 
     <!-- JavaScript -->
     <script>
+        // Contract ABI - Add your full ABI here
+        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_y2kToken","type":"address"},{"internalType":"address","name":"_pogsToken","type":"address"},{"internalType":"uint256","name":"_rewardRate","type":"uint256"},{"internalType":"address","name":"_treasury","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"AutoCompoundingToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"BurnRateUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"winner","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"roundId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryWinner","type":"event"}];
+
+        // Contract Constants
+        const CONTRACT_ADDRESS = "0x7DC6a9900e9DE69fF36ECb7dF56aA7c9157DE483";
+        const CRONOS_NETWORK_CONFIG = {
+            chainId: '0x19',
+            chainName: 'Cronos Mainnet',
+            nativeCurrency: {
+                name: 'CRO',
+                symbol: 'CRO',
+                decimals: 18
+            },
+            rpcUrls: ['https://evm.cronos.org'],
+            blockExplorerUrls: ['https://cronoscan.com/']
+        };
+
+        let contract;
+        let signer;
+        let provider;
+
         // Tab Switching Logic
         document.addEventListener("DOMContentLoaded", () => {
             const tabButtons = document.querySelectorAll(".tab-btn");
@@ -326,14 +379,27 @@
             showTab('about');
         });
 
-        // Staking Logic
-        let contract;
-        let signer;
-        let provider;
-        
-        const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS"; // Replace with your contract address
-        const CONTRACT_ABI = []; // Add your contract ABI here
-        
+        async function switchToCronosNetwork() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: CRONOS_NETWORK_CONFIG.chainId }],
+                });
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [CRONOS_NETWORK_CONFIG],
+                        });
+                    } catch (addError) {
+                        console.error('Failed to add Cronos network:', addError);
+                        showError('Failed to add Cronos network');
+                    }
+                }
+            }
+        }
+
         async function connectWallet() {
             try {
                 if (typeof window.ethereum === 'undefined') {
@@ -344,6 +410,8 @@
                 const loadingBtn = document.getElementById("connect-wallet");
                 loadingBtn.textContent = 'Connecting...';
                 
+                await switchToCronosNetwork();
+                
                 provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send("eth_requestAccounts", []);
                 signer = provider.getSigner();
@@ -351,33 +419,198 @@
                 contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 
                 const address = await signer.getAddress();
-                const network = await provider.getNetwork();
                 
-                document.getElementById("wallet-address").textContent = `Connected: ${address.substring(0, 6)}...${address.substring(38)}`;
-                document.getElementById("network-name").textContent = network.name;
+                document.getElementById("wallet-address").textContent = 
+                    `${address.substring(0, 6)}...${address.substring(38)}`;
+                document.getElementById("network-info").classList.remove('hidden');
                 document.getElementById("connect-wallet").classList.add('hidden');
                 document.getElementById("disconnect-wallet").classList.remove('hidden');
+                document.getElementById("staking-interface").classList.remove('hidden');
                 
                 await updateUI();
                 setupEventListeners();
                 
-                // Setup network change listener
-                window.ethereum.on('chainChanged', () => window.location.reload());
-                window.ethereum.on('accountsChanged', () => window.location.reload());
-                
             } catch (error) {
                 console.error("Error connecting wallet:", error);
-                alert("Failed to connect wallet: " + error.message);
+                showError("Failed to connect wallet: " + error.message);
             } finally {
                 const loadingBtn = document.getElementById("connect-wallet");
                 loadingBtn.textContent = 'Connect Wallet';
             }
         }
 
-        // Add event listener for wallet connection
-        document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
+        async function updateUI() {
+            if (!contract || !signer) return;
 
-        // Update UI every 30 seconds
+            try {
+                const address = await signer.getAddress();
+                
+                // Get stake info
+                const stakeInfo = await contract.stakes(address);
+                document.getElementById("staked-amount").textContent = 
+                    ethers.utils.formatEther(stakeInfo.amount);
+                
+                if (stakeInfo.startTime.gt(0)) {
+                    const stakingDate = new Date(stakeInfo.startTime.mul(1000).toNumber());
+                    document.getElementById("staking-time").textContent = stakingDate.toLocaleDateString();
+                }
+
+                // Get token balances
+                const y2kToken = new ethers.Contract(
+                    await contract.y2kToken(),
+                    ["function balanceOf(address) view returns (uint256)"],
+                    signer
+                );
+                const pogsToken = new ethers.Contract(
+                    await contract.pogsToken(),
+                    ["function balanceOf(address) view returns (uint256)"],
+                    signer
+                );
+
+                const y2kBalance = await y2kToken.balanceOf(address);
+                const pogsBalance = await pogsToken.balanceOf(address);
+
+                document.getElementById("y2k-balance").textContent = 
+                    ethers.utils.formatEther(y2kBalance);
+                document.getElementById("pogs-balance").textContent = 
+                    ethers.utils.formatEther(pogsBalance);
+
+                // Update other UI elements
+                const referralRewards = await contract.referralRewards(address);
+                document.getElementById("referral-rewards").textContent = 
+                    ethers.utils.formatEther(referralRewards);
+
+                const burnRate = await contract.burnRate();
+                document.getElementById("burn-rate").textContent = 
+                    burnRate.toString() + "%";
+
+            } catch (error) {
+                console.error("Error updating UI:", error);
+                showError("Failed to update information");
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById("stake-button").addEventListener("click", stake);
+            document.getElementById("unstake-button").addEventListener("click", unstake);
+            document.getElementById("claim-rewards").addEventListener("click", claimRewards);
+            document.getElementById("approve-button").addEventListener("click", approveTokens);
+            
+            document.getElementById("max-button").addEventListener("click", async () => {
+                if (!contract || !signer) return;
+                
+                try {
+                    const y2kToken = new ethers.Contract(
+                        await contract.y2kToken(),
+                        ["function balanceOf(address) view returns (uint256)"],
+                        signer
+                    );
+                    
+                    const balance = await y2kToken.balanceOf(await signer.getAddress());
+                    document.getElementById("stake-amount").value = ethers.utils.formatEther(balance);
+                } catch (error) {
+                    console.error("Error setting max amount:", error);
+                    showError("Failed to set maximum amount");
+                }
+            });
+        }
+
+        async function approveTokens() {
+            if (!contract || !signer) return;
+            
+            try {
+                const amount = document.getElementById("stake-amount").value;
+                const amountWei = ethers.utils.parseEther(amount);
+                
+                const y2kToken = new ethers.Contract(
+                    await contract.y2kToken(),
+                    ["function approve(address spender, uint256 amount) public returns (bool)"],
+                    signer
+                );
+                
+                const tx = await y2kToken.approve(CONTRACT_ADDRESS, amountWei);
+                showStatus("Approving tokens...");
+                await tx.wait();
+                showStatus("Tokens approved successfully!");
+            } catch (error) {
+                console.error("Approval error:", error);
+                showError("Failed to approve tokens");
+            }
+        }
+
+        async function stake() {
+            if (!contract || !signer) return;
+            
+            try {
+                const amount = document.getElementById("stake-amount").value;
+                const referralAddress = document.getElementById("referral-address").value;
+                const amountWei = ethers.utils.parseEther(amount);
+                
+                const tx = await contract.stake(
+                    amountWei,
+                    referralAddress || ethers.constants.AddressZero
+                );
+                showStatus("Staking tokens...");
+                await tx.wait();
+                showStatus("Tokens staked successfully!");
+                await updateUI();
+            } catch (error) {
+                console.error("Staking error:", error);
+                showError("Failed to stake tokens");
+            }
+        }
+
+        async function unstake() {
+            if (!contract || !signer) return;
+            
+            try {
+                const amount = document.getElementById("stake-amount").value;
+                const amountWei = ethers.utils.parseEther(amount);
+                
+                const tx = await contract.unstake(amountWei);
+                showStatus("Unstaking tokens...");
+                await tx.wait();
+                showStatus("Tokens unstaked successfully!");
+                await updateUI();
+            } catch (error) {
+                console.error("Unstaking error:", error);
+                showError("Failed to unstake tokens");
+            }
+        }
+
+        async function claimRewards() {
+            if (!contract || !signer) return;
+            
+            try {
+                const tx = await contract.claimReward();
+                showStatus("Claiming rewards...");
+                await tx.wait();
+                showStatus("Rewards claimed successfully!");
+                await updateUI();
+            } catch (error) {
+                console.error("Claim error:", error);
+                showError("Failed to claim rewards");
+            }
+        }
+
+        function showStatus(message) {
+            const statusEl = document.getElementById("tx-status");
+            const messageEl = document.getElementById("tx-message");
+            messageEl.textContent = message;
+            statusEl.classList.remove('hidden');
+            setTimeout(() => {
+                statusEl.classList.add('hidden');
+            }, 5000);
+        }
+
+        function showError(message) {
+            showStatus("Error: " + message);
+        }
+
+        // Event Listeners
+        document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
+        
+        // Update UI periodically
         setInterval(updateUI, 30000);
     </script>
 </body>
