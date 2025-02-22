@@ -33,27 +33,28 @@
         }
         .tab-btn.active {
             color: #00e6e6;
+            font-weight: bold;
         }
     </style>
 </head>
-<body class="flex flex-col items-center text-center px-4">
+<body class="flex flex-col items-center text-center px-4 min-h-screen">
     <!-- Header -->
-    <header class="w-full py-4 bg-gray-900">
+    <header class="w-full py-4 bg-[#0a0a0a]">
         <nav class="flex justify-between items-center max-w-5xl mx-auto">
             <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
             <ul class="flex flex-wrap justify-center gap-4">
-                <li><button class="tab-btn hover:text-cyan-400 active" data-tab="about">About</button></li>
-                <li><button class="tab-btn hover:text-cyan-400" data-tab="mission">Mission</button></li>
-                <li><button class="tab-btn hover:text-cyan-400" data-tab="marketplace">Marketplace</button></li>
-                <li><button class="tab-btn hover:text-cyan-400" data-tab="nfts">NFTs</button></li>
-                <li><button class="tab-btn hover:text-cyan-400" data-tab="staking">Staking</button></li>
-                <li><button class="tab-btn hover:text-cyan-400" data-tab="gaming">Gaming</button></li>
+                <li><button class="tab-btn active" data-tab="about">About</button></li>
+                <li><button class="tab-btn" data-tab="mission">Mission</button></li>
+                <li><button class="tab-btn" data-tab="marketplace">Marketplace</button></li>
+                <li><button class="tab-btn" data-tab="nfts">NFTs</button></li>
+                <li><button class="tab-btn" data-tab="staking">Staking</button></li>
+                <li><button class="tab-btn" data-tab="gaming">Gaming</button></li>
             </ul>
         </nav>
     </header>
 
     <!-- Main Content -->
-    <main class="w-full max-w-4xl py-10">
+    <main class="w-full max-w-4xl py-10 flex-grow">
         <!-- Hero Section -->
         <section id="hero" class="mb-10">
             <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
@@ -71,65 +72,62 @@
                 <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
             </div>
 
+            <div id="mission" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
+                <p class="mt-4 text-gray-400">We aim to build an engaging, sustainable digital ecosystem where holders benefit from staking, NFTs, and gaming.</p>
+            </div>
+
+            <div id="marketplace" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
+                <p class="mt-4 text-gray-400">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
+            </div>
+
+            <div id="nfts" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Y2K NFTs</h2>
+                <p class="mt-4 text-gray-400">Limited edition, community-driven digital collectibles with real utility.</p>
+            </div>
+
             <div id="staking" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
-                <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
-            </div>
-        </section>
-
-        <!-- Staking Section -->
-        <section id="staking-section" class="mt-10">
-            <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
-            <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock digital rewards, and participate in our ecosystem.</p>
-
-            <div id="wallet-connection" class="mt-6">
-                <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
-                <button id="disconnect-wallet" class="btn btn-secondary" style="display: none;">Disconnect Wallet</button>
-                <p id="wallet-address"></p>
+                <p class="mt-4 text-gray-400">Stake Y2K tokens to earn POGs, unlock rewards, and participate in our ecosystem.</p>
             </div>
 
-            <div id="staking-interface" class="mt-6">
-                <input type="number" id="stake-amount" placeholder="Amount to stake" class="p-2 text-black w-full rounded">
-                <div class="flex gap-4 mt-4">
-                    <button id="stake-button" class="btn btn-secondary">Stake Y2K</button>
-                    <button id="unstake-button" class="btn btn-secondary">Unstake Y2K</button>
-                    <button id="claim-rewards" class="btn btn-primary">Claim Rewards</button>
-                </div>
-            </div>
-
-            <div id="staking-info" class="mt-6">
-                <p>Your Staked Y2K: <span id="staked-amount">0</span></p>
-                <p>Rewards Earned (POGs on Unstake): <span id="rewards-earned">0</span> POGs</p>
+            <div id="gaming" class="tab-content">
+                <h2 class="text-3xl font-bold glow-text">Y2K Gaming</h2>
+                <p class="mt-4 text-gray-400">An immersive gaming experience that rewards players through blockchain mechanics.</p>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="w-full py-6 bg-gray-900">
+    <footer class="w-full py-6 bg-[#0a0a0a]">
+        <!-- Social Links -->
+        <section id="social-links" class="mb-6">
+            <h2 class="text-2xl font-bold glow-text">Follow Us</h2>
+            <div class="flex justify-center gap-4 mt-4">
+                <a href="https://x.com/y2kc0in?s=21" target="_blank" class="btn btn-primary">𝕏</a>
+                <a href="https://www.instagram.com/y2kcoin" target="_blank" class="btn btn-primary">Instagram</a>
+                <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="btn btn-primary">Reddit</a>
+            </div>
+        </section>
         <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
     </footer>
 
     <!-- JavaScript -->
-    <script src="staking.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
+        document.addEventListener("DOMContentLoaded", () => {
             const tabButtons = document.querySelectorAll(".tab-btn");
             const tabContents = document.querySelectorAll(".tab-content");
 
             tabButtons.forEach(button => {
                 button.addEventListener("click", () => {
-                    const tabId = button.getAttribute("data-tab");
-                    const targetTab = document.getElementById(tabId);
-
-                    if (!targetTab) {
-                        console.error(`Tab ID '${tabId}' not found.`);
-                        return;
-                    }
-
+                    // Remove active state from all buttons & contents
                     tabButtons.forEach(btn => btn.classList.remove("active"));
                     tabContents.forEach(content => content.classList.remove("active"));
+
+                    // Activate the clicked tab
                     button.classList.add("active");
-                    targetTab.classList.add("active");
+                    document.getElementById(button.getAttribute("data-tab")).classList.add("active");
                 });
             });
         });
