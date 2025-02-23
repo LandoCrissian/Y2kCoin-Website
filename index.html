@@ -6,8 +6,17 @@
     <title>Y2KCoin - A Digital Revolution</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Error Check Script -->
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof ethers === 'undefined') {
+                console.error('Ethers.js not loaded');
+                alert('Failed to load required dependencies. Please refresh the page.');
+            }
+        });
+    </script>
     <style>
         body {
             font-family: 'Orbitron', sans-serif;
@@ -39,6 +48,11 @@
         .btn-secondary:hover { 
             background-color: #cc0066; 
             transform: translateY(-2px);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
         .tab-content {
             display: none;
@@ -123,10 +137,17 @@
         .hidden {
             display: none;
         }
+        .network-error {
+            background-color: #ff007f;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center text-center px-4 min-h-screen">
-    <!-- Header -->
+     <!-- Header -->
     <header class="w-full py-4 bg-[#0a0a0a]">
         <nav class="flex justify-between items-center max-w-5xl mx-auto">
             <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
@@ -181,6 +202,11 @@
                         <!-- Staking Tab -->
             <div id="staking" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text mb-6">Y2K Staking Dashboard</h2>
+                
+                <!-- Network Error Message -->
+                <div id="network-error" class="network-error hidden">
+                    Please switch to the Cronos Network to use staking features
+                </div>
                 
                 <!-- Wallet Connection -->
                 <div id="wallet-section" class="mb-8">
@@ -321,8 +347,8 @@
 
     <!-- JavaScript -->
     <script>
-        // Contract ABI - Add your full ABI here
-        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_y2kToken","type":"address"},{"internalType":"address","name":"_pogsToken","type":"address"},{"internalType":"uint256","name":"_rewardRate","type":"uint256"},{"internalType":"address","name":"_treasury","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"AutoCompoundingToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"BurnRateUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"winner","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"roundId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryWinner","type":"event"}];
+        // Complete Contract ABI
+        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_y2kToken","type":"address"},{"internalType":"address","name":"_pogsToken","type":"address"},{"internalType":"uint256","name":"_rewardRate","type":"uint256"},{"internalType":"address","name":"_treasury","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"AutoCompoundingToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"BurnRateUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"winner","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"roundId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryWinner","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"MaxStakeAmountUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"referrer","type":"address"},{"indexed":true,"internalType":"address","name":"referee","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"ReferralReward","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"ReferralsToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"RewardClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"RewardRateUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"Unstaked","type":"event"},{"inputs":[],"name":"LOCK_PERIOD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"LOTTERY_REWARD_PERCENTAGE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_BURN_RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_STAKE_AMOUNT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"REFERRAL_BONUS_RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"autoCompoundingEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"burnRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"currentLotteryRound","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"lotteryEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"lotteryRounds","outputs":[{"internalType":"uint256","name":"roundId","type":"uint256"},{"internalType":"uint256","name":"endTime","type":"uint256"},{"internalType":"bool","name":"distributed","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxStakeAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pogsToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"referralRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"referralsEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_referrer","type":"address"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stakes","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"lastCompoundTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"_status","type":"bool"}],"name":"toggleAutoCompounding","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_status","type":"bool"}],"name":"toggleLottery","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_status","type":"bool"}],"name":"toggleReferrals","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"treasury","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newRate","type":"uint256"}],"name":"updateBurnRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newRate","type":"uint256"}],"name":"updateRewardRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"y2kToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"}];
 
         // Contract Constants
         const CONTRACT_ADDRESS = "0x7DC6a9900e9DE69fF36ECb7dF56aA7c9157DE483";
@@ -341,8 +367,7 @@
         let contract;
         let signer;
         let provider;
-
-        // Tab Switching Logic
+                // Tab Switching Logic
         document.addEventListener("DOMContentLoaded", () => {
             const tabButtons = document.querySelectorAll(".tab-btn");
             const tabContents = document.querySelectorAll(".tab-content");
@@ -380,82 +405,96 @@
         });
 
         async function switchToCronosNetwork() {
-    try {
-        await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x19' }], // Cronos chainId in hex
-        });
-    } catch (switchError) {
-        // This error code indicates that the chain has not been added to MetaMask
-        if (switchError.code === 4902) {
             try {
                 await window.ethereum.request({
-                    method: 'wallet_addEthereumChain',
-                    params: [{
-                        chainId: '0x19', // 25 in hex
-                        chainName: 'Cronos Mainnet',
-                        nativeCurrency: {
-                            name: 'CRO',
-                            symbol: 'CRO',
-                            decimals: 18
-                        },
-                        rpcUrls: ['https://evm.cronos.org'],
-                        blockExplorerUrls: ['https://cronoscan.com/']
-                    }]
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x19' }], // Cronos chainId in hex
                 });
-            } catch (addError) {
-                console.error('Failed to add Cronos network:', addError);
+                document.getElementById("network-error").classList.add('hidden');
+                return true;
+            } catch (switchError) {
+                // This error code indicates that the chain has not been added to MetaMask
+                if (switchError.code === 4902) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [CRONOS_NETWORK_CONFIG]
+                        });
+                        return true;
+                    } catch (addError) {
+                        console.error('Failed to add Cronos network:', addError);
+                        document.getElementById("network-error").classList.remove('hidden');
+                        showError('Failed to add Cronos network. Please add it manually in MetaMask.');
+                        return false;
+                    }
+                }
+                console.error('Failed to switch to Cronos network:', switchError);
+                document.getElementById("network-error").classList.remove('hidden');
+                showError('Please switch to Cronos network in MetaMask');
+                return false;
             }
         }
-        console.error('Failed to switch to Cronos network:', switchError);
-    }
-}
-        async function connectWallet() {
-    try {
-        if (typeof window.ethereum === 'undefined') {
-            alert('Please install MetaMask to use the staking feature');
-            return;
+
+        async function disconnectWallet() {
+            contract = null;
+            signer = null;
+            provider = null;
+            document.getElementById("connect-wallet").classList.remove('hidden');
+            document.getElementById("disconnect-wallet").classList.add('hidden');
+            document.getElementById("network-info").classList.add('hidden');
+            document.getElementById("staking-interface").classList.add('hidden');
+            document.getElementById("network-error").classList.add('hidden');
         }
 
-        const loadingBtn = document.getElementById("connect-wallet");
-        loadingBtn.textContent = 'Connecting...';
-        
-        await switchToCronosNetwork(); // Make sure we're on Cronos
-        
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
-        
-        // Get network info
-        const network = await provider.getNetwork();
-        if (network.chainId !== 25) { // Cronos mainnet chainId
-            alert('Please switch to Cronos network');
-            return;
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask to use the staking feature');
+                    return;
+                }
+
+                const loadingBtn = document.getElementById("connect-wallet");
+                loadingBtn.textContent = 'Connecting...';
+                
+                const networkSwitched = await switchToCronosNetwork();
+                if (!networkSwitched) return;
+                
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner();
+                
+                // Get network info
+                const network = await provider.getNetwork();
+                if (network.chainId !== 25) { // Cronos mainnet chainId
+                    document.getElementById("network-error").classList.remove('hidden');
+                    return;
+                }
+                
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                
+                const address = await signer.getAddress();
+                
+                document.getElementById("wallet-address").textContent = 
+                    `${address.substring(0, 6)}...${address.substring(38)}`;
+                document.getElementById("network-name").textContent = "Cronos";
+                document.getElementById("network-info").classList.remove('hidden');
+                document.getElementById("connect-wallet").classList.add('hidden');
+                document.getElementById("disconnect-wallet").classList.remove('hidden');
+                document.getElementById("staking-interface").classList.remove('hidden');
+                document.getElementById("network-error").classList.add('hidden');
+                
+                await updateUI();
+                setupEventListeners();
+                
+            } catch (error) {
+                console.error("Error connecting wallet:", error);
+                showError("Failed to connect wallet: " + error.message);
+            } finally {
+                const loadingBtn = document.getElementById("connect-wallet");
+                loadingBtn.textContent = 'Connect Wallet';
+            }
         }
-        
-        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-        
-        const address = await signer.getAddress();
-        
-        document.getElementById("wallet-address").textContent = 
-            `${address.substring(0, 6)}...${address.substring(38)}`;
-        document.getElementById("network-name").textContent = "Cronos";
-        document.getElementById("network-info").classList.remove('hidden');
-        document.getElementById("connect-wallet").classList.add('hidden');
-        document.getElementById("disconnect-wallet").classList.remove('hidden');
-        document.getElementById("staking-interface").classList.remove('hidden');
-        
-        await updateUI();
-        setupEventListeners();
-        
-    } catch (error) {
-        console.error("Error connecting wallet:", error);
-        showError("Failed to connect wallet: " + error.message);
-    } finally {
-        const loadingBtn = document.getElementById("connect-wallet");
-        loadingBtn.textContent = 'Connect Wallet';
-    }
-}
+
         async function updateUI() {
             if (!contract || !signer) return;
 
@@ -470,6 +509,11 @@
                 if (stakeInfo.startTime.gt(0)) {
                     const stakingDate = new Date(stakeInfo.startTime.mul(1000).toNumber());
                     document.getElementById("staking-time").textContent = stakingDate.toLocaleDateString();
+                    
+                    // Calculate next unlock
+                    const lockPeriod = await contract.LOCK_PERIOD();
+                    const unlockDate = new Date((stakeInfo.startTime.add(lockPeriod)).mul(1000).toNumber());
+                    document.getElementById("next-unlock").textContent = unlockDate.toLocaleDateString();
                 }
 
                 // Get token balances
@@ -501,6 +545,23 @@
                 document.getElementById("burn-rate").textContent = 
                     burnRate.toString() + "%";
 
+                // Get lock period
+                const lockPeriod = await contract.LOCK_PERIOD();
+                document.getElementById("lock-period").textContent = 
+                    `${lockPeriod.toString()} seconds`;
+
+                // Calculate and display APR
+                const rewardRate = await contract.rewardRate();
+                const apr = (rewardRate.mul(365).mul(100)).toString();
+                document.getElementById("current-apr").textContent = 
+                    `${apr}%`;
+
+                // Update feature toggles
+                const autoCompoundEnabled = await contract.autoCompoundingEnabled();
+                const lotteryEnabled = await contract.lotteryEnabled();
+                document.getElementById("auto-compound-toggle").checked = autoCompoundEnabled;
+                document.getElementById("lottery-toggle").checked = lotteryEnabled;
+
             } catch (error) {
                 console.error("Error updating UI:", error);
                 showError("Failed to update information");
@@ -512,6 +573,7 @@
             document.getElementById("unstake-button").addEventListener("click", unstake);
             document.getElementById("claim-rewards").addEventListener("click", claimRewards);
             document.getElementById("approve-button").addEventListener("click", approveTokens);
+            document.getElementById("disconnect-wallet").addEventListener("click", disconnectWallet);
             
             document.getElementById("max-button").addEventListener("click", async () => {
                 if (!contract || !signer) return;
@@ -528,6 +590,31 @@
                 } catch (error) {
                     console.error("Error setting max amount:", error);
                     showError("Failed to set maximum amount");
+                }
+            });
+
+            // Feature toggles
+            document.getElementById("auto-compound-toggle").addEventListener("change", async (e) => {
+                try {
+                    const tx = await contract.toggleAutoCompounding(e.target.checked);
+                    await tx.wait();
+                    showStatus(`Auto-compounding ${e.target.checked ? 'enabled' : 'disabled'}`);
+                } catch (error) {
+                    console.error("Error toggling auto-compound:", error);
+                    showError("Failed to toggle auto-compounding");
+                    e.target.checked = !e.target.checked; // Revert toggle
+                }
+            });
+
+            document.getElementById("lottery-toggle").addEventListener("change", async (e) => {
+                try {
+                    const tx = await contract.toggleLottery(e.target.checked);
+                    await tx.wait();
+                    showStatus(`Lottery participation ${e.target.checked ? 'enabled' : 'disabled'}`);
+                } catch (error) {
+                    console.error("Error toggling lottery:", error);
+                    showError("Failed to toggle lottery participation");
+                    e.target.checked = !e.target.checked; // Revert toggle
                 }
             });
         }
@@ -626,18 +713,17 @@
 
         // Event Listeners
         document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
-        // Add this near your other event listeners
-if (window.ethereum) {
-    window.ethereum.on('chainChanged', (chainId) => {
-        // Reload the page when network changes
-        window.location.reload();
-    });
+        
+        // Network and Account Change Listeners
+        if (window.ethereum) {
+            window.ethereum.on('chainChanged', (chainId) => {
+                window.location.reload();
+            });
 
-    window.ethereum.on('accountsChanged', (accounts) => {
-        // Reload the page when accounts change
-        window.location.reload();
-    });
-}
+            window.ethereum.on('accountsChanged', (accounts) => {
+                window.location.reload();
+            });
+        }
         
         // Update UI periodically
         setInterval(updateUI, 30000);
