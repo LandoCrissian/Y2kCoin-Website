@@ -375,6 +375,7 @@
         <script>
 // Contract Configuration
 const CONTRACT_ADDRESS = "0x7DC6a9900e9DE69fF36ECb7dF56aA7c9157DE483";
+const Y2K_TOKEN_ADDRESS = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
 const CRONOS_CHAIN_ID = '0x19';
 const CRONOS_NETWORK_CONFIG = {
     chainId: CRONOS_CHAIN_ID,
@@ -388,7 +389,14 @@ const CRONOS_NETWORK_CONFIG = {
     blockExplorerUrls: ['https://cronoscan.com/']
 };
 
-// Contract ABI - Only user-facing functions
+// ERC20 Token ABI (minimal)
+const ERC20_ABI = [
+    "function balanceOf(address owner) view returns (uint256)",
+    "function approve(address spender, uint256 amount) returns (bool)",
+    "function allowance(address owner, address spender) view returns (uint256)"
+];
+
+// Contract ABI with all necessary functions
 const CONTRACT_ABI = [
     {
         "inputs": [
@@ -424,40 +432,33 @@ const CONTRACT_ABI = [
         ],
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "y2kToken",
+        "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "pogsToken",
+        "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MIN_STAKE_AMOUNT",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
 
 // Global Variables
-let provider, signer, contract;
+let provider, signer, contract, y2kToken;
 let isWalletConnected = false;
-
-// Authentication Manager
-class AuthManager {
-    constructor() {
-        this.signatures = new Map();
-        this.nonces = new Map();
-    }
-
-    generateNonce() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    async requestSignature(address) {
-        const nonce = this.generateNonce();
-        const message = `Welcome to Y2K Staking Platform\n\nPlease sign this message to verify your wallet ownership.\nThis signature will not trigger any blockchain transaction.\n\nNonce: ${nonce}`;
-        
-        try {
-            const signature = await signer.signMessage(message);
-            this.signatures.set(address, signature);
-            return true;
-        } catch (error) {
-            console.error("Signature error:", error);
-            return false;
-        }
-    }
-}
-
-const authManager = new AuthManager();
 
 // UI Manager
 class UIManager {
@@ -483,11 +484,7 @@ class UIManager {
             </div>
         `;
         container.appendChild(notification);
-        
-        // Trigger animation
         setTimeout(() => notification.classList.add('show'), 100);
-        
-        // Auto remove
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => notification.remove(), 300);
@@ -495,50 +492,66 @@ class UIManager {
     }
 
     static async updateStakingInterface(address) {
-        const stakingInterface = document.getElementById('staking-interface');
-        
-        // Get user's staking info
-        const stakeInfo = await contract.stakes(address);
-        const stakedAmount = ethers.utils.formatEther(stakeInfo.amount);
-        
-        stakingInterface.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="info-card">
-                    <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Balances</h3>
-                    <p class="text-lg">Staked: <span id="staked-amount" class="font-mono text-cyan-400">${stakedAmount} Y2K</span></p>
-                    <p class="text-lg">Available: <span id="available-amount" class="font-mono text-cyan-400">Loading...</span></p>
-                </div>
-                
-                <div class="info-card">
-                    <h3 class="text-xl font-bold text-cyan-400 mb-4">Staking Actions</h3>
-                    <div class="flex flex-col gap-4">
-                        <input type="number" id="stake-amount" placeholder="Amount to stake" class="input-field" min="0" step="any">
-                        <input type="text" id="referral-address" placeholder="Referral Address (optional)" class="input-field">
-                        <div class="flex gap-2">
-                            <button id="approve-btn" class="btn btn-primary flex-1">Approve</button>
-                            <button id="stake-btn" class="btn btn-primary flex-1">Stake</button>
-                            <button id="unstake-btn" class="btn btn-secondary flex-1">Unstake</button>
+        try {
+            const stakingInterface = document.getElementById('staking-interface');
+            const stakeInfo = await contract.stakes(address);
+            const stakedAmount = ethers.utils.formatEther(stakeInfo.amount);
+            
+            stakingInterface.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Balances</h3>
+                        <p class="text-lg">Staked: <span id="staked-amount" class="font-mono text-cyan-400">${stakedAmount} Y2K</span></p>
+                        <p class="text-lg">Available: <span id="available-amount" class="font-mono text-cyan-400">Loading...</span></p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Staking Actions</h3>
+                        <div class="flex flex-col gap-4">
+                            <input type="number" id="stake-amount" placeholder="Amount to stake" class="input-field" min="0" step="any">
+                            <input type="text" id="referral-address" placeholder="Referral Address (optional)" class="input-field">
+                            <div class="flex gap-2">
+                                <button id="approve-btn" class="btn btn-primary flex-1">Approve</button>
+                                <button id="stake-btn" class="btn btn-primary flex-1">Stake</button>
+                                <button id="unstake-btn" class="btn btn-secondary flex-1">Unstake</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="info-card mt-6">
-                <h3 class="text-xl font-bold text-cyan-400 mb-4">Rewards</h3>
-                <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">Loading...</span></p>
-                <button id="claim-btn" class="btn btn-primary mt-4">Claim Rewards</button>
-            </div>
-        `;
+                <div class="info-card mt-6">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-4">Rewards</h3>
+                    <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">Loading...</span></p>
+                    <button id="claim-btn" class="btn btn-primary mt-4">Claim Rewards</button>
+                </div>
+            `;
 
-        // Show the interface with animation
-        stakingInterface.classList.remove('hidden');
-        setTimeout(() => {
-            stakingInterface.style.opacity = '1';
-            stakingInterface.style.transform = 'translateY(0)';
-        }, 100);
+            stakingInterface.classList.remove('hidden');
+            setTimeout(() => {
+                stakingInterface.style.opacity = '1';
+                stakingInterface.style.transform = 'translateY(0)';
+            }, 100);
 
-        // Setup event listeners
-        this.setupStakingEventListeners();
+            this.setupStakingEventListeners();
+            await this.updateTokenBalances();
+
+        } catch (error) {
+            console.error('Error updating interface:', error);
+            this.showNotification('Error updating interface', 'error');
+        }
+    }
+
+    static async updateTokenBalances() {
+        if (!y2kToken || !signer) return;
+
+        try {
+            const userAddress = await signer.getAddress();
+            const balance = await y2kToken.balanceOf(userAddress);
+            document.getElementById('available-amount').textContent = 
+                `${ethers.utils.formatEther(balance)} Y2K`;
+        } catch (error) {
+            console.error('Error updating balances:', error);
+        }
     }
 
     static setupStakingEventListeners() {
@@ -549,10 +562,14 @@ class UIManager {
     }
 }
 
-// Network Manager
-class NetworkManager {
-    static async checkAndSwitchNetwork() {
-        if (!window.ethereum) throw new Error('MetaMask is not installed');
+// Connect Wallet
+async function connectWallet() {
+    try {
+        UIManager.showLoading('Connecting wallet...');
+
+        if (!window.ethereum) {
+            throw new Error('Please install MetaMask to use this feature');
+        }
 
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
         if (chainId !== CRONOS_CHAIN_ID) {
@@ -563,47 +580,25 @@ class NetworkManager {
                 });
             } catch (error) {
                 if (error.code === 4902) {
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [CRONOS_NETWORK_CONFIG],
-                        });
-                    } catch (addError) {
-                        throw new Error('Failed to add Cronos network');
-                    }
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [CRONOS_NETWORK_CONFIG],
+                    });
                 } else {
                     throw error;
                 }
             }
         }
-    }
-}
-
-// Main Functions
-async function connectWallet() {
-    try {
-        UIManager.showLoading('Connecting wallet...');
-
-        if (!window.ethereum) {
-            throw new Error('Please install MetaMask to use this feature');
-        }
-
-        await NetworkManager.checkAndSwitchNetwork();
 
         provider = new ethers.providers.Web3Provider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         signer = provider.getSigner();
         
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        y2kToken = new ethers.Contract(Y2K_TOKEN_ADDRESS, ERC20_ABI, signer);
+
         const address = await signer.getAddress();
         
-        // Request signature
-        const isSigned = await authManager.requestSignature(address);
-        if (!isSigned) throw new Error('Signature rejected');
-
-        // Initialize contract
-        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
-        // Update UI
         document.getElementById('wallet-address').textContent = 
             `${address.substring(0, 6)}...${address.substring(38)}`;
         document.getElementById('network-name').textContent = 'Cronos Mainnet';
@@ -611,9 +606,7 @@ async function connectWallet() {
         document.getElementById('connect-wallet').classList.add('hidden');
         document.getElementById('disconnect-wallet').classList.remove('hidden');
 
-        // Update staking interface
         await UIManager.updateStakingInterface(address);
-
         isWalletConnected = true;
         UIManager.showNotification('Wallet connected successfully', 'success');
 
@@ -629,6 +622,7 @@ async function disconnectWallet() {
     provider = null;
     signer = null;
     contract = null;
+    y2kToken = null;
     isWalletConnected = false;
 
     document.getElementById('network-info').classList.add('hidden');
@@ -644,23 +638,29 @@ async function approveTokens() {
     if (!isWalletConnected) return;
     
     try {
-        UIManager.showLoading('Approving tokens...');
         const amount = document.getElementById('stake-amount').value;
+        if (!amount || amount <= 0) {
+            throw new Error('Please enter a valid amount');
+        }
+
+        UIManager.showLoading('Approving tokens...');
         const amountWei = ethers.utils.parseEther(amount);
         
-        const tokenContract = new ethers.Contract(
-            await contract.y2kToken(),
-            ['function approve(address spender, uint256 amount) returns (bool)'],
-            signer
-        );
+        console.log('Approving tokens:', {
+            spender: CONTRACT_ADDRESS,
+            amount: ethers.utils.formatEther(amountWei)
+        });
+
+        const tx = await y2kToken.approve(CONTRACT_ADDRESS, amountWei);
+        UIManager.showNotification('Approval pending, please wait...', 'info');
         
-        const tx = await tokenContract.approve(CONTRACT_ADDRESS, amountWei);
-        await tx.wait();
-        
+        const receipt = await tx.wait();
+        console.log('Approval receipt:', receipt);
+
         UIManager.showNotification('Tokens approved successfully', 'success');
     } catch (error) {
         console.error('Approval error:', error);
-        UIManager.showNotification('Failed to approve tokens', 'error');
+        UIManager.showNotification(error.message, 'error');
     } finally {
         UIManager.hideLoading();
     }
@@ -670,22 +670,51 @@ async function stake() {
     if (!isWalletConnected) return;
     
     try {
-        UIManager.showLoading('Staking tokens...');
         const amount = document.getElementById('stake-amount').value;
-        const referralAddress = document.getElementById('referral-address').value;
+        if (!amount || amount <= 0) {
+            throw new Error('Please enter a valid amount');
+        }
+
         const amountWei = ethers.utils.parseEther(amount);
+        const referralAddress = document.getElementById('referral-address').value;
+        const userAddress = await signer.getAddress();
+
+        // Check balance and allowance
+        const balance = await y2kToken.balanceOf(userAddress);
+        const allowance = await y2kToken.allowance(userAddress, CONTRACT_ADDRESS);
+
+        console.log('Staking Details:', {
+            amount: ethers.utils.formatEther(amountWei),
+            balance: ethers.utils.formatEther(balance),
+            allowance: ethers.utils.formatEther(allowance)
+        });
+
+        if (balance.lt(amountWei)) {
+            throw new Error('Insufficient Y2K balance');
+        }
+
+        if (allowance.lt(amountWei)) {
+            throw new Error('Please approve tokens first');
+        }
+
+        UIManager.showLoading('Staking tokens...');
         
         const tx = await contract.stake(
             amountWei,
-            referralAddress || ethers.constants.AddressZero
+            referralAddress || ethers.constants.AddressZero,
+            { gasLimit: 500000 }
         );
-        await tx.wait();
+
+        UIManager.showNotification('Transaction submitted, waiting for confirmation...', 'info');
         
-        await UIManager.updateStakingInterface(await signer.getAddress());
+        const receipt = await tx.wait();
+        console.log('Stake transaction receipt:', receipt);
+
+        await UIManager.updateStakingInterface(userAddress);
         UIManager.showNotification('Tokens staked successfully', 'success');
     } catch (error) {
         console.error('Staking error:', error);
-        UIManager.showNotification('Failed to stake tokens', 'error');
+        UIManager.showNotification(error.message, 'error');
     } finally {
         UIManager.hideLoading();
     }
@@ -695,18 +724,25 @@ async function unstake() {
     if (!isWalletConnected) return;
     
     try {
-        UIManager.showLoading('Unstaking tokens...');
         const amount = document.getElementById('stake-amount').value;
+        if (!amount || amount <= 0) {
+            throw new Error('Please enter a valid amount');
+        }
+
         const amountWei = ethers.utils.parseEther(amount);
+        UIManager.showLoading('Unstaking tokens...');
         
-        const tx = await contract.unstake(amountWei);
-        await tx.wait();
+        const tx = await contract.unstake(amountWei, { gasLimit: 500000 });
+        UIManager.showNotification('Transaction submitted, waiting for confirmation...', 'info');
         
+        const receipt = await tx.wait();
+        console.log('Unstake transaction receipt:', receipt);
+
         await UIManager.updateStakingInterface(await signer.getAddress());
         UIManager.showNotification('Tokens unstaked successfully', 'success');
     } catch (error) {
         console.error('Unstaking error:', error);
-        UIManager.showNotification('Failed to unstake tokens', 'error');
+        UIManager.showNotification(error.message, 'error');
     } finally {
         UIManager.hideLoading();
     }
@@ -717,14 +753,32 @@ async function claimRewards() {
     
     try {
         UIManager.showLoading('Claiming rewards...');
-        const tx = await contract.claimReward();
-        await tx.wait();
+        const tx = await contract.claimReward({ gasLimit: 500000 });
+        UIManager.showNotification('Transaction submitted, waiting for confirmation...', 'info');
         
+        const receipt = await tx.wait();
+        console.log('Claim transaction receipt:', receipt);
+
         await UIManager.updateStakingInterface(await signer.getAddress());
         UIManager.showNotification('Rewards claimed successfully', 'success');
     } catch (error) {
         console.error('Claim error:', error);
-        UIManager.showNotification('Failed to claim rewards', 'error');
+        UIManager.showNotification(async function claimRewards() {
+    if (!isWalletConnected) return;
+    
+    try {
+        UIManager.showLoading('Claiming rewards...');
+        const tx = await contract.claimReward({ gasLimit: 500000 });
+        UIManager.showNotification('Transaction submitted, waiting for confirmation...', 'info');
+        
+        const receipt = await tx.wait();
+        console.log('Claim transaction receipt:', receipt);
+
+        await UIManager.updateStakingInterface(await signer.getAddress());
+        UIManager.showNotification('Rewards claimed successfully', 'success');
+    } catch (error) {
+        console.error('Claim error:', error);
+        UIManager.showNotification(error.message, 'error');
     } finally {
         UIManager.hideLoading();
     }
@@ -767,6 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+</script>
 </script>
 </body>
 </html>
