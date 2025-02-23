@@ -529,8 +529,42 @@ function setupTabListeners() {
 
 // Add this to your initialization code (at the bottom of your script)
 document.addEventListener('DOMContentLoaded', () => {
-    setupTabListeners();
-    showTab('about'); // Show initial tab
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    function showTab(tabId) {
+        console.log("Switching to tab:", tabId); // Debugging log
+
+        // Hide all tabs
+        tabContents.forEach(content => content.style.display = 'none');
+
+        // Remove active class from all buttons
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+
+        // Show selected tab
+        const selectedTab = document.getElementById(tabId);
+        if (selectedTab) {
+            selectedTab.style.display = 'block';
+        }
+
+        // Activate the correct button
+        const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+    }
+
+    // Set up event listeners for each tab button
+    tabButtons.forEach(button => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const tabId = button.getAttribute("data-tab");
+            showTab(tabId);
+        });
+    });
+
+    // Show the first tab on page load
+    showTab("about");
 });
             const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
             if (activeButton) {
