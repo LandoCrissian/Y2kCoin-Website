@@ -9,20 +9,8 @@
     <!-- Essential Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Multiple Ethers.js Sources -->
+    <!-- Multiple Ethers.js Sources for Reliability -->
     <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
-    <script>
-        if (typeof ethers === 'undefined') {
-            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"><\/script>');
-        }
-    </script>
-    <script>
-        if (typeof ethers === 'undefined') {
-            document.write('<script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"><\/script>');
-        }
-    </script>
-
-    <!-- Dependency Check and Auto-Recovery -->
     <script>
         window.addEventListener('load', function() {
             if (typeof ethers === 'undefined') {
@@ -32,18 +20,23 @@
                 script.type = 'application/javascript';
                 script.onload = function() {
                     console.log('Ethers.js loaded successfully');
-                    window.location.reload();
+                    initializeWeb3();
                 };
                 document.head.appendChild(script);
             } else {
                 console.log('Ethers.js loaded successfully');
-                // Initialize Web3 components
-                if (window.ethereum) {
-                    window.provider = new ethers.providers.Web3Provider(window.ethereum);
-                    console.log('Web3 provider initialized');
-                }
+                initializeWeb3();
             }
         });
+
+        function initializeWeb3() {
+            // Check for various wallet providers
+            const provider = window.ethereum || window.onchain || window.coinbase;
+            if (provider) {
+                window.provider = new ethers.providers.Web3Provider(provider);
+                console.log('Web3 provider initialized');
+            }
+        }
     </script>
 
     <!-- Fonts -->
@@ -270,19 +263,22 @@
                     <p>Please switch to the Cronos Network to use staking features</p>
                 </div>
 
-                <!-- MetaMask Not Detected Message -->
-                <div id="metamask-error" class="network-error hidden">
-                    <p class="font-bold">MetaMask Not Detected</p>
-                    <p>Please install MetaMask to use staking features</p>
-                    <a href="https://metamask.io" target="_blank" rel="noopener noreferrer" 
-                       class="underline text-white hover:text-cyan-400">Download MetaMask</a>
+                <!-- Wallet Error Message -->
+                <div id="wallet-error" class="network-error hidden">
+                    <p class="font-bold">Web3 Wallet Required</p>
+                    <p>Please connect using OnChain, MetaMask, or another Web3 wallet</p>
+                    <div class="mt-2 text-sm">
+                        <a href="https://onchain.today/" target="_blank" rel="noopener noreferrer" class="underline">Get OnChain</a>
+                        <span class="mx-2">|</span>
+                        <a href="https://metamask.io" target="_blank" rel="noopener noreferrer" class="underline">Get MetaMask</a>
+                    </div>
                 </div>
                 
                 <!-- Wallet Connection -->
                 <div id="wallet-section" class="mb-8">
                     <button id="connect-wallet" class="btn btn-primary">
                         <span class="flex items-center justify-center">
-                            <span id="connect-text">Connect Wallet</span>
+                            <span id="connect-text">Connect Web3 Wallet</span>
                             <span id="connect-loader" class="hidden ml-2 loading-spinner"></span>
                         </span>
                     </button>
@@ -461,6 +457,7 @@
         let signer;
         let provider;
         let isInitialized = false;
+        let currentTab = 'about';
 
         // Loading state management
         function showLoading() {
@@ -486,6 +483,35 @@
             }
         }
 
+        // Tab Management with State Persistence
+        function showTab(tabId, force = false) {
+            if (!force && tabId === 'staking' && !isInitialized) {
+                return; // Don't switch to staking if not initialized
+            }
+
+            const tabContents = document.querySelectorAll(".tab-content");
+            const tabButtons = document.querySelectorAll(".tab-btn");
+
+            tabContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+                currentTab = tabId;
+            }
+
+            const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
         // Enhanced error handling
         function handleError(error, action) {
             console.error(`Error during ${action}:`, error);
@@ -499,62 +525,31 @@
                 errorMessage = 'Insufficient funds for transaction.';
             } else if (error.message.includes('user rejected')) {
                 errorMessage = 'Transaction cancelled by user.';
+            } else if (error.message.includes('network')) {
+                errorMessage = 'Please ensure you are connected to Cronos Network.';
             }
 
             showError(errorMessage);
+            hideLoading();
         }
 
-        // Tab Switching Logic with Error Handling
-        document.addEventListener("DOMContentLoaded", () => {
-            try {
-                const tabButtons = document.querySelectorAll(".tab-btn");
-                const tabContents = document.querySelectorAll(".tab-content");
-
-                function showTab(tabId) {
-                    tabContents.forEach(content => {
-                        content.style.display = 'none';
-                    });
-
-                    tabButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-
-                    const selectedTab = document.getElementById(tabId);
-                    if (selectedTab) {
-                        selectedTab.style.display = 'block';
-                    }
-
-                    const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
-                    if (activeButton) {
-                        activeButton.classList.add('active');
-                    }
-
-                    // Special handling for staking tab
-                    if (tabId === 'staking' && !isInitialized) {
-                        checkWalletConnection();
-                    }
-                }
-
-                tabButtons.forEach(button => {
-                    button.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        const tabId = button.getAttribute("data-tab");
-                        showTab(tabId);
-                    });
-                });
-
-                // Show initial tab
-                showTab('about');
-            } catch (error) {
-                console.error("Error in tab initialization:", error);
+        // Enhanced wallet connection check
+        async function checkWalletConnection() {
+            const provider = window.ethereum || window.onchain || window.coinbase;
+            if (!provider) {
+                document.getElementById("wallet-error").classList.remove('hidden');
+                return false;
             }
-        });
+            document.getElementById("wallet-error").classList.add('hidden');
+            return true;
+        }
 
-        // Enhanced network switching with better error handling
+        // Enhanced network switching
         async function switchToCronosNetwork() {
+            const provider = window.ethereum || window.onchain || window.coinbase;
             try {
                 showLoading();
-                await window.ethereum.request({
+                await provider.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{ chainId: '0x19' }],
                 });
@@ -563,7 +558,7 @@
             } catch (switchError) {
                 if (switchError.code === 4902) {
                     try {
-                        await window.ethereum.request({
+                        await provider.request({
                             method: 'wallet_addEthereumChain',
                             params: [CRONOS_NETWORK_CONFIG]
                         });
@@ -581,41 +576,33 @@
                 hideLoading();
             }
         }
-
-        // Enhanced wallet connection with status checking
-        async function checkWalletConnection() {
-            if (typeof window.ethereum === 'undefined') {
-                document.getElementById("metamask-error").classList.remove('hidden');
-                return false;
-            }
-            document.getElementById("metamask-error").classList.add('hidden');
-            return true;
-        }
-                async function connectWallet() {
+                // Enhanced wallet connection with persistence
+        async function connectWallet() {
             try {
                 if (!await checkWalletConnection()) return;
 
                 setButtonLoading('connect-wallet', true);
                 
-                const networkSwitched = await switchToCronosNetwork();
-                if (!networkSwitched) return;
+                // Get the available provider
+                const web3Provider = window.ethereum || window.onchain || window.coinbase;
+                if (!web3Provider) {
+                    throw new Error('No Web3 wallet detected');
+                }
                 
-                provider = new ethers.providers.Web3Provider(window.ethereum);
+                provider = new ethers.providers.Web3Provider(web3Provider);
                 await provider.send("eth_requestAccounts", []);
                 signer = provider.getSigner();
                 
-                // Verify network
-                const network = await provider.getNetwork();
-                if (network.chainId !== 25) {
-                    document.getElementById("network-error").classList.remove('hidden');
-                    return;
-                }
+                // Ensure correct network
+                const networkSwitched = await switchToCronosNetwork();
+                if (!networkSwitched) return;
                 
                 contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 
                 const address = await signer.getAddress();
+                console.log("Wallet connected:", address); // Debug log
                 
-                // Update UI elements
+                // Update UI
                 document.getElementById("wallet-address").textContent = 
                     `${address.substring(0, 6)}...${address.substring(38)}`;
                 document.getElementById("network-name").textContent = "Cronos";
@@ -628,8 +615,12 @@
                 isInitialized = true;
                 await updateUI();
                 setupEventListeners();
+
+                // Switch to staking tab if not already there
+                showTab('staking', true);
                 
             } catch (error) {
+                console.error("Connection error:", error);
                 handleError(error, 'wallet connection');
             } finally {
                 setButtonLoading('connect-wallet', false);
@@ -649,14 +640,24 @@
                 document.getElementById("network-info").classList.add('hidden');
                 document.getElementById("staking-interface").classList.add('hidden');
                 document.getElementById("network-error").classList.add('hidden');
+                document.getElementById("wallet-error").classList.add('hidden');
 
-                // Clear displayed values
-                document.getElementById("y2k-balance").textContent = "0";
-                document.getElementById("pogs-balance").textContent = "0";
-                document.getElementById("staked-amount").textContent = "0";
-                document.getElementById("pending-rewards").textContent = "0";
+                // Clear all displayed values
+                const elements = [
+                    "y2k-balance", "pogs-balance", "staked-amount", "pending-rewards",
+                    "referral-rewards", "burn-rate", "current-apr", "total-staked"
+                ];
+                elements.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.textContent = "0";
+                });
+
+                // Clear input fields
                 document.getElementById("stake-amount").value = "";
                 document.getElementById("referral-address").value = "";
+
+                // Switch back to about tab
+                showTab('about', true);
             } catch (error) {
                 handleError(error, 'wallet disconnection');
             }
@@ -668,6 +669,7 @@
             try {
                 showLoading();
                 const address = await signer.getAddress();
+                console.log("Updating UI for address:", address); // Debug log
                 
                 // Get stake info
                 const stakeInfo = await contract.stakes(address);
@@ -684,7 +686,7 @@
                     document.getElementById("next-unlock").textContent = unlockDate.toLocaleDateString();
                 }
 
-                // Get token balances
+                // Get token contracts
                 const y2kToken = new ethers.Contract(
                     await contract.y2kToken(),
                     ["function balanceOf(address) view returns (uint256)"],
@@ -696,13 +698,25 @@
                     signer
                 );
 
-                const [y2kBalance, pogsBalance, referralRewards, burnRate, lockPeriod, rewardRate] = await Promise.all([
+                // Fetch all data in parallel
+                const [
+                    y2kBalance,
+                    pogsBalance,
+                    referralRewards,
+                    burnRate,
+                    lockPeriod,
+                    rewardRate,
+                    autoCompoundEnabled,
+                    lotteryEnabled
+                ] = await Promise.all([
                     y2kToken.balanceOf(address),
                     pogsToken.balanceOf(address),
                     contract.referralRewards(address),
                     contract.burnRate(),
                     contract.LOCK_PERIOD(),
-                    contract.rewardRate()
+                    contract.rewardRate(),
+                    contract.autoCompoundingEnabled(),
+                    contract.lotteryEnabled()
                 ]);
 
                 // Update all UI elements
@@ -722,22 +736,83 @@
                 document.getElementById("current-apr").textContent = 
                     `${apr}%`;
 
-                // Update feature toggles
-                const [autoCompoundEnabled, lotteryEnabled] = await Promise.all([
-                    contract.autoCompoundingEnabled(),
-                    contract.lotteryEnabled()
-                ]);
-                
+                // Update toggles
                 document.getElementById("auto-compound-toggle").checked = autoCompoundEnabled;
                 document.getElementById("lottery-toggle").checked = lotteryEnabled;
 
             } catch (error) {
-                handleError(error, 'updating UI');
+                console.error("UI update error:", error);
+                handleError(error, 'updating information');
             } finally {
                 hideLoading();
             }
         }
 
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll(".tab-btn").forEach(button => {
+                button.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const tabId = button.getAttribute("data-tab");
+                    showTab(tabId);
+                });
+            });
+
+            // Wallet connection
+            document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
+            document.getElementById("disconnect-wallet")?.addEventListener("click", disconnectWallet);
+
+            // Staking actions
+            document.getElementById("approve-button")?.addEventListener("click", approveTokens);
+            document.getElementById("stake-button")?.addEventListener("click", stake);
+            document.getElementById("unstake-button")?.addEventListener("click", unstake);
+            document.getElementById("claim-rewards")?.addEventListener("click", claimRewards);
+
+            // MAX button
+            document.getElementById("max-button")?.addEventListener("click", async () => {
+                if (!contract || !signer) return;
+                
+                try {
+                    const y2kToken = new ethers.Contract(
+                        await contract.y2kToken(),
+                        ["function balanceOf(address) view returns (uint256)"],
+                        signer
+                    );
+                    
+                    const balance = await y2kToken.balanceOf(await signer.getAddress());
+                    document.getElementById("stake-amount").value = ethers.utils.formatEther(balance);
+                } catch (error) {
+                    handleError(error, 'setting max amount');
+                }
+            });
+
+            // Feature toggles
+            document.getElementById("auto-compound-toggle")?.addEventListener("change", async (e) => {
+                try {
+                    const tx = await contract.toggleAutoCompounding(e.target.checked);
+                    showStatus(`Updating auto-compound setting...`);
+                    await tx.wait();
+                    showStatus(`Auto-compounding ${e.target.checked ? 'enabled' : 'disabled'}`);
+                } catch (error) {
+                    handleError(error, 'toggling auto-compound');
+                    e.target.checked = !e.target.checked; // Revert toggle
+                }
+            });
+
+            document.getElementById("lottery-toggle")?.addEventListener("change", async (e) => {
+                try {
+                    const tx = await contract.toggleLottery(e.target.checked);
+                    showStatus(`Updating lottery setting...`);
+                    await tx.wait();
+                    showStatus(`Lottery participation ${e.target.checked ? 'enabled' : 'disabled'}`);
+                } catch (error) {
+                    handleError(error, 'toggling lottery');
+                    e.target.checked = !e.target.checked; // Revert toggle
+                }
+            });
+        }
+
+        // Staking Functions
         async function approveTokens() {
             if (!contract || !signer) return;
             
@@ -824,51 +899,6 @@
             }
         }
 
-        function setupEventListeners() {
-            // Setup MAX button
-            document.getElementById("max-button").addEventListener("click", async () => {
-                if (!contract || !signer) return;
-                
-                try {
-                    const y2kToken = new ethers.Contract(
-                        await contract.y2kToken(),
-                        ["function balanceOf(address) view returns (uint256)"],
-                        signer
-                    );
-                    
-                    const balance = await y2kToken.balanceOf(await signer.getAddress());
-                    document.getElementById("stake-amount").value = ethers.utils.formatEther(balance);
-                } catch (error) {
-                    handleError(error, 'setting max amount');
-                }
-            });
-
-            // Feature toggles
-            document.getElementById("auto-compound-toggle").addEventListener("change", async (e) => {
-                try {
-                    const tx = await contract.toggleAutoCompounding(e.target.checked);
-                    showStatus(`Updating auto-compound setting...`);
-                    await tx.wait();
-                    showStatus(`Auto-compounding ${e.target.checked ? 'enabled' : 'disabled'}`);
-                } catch (error) {
-                    handleError(error, 'toggling auto-compound');
-                    e.target.checked = !e.target.checked; // Revert toggle
-                }
-            });
-
-            document.getElementById("lottery-toggle").addEventListener("change", async (e) => {
-                try {
-                    const tx = await contract.toggleLottery(e.target.checked);
-                    showStatus(`Updating lottery setting...`);
-                    await tx.wait();
-                    showStatus(`Lottery participation ${e.target.checked ? 'enabled' : 'disabled'}`);
-                } catch (error) {
-                    handleError(error, 'toggling lottery');
-                    e.target.checked = !e.target.checked; // Revert toggle
-                }
-            });
-        }
-
         function showStatus(message) {
             const statusEl = document.getElementById("tx-status");
             const messageEl = document.getElementById("tx-message");
@@ -883,26 +913,25 @@
             showStatus("Error: " + message);
         }
 
-        // Initialize event listeners
-        document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
-        document.getElementById("disconnect-wallet")?.addEventListener("click", disconnectWallet);
-        document.getElementById("approve-button")?.addEventListener("click", approveTokens);
-        document.getElementById("stake-button")?.addEventListener("click", stake);
-        document.getElementById("unstake-button")?.addEventListener("click", unstake);
-        document.getElementById("claim-rewards")?.addEventListener("click", claimRewards);
-
         // Network and Account Change Listeners
-        if (window.ethereum) {
-            window.ethereum.on('chainChanged', () => {
+        if (window.ethereum || window.onchain || window.coinbase) {
+            const provider = window.ethereum || window.onchain || window.coinbase;
+            provider.on('chainChanged', () => {
                 window.location.reload();
             });
 
-            window.ethereum.on('accountsChanged', () => {
+            provider.on('accountsChanged', () => {
                 window.location.reload();
             });
         }
         
-        // Update UI periodically
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            showTab('about');
+        });
+        
+        // Update UI periodically if initialized
         setInterval(() => {
             if (isInitialized) {
                 updateUI();
