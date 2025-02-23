@@ -380,65 +380,82 @@
         });
 
         async function switchToCronosNetwork() {
+    try {
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x19' }], // Cronos chainId in hex
+        });
+    } catch (switchError) {
+        // This error code indicates that the chain has not been added to MetaMask
+        if (switchError.code === 4902) {
             try {
                 await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: CRONOS_NETWORK_CONFIG.chainId }],
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                        chainId: '0x19', // 25 in hex
+                        chainName: 'Cronos Mainnet',
+                        nativeCurrency: {
+                            name: 'CRO',
+                            symbol: 'CRO',
+                            decimals: 18
+                        },
+                        rpcUrls: ['https://evm.cronos.org'],
+                        blockExplorerUrls: ['https://cronoscan.com/']
+                    }]
                 });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [CRONOS_NETWORK_CONFIG],
-                        });
-                    } catch (addError) {
-                        console.error('Failed to add Cronos network:', addError);
-                        showError('Failed to add Cronos network');
-                    }
-                }
+            } catch (addError) {
+                console.error('Failed to add Cronos network:', addError);
             }
         }
-
+        console.error('Failed to switch to Cronos network:', switchError);
+    }
+}
         async function connectWallet() {
-            try {
-                if (typeof window.ethereum === 'undefined') {
-                    alert('Please install MetaMask to use the staking feature');
-                    return;
-                }
-
-                const loadingBtn = document.getElementById("connect-wallet");
-                loadingBtn.textContent = 'Connecting...';
-                
-                await switchToCronosNetwork();
-                
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                
-                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                
-                const address = await signer.getAddress();
-                
-                document.getElementById("wallet-address").textContent = 
-                    `${address.substring(0, 6)}...${address.substring(38)}`;
-                document.getElementById("network-info").classList.remove('hidden');
-                document.getElementById("connect-wallet").classList.add('hidden');
-                document.getElementById("disconnect-wallet").classList.remove('hidden');
-                document.getElementById("staking-interface").classList.remove('hidden');
-                
-                await updateUI();
-                setupEventListeners();
-                
-            } catch (error) {
-                console.error("Error connecting wallet:", error);
-                showError("Failed to connect wallet: " + error.message);
-            } finally {
-                const loadingBtn = document.getElementById("connect-wallet");
-                loadingBtn.textContent = 'Connect Wallet';
-            }
+    try {
+        if (typeof window.ethereum === 'undefined') {
+            alert('Please install MetaMask to use the staking feature');
+            return;
         }
 
+        const loadingBtn = document.getElementById("connect-wallet");
+        loadingBtn.textContent = 'Connecting...';
+        
+        await switchToCronosNetwork(); // Make sure we're on Cronos
+        
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
+        
+        // Get network info
+        const network = await provider.getNetwork();
+        if (network.chainId !== 25) { // Cronos mainnet chainId
+            alert('Please switch to Cronos network');
+            return;
+        }
+        
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        
+        const address = await signer.getAddress();
+        
+        document.getElementById("wallet-address").textContent = 
+            `${address.substring(0, 6)}...${address.substring(38)}`;
+        document.getElementById("network-name").textContent = "Cronos";
+        document.getElementById("network-info").classList.remove('hidden');
+        document.getElementById("connect-wallet").classList.add('hidden');
+        document.getElementById("disconnect-wallet").classList.remove('hidden');
+        document.getElementById("staking-interface").classList.remove('hidden');
+        
+        await updateUI();
+        setupEventListeners();
+        
+    } catch (error) {
+        console.error("Error connecting wallet:", error);
+        showError("Failed to connect wallet: " + error.message);
+    } finally {
+        const loadingBtn = document.getElementById("connect-wallet");
+        loadingBtn.textContent = 'Connect Wallet';
+    }
+}
         async function updateUI() {
             if (!contract || !signer) return;
 
@@ -609,6 +626,18 @@
 
         // Event Listeners
         document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
+        // Add this near your other event listeners
+if (window.ethereum) {
+    window.ethereum.on('chainChanged', (chainId) => {
+        // Reload the page when network changes
+        window.location.reload();
+    });
+
+    window.ethereum.on('accountsChanged', (accounts) => {
+        // Reload the page when accounts change
+        window.location.reload();
+    });
+}
         
         // Update UI periodically
         setInterval(updateUI, 30000);
