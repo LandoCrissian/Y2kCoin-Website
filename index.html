@@ -6,20 +6,18 @@
     <title>Y2KCoin - A Digital Revolution</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
     
-    <!-- Essential Scripts -->
+    <!-- Essential Scripts - Improved Ethers.js Loading -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Multiple Ethers.js Sources for Reliability -->
     <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
     <script>
+        // Backup loading for ethers.js
         window.addEventListener('load', function() {
             if (typeof ethers === 'undefined') {
-                console.error('Attempting to reload Ethers.js');
+                console.error('Primary Ethers.js load failed, attempting backup...');
                 const script = document.createElement('script');
-                script.src = 'https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js';
-                script.type = 'application/javascript';
+                script.src = 'https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js';
                 script.onload = function() {
-                    console.log('Ethers.js loaded successfully');
+                    console.log('Backup Ethers.js loaded successfully');
                     initializeWeb3();
                 };
                 document.head.appendChild(script);
@@ -29,12 +27,23 @@
             }
         });
 
+        // Initialize Web3 with multiple wallet support
         function initializeWeb3() {
-            // Check for various wallet providers
             const provider = window.ethereum || window.onchain || window.coinbase;
             if (provider) {
                 window.provider = new ethers.providers.Web3Provider(provider);
                 console.log('Web3 provider initialized');
+                
+                // Listen for network changes
+                provider.on('chainChanged', () => {
+                    console.log('Network changed, reloading...');
+                    window.location.reload();
+                });
+
+                provider.on('accountsChanged', () => {
+                    console.log('Account changed, reloading...');
+                    window.location.reload();
+                });
             }
         }
     </script>
@@ -43,49 +52,109 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
+        /* Base Styles */
         body {
             font-family: 'Orbitron', sans-serif;
             background-color: #0a0a0a;
             color: #e2e8f0;
         }
-        .glow-text { text-shadow: 0px 0px 8px cyan; }
+        
+        /* Enhanced Glow Effect */
+        .glow-text { 
+            text-shadow: 0px 0px 8px cyan;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 5px cyan, 0 0 10px cyan; }
+            to { text-shadow: 0 0 10px cyan, 0 0 20px cyan; }
         .btn {
             padding: 10px 20px;
             border-radius: 8px;
             font-size: 1.1rem;
             font-weight: bold;
             transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
         }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
         .btn-primary { 
             background-color: #00e6e6; 
             color: #0a0a0a; 
             box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
         }
+
         .btn-primary:hover { 
             background-color: #009999; 
             transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.5);
         }
+
         .btn-secondary { 
             background-color: #ff007f; 
             color: #fff; 
             box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
         }
+
         .btn-secondary:hover { 
             background-color: #cc0066; 
             transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
         }
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
+
+        /* Tab Styles */
         .tab-content {
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .tab-btn {
+            transition: all 0.3s ease-in-out;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+
+        .tab-btn:hover {
+            color: #00e6e6;
+            transform: translateY(-1px);
+        }
+
         .tab-btn.active {
             color: #00e6e6;
             font-weight: bold;
+            box-shadow: 0 2px 0 #00e6e6;
         }
+
+        /* Form Elements */
         .input-field {
             background-color: #1a1a1a;
             border: 2px solid #333;
@@ -93,43 +162,58 @@
             padding: 12px 16px;
             border-radius: 12px;
             width: 100%;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
+
         .input-field:focus {
             border-color: #00e6e6;
             outline: none;
-            box-shadow: 0 0 10px rgba(0, 230, 230, 0.2);
+            box-shadow: 0 0 15px rgba(0, 230, 230, 0.2);
+            transform: translateY(-1px);
         }
+
+        /* Card Styles */
         .info-card {
             background-color: #111;
             padding: 24px;
             border-radius: 16px;
             margin: 12px 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
         }
+
         .info-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            border-color: #00e6e6;
         }
+
+        /* Loading Animation */
         .loading {
             animation: pulse 1.5s infinite;
         }
+
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
+
+        /* Toggle Switch */
         .toggle-switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 30px;
         }
+
         .toggle-switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -141,6 +225,7 @@
             transition: .3s;
             border-radius: 34px;
         }
+
         .slider:before {
             position: absolute;
             content: "";
@@ -152,35 +237,51 @@
             transition: .3s;
             border-radius: 50%;
         }
+
         input:checked + .slider {
             background-color: #00e6e6;
-            box-shadow: 0 0 10px rgba(0, 230, 230, 0.5);
+            box-shadow: 0 0 15px rgba(0, 230, 230, 0.5);
         }
+
         input:checked + .slider:before {
             transform: translateX(30px);
         }
+
+        /* Utility Classes */
         .hidden {
-            display: none;
+            display: none !important;
         }
+
+        /* Enhanced Error Messages */
         .network-error {
             background-color: #ff007f;
             color: white;
             padding: 1rem;
             border-radius: 8px;
             margin: 1rem 0;
+            animation: slideIn 0.3s ease-out;
         }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            backdrop-filter: blur(5px);
         }
+
         .loading-spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #00e6e6;
@@ -189,6 +290,7 @@
             height: 40px;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -198,13 +300,18 @@
 <body class="flex flex-col items-center text-center px-4 min-h-screen">
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay hidden">
-        <div class="loading-spinner"></div>
+        <div class="flex flex-col items-center">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-cyan-400" id="loading-text">Processing Transaction...</p>
+        </div>
     </div>
 
     <!-- Header -->
-    <header class="w-full py-4 bg-[#0a0a0a]">
-        <nav class="flex justify-between items-center max-w-5xl mx-auto">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
+    <header class="w-full py-4 bg-[#0a0a0a] sticky top-0 z-50">
+        <nav class="flex justify-between items-center max-w-5xl mx-auto px-4">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
+                 alt="Y2KCoin Logo" 
+                 class="w-16 hover:transform hover:scale-105 transition-transform duration-300">
             <ul class="flex flex-wrap justify-center gap-4">
                 <li><button class="tab-btn active" data-tab="about">About</button></li>
                 <li><button class="tab-btn" data-tab="mission">Mission</button></li>
@@ -220,38 +327,56 @@
     <main class="w-full max-w-4xl py-10 flex-grow">
         <!-- Hero Section -->
         <section id="hero" class="mb-10">
-            <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
-            <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
+            <h1 class="text-4xl sm:text-5xl font-bold glow-text mb-6">Welcome to Y2KCoin</h1>
+            <p class="text-lg sm:text-xl mt-4 text-gray-300 mb-8">A digital revolution inspired by the past, built for the future.</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Buy Y2K</a>
-                <a href="https://discord.gg/jpFbSapSAh" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Join Discord</a>
+                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
+                   class="btn btn-primary transform hover:scale-105 transition-all duration-300"
+                   target="_blank" 
+                   rel="noopener noreferrer">
+                    Buy Y2K
+                </a>
+                <a href="https://discord.gg/jpFbSapSAh" 
+                   class="btn btn-secondary transform hover:scale-105 transition-all duration-300"
+                   target="_blank" 
+                   rel="noopener noreferrer">
+                    Join Discord
+                </a>
             </div>
         </section>
 
-        <!-- Tab Content -->
+        <!-- Tab Content Container -->
         <section id="tab-content" class="mt-8">
             <!-- About Tab -->
-            <div id="about" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
-                <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
+            <div id="about" class="tab-content active">
+                <h2 class="text-3xl font-bold glow-text mb-6">About Y2KCoin</h2>
+                <div class="info-card">
+                    <p class="text-lg text-gray-300">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
+                </div>
             </div>
 
             <!-- Mission Tab -->
             <div id="mission" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
-                <p class="mt-4 text-gray-400">We aim to build an engaging, sustainable digital ecosystem where holders benefit from staking, NFTs, and gaming.</p>
+                <h2 class="text-3xl font-bold glow-text mb-6">Our Mission</h2>
+                <div class="info-card">
+                    <p class="text-lg text-gray-300">We aim to build an engaging, sustainable digital ecosystem where holders benefit from staking, NFTs, and gaming.</p>
+                </div>
             </div>
 
             <!-- Marketplace Tab -->
             <div id="marketplace" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
-                <p class="mt-4 text-gray-400">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
+                <h2 class="text-3xl font-bold glow-text mb-6">Y2K Marketplace</h2>
+                <div class="info-card">
+                    <p class="text-lg text-gray-300">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
+                </div>
             </div>
 
             <!-- NFTs Tab -->
             <div id="nfts" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K NFTs</h2>
-                <p class="mt-4 text-gray-400">Limited edition, community-driven digital collectibles with real utility.</p>
+                <h2 class="text-3xl font-bold glow-text mb-6">Y2K NFTs</h2>
+                <div class="info-card">
+                    <p class="text-lg text-gray-300">Limited edition, community-driven digital collectibles with real utility.</p>
+                </div>
             </div>
                         <!-- Staking Tab -->
             <div id="staking" class="tab-content">
@@ -259,33 +384,53 @@
                 
                 <!-- Network Error Message -->
                 <div id="network-error" class="network-error hidden">
-                    <p class="font-bold">Wrong Network Detected</p>
-                    <p>Please switch to the Cronos Network to use staking features</p>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-bold text-xl mb-2">Wrong Network Detected</p>
+                            <p>Please switch to the Cronos Network to use staking features</p>
+                        </div>
+                        <button onclick="switchToCronosNetwork()" class="btn btn-primary text-sm">
+                            Switch to Cronos
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Wallet Error Message -->
                 <div id="wallet-error" class="network-error hidden">
-                    <p class="font-bold">Web3 Wallet Required</p>
-                    <p>Please connect using OnChain, MetaMask, or another Web3 wallet</p>
-                    <div class="mt-2 text-sm">
-                        <a href="https://onchain.today/" target="_blank" rel="noopener noreferrer" class="underline">Get OnChain</a>
-                        <span class="mx-2">|</span>
-                        <a href="https://metamask.io" target="_blank" rel="noopener noreferrer" class="underline">Get MetaMask</a>
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-left">
+                            <p class="font-bold text-xl mb-2">Web3 Wallet Required</p>
+                            <p>Please connect using any of these wallets:</p>
+                            <div class="mt-2 flex gap-4">
+                                <a href="https://onchain.today/" target="_blank" rel="noopener noreferrer" class="text-white underline hover:text-cyan-400">OnChain</a>
+                                <a href="https://metamask.io" target="_blank" rel="noopener noreferrer" class="text-white underline hover:text-cyan-400">MetaMask</a>
+                                <span>or other Web3 wallets</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Wallet Connection -->
                 <div id="wallet-section" class="mb-8">
-                    <button id="connect-wallet" class="btn btn-primary">
-                        <span class="flex items-center justify-center">
+                    <button id="connect-wallet" class="btn btn-primary transform hover:scale-105 transition-all duration-300">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
                             <span id="connect-text">Connect Web3 Wallet</span>
-                            <span id="connect-loader" class="hidden ml-2 loading-spinner"></span>
+                            <span id="connect-loader" class="hidden">
+                                <div class="loading-spinner w-5 h-5"></div>
+                            </span>
                         </span>
                     </button>
-                    <button id="disconnect-wallet" class="btn btn-secondary hidden">Disconnect Wallet</button>
-                    <div id="network-info" class="mt-4 hidden">
-                        <p class="text-lg">Connected Wallet: <span id="wallet-address" class="font-mono text-cyan-400"></span></p>
-                        <p class="text-lg">Network: <span id="network-name" class="text-cyan-400">Not Connected</span></p>
+                    <button id="disconnect-wallet" class="btn btn-secondary hidden transform hover:scale-105 transition-all duration-300">
+                        Disconnect Wallet
+                    </button>
+                    <div id="network-info" class="mt-4 hidden info-card">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <p class="text-lg">Wallet: <span id="wallet-address" class="font-mono text-cyan-400"></span></p>
+                            <p class="text-lg">Network: <span id="network-name" class="text-cyan-400">Not Connected</span></p>
+                        </div>
                     </div>
                 </div>
 
@@ -294,13 +439,13 @@
                     <!-- Token Balances -->
                     <div class="info-card mb-8">
                         <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Balances</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-lg">Y2K Balance: <span id="y2k-balance" class="font-mono text-cyan-400">0</span></p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-black bg-opacity-50 p-4 rounded-lg">
+                                <p class="text-lg mb-2">Y2K Balance: <span id="y2k-balance" class="font-mono text-cyan-400">0</span></p>
                                 <p class="text-lg">POGS Balance: <span id="pogs-balance" class="font-mono text-cyan-400">0</span></p>
                             </div>
-                            <div>
-                                <p class="text-lg">Staked Y2K: <span id="staked-amount" class="font-mono text-cyan-400">0</span></p>
+                            <div class="bg-black bg-opacity-50 p-4 rounded-lg">
+                                <p class="text-lg mb-2">Staked Y2K: <span id="staked-amount" class="font-mono text-cyan-400">0</span></p>
                                 <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">0</span></p>
                             </div>
                         </div>
@@ -318,7 +463,7 @@
                                        min="0" 
                                        step="any">
                                 <button id="max-button" 
-                                        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-cyan-400 hover:text-cyan-300">
+                                        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-cyan-400 hover:text-cyan-300 transition-colors duration-300">
                                     MAX
                                 </button>
                             </div>
@@ -328,44 +473,54 @@
                                    class="input-field mb-4">
                             <div class="flex flex-wrap justify-center gap-4">
                                 <button id="approve-button" class="btn btn-primary">
-                                    <span class="flex items-center">
+                                    <span class="flex items-center gap-2">
                                         <span>Approve Y2K</span>
-                                        <span class="approve-loader hidden ml-2 loading-spinner"></span>
+                                        <span class="approve-loader hidden">
+                                            <div class="loading-spinner w-5 h-5"></div>
+                                        </span>
                                     </span>
                                 </button>
                                 <button id="stake-button" class="btn btn-primary">
-                                    <span class="flex items-center">
+                                    <span class="flex items-center gap-2">
                                         <span>Stake</span>
-                                        <span class="stake-loader hidden ml-2 loading-spinner"></span>
+                                        <span class="stake-loader hidden">
+                                            <div class="loading-spinner w-5 h-5"></div>
+                                        </span>
                                     </span>
                                 </button>
                                 <button id="unstake-button" class="btn btn-secondary">
-                                    <span class="flex items-center">
+                                    <span class="flex items-center gap-2">
                                         <span>Unstake</span>
-                                        <span class="unstake-loader hidden ml-2 loading-spinner"></span>
+                                        <span class="unstake-loader hidden">
+                                            <div class="loading-spinner w-5 h-5"></div>
+                                        </span>
                                     </span>
                                 </button>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Rewards Section -->
+                                        <!-- Rewards Section -->
                     <div class="info-card mb-8">
                         <h3 class="text-xl font-bold text-cyan-400 mb-4">Rewards</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <p class="text-lg">Claimable POGS: <span id="claimable-rewards" class="font-mono text-cyan-400">0</span></p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-black bg-opacity-50 p-4 rounded-lg">
+                                <p class="text-lg mb-2">Claimable POGS: <span id="claimable-rewards" class="font-mono text-cyan-400">0</span></p>
                                 <p class="text-lg">Last Claim: <span id="last-claim-time" class="font-mono text-cyan-400">Never</span></p>
                             </div>
-                            <div>
-                                <p class="text-lg">Referral Rewards: <span id="referral-rewards" class="font-mono text-cyan-400">0</span></p>
+                            <div class="bg-black bg-opacity-50 p-4 rounded-lg">
+                                <p class="text-lg mb-2">Referral Rewards: <span id="referral-rewards" class="font-mono text-cyan-400">0</span></p>
                                 <p class="text-lg">Total Referred: <span id="total-referrals" class="font-mono text-cyan-400">0</span></p>
                             </div>
                         </div>
-                        <button id="claim-rewards" class="btn btn-primary">
-                            <span class="flex items-center justify-center">
+                        <button id="claim-rewards" class="btn btn-primary transform hover:scale-105 transition-all duration-300">
+                            <span class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
                                 <span>Claim Rewards</span>
-                                <span class="claim-loader hidden ml-2 loading-spinner"></span>
+                                <span class="claim-loader hidden">
+                                    <div class="loading-spinner w-5 h-5"></div>
+                                </span>
                             </span>
                         </button>
                     </div>
@@ -374,31 +529,53 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div class="info-card">
                             <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Staking Info</h3>
-                            <p class="text-lg">Staking Since: <span id="staking-time" class="font-mono text-cyan-400">-</span></p>
-                            <p class="text-lg">Lock Period: <span id="lock-period" class="font-mono text-cyan-400">-</span></p>
-                            <p class="text-lg">Next Unlock: <span id="next-unlock" class="font-mono text-cyan-400">-</span></p>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg">Staking Since:</span>
+                                    <span id="staking-time" class="font-mono text-cyan-400">-</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg">Lock Period:</span>
+                                    <span id="lock-period" class="font-mono text-cyan-400">-</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg">Next Unlock:</span>
+                                    <span id="next-unlock" class="font-mono text-cyan-400">-</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="info-card">
                             <h3 class="text-xl font-bold text-cyan-400 mb-4">Protocol Stats</h3>
-                            <p class="text-lg">APR: <span id="current-apr" class="font-mono text-cyan-400">0%</span></p>
-                            <p class="text-lg">Total Staked: <span id="total-staked" class="font-mono text-cyan-400">0</span></p>
-                            <p class="text-lg">Burn Rate: <span id="burn-rate" class="font-mono text-cyan-400">0%</span></p>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg">APR:</span>
+                                    <span id="current-apr" class="font-mono text-cyan-400">0%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg">Total Staked:</span>
+                                    <span id="total-staked" class="font-mono text-cyan-400">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg">Burn Rate:</span>
+                                    <span id="burn-rate" class="font-mono text-cyan-400">0%</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Features Toggle -->
                     <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Features</h3>
+                        <h3 class="text-xl font-bold text-cyan-400 mb-6">Features</h3>
                         <div class="flex flex-wrap justify-center gap-12">
-                            <div class="flex items-center">
-                                <label class="text-lg mr-3">Auto-Compound</label>
+                            <div class="flex items-center gap-4">
+                                <label class="text-lg">Auto-Compound</label>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="auto-compound-toggle">
                                     <span class="slider"></span>
                                 </label>
                             </div>
-                            <div class="flex items-center">
-                                <label class="text-lg mr-3">Lottery Entry</label>
+                            <div class="flex items-center gap-4">
+                                <label class="text-lg">Lottery Entry</label>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="lottery-toggle">
                                     <span class="slider"></span>
@@ -410,16 +587,23 @@
 
                 <!-- Transaction Status -->
                 <div id="tx-status" class="fixed bottom-4 right-4 hidden">
-                    <div class="bg-black border border-cyan-400 rounded-lg p-4 shadow-lg">
-                        <p id="tx-message" class="text-cyan-400"></p>
+                    <div class="bg-black border-2 border-cyan-400 rounded-lg p-4 shadow-lg backdrop-blur-sm">
+                        <div class="flex items-center gap-3">
+                            <div id="tx-status-icon" class="flex-shrink-0">
+                                <!-- Success/Error icon will be injected here -->
+                            </div>
+                            <p id="tx-message" class="text-cyan-400"></p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Gaming Tab -->
             <div id="gaming" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Gaming</h2>
-                <p class="mt-4 text-gray-400">An immersive gaming experience that rewards players through blockchain mechanics.</p>
+                <h2 class="text-3xl font-bold glow-text mb-6">Y2K Gaming</h2>
+                <div class="info-card">
+                    <p class="text-lg text-gray-300">An immersive gaming experience that rewards players through blockchain mechanics.</p>
+                </div>
             </div>
         </section>
     </main>
@@ -428,9 +612,9 @@
         <section id="social-links" class="mb-6">
             <h2 class="text-2xl font-bold glow-text">Follow Us</h2>
             <div class="flex justify-center gap-4 mt-4">
-                <a href="https://x.com/y2kc0in?s=21" target="_blank" class="btn btn-primary">𝕏</a>
-                <a href="https://www.instagram.com/y2kcoin" target="_blank" class="btn btn-primary">Instagram</a>
-                <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="btn btn-primary">Reddit</a>
+                <a href="https://x.com/y2kc0in?s=21" target="_blank" class="btn btn-primary transform hover:scale-105 transition-all duration-300">𝕏</a>
+                <a href="https://www.instagram.com/y2kcoin" target="_blank" class="btn btn-primary transform hover:scale-105 transition-all duration-300">Instagram</a>
+                <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="btn btn-primary transform hover:scale-105 transition-all duration-300">Reddit</a>
             </div>
         </section>
         <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
@@ -438,7 +622,7 @@
 
     <!-- JavaScript -->
     <script>
-        // Contract Constants and State Management
+        // Contract Constants
         const CONTRACT_ADDRESS = "0x7DC6a9900e9DE69fF36ECb7dF56aA7c9157DE483";
         const CRONOS_NETWORK_CONFIG = {
             chainId: '0x19',
@@ -452,549 +636,421 @@
             blockExplorerUrls: ['https://cronoscan.com/']
         };
 
-        // Global state
-        let contract;
-        let signer;
-        let provider;
-        let isInitialized = false;
-        let currentTab = 'about';
+        // Global state management
+        const state = {
+            contract: null,
+            signer: null,
+            provider: null,
+            isInitialized: false,
+            currentTab: 'about',
+            isConnecting: false,
+            lastUpdateTime: 0
+        };
 
-        // Loading state management
-        function showLoading() {
-            document.getElementById('loading-overlay').classList.remove('hidden');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading-overlay').classList.add('hidden');
-        }
-
-        function setButtonLoading(buttonId, isLoading) {
-            const button = document.getElementById(buttonId);
-            const loader = button.querySelector('.loading-spinner');
-            const text = button.querySelector('span:not(.loading-spinner)');
-            
-            button.disabled = isLoading;
-            if (isLoading) {
-                loader?.classList.remove('hidden');
-                text.classList.add('opacity-50');
-            } else {
-                loader?.classList.add('hidden');
-                text.classList.remove('opacity-50');
-            }
-        }
-
-        // Tab Management with State Persistence
-        // Replace the current showTab function with this updated version
-function showTab(tabId, force = false) {
-    console.log("Showing tab:", tabId); // Debug log
-
-    const tabContents = document.querySelectorAll(".tab-content");
-    const tabButtons = document.querySelectorAll(".tab-btn");
-
-    // Hide all tabs
-    tabContents.forEach(content => {
-        content.style.display = 'none';
-    });
-
-    // Remove active class from all buttons
-    tabButtons.forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    // Show selected tab
-    const selectedTab = document.getElementById(tabId);
-    if (selectedTab) {
-        selectedTab.style.display = 'block';
-        currentTab = tabId;
-    }
-
-    // Activate the correct button
-    const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
-    if (activeButton) {
-        activeButton.classList.add('active');
-    }
-}
-
-// Update the event listeners setup
-function setupTabListeners() {
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    tabButtons.forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const tabId = button.getAttribute("data-tab");
-            showTab(tabId);
-        });
-    });
-}
-
-// Add this to your initialization code (at the bottom of your script)
-document.addEventListener('DOMContentLoaded', () => {
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const tabContents = document.querySelectorAll(".tab-content");
-
-    function showTab(tabId) {
-        console.log("Switching to tab:", tabId); // Debugging log
-
-        // Hide all tabs
-        tabContents.forEach(content => content.style.display = 'none');
-
-        // Remove active class from all buttons
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-
-        // Show selected tab
-        const selectedTab = document.getElementById(tabId);
-        if (selectedTab) {
-            selectedTab.style.display = 'block';
-        }
-
-        // Activate the correct button
-        const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
-    }
-
-    // Set up event listeners for each tab button
-    tabButtons.forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const tabId = button.getAttribute("data-tab");
-            showTab(tabId);
-        });
-    });
-
-    // Show the first tab on page load
-    showTab("about");
-});
-            const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
-        }
-
-        // Enhanced error handling
-        function handleError(error, action) {
-            console.error(`Error during ${action}:`, error);
-            let errorMessage = 'An error occurred. Please try again.';
-
-            if (error.code === 4001) {
-                errorMessage = 'Transaction rejected by user.';
-            } else if (error.code === -32603) {
-                errorMessage = 'Transaction failed. Please check your balance and try again.';
-            } else if (error.message.includes('insufficient funds')) {
-                errorMessage = 'Insufficient funds for transaction.';
-            } else if (error.message.includes('user rejected')) {
-                errorMessage = 'Transaction cancelled by user.';
-            } else if (error.message.includes('network')) {
-                errorMessage = 'Please ensure you are connected to Cronos Network.';
+        // Tab Management System
+        class TabManager {
+            constructor() {
+                this.currentTab = 'about';
+                this.setupListeners();
             }
 
-            showError(errorMessage);
-            hideLoading();
-        }
-
-        // Enhanced wallet connection check
-        async function checkWalletConnection() {
-            const provider = window.ethereum || window.onchain || window.coinbase;
-            if (!provider) {
-                document.getElementById("wallet-error").classList.remove('hidden');
-                return false;
-            }
-            document.getElementById("wallet-error").classList.add('hidden');
-            return true;
-        }
-
-        // Enhanced network switching
-        async function switchToCronosNetwork() {
-            const provider = window.ethereum || window.onchain || window.coinbase;
-            try {
-                showLoading();
-                await provider.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x19' }],
+            setupListeners() {
+                document.querySelectorAll(".tab-btn").forEach(button => {
+                    button.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        const tabId = button.getAttribute("data-tab");
+                        this.showTab(tabId);
+                    });
                 });
-                document.getElementById("network-error").classList.add('hidden');
-                return true;
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    try {
-                        await provider.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [CRONOS_NETWORK_CONFIG]
-                        });
-                        return true;
-                    } catch (addError) {
-                        handleError(addError, 'adding Cronos network');
-                        document.getElementById("network-error").classList.remove('hidden');
-                        return false;
-                    }
-                }
-                handleError(switchError, 'switching network');
-                document.getElementById("network-error").classList.remove('hidden');
-                return false;
-            } finally {
-                hideLoading();
             }
-        }
-                // Enhanced wallet connection with persistence
-        async function connectWallet() {
-            try {
-                if (!await checkWalletConnection()) return;
 
-                setButtonLoading('connect-wallet', true);
-                
-                // Get the available provider
-                const web3Provider = window.ethereum || window.onchain || window.coinbase;
-                if (!web3Provider) {
-                    throw new Error('No Web3 wallet detected');
+            showTab(tabId, force = false) {
+                // Don't switch to staking if not initialized unless forced
+                if (tabId === 'staking' && !state.isInitialized && !force) {
+                    this.handleStakingAccess();
+                    return;
                 }
-                
-                provider = new ethers.providers.Web3Provider(web3Provider);
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                
-                // Ensure correct network
-                const networkSwitched = await switchToCronosNetwork();
-                if (!networkSwitched) return;
-                
-                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                
-                const address = await signer.getAddress();
-                console.log("Wallet connected:", address); // Debug log
-                
-                // Update UI
-                document.getElementById("wallet-address").textContent = 
-                    `${address.substring(0, 6)}...${address.substring(38)}`;
-                document.getElementById("network-name").textContent = "Cronos";
-                document.getElementById("network-info").classList.remove('hidden');
-                document.getElementById("connect-wallet").classList.add('hidden');
-                document.getElementById("disconnect-wallet").classList.remove('hidden');
-                document.getElementById("staking-interface").classList.remove('hidden');
-                document.getElementById("network-error").classList.add('hidden');
-                
-                isInitialized = true;
-                await updateUI();
-                setupEventListeners();
 
-                // Switch to staking tab if not already there
-                showTab('staking', true);
-                
-            } catch (error) {
-                console.error("Connection error:", error);
-                handleError(error, 'wallet connection');
-            } finally {
-                setButtonLoading('connect-wallet', false);
+                const tabContents = document.querySelectorAll(".tab-content");
+                const tabButtons = document.querySelectorAll(".tab-btn");
+
+                // Remove active class from all tabs and buttons
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    content.style.display = 'none';
+                });
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Show selected tab
+                const selectedTab = document.getElementById(tabId);
+                const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+
+                if (selectedTab && activeButton) {
+                    selectedTab.style.display = 'block';
+                    setTimeout(() => selectedTab.classList.add('active'), 50);
+                    activeButton.classList.add('active');
+                    this.currentTab = tabId;
+                }
+            }
+
+            handleStakingAccess() {
+                // Show wallet connection prompt
+                const walletError = document.getElementById("wallet-error");
+                walletError.classList.remove('hidden');
+                setTimeout(() => {
+                    walletError.classList.add('scale-105');
+                    setTimeout(() => walletError.classList.remove('scale-105'), 200);
+                }, 50);
             }
         }
 
-        async function disconnectWallet() {
-            try {
-                contract = null;
-                signer = null;
-                provider = null;
-                isInitialized = false;
+        // UI Management System
+        class UIManager {
+            constructor() {
+                this.loadingOverlay = document.getElementById('loading-overlay');
+                this.loadingText = document.getElementById('loading-text');
+            }
 
-                // Reset UI
-                document.getElementById("connect-wallet").classList.remove('hidden');
-                document.getElementById("disconnect-wallet").classList.add('hidden');
-                document.getElementById("network-info").classList.add('hidden');
-                document.getElementById("staking-interface").classList.add('hidden');
-                document.getElementById("network-error").classList.add('hidden');
+            showLoading(message = 'Processing Transaction...') {
+                this.loadingText.textContent = message;
+                this.loadingOverlay.classList.remove('hidden');
+            }
+
+            hideLoading() {
+                this.loadingOverlay.classList.add('hidden');
+            }
+
+            setButtonLoading(buttonId, isLoading) {
+                const button = document.getElementById(buttonId);
+                if (!button) return;
+
+                const loader = button.querySelector('.loading-spinner');
+                const text = button.querySelector('span:not(.loading-spinner)');
+                
+                button.disabled = isLoading;
+                if (isLoading) {
+                    loader?.classList.remove('hidden');
+                    text?.classList.add('opacity-50');
+                } else {
+                    loader?.classList.add('hidden');
+                    text?.classList.remove('opacity-50');
+                }
+            }
+
+            showStatus(message, type = 'info') {
+                const statusEl = document.getElementById("tx-status");
+                const messageEl = document.getElementById("tx-message");
+                const iconEl = document.getElementById("tx-status-icon");
+
+                // Set icon based on type
+                const icons = {
+                    success: `<svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>`,
+                    error: `<svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>`,
+                    info: `<svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>`
+                };
+
+                iconEl.innerHTML = icons[type];
+                messageEl.textContent = message;
+                statusEl.classList.remove('hidden');
+
+                setTimeout(() => {
+                    statusEl.classList.add('hidden');
+                }, 5000);
+            }
+
+            showError(message) {
+                this.showStatus(message, 'error');
+            }
+
+            updateNetworkStatus(isConnected, networkName = '') {
+                const networkInfo = document.getElementById("network-info");
+                const networkNameSpan = document.getElementById("network-name");
+                
+                if (isConnected) {
+                    networkInfo.classList.remove('hidden');
+                    networkNameSpan.textContent = networkName;
+                } else {
+                    networkInfo.classList.add('hidden');
+                    networkNameSpan.textContent = 'Not Connected';
+                }
+            }
+        }
+                // Wallet Connection Manager
+        class WalletManager {
+            constructor(uiManager) {
+                this.ui = uiManager;
+                this.setupWalletEvents();
+            }
+
+            setupWalletEvents() {
+                const provider = window.ethereum || window.onchain || window.coinbase;
+                if (provider) {
+                    provider.on('chainChanged', () => {
+                        console.log('Network changed, reloading...');
+                        window.location.reload();
+                    });
+
+                    provider.on('accountsChanged', () => {
+                        console.log('Account changed, reloading...');
+                        window.location.reload();
+                    });
+                }
+            }
+
+            async checkWalletConnection() {
+                const provider = window.ethereum || window.onchain || window.coinbase;
+                if (!provider) {
+                    document.getElementById("wallet-error").classList.remove('hidden');
+                    return false;
+                }
                 document.getElementById("wallet-error").classList.add('hidden');
-
-                // Clear all displayed values
-                const elements = [
-                    "y2k-balance", "pogs-balance", "staked-amount", "pending-rewards",
-                    "referral-rewards", "burn-rate", "current-apr", "total-staked"
-                ];
-                elements.forEach(id => {
-                    const element = document.getElementById(id);
-                    if (element) element.textContent = "0";
-                });
-
-                // Clear input fields
-                document.getElementById("stake-amount").value = "";
-                document.getElementById("referral-address").value = "";
-
-                // Switch back to about tab
-                showTab('about', true);
-            } catch (error) {
-                handleError(error, 'wallet disconnection');
+                return true;
             }
-        }
 
-        async function updateUI() {
-            if (!contract || !signer) return;
-
-            try {
-                showLoading();
-                const address = await signer.getAddress();
-                console.log("Updating UI for address:", address); // Debug log
-                
-                // Get stake info
-                const stakeInfo = await contract.stakes(address);
-                document.getElementById("staked-amount").textContent = 
-                    ethers.utils.formatEther(stakeInfo.amount);
-                
-                if (stakeInfo.startTime.gt(0)) {
-                    const stakingDate = new Date(stakeInfo.startTime.mul(1000).toNumber());
-                    document.getElementById("staking-time").textContent = stakingDate.toLocaleDateString();
-                    
-                    // Calculate next unlock
-                    const lockPeriod = await contract.LOCK_PERIOD();
-                    const unlockDate = new Date((stakeInfo.startTime.add(lockPeriod)).mul(1000).toNumber());
-                    document.getElementById("next-unlock").textContent = unlockDate.toLocaleDateString();
-                }
-
-                // Get token contracts
-                const y2kToken = new ethers.Contract(
-                    await contract.y2kToken(),
-                    ["function balanceOf(address) view returns (uint256)"],
-                    signer
-                );
-                const pogsToken = new ethers.Contract(
-                    await contract.pogsToken(),
-                    ["function balanceOf(address) view returns (uint256)"],
-                    signer
-                );
-
-                // Fetch all data in parallel
-                const [
-                    y2kBalance,
-                    pogsBalance,
-                    referralRewards,
-                    burnRate,
-                    lockPeriod,
-                    rewardRate,
-                    autoCompoundEnabled,
-                    lotteryEnabled
-                ] = await Promise.all([
-                    y2kToken.balanceOf(address),
-                    pogsToken.balanceOf(address),
-                    contract.referralRewards(address),
-                    contract.burnRate(),
-                    contract.LOCK_PERIOD(),
-                    contract.rewardRate(),
-                    contract.autoCompoundingEnabled(),
-                    contract.lotteryEnabled()
-                ]);
-
-                // Update all UI elements
-                document.getElementById("y2k-balance").textContent = 
-                    ethers.utils.formatEther(y2kBalance);
-                document.getElementById("pogs-balance").textContent = 
-                    ethers.utils.formatEther(pogsBalance);
-                document.getElementById("referral-rewards").textContent = 
-                    ethers.utils.formatEther(referralRewards);
-                document.getElementById("burn-rate").textContent = 
-                    burnRate.toString() + "%";
-                document.getElementById("lock-period").textContent = 
-                    `${lockPeriod.toString()} seconds`;
-
-                // Calculate and display APR
-                const apr = (rewardRate.mul(365).mul(100)).toString();
-                document.getElementById("current-apr").textContent = 
-                    `${apr}%`;
-
-                // Update toggles
-                document.getElementById("auto-compound-toggle").checked = autoCompoundEnabled;
-                document.getElementById("lottery-toggle").checked = lotteryEnabled;
-
-            } catch (error) {
-                console.error("UI update error:", error);
-                handleError(error, 'updating information');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        function setupEventListeners() {
-            // Tab switching
-            document.querySelectorAll(".tab-btn").forEach(button => {
-                button.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const tabId = button.getAttribute("data-tab");
-                    showTab(tabId);
-                });
-            });
-
-            // Wallet connection
-            document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
-            document.getElementById("disconnect-wallet")?.addEventListener("click", disconnectWallet);
-
-            // Staking actions
-            document.getElementById("approve-button")?.addEventListener("click", approveTokens);
-            document.getElementById("stake-button")?.addEventListener("click", stake);
-            document.getElementById("unstake-button")?.addEventListener("click", unstake);
-            document.getElementById("claim-rewards")?.addEventListener("click", claimRewards);
-
-            // MAX button
-            document.getElementById("max-button")?.addEventListener("click", async () => {
-                if (!contract || !signer) return;
-                
+            async switchToCronosNetwork() {
+                const provider = window.ethereum || window.onchain || window.coinbase;
                 try {
-                    const y2kToken = new ethers.Contract(
-                        await contract.y2kToken(),
+                    this.ui.showLoading('Switching to Cronos Network...');
+                    await provider.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x19' }],
+                    });
+                    document.getElementById("network-error").classList.add('hidden');
+                    return true;
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        try {
+                            await provider.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [CRONOS_NETWORK_CONFIG]
+                            });
+                            return true;
+                        } catch (addError) {
+                            console.error('Failed to add Cronos network:', addError);
+                            this.ui.showError('Failed to add Cronos network. Please add it manually.');
+                            document.getElementById("network-error").classList.remove('hidden');
+                            return false;
+                        }
+                    }
+                    console.error('Failed to switch network:', switchError);
+                    this.ui.showError('Please switch to Cronos network.');
+                    document.getElementById("network-error").classList.remove('hidden');
+                    return false;
+                } finally {
+                    this.ui.hideLoading();
+                }
+            }
+
+            async connectWallet() {
+                if (state.isConnecting) return;
+                state.isConnecting = true;
+
+                try {
+                    if (!await this.checkWalletConnection()) return;
+
+                    this.ui.setButtonLoading('connect-wallet', true);
+                    
+                    const web3Provider = window.ethereum || window.onchain || window.coinbase;
+                    if (!web3Provider) {
+                        throw new Error('No Web3 wallet detected');
+                    }
+                    
+                    state.provider = new ethers.providers.Web3Provider(web3Provider);
+                    await state.provider.send("eth_requestAccounts", []);
+                    state.signer = state.provider.getSigner();
+                    
+                    const networkSwitched = await this.switchToCronosNetwork();
+                    if (!networkSwitched) return;
+                    
+                    state.contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, state.signer);
+                    
+                    const address = await state.signer.getAddress();
+                    console.log("Wallet connected:", address);
+                    
+                    document.getElementById("wallet-address").textContent = 
+                        `${address.substring(0, 6)}...${address.substring(38)}`;
+                    this.ui.updateNetworkStatus(true, 'Cronos');
+                    document.getElementById("connect-wallet").classList.add('hidden');
+                    document.getElementById("disconnect-wallet").classList.remove('hidden');
+                    document.getElementById("staking-interface").classList.remove('hidden');
+                    document.getElementById("network-error").classList.add('hidden');
+                    
+                    state.isInitialized = true;
+                    await this.updateUI();
+                    this.setupStakingListeners();
+
+                    // Show success message
+                    this.ui.showStatus('Wallet connected successfully!', 'success');
+                    
+                    // Switch to staking tab
+                    tabManager.showTab('staking', true);
+                    
+                } catch (error) {
+                    console.error("Connection error:", error);
+                    this.ui.showError(error.message || 'Failed to connect wallet');
+                } finally {
+                    this.ui.setButtonLoading('connect-wallet', false);
+                    state.isConnecting = false;
+                }
+            }
+
+            async disconnectWallet() {
+                try {
+                    state.contract = null;
+                    state.signer = null;
+                    state.provider = null;
+                    state.isInitialized = false;
+
+                    // Reset UI
+                    document.getElementById("connect-wallet").classList.remove('hidden');
+                    document.getElementById("disconnect-wallet").classList.add('hidden');
+                    document.getElementById("network-info").classList.add('hidden');
+                    document.getElementById("staking-interface").classList.add('hidden');
+                    document.getElementById("network-error").classList.add('hidden');
+                    document.getElementById("wallet-error").classList.add('hidden');
+
+                    // Clear displayed values
+                    const elements = [
+                        "y2k-balance", "pogs-balance", "staked-amount", "pending-rewards",
+                        "referral-rewards", "burn-rate", "current-apr", "total-staked"
+                    ];
+                    elements.forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) element.textContent = "0";
+                    });
+
+                    // Clear input fields
+                    document.getElementById("stake-amount").value = "";
+                    document.getElementById("referral-address").value = "";
+
+                    // Show success message
+                    this.ui.showStatus('Wallet disconnected', 'info');
+
+                    // Switch back to about tab
+                    tabManager.showTab('about', true);
+                } catch (error) {
+                    this.ui.showError('Error disconnecting wallet');
+                    console.error(error);
+                }
+            }
+
+            async updateUI() {
+                if (!state.contract || !state.signer) return;
+                
+                // Prevent multiple simultaneous updates
+                const now = Date.now();
+                if (now - state.lastUpdateTime < 5000) return; // Throttle updates to every 5 seconds
+                state.lastUpdateTime = now;
+
+                try {
+                    this.ui.showLoading('Updating staking information...');
+                    const address = await state.signer.getAddress();
+                    
+                    // Fetch all contract data in parallel
+                    const [
+                        stakeInfo,
+                        y2kToken,
+                        pogsToken,
+                        referralRewards,
+                        burnRate,
+                        lockPeriod,
+                        rewardRate,
+                        autoCompoundEnabled,
+                        lotteryEnabled
+                    ] = await Promise.all([
+                        state.contract.stakes(address),
+                        state.contract.y2kToken(),
+                        state.contract.pogsToken(),
+                        state.contract.referralRewards(address),
+                        state.contract.burnRate(),
+                        state.contract.LOCK_PERIOD(),
+                        state.contract.rewardRate(),
+                        state.contract.autoCompoundingEnabled(),
+                        state.contract.lotteryEnabled()
+                    ]);
+
+                    // Create token contracts
+                    const y2kTokenContract = new ethers.Contract(
+                        y2kToken,
                         ["function balanceOf(address) view returns (uint256)"],
-                        signer
+                        state.signer
                     );
-                    
-                    const balance = await y2kToken.balanceOf(await signer.getAddress());
-                    document.getElementById("stake-amount").value = ethers.utils.formatEther(balance);
+                    const pogsTokenContract = new ethers.Contract(
+                        pogsToken,
+                        ["function balanceOf(address) view returns (uint256)"],
+                        state.signer
+                    );
+
+                    // Fetch balances
+                    const [y2kBalance, pogsBalance] = await Promise.all([
+                        y2kTokenContract.balanceOf(address),
+                        pogsTokenContract.balanceOf(address)
+                    ]);
+
+                    // Update UI elements
+                    document.getElementById("y2k-balance").textContent = 
+                        ethers.utils.formatEther(y2kBalance);
+                    document.getElementById("pogs-balance").textContent = 
+                        ethers.utils.formatEther(pogsBalance);
+                    document.getElementById("staked-amount").textContent = 
+                        ethers.utils.formatEther(stakeInfo.amount);
+                    document.getElementById("referral-rewards").textContent = 
+                        ethers.utils.formatEther(referralRewards);
+                    document.getElementById("burn-rate").textContent = 
+                        burnRate.toString() + "%";
+                    document.getElementById("lock-period").textContent = 
+                        `${lockPeriod.toString()} seconds`;
+
+                    // Calculate and display APR
+                    const apr = (rewardRate.mul(365).mul(100)).toString();
+                    document.getElementById("current-apr").textContent = `${apr}%`;
+
+                    // Update staking time and next unlock
+                    if (stakeInfo.startTime.gt(0)) {
+                        const stakingDate = new Date(stakeInfo.startTime.mul(1000).toNumber());
+                        document.getElementById("staking-time").textContent = stakingDate.toLocaleDateString();
+                        
+                        const unlockDate = new Date((stakeInfo.startTime.add(lockPeriod)).mul(1000).toNumber());
+                        document.getElementById("next-unlock").textContent = unlockDate.toLocaleDateString();
+                    }
+
+                    // Update feature toggles
+                    document.getElementById("auto-compound-toggle").checked = autoCompoundEnabled;
+                    document.getElementById("lottery-toggle").checked = lotteryEnabled;
+
                 } catch (error) {
-                    handleError(error, 'setting max amount');
+                    console.error("Error updating UI:", error);
+                    this.ui.showError('Failed to update staking information');
+                } finally {
+                    this.ui.hideLoading();
                 }
-            });
-
-            // Feature toggles
-            document.getElementById("auto-compound-toggle")?.addEventListener("change", async (e) => {
-                try {
-                    const tx = await contract.toggleAutoCompounding(e.target.checked);
-                    showStatus(`Updating auto-compound setting...`);
-                    await tx.wait();
-                    showStatus(`Auto-compounding ${e.target.checked ? 'enabled' : 'disabled'}`);
-                } catch (error) {
-                    handleError(error, 'toggling auto-compound');
-                    e.target.checked = !e.target.checked; // Revert toggle
-                }
-            });
-
-            document.getElementById("lottery-toggle")?.addEventListener("change", async (e) => {
-                try {
-                    const tx = await contract.toggleLottery(e.target.checked);
-                    showStatus(`Updating lottery setting...`);
-                    await tx.wait();
-                    showStatus(`Lottery participation ${e.target.checked ? 'enabled' : 'disabled'}`);
-                } catch (error) {
-                    handleError(error, 'toggling lottery');
-                    e.target.checked = !e.target.checked; // Revert toggle
-                }
-            });
-        }
-
-        // Staking Functions
-        async function approveTokens() {
-            if (!contract || !signer) return;
-            
-            try {
-                setButtonLoading('approve-button', true);
-                const amount = document.getElementById("stake-amount").value;
-                const amountWei = ethers.utils.parseEther(amount);
-                
-                const y2kToken = new ethers.Contract(
-                    await contract.y2kToken(),
-                    ["function approve(address spender, uint256 amount) public returns (bool)"],
-                    signer
-                );
-                
-                const tx = await y2kToken.approve(CONTRACT_ADDRESS, amountWei);
-                showStatus("Approving tokens...");
-                await tx.wait();
-                showStatus("Tokens approved successfully!");
-            } catch (error) {
-                handleError(error, 'token approval');
-            } finally {
-                setButtonLoading('approve-button', false);
             }
         }
 
-        async function stake() {
-            if (!contract || !signer) return;
-            
-            try {
-                setButtonLoading('stake-button', true);
-                const amount = document.getElementById("stake-amount").value;
-                const referralAddress = document.getElementById("referral-address").value;
-                const amountWei = ethers.utils.parseEther(amount);
-                
-                const tx = await contract.stake(
-                    amountWei,
-                    referralAddress || ethers.constants.AddressZero
-                );
-                showStatus("Staking tokens...");
-                await tx.wait();
-                showStatus("Tokens staked successfully!");
-                await updateUI();
-            } catch (error) {
-                handleError(error, 'staking');
-            } finally {
-                setButtonLoading('stake-button', false);
-            }
-        }
+        // Initialize managers
+        const uiManager = new UIManager();
+        const tabManager = new TabManager();
+        const walletManager = new WalletManager(uiManager);
 
-        async function unstake() {
-            if (!contract || !signer) return;
-            
-            try {
-                setButtonLoading('unstake-button', true);
-                const amount = document.getElementById("stake-amount").value;
-                const amountWei = ethers.utils.parseEther(amount);
-                
-                const tx = await contract.unstake(amountWei);
-                showStatus("Unstaking tokens...");
-                await tx.wait();
-                showStatus("Tokens unstaked successfully!");
-                await updateUI();
-            } catch (error) {
-                handleError(error, 'unstaking');
-            } finally {
-                setButtonLoading('unstake-button', false);
-            }
-        }
-
-        async function claimRewards() {
-            if (!contract || !signer) return;
-            
-            try {
-                setButtonLoading('claim-rewards', true);
-                const tx = await contract.claimReward();
-                showStatus("Claiming rewards...");
-                await tx.wait();
-                showStatus("Rewards claimed successfully!");
-                await updateUI();
-            } catch (error) {
-                handleError(error, 'claiming rewards');
-            } finally {
-                setButtonLoading('claim-rewards', false);
-            }
-        }
-
-        function showStatus(message) {
-            const statusEl = document.getElementById("tx-status");
-            const messageEl = document.getElementById("tx-message");
-            messageEl.textContent = message;
-            statusEl.classList.remove('hidden');
-            setTimeout(() => {
-                statusEl.classList.add('hidden');
-            }, 5000);
-        }
-
-        function showError(message) {
-            showStatus("Error: " + message);
-        }
-
-        // Network and Account Change Listeners
-        if (window.ethereum || window.onchain || window.coinbase) {
-            const provider = window.ethereum || window.onchain || window.coinbase;
-            provider.on('chainChanged', () => {
-                window.location.reload();
-            });
-
-            provider.on('accountsChanged', () => {
-                window.location.reload();
-            });
-        }
-        
-        // Initialize
+        // Setup initial event listeners
         document.addEventListener('DOMContentLoaded', () => {
-            setupEventListeners();
-            showTab('about');
+            document.getElementById("connect-wallet")?.addEventListener("click", () => walletManager.connectWallet());
+            document.getElementById("disconnect-wallet")?.addEventListener("click", () => walletManager.disconnectWallet());
+            
+            // Show initial tab
+            tabManager.showTab('about');
         });
-        
+
         // Update UI periodically if initialized
         setInterval(() => {
-            if (isInitialized) {
-                updateUI();
+            if (state.isInitialized) {
+                walletManager.updateUI();
             }
         }, 30000);
     </script>
