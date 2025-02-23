@@ -5,18 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Y2KCoin - A Digital Revolution</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
+    
+    <!-- Essential Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Multiple Ethers.js Sources -->
     <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Error Check Script -->
+    <script>
+        if (typeof ethers === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"><\/script>');
+        }
+    </script>
+    <script>
+        if (typeof ethers === 'undefined') {
+            document.write('<script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"><\/script>');
+        }
+    </script>
+
+    <!-- Dependency Check and Auto-Recovery -->
     <script>
         window.addEventListener('load', function() {
             if (typeof ethers === 'undefined') {
-                console.error('Ethers.js not loaded');
-                alert('Failed to load required dependencies. Please refresh the page.');
+                console.error('Attempting to reload Ethers.js');
+                const script = document.createElement('script');
+                script.src = 'https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js';
+                script.type = 'application/javascript';
+                script.onload = function() {
+                    console.log('Ethers.js loaded successfully');
+                    window.location.reload();
+                };
+                document.head.appendChild(script);
+            } else {
+                console.log('Ethers.js loaded successfully');
+                // Initialize Web3 components
+                if (window.ethereum) {
+                    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+                    console.log('Web3 provider initialized');
+                }
             }
         });
     </script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Orbitron', sans-serif;
@@ -144,10 +176,39 @@
             border-radius: 8px;
             margin: 1rem 0;
         }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00e6e6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="flex flex-col items-center text-center px-4 min-h-screen">
-     <!-- Header -->
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header -->
     <header class="w-full py-4 bg-[#0a0a0a]">
         <nav class="flex justify-between items-center max-w-5xl mx-auto">
             <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
@@ -169,8 +230,8 @@
             <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
             <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn btn-primary">Buy Y2K</a>
-                <a href="https://discord.gg/jpFbSapSAh" class="btn btn-secondary">Join Discord</a>
+                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Buy Y2K</a>
+                <a href="https://discord.gg/jpFbSapSAh" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Join Discord</a>
             </div>
         </section>
 
@@ -205,12 +266,26 @@
                 
                 <!-- Network Error Message -->
                 <div id="network-error" class="network-error hidden">
-                    Please switch to the Cronos Network to use staking features
+                    <p class="font-bold">Wrong Network Detected</p>
+                    <p>Please switch to the Cronos Network to use staking features</p>
+                </div>
+
+                <!-- MetaMask Not Detected Message -->
+                <div id="metamask-error" class="network-error hidden">
+                    <p class="font-bold">MetaMask Not Detected</p>
+                    <p>Please install MetaMask to use staking features</p>
+                    <a href="https://metamask.io" target="_blank" rel="noopener noreferrer" 
+                       class="underline text-white hover:text-cyan-400">Download MetaMask</a>
                 </div>
                 
                 <!-- Wallet Connection -->
                 <div id="wallet-section" class="mb-8">
-                    <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
+                    <button id="connect-wallet" class="btn btn-primary">
+                        <span class="flex items-center justify-center">
+                            <span id="connect-text">Connect Wallet</span>
+                            <span id="connect-loader" class="hidden ml-2 loading-spinner"></span>
+                        </span>
+                    </button>
                     <button id="disconnect-wallet" class="btn btn-secondary hidden">Disconnect Wallet</button>
                     <div id="network-info" class="mt-4 hidden">
                         <p class="text-lg">Connected Wallet: <span id="wallet-address" class="font-mono text-cyan-400"></span></p>
@@ -256,9 +331,24 @@
                                    placeholder="Referral Address (optional)" 
                                    class="input-field mb-4">
                             <div class="flex flex-wrap justify-center gap-4">
-                                <button id="approve-button" class="btn btn-primary">Approve Y2K</button>
-                                <button id="stake-button" class="btn btn-primary">Stake</button>
-                                <button id="unstake-button" class="btn btn-secondary">Unstake</button>
+                                <button id="approve-button" class="btn btn-primary">
+                                    <span class="flex items-center">
+                                        <span>Approve Y2K</span>
+                                        <span class="approve-loader hidden ml-2 loading-spinner"></span>
+                                    </span>
+                                </button>
+                                <button id="stake-button" class="btn btn-primary">
+                                    <span class="flex items-center">
+                                        <span>Stake</span>
+                                        <span class="stake-loader hidden ml-2 loading-spinner"></span>
+                                    </span>
+                                </button>
+                                <button id="unstake-button" class="btn btn-secondary">
+                                    <span class="flex items-center">
+                                        <span>Unstake</span>
+                                        <span class="unstake-loader hidden ml-2 loading-spinner"></span>
+                                    </span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -276,7 +366,12 @@
                                 <p class="text-lg">Total Referred: <span id="total-referrals" class="font-mono text-cyan-400">0</span></p>
                             </div>
                         </div>
-                        <button id="claim-rewards" class="btn btn-primary">Claim Rewards</button>
+                        <button id="claim-rewards" class="btn btn-primary">
+                            <span class="flex items-center justify-center">
+                                <span>Claim Rewards</span>
+                                <span class="claim-loader hidden ml-2 loading-spinner"></span>
+                            </span>
+                        </button>
                     </div>
 
                     <!-- Staking Stats -->
@@ -347,10 +442,7 @@
 
     <!-- JavaScript -->
     <script>
-        // Complete Contract ABI
-        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_y2kToken","type":"address"},{"internalType":"address","name":"_pogsToken","type":"address"},{"internalType":"uint256","name":"_rewardRate","type":"uint256"},{"internalType":"address","name":"_treasury","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"AutoCompoundingToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"BurnRateUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"winner","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"roundId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryWinner","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"MaxStakeAmountUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"referrer","type":"address"},{"indexed":true,"internalType":"address","name":"referee","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"ReferralReward","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"ReferralsToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"RewardClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"RewardRateUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"Unstaked","type":"event"},{"inputs":[],"name":"LOCK_PERIOD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"LOTTERY_REWARD_PERCENTAGE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_BURN_RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_STAKE_AMOUNT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"REFERRAL_BONUS_RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"autoCompoundingEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"burnRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"currentLotteryRound","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"lotteryEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"lotteryRounds","outputs":[{"internalType":"uint256","name":"roundId","type":"uint256"},{"internalType":"uint256","name":"endTime","type":"uint256"},{"internalType":"bool","name":"distributed","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxStakeAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pogsToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"referralRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"referralsEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rewardRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_referrer","type":"address"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stakes","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"lastCompoundTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"_status","type":"bool"}],"name":"toggleAutoCompounding","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_status","type":"bool"}],"name":"toggleLottery","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_status","type":"bool"}],"name":"toggleReferrals","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"treasury","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newRate","type":"uint256"}],"name":"updateBurnRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newRate","type":"uint256"}],"name":"updateRewardRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"y2kToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"}];
-
-        // Contract Constants
+        // Contract Constants and State Management
         const CONTRACT_ADDRESS = "0x7DC6a9900e9DE69fF36ECb7dF56aA7c9157DE483";
         const CRONOS_NETWORK_CONFIG = {
             chainId: '0x19',
@@ -364,56 +456,111 @@
             blockExplorerUrls: ['https://cronoscan.com/']
         };
 
+        // Global state
         let contract;
         let signer;
         let provider;
-                // Tab Switching Logic
-        document.addEventListener("DOMContentLoaded", () => {
-            const tabButtons = document.querySelectorAll(".tab-btn");
-            const tabContents = document.querySelectorAll(".tab-content");
+        let isInitialized = false;
 
-            function showTab(tabId) {
-                tabContents.forEach(content => {
-                    content.style.display = 'none';
-                });
+        // Loading state management
+        function showLoading() {
+            document.getElementById('loading-overlay').classList.remove('hidden');
+        }
 
-                tabButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
 
-                const selectedTab = document.getElementById(tabId);
-                if (selectedTab) {
-                    selectedTab.style.display = 'block';
-                }
+        function setButtonLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            const loader = button.querySelector('.loading-spinner');
+            const text = button.querySelector('span:not(.loading-spinner)');
+            
+            button.disabled = isLoading;
+            if (isLoading) {
+                loader?.classList.remove('hidden');
+                text.classList.add('opacity-50');
+            } else {
+                loader?.classList.add('hidden');
+                text.classList.remove('opacity-50');
+            }
+        }
 
-                const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
-                if (activeButton) {
-                    activeButton.classList.add('active');
-                }
+        // Enhanced error handling
+        function handleError(error, action) {
+            console.error(`Error during ${action}:`, error);
+            let errorMessage = 'An error occurred. Please try again.';
+
+            if (error.code === 4001) {
+                errorMessage = 'Transaction rejected by user.';
+            } else if (error.code === -32603) {
+                errorMessage = 'Transaction failed. Please check your balance and try again.';
+            } else if (error.message.includes('insufficient funds')) {
+                errorMessage = 'Insufficient funds for transaction.';
+            } else if (error.message.includes('user rejected')) {
+                errorMessage = 'Transaction cancelled by user.';
             }
 
-            tabButtons.forEach(button => {
-                button.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const tabId = button.getAttribute("data-tab");
-                    showTab(tabId);
-                });
-            });
+            showError(errorMessage);
+        }
 
-            // Show initial tab
-            showTab('about');
+        // Tab Switching Logic with Error Handling
+        document.addEventListener("DOMContentLoaded", () => {
+            try {
+                const tabButtons = document.querySelectorAll(".tab-btn");
+                const tabContents = document.querySelectorAll(".tab-content");
+
+                function showTab(tabId) {
+                    tabContents.forEach(content => {
+                        content.style.display = 'none';
+                    });
+
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+
+                    const selectedTab = document.getElementById(tabId);
+                    if (selectedTab) {
+                        selectedTab.style.display = 'block';
+                    }
+
+                    const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+                    if (activeButton) {
+                        activeButton.classList.add('active');
+                    }
+
+                    // Special handling for staking tab
+                    if (tabId === 'staking' && !isInitialized) {
+                        checkWalletConnection();
+                    }
+                }
+
+                tabButtons.forEach(button => {
+                    button.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        const tabId = button.getAttribute("data-tab");
+                        showTab(tabId);
+                    });
+                });
+
+                // Show initial tab
+                showTab('about');
+            } catch (error) {
+                console.error("Error in tab initialization:", error);
+            }
         });
 
+        // Enhanced network switching with better error handling
         async function switchToCronosNetwork() {
             try {
+                showLoading();
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x19' }], // Cronos chainId in hex
+                    params: [{ chainId: '0x19' }],
                 });
                 document.getElementById("network-error").classList.add('hidden');
                 return true;
             } catch (switchError) {
-                // This error code indicates that the chain has not been added to MetaMask
                 if (switchError.code === 4902) {
                     try {
                         await window.ethereum.request({
@@ -422,39 +569,33 @@
                         });
                         return true;
                     } catch (addError) {
-                        console.error('Failed to add Cronos network:', addError);
+                        handleError(addError, 'adding Cronos network');
                         document.getElementById("network-error").classList.remove('hidden');
-                        showError('Failed to add Cronos network. Please add it manually in MetaMask.');
                         return false;
                     }
                 }
-                console.error('Failed to switch to Cronos network:', switchError);
+                handleError(switchError, 'switching network');
                 document.getElementById("network-error").classList.remove('hidden');
-                showError('Please switch to Cronos network in MetaMask');
                 return false;
+            } finally {
+                hideLoading();
             }
         }
 
-        async function disconnectWallet() {
-            contract = null;
-            signer = null;
-            provider = null;
-            document.getElementById("connect-wallet").classList.remove('hidden');
-            document.getElementById("disconnect-wallet").classList.add('hidden');
-            document.getElementById("network-info").classList.add('hidden');
-            document.getElementById("staking-interface").classList.add('hidden');
-            document.getElementById("network-error").classList.add('hidden');
+        // Enhanced wallet connection with status checking
+        async function checkWalletConnection() {
+            if (typeof window.ethereum === 'undefined') {
+                document.getElementById("metamask-error").classList.remove('hidden');
+                return false;
+            }
+            document.getElementById("metamask-error").classList.add('hidden');
+            return true;
         }
-
-        async function connectWallet() {
+                async function connectWallet() {
             try {
-                if (typeof window.ethereum === 'undefined') {
-                    alert('Please install MetaMask to use the staking feature');
-                    return;
-                }
+                if (!await checkWalletConnection()) return;
 
-                const loadingBtn = document.getElementById("connect-wallet");
-                loadingBtn.textContent = 'Connecting...';
+                setButtonLoading('connect-wallet', true);
                 
                 const networkSwitched = await switchToCronosNetwork();
                 if (!networkSwitched) return;
@@ -463,9 +604,9 @@
                 await provider.send("eth_requestAccounts", []);
                 signer = provider.getSigner();
                 
-                // Get network info
+                // Verify network
                 const network = await provider.getNetwork();
-                if (network.chainId !== 25) { // Cronos mainnet chainId
+                if (network.chainId !== 25) {
                     document.getElementById("network-error").classList.remove('hidden');
                     return;
                 }
@@ -474,6 +615,7 @@
                 
                 const address = await signer.getAddress();
                 
+                // Update UI elements
                 document.getElementById("wallet-address").textContent = 
                     `${address.substring(0, 6)}...${address.substring(38)}`;
                 document.getElementById("network-name").textContent = "Cronos";
@@ -483,15 +625,40 @@
                 document.getElementById("staking-interface").classList.remove('hidden');
                 document.getElementById("network-error").classList.add('hidden');
                 
+                isInitialized = true;
                 await updateUI();
                 setupEventListeners();
                 
             } catch (error) {
-                console.error("Error connecting wallet:", error);
-                showError("Failed to connect wallet: " + error.message);
+                handleError(error, 'wallet connection');
             } finally {
-                const loadingBtn = document.getElementById("connect-wallet");
-                loadingBtn.textContent = 'Connect Wallet';
+                setButtonLoading('connect-wallet', false);
+            }
+        }
+
+        async function disconnectWallet() {
+            try {
+                contract = null;
+                signer = null;
+                provider = null;
+                isInitialized = false;
+
+                // Reset UI
+                document.getElementById("connect-wallet").classList.remove('hidden');
+                document.getElementById("disconnect-wallet").classList.add('hidden');
+                document.getElementById("network-info").classList.add('hidden');
+                document.getElementById("staking-interface").classList.add('hidden');
+                document.getElementById("network-error").classList.add('hidden');
+
+                // Clear displayed values
+                document.getElementById("y2k-balance").textContent = "0";
+                document.getElementById("pogs-balance").textContent = "0";
+                document.getElementById("staked-amount").textContent = "0";
+                document.getElementById("pending-rewards").textContent = "0";
+                document.getElementById("stake-amount").value = "";
+                document.getElementById("referral-address").value = "";
+            } catch (error) {
+                handleError(error, 'wallet disconnection');
             }
         }
 
@@ -499,6 +666,7 @@
             if (!contract || !signer) return;
 
             try {
+                showLoading();
                 const address = await signer.getAddress();
                 
                 // Get stake info
@@ -528,101 +696,53 @@
                     signer
                 );
 
-                const y2kBalance = await y2kToken.balanceOf(address);
-                const pogsBalance = await pogsToken.balanceOf(address);
+                const [y2kBalance, pogsBalance, referralRewards, burnRate, lockPeriod, rewardRate] = await Promise.all([
+                    y2kToken.balanceOf(address),
+                    pogsToken.balanceOf(address),
+                    contract.referralRewards(address),
+                    contract.burnRate(),
+                    contract.LOCK_PERIOD(),
+                    contract.rewardRate()
+                ]);
 
+                // Update all UI elements
                 document.getElementById("y2k-balance").textContent = 
                     ethers.utils.formatEther(y2kBalance);
                 document.getElementById("pogs-balance").textContent = 
                     ethers.utils.formatEther(pogsBalance);
-
-                // Update other UI elements
-                const referralRewards = await contract.referralRewards(address);
                 document.getElementById("referral-rewards").textContent = 
                     ethers.utils.formatEther(referralRewards);
-
-                const burnRate = await contract.burnRate();
                 document.getElementById("burn-rate").textContent = 
                     burnRate.toString() + "%";
-
-                // Get lock period
-                const lockPeriod = await contract.LOCK_PERIOD();
                 document.getElementById("lock-period").textContent = 
                     `${lockPeriod.toString()} seconds`;
 
                 // Calculate and display APR
-                const rewardRate = await contract.rewardRate();
                 const apr = (rewardRate.mul(365).mul(100)).toString();
                 document.getElementById("current-apr").textContent = 
                     `${apr}%`;
 
                 // Update feature toggles
-                const autoCompoundEnabled = await contract.autoCompoundingEnabled();
-                const lotteryEnabled = await contract.lotteryEnabled();
+                const [autoCompoundEnabled, lotteryEnabled] = await Promise.all([
+                    contract.autoCompoundingEnabled(),
+                    contract.lotteryEnabled()
+                ]);
+                
                 document.getElementById("auto-compound-toggle").checked = autoCompoundEnabled;
                 document.getElementById("lottery-toggle").checked = lotteryEnabled;
 
             } catch (error) {
-                console.error("Error updating UI:", error);
-                showError("Failed to update information");
+                handleError(error, 'updating UI');
+            } finally {
+                hideLoading();
             }
-        }
-
-        function setupEventListeners() {
-            document.getElementById("stake-button").addEventListener("click", stake);
-            document.getElementById("unstake-button").addEventListener("click", unstake);
-            document.getElementById("claim-rewards").addEventListener("click", claimRewards);
-            document.getElementById("approve-button").addEventListener("click", approveTokens);
-            document.getElementById("disconnect-wallet").addEventListener("click", disconnectWallet);
-            
-            document.getElementById("max-button").addEventListener("click", async () => {
-                if (!contract || !signer) return;
-                
-                try {
-                    const y2kToken = new ethers.Contract(
-                        await contract.y2kToken(),
-                        ["function balanceOf(address) view returns (uint256)"],
-                        signer
-                    );
-                    
-                    const balance = await y2kToken.balanceOf(await signer.getAddress());
-                    document.getElementById("stake-amount").value = ethers.utils.formatEther(balance);
-                } catch (error) {
-                    console.error("Error setting max amount:", error);
-                    showError("Failed to set maximum amount");
-                }
-            });
-
-            // Feature toggles
-            document.getElementById("auto-compound-toggle").addEventListener("change", async (e) => {
-                try {
-                    const tx = await contract.toggleAutoCompounding(e.target.checked);
-                    await tx.wait();
-                    showStatus(`Auto-compounding ${e.target.checked ? 'enabled' : 'disabled'}`);
-                } catch (error) {
-                    console.error("Error toggling auto-compound:", error);
-                    showError("Failed to toggle auto-compounding");
-                    e.target.checked = !e.target.checked; // Revert toggle
-                }
-            });
-
-            document.getElementById("lottery-toggle").addEventListener("change", async (e) => {
-                try {
-                    const tx = await contract.toggleLottery(e.target.checked);
-                    await tx.wait();
-                    showStatus(`Lottery participation ${e.target.checked ? 'enabled' : 'disabled'}`);
-                } catch (error) {
-                    console.error("Error toggling lottery:", error);
-                    showError("Failed to toggle lottery participation");
-                    e.target.checked = !e.target.checked; // Revert toggle
-                }
-            });
         }
 
         async function approveTokens() {
             if (!contract || !signer) return;
             
             try {
+                setButtonLoading('approve-button', true);
                 const amount = document.getElementById("stake-amount").value;
                 const amountWei = ethers.utils.parseEther(amount);
                 
@@ -637,8 +757,9 @@
                 await tx.wait();
                 showStatus("Tokens approved successfully!");
             } catch (error) {
-                console.error("Approval error:", error);
-                showError("Failed to approve tokens");
+                handleError(error, 'token approval');
+            } finally {
+                setButtonLoading('approve-button', false);
             }
         }
 
@@ -646,6 +767,7 @@
             if (!contract || !signer) return;
             
             try {
+                setButtonLoading('stake-button', true);
                 const amount = document.getElementById("stake-amount").value;
                 const referralAddress = document.getElementById("referral-address").value;
                 const amountWei = ethers.utils.parseEther(amount);
@@ -659,8 +781,9 @@
                 showStatus("Tokens staked successfully!");
                 await updateUI();
             } catch (error) {
-                console.error("Staking error:", error);
-                showError("Failed to stake tokens");
+                handleError(error, 'staking');
+            } finally {
+                setButtonLoading('stake-button', false);
             }
         }
 
@@ -668,6 +791,7 @@
             if (!contract || !signer) return;
             
             try {
+                setButtonLoading('unstake-button', true);
                 const amount = document.getElementById("stake-amount").value;
                 const amountWei = ethers.utils.parseEther(amount);
                 
@@ -677,8 +801,9 @@
                 showStatus("Tokens unstaked successfully!");
                 await updateUI();
             } catch (error) {
-                console.error("Unstaking error:", error);
-                showError("Failed to unstake tokens");
+                handleError(error, 'unstaking');
+            } finally {
+                setButtonLoading('unstake-button', false);
             }
         }
 
@@ -686,15 +811,62 @@
             if (!contract || !signer) return;
             
             try {
+                setButtonLoading('claim-rewards', true);
                 const tx = await contract.claimReward();
                 showStatus("Claiming rewards...");
                 await tx.wait();
                 showStatus("Rewards claimed successfully!");
                 await updateUI();
             } catch (error) {
-                console.error("Claim error:", error);
-                showError("Failed to claim rewards");
+                handleError(error, 'claiming rewards');
+            } finally {
+                setButtonLoading('claim-rewards', false);
             }
+        }
+
+        function setupEventListeners() {
+            // Setup MAX button
+            document.getElementById("max-button").addEventListener("click", async () => {
+                if (!contract || !signer) return;
+                
+                try {
+                    const y2kToken = new ethers.Contract(
+                        await contract.y2kToken(),
+                        ["function balanceOf(address) view returns (uint256)"],
+                        signer
+                    );
+                    
+                    const balance = await y2kToken.balanceOf(await signer.getAddress());
+                    document.getElementById("stake-amount").value = ethers.utils.formatEther(balance);
+                } catch (error) {
+                    handleError(error, 'setting max amount');
+                }
+            });
+
+            // Feature toggles
+            document.getElementById("auto-compound-toggle").addEventListener("change", async (e) => {
+                try {
+                    const tx = await contract.toggleAutoCompounding(e.target.checked);
+                    showStatus(`Updating auto-compound setting...`);
+                    await tx.wait();
+                    showStatus(`Auto-compounding ${e.target.checked ? 'enabled' : 'disabled'}`);
+                } catch (error) {
+                    handleError(error, 'toggling auto-compound');
+                    e.target.checked = !e.target.checked; // Revert toggle
+                }
+            });
+
+            document.getElementById("lottery-toggle").addEventListener("change", async (e) => {
+                try {
+                    const tx = await contract.toggleLottery(e.target.checked);
+                    showStatus(`Updating lottery setting...`);
+                    await tx.wait();
+                    showStatus(`Lottery participation ${e.target.checked ? 'enabled' : 'disabled'}`);
+                } catch (error) {
+                    handleError(error, 'toggling lottery');
+                    e.target.checked = !e.target.checked; // Revert toggle
+                }
+            });
         }
 
         function showStatus(message) {
@@ -711,22 +883,31 @@
             showStatus("Error: " + message);
         }
 
-        // Event Listeners
+        // Initialize event listeners
         document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
-        
+        document.getElementById("disconnect-wallet")?.addEventListener("click", disconnectWallet);
+        document.getElementById("approve-button")?.addEventListener("click", approveTokens);
+        document.getElementById("stake-button")?.addEventListener("click", stake);
+        document.getElementById("unstake-button")?.addEventListener("click", unstake);
+        document.getElementById("claim-rewards")?.addEventListener("click", claimRewards);
+
         // Network and Account Change Listeners
         if (window.ethereum) {
-            window.ethereum.on('chainChanged', (chainId) => {
+            window.ethereum.on('chainChanged', () => {
                 window.location.reload();
             });
 
-            window.ethereum.on('accountsChanged', (accounts) => {
+            window.ethereum.on('accountsChanged', () => {
                 window.location.reload();
             });
         }
         
         // Update UI periodically
-        setInterval(updateUI, 30000);
+        setInterval(() => {
+            if (isInitialized) {
+                updateUI();
+            }
+        }, 30000);
     </script>
 </body>
 </html>
