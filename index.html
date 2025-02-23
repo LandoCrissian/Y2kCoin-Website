@@ -14,13 +14,36 @@
             background-color: #0a0a0a;
             color: #e2e8f0;
         }
-        .glow-text { text-shadow: 0px 0px 8px cyan; }
+        .glow-text { 
+            text-shadow: 0px 0px 8px cyan; 
+        }
         .btn {
             padding: 10px 20px;
             border-radius: 8px;
             font-size: 1.1rem;
             font-weight: bold;
             transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.2) 0%,
+                rgba(255, 255, 255, 0.05) 40%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            transition: all 0.3s ease-in-out;
+        }
+        .btn:hover::after {
+            transform: rotate(45deg) translate(50%, 50%);
         }
         .btn-primary { 
             background-color: #00e6e6; 
@@ -30,6 +53,7 @@
         .btn-primary:hover { 
             background-color: #009999; 
             transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.5);
         }
         .btn-secondary { 
             background-color: #ff007f; 
@@ -39,13 +63,43 @@
         .btn-secondary:hover { 
             background-color: #cc0066; 
             transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
         }
         .tab-content {
             display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tab-btn {
+            position: relative;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #00e6e6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .tab-btn:hover::after {
+            width: 100%;
         }
         .tab-btn.active {
             color: #00e6e6;
-            font-weight: bold;
+        }
+        .tab-btn.active::after {
+            width: 100%;
         }
         .input-field {
             background-color: #1a1a1a;
@@ -54,12 +108,13 @@
             padding: 12px 16px;
             border-radius: 12px;
             width: 100%;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
         .input-field:focus {
             border-color: #00e6e6;
             outline: none;
-            box-shadow: 0 0 10px rgba(0, 230, 230, 0.2);
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+            transform: translateY(-1px);
         }
         .info-card {
             background-color: #111;
@@ -67,10 +122,13 @@
             border-radius: 16px;
             margin: 12px 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            border: 1px solid #222;
         }
         .info-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+            border-color: #00e6e6;
         }
         .loading {
             animation: pulse 1.5s infinite;
@@ -80,56 +138,99 @@
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-        .toggle-switch input {
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            background: rgba(0, 230, 230, 0.9);
+            color: #fff;
+            transform: translateY(100%);
             opacity: 0;
-            width: 0;
-            height: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
         }
-        .slider {
-            position: absolute;
-            cursor: pointer;
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 230, 230, 0.1);
+            border-left-color: #00e6e6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .modal {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #2d2d2d;
-            transition: .3s;
-            border-radius: 34px;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
         }
-        input:checked + .slider {
-            background-color: #00e6e6;
-            box-shadow: 0 0 10px rgba(0, 230, 230, 0.5);
+        .modal-content {
+            background: #111;
+            padding: 32px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+            border: 1px solid #00e6e6;
         }
-        input:checked + .slider:before {
-            transform: translateX(30px);
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #222;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #00e6e6;
+            transition: width 0.3s ease;
         }
         .hidden {
             display: none;
         }
     </style>
 </head>
-<body class="flex flex-col items-center text-center px-4 min-h-screen">
+    <body class="flex flex-col items-center text-center px-4 min-h-screen">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+        <div class="text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-cyan-400" id="loading-text">Connecting to network...</p>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="w-full py-4 bg-[#0a0a0a]">
-        <nav class="flex justify-between items-center max-w-5xl mx-auto">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" alt="Y2KCoin Logo" class="w-16">
+    <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 backdrop-blur-md bg-opacity-80">
+        <nav class="flex justify-between items-center max-w-5xl mx-auto px-4">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
+                 alt="Y2KCoin Logo" 
+                 class="w-16 hover:scale-105 transition-transform duration-300">
             <ul class="flex flex-wrap justify-center gap-4">
                 <li><button class="tab-btn active" data-tab="about">About</button></li>
                 <li><button class="tab-btn" data-tab="mission">Mission</button></li>
@@ -142,160 +243,95 @@
     </header>
 
     <!-- Main Content -->
-    <main class="w-full max-w-4xl py-10 flex-grow">
+    <main class="w-full max-w-4xl py-20 flex-grow mt-16">
         <!-- Hero Section -->
         <section id="hero" class="mb-10">
             <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
             <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn btn-primary">Buy Y2K</a>
-                <a href="https://discord.gg/jpFbSapSAh" class="btn btn-secondary">Join Discord</a>
+                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
+                   class="btn btn-primary group">
+                    <span class="relative z-10">Buy Y2K</span>
+                </a>
+                <a href="https://discord.gg/jpFbSapSAh" 
+                   class="btn btn-secondary group">
+                    <span class="relative z-10">Join Discord</span>
+                </a>
             </div>
         </section>
 
         <!-- Tab Content -->
         <section id="tab-content" class="mt-8">
             <!-- About Tab -->
-            <div id="about" class="tab-content">
+            <div id="about" class="tab-content active">
                 <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
                 <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400">Community Driven</h3>
+                        <p class="mt-2 text-gray-400">Built by the community, for the community. Every holder has a voice in our future.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3 class="text-xl font-bold text-cyan-400">Innovative Technology</h3>
+                        <p class="mt-2 text-gray-400">Leveraging blockchain technology to create a secure and transparent ecosystem.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Mission Tab -->
             <div id="mission" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
                 <p class="mt-4 text-gray-400">We aim to build an engaging, sustainable digital ecosystem where holders benefit from staking, NFTs, and gaming.</p>
+                <div class="info-card mt-8">
+                    <h3 class="text-xl font-bold text-cyan-400">Core Values</h3>
+                    <ul class="mt-4 space-y-2 text-gray-400">
+                        <li>Community First</li>
+                        <li>Sustainable Growth</li>
+                        <li>Innovation & Development</li>
+                        <li>Transparency & Trust</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Marketplace Tab -->
             <div id="marketplace" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
                 <p class="mt-4 text-gray-400">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
+                <div class="info-card mt-8">
+                    <p class="text-gray-400">Coming Soon</p>
+                </div>
             </div>
 
             <!-- NFTs Tab -->
             <div id="nfts" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K NFTs</h2>
                 <p class="mt-4 text-gray-400">Limited edition, community-driven digital collectibles with real utility.</p>
+                <div class="info-card mt-8">
+                    <p class="text-gray-400">Coming Soon</p>
+                </div>
             </div>
-                        <!-- Staking Tab -->
+
+            <!-- Staking Tab -->
             <div id="staking" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text mb-6">Y2K Staking Dashboard</h2>
                 
                 <!-- Wallet Connection -->
                 <div id="wallet-section" class="mb-8">
-                    <button id="connect-wallet" class="btn btn-primary">Connect Wallet</button>
-                    <button id="disconnect-wallet" class="btn btn-secondary hidden">Disconnect Wallet</button>
+                    <button id="connect-wallet" class="btn btn-primary">
+                        <span class="relative z-10">Connect Wallet</span>
+                    </button>
+                    <button id="disconnect-wallet" class="btn btn-secondary hidden">
+                        <span class="relative z-10">Disconnect Wallet</span>
+                    </button>
                     <div id="network-info" class="mt-4 hidden">
                         <p class="text-lg">Connected Wallet: <span id="wallet-address" class="font-mono text-cyan-400"></span></p>
                         <p class="text-lg">Network: <span id="network-name" class="text-cyan-400">Not Connected</span></p>
                     </div>
                 </div>
 
-                <!-- Main Staking Interface - Hidden until wallet connected -->
-                <div id="staking-interface" class="hidden">
-                    <!-- Token Balances -->
-                    <div class="info-card mb-8">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Balances</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-lg">Y2K Balance: <span id="y2k-balance" class="font-mono text-cyan-400">0</span></p>
-                                <p class="text-lg">POGS Balance: <span id="pogs-balance" class="font-mono text-cyan-400">0</span></p>
-                            </div>
-                            <div>
-                                <p class="text-lg">Staked Y2K: <span id="staked-amount" class="font-mono text-cyan-400">0</span></p>
-                                <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">0</span></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Staking Actions -->
-                    <div class="info-card mb-8">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Stake/Unstake</h3>
-                        <div class="max-w-md mx-auto">
-                            <div class="relative mb-4">
-                                <input type="number" 
-                                       id="stake-amount" 
-                                       placeholder="Enter amount" 
-                                       class="input-field"
-                                       min="0" 
-                                       step="any">
-                                <button id="max-button" 
-                                        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-cyan-400 hover:text-cyan-300">
-                                    MAX
-                                </button>
-                            </div>
-                            <input type="text" 
-                                   id="referral-address" 
-                                   placeholder="Referral Address (optional)" 
-                                   class="input-field mb-4">
-                            <div class="flex flex-wrap justify-center gap-4">
-                                <button id="approve-button" class="btn btn-primary">Approve Y2K</button>
-                                <button id="stake-button" class="btn btn-primary">Stake</button>
-                                <button id="unstake-button" class="btn btn-secondary">Unstake</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Rewards Section -->
-                    <div class="info-card mb-8">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Rewards</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <p class="text-lg">Claimable POGS: <span id="claimable-rewards" class="font-mono text-cyan-400">0</span></p>
-                                <p class="text-lg">Last Claim: <span id="last-claim-time" class="font-mono text-cyan-400">Never</span></p>
-                            </div>
-                            <div>
-                                <p class="text-lg">Referral Rewards: <span id="referral-rewards" class="font-mono text-cyan-400">0</span></p>
-                                <p class="text-lg">Total Referred: <span id="total-referrals" class="font-mono text-cyan-400">0</span></p>
-                            </div>
-                        </div>
-                        <button id="claim-rewards" class="btn btn-primary">Claim Rewards</button>
-                    </div>
-
-                    <!-- Staking Stats -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div class="info-card">
-                            <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Staking Info</h3>
-                            <p class="text-lg">Staking Since: <span id="staking-time" class="font-mono text-cyan-400">-</span></p>
-                            <p class="text-lg">Lock Period: <span id="lock-period" class="font-mono text-cyan-400">-</span></p>
-                            <p class="text-lg">Next Unlock: <span id="next-unlock" class="font-mono text-cyan-400">-</span></p>
-                        </div>
-                        <div class="info-card">
-                            <h3 class="text-xl font-bold text-cyan-400 mb-4">Protocol Stats</h3>
-                            <p class="text-lg">APR: <span id="current-apr" class="font-mono text-cyan-400">0%</span></p>
-                            <p class="text-lg">Total Staked: <span id="total-staked" class="font-mono text-cyan-400">0</span></p>
-                            <p class="text-lg">Burn Rate: <span id="burn-rate" class="font-mono text-cyan-400">0%</span></p>
-                        </div>
-                    </div>
-
-                    <!-- Features Toggle -->
-                    <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Features</h3>
-                        <div class="flex flex-wrap justify-center gap-12">
-                            <div class="flex items-center">
-                                <label class="text-lg mr-3">Auto-Compound</label>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="auto-compound-toggle">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                            <div class="flex items-center">
-                                <label class="text-lg mr-3">Lottery Entry</label>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="lottery-toggle">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Transaction Status -->
-                <div id="tx-status" class="fixed bottom-4 right-4 hidden">
-                    <div class="bg-black border border-cyan-400 rounded-lg p-4 shadow-lg">
-                        <p id="tx-message" class="text-cyan-400"></p>
-                    </div>
+                <!-- Staking Interface -->
+                <div id="staking-interface" class="hidden opacity-0 transform translate-y-4 transition-all duration-300">
+                    <!-- Content will be dynamically populated -->
                 </div>
             </div>
 
@@ -303,11 +339,15 @@
             <div id="gaming" class="tab-content">
                 <h2 class="text-3xl font-bold glow-text">Y2K Gaming</h2>
                 <p class="mt-4 text-gray-400">An immersive gaming experience that rewards players through blockchain mechanics.</p>
+                <div class="info-card mt-8">
+                    <p class="text-gray-400">Coming Soon</p>
+                </div>
             </div>
         </section>
     </main>
-        <!-- Footer -->
-    <footer class="w-full py-6 bg-[#0a0a0a]">
+
+    <!-- Footer -->
+    <footer class="w-full py-6 bg-[#0a0a0a] mt-auto">
         <section id="social-links" class="mb-6">
             <h2 class="text-2xl font-bold glow-text">Follow Us</h2>
             <div class="flex justify-center gap-4 mt-4">
@@ -316,302 +356,419 @@
                 <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="btn btn-primary">Reddit</a>
             </div>
         </section>
-        <p>&copy; 2025 Y2KCoin. All rights reserved.</p>
+        <p class="text-gray-400">&copy; 2025 Y2KCoin. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript -->
-    <script>
-        // Contract ABI - Add your full ABI here
-        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_y2kToken","type":"address"},{"internalType":"address","name":"_pogsToken","type":"address"},{"internalType":"uint256","name":"_rewardRate","type":"uint256"},{"internalType":"address","name":"_treasury","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"AutoCompoundingToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"BurnRateUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"status","type":"bool"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"winner","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"roundId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"LotteryWinner","type":"event"}];
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed bottom-4 right-4 z-50"></div>
 
-        // Contract Constants
-        const CONTRACT_ADDRESS = "0x7DC6a9900e9DE69fF36ECb7dF56aA7c9157DE483";
-        const CRONOS_NETWORK_CONFIG = {
-            chainId: '0x19',
-            chainName: 'Cronos Mainnet',
-            nativeCurrency: {
-                name: 'CRO',
-                symbol: 'CRO',
-                decimals: 18
-            },
-            rpcUrls: ['https://evm.cronos.org'],
-            blockExplorerUrls: ['https://cronoscan.com/']
-        };
+    <!-- Transaction Status Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold text-cyan-400 mb-4">Transaction Status</h3>
+            <div class="progress-bar mb-4">
+                <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+            <p id="transaction-status" class="text-gray-400"></p>
+        </div>
+    </div>
+        <script>
+// Contract Configuration
+const CONTRACT_ADDRESS = "0x7DC6a9900e9DE69fF36ECb7dF56aA7c9157DE483";
+const CRONOS_CHAIN_ID = '0x19';
+const CRONOS_NETWORK_CONFIG = {
+    chainId: CRONOS_CHAIN_ID,
+    chainName: 'Cronos Mainnet',
+    nativeCurrency: {
+        name: 'CRO',
+        symbol: 'CRO',
+        decimals: 18
+    },
+    rpcUrls: ['https://evm.cronos.org'],
+    blockExplorerUrls: ['https://cronoscan.com/']
+};
 
-        let contract;
-        let signer;
-        let provider;
+// Contract ABI - Only user-facing functions
+const CONTRACT_ABI = [
+    {
+        "inputs": [
+            {"internalType": "uint256", "name": "_amount", "type": "uint256"},
+            {"internalType": "address", "name": "_referrer", "type": "address"}
+        ],
+        "name": "stake",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"internalType": "uint256", "name": "_amount", "type": "uint256"}],
+        "name": "unstake",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimReward",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+        "name": "stakes",
+        "outputs": [
+            {"internalType": "uint256", "name": "amount", "type": "uint256"},
+            {"internalType": "uint256", "name": "startTime", "type": "uint256"},
+            {"internalType": "uint256", "name": "lastCompoundTime", "type": "uint256"}
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
 
-        // Tab Switching Logic
-        document.addEventListener("DOMContentLoaded", () => {
-            const tabButtons = document.querySelectorAll(".tab-btn");
-            const tabContents = document.querySelectorAll(".tab-content");
+// Global Variables
+let provider, signer, contract;
+let isWalletConnected = false;
 
-            function showTab(tabId) {
-                tabContents.forEach(content => {
-                    content.style.display = 'none';
-                });
+// Authentication Manager
+class AuthManager {
+    constructor() {
+        this.signatures = new Map();
+        this.nonces = new Map();
+    }
 
-                tabButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
+    generateNonce() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
 
-                const selectedTab = document.getElementById(tabId);
-                if (selectedTab) {
-                    selectedTab.style.display = 'block';
-                }
+    async requestSignature(address) {
+        const nonce = this.generateNonce();
+        const message = `Welcome to Y2K Staking Platform\n\nPlease sign this message to verify your wallet ownership.\nThis signature will not trigger any blockchain transaction.\n\nNonce: ${nonce}`;
+        
+        try {
+            const signature = await signer.signMessage(message);
+            this.signatures.set(address, signature);
+            return true;
+        } catch (error) {
+            console.error("Signature error:", error);
+            return false;
+        }
+    }
+}
 
-                const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
-                if (activeButton) {
-                    activeButton.classList.add('active');
-                }
-            }
+const authManager = new AuthManager();
 
-            tabButtons.forEach(button => {
-                button.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const tabId = button.getAttribute("data-tab");
-                    showTab(tabId);
-                });
-            });
+// UI Manager
+class UIManager {
+    static showLoading(message = 'Processing...') {
+        const overlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        loadingText.textContent = message;
+        overlay.classList.remove('hidden');
+    }
 
-            // Show initial tab
-            showTab('about');
-        });
+    static hideLoading() {
+        document.getElementById('loading-overlay').classList.add('hidden');
+    }
 
-        async function switchToCronosNetwork() {
+    static showNotification(message, type = 'info') {
+        const container = document.getElementById('notification-container');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type} transform transition-all duration-300`;
+        notification.innerHTML = `
+            <div class="flex items-center justify-between">
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-4">×</button>
+            </div>
+        `;
+        container.appendChild(notification);
+        
+        // Trigger animation
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        // Auto remove
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
+    }
+
+    static async updateStakingInterface(address) {
+        const stakingInterface = document.getElementById('staking-interface');
+        
+        // Get user's staking info
+        const stakeInfo = await contract.stakes(address);
+        const stakedAmount = ethers.utils.formatEther(stakeInfo.amount);
+        
+        stakingInterface.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="info-card">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-4">Your Balances</h3>
+                    <p class="text-lg">Staked: <span id="staked-amount" class="font-mono text-cyan-400">${stakedAmount} Y2K</span></p>
+                    <p class="text-lg">Available: <span id="available-amount" class="font-mono text-cyan-400">Loading...</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-4">Staking Actions</h3>
+                    <div class="flex flex-col gap-4">
+                        <input type="number" id="stake-amount" placeholder="Amount to stake" class="input-field" min="0" step="any">
+                        <input type="text" id="referral-address" placeholder="Referral Address (optional)" class="input-field">
+                        <div class="flex gap-2">
+                            <button id="approve-btn" class="btn btn-primary flex-1">Approve</button>
+                            <button id="stake-btn" class="btn btn-primary flex-1">Stake</button>
+                            <button id="unstake-btn" class="btn btn-secondary flex-1">Unstake</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card mt-6">
+                <h3 class="text-xl font-bold text-cyan-400 mb-4">Rewards</h3>
+                <p class="text-lg">Pending Rewards: <span id="pending-rewards" class="font-mono text-cyan-400">Loading...</span></p>
+                <button id="claim-btn" class="btn btn-primary mt-4">Claim Rewards</button>
+            </div>
+        `;
+
+        // Show the interface with animation
+        stakingInterface.classList.remove('hidden');
+        setTimeout(() => {
+            stakingInterface.style.opacity = '1';
+            stakingInterface.style.transform = 'translateY(0)';
+        }, 100);
+
+        // Setup event listeners
+        this.setupStakingEventListeners();
+    }
+
+    static setupStakingEventListeners() {
+        document.getElementById('approve-btn')?.addEventListener('click', approveTokens);
+        document.getElementById('stake-btn')?.addEventListener('click', stake);
+        document.getElementById('unstake-btn')?.addEventListener('click', unstake);
+        document.getElementById('claim-btn')?.addEventListener('click', claimRewards);
+    }
+}
+
+// Network Manager
+class NetworkManager {
+    static async checkAndSwitchNetwork() {
+        if (!window.ethereum) throw new Error('MetaMask is not installed');
+
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== CRONOS_CHAIN_ID) {
             try {
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: CRONOS_NETWORK_CONFIG.chainId }],
+                    params: [{ chainId: CRONOS_CHAIN_ID }],
                 });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
+            } catch (error) {
+                if (error.code === 4902) {
                     try {
                         await window.ethereum.request({
                             method: 'wallet_addEthereumChain',
                             params: [CRONOS_NETWORK_CONFIG],
                         });
                     } catch (addError) {
-                        console.error('Failed to add Cronos network:', addError);
-                        showError('Failed to add Cronos network');
+                        throw new Error('Failed to add Cronos network');
                     }
+                } else {
+                    throw error;
                 }
             }
         }
+    }
+}
 
-        async function connectWallet() {
-            try {
-                if (typeof window.ethereum === 'undefined') {
-                    alert('Please install MetaMask to use the staking feature');
-                    return;
-                }
+// Main Functions
+async function connectWallet() {
+    try {
+        UIManager.showLoading('Connecting wallet...');
 
-                const loadingBtn = document.getElementById("connect-wallet");
-                loadingBtn.textContent = 'Connecting...';
-                
-                await switchToCronosNetwork();
-                
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                
-                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                
-                const address = await signer.getAddress();
-                
-                document.getElementById("wallet-address").textContent = 
-                    `${address.substring(0, 6)}...${address.substring(38)}`;
-                document.getElementById("network-info").classList.remove('hidden');
-                document.getElementById("connect-wallet").classList.add('hidden');
-                document.getElementById("disconnect-wallet").classList.remove('hidden');
-                document.getElementById("staking-interface").classList.remove('hidden');
-                
-                await updateUI();
-                setupEventListeners();
-                
-            } catch (error) {
-                console.error("Error connecting wallet:", error);
-                showError("Failed to connect wallet: " + error.message);
-            } finally {
-                const loadingBtn = document.getElementById("connect-wallet");
-                loadingBtn.textContent = 'Connect Wallet';
-            }
+        if (!window.ethereum) {
+            throw new Error('Please install MetaMask to use this feature');
         }
 
-        async function updateUI() {
-            if (!contract || !signer) return;
+        await NetworkManager.checkAndSwitchNetwork();
 
-            try {
-                const address = await signer.getAddress();
-                
-                // Get stake info
-                const stakeInfo = await contract.stakes(address);
-                document.getElementById("staked-amount").textContent = 
-                    ethers.utils.formatEther(stakeInfo.amount);
-                
-                if (stakeInfo.startTime.gt(0)) {
-                    const stakingDate = new Date(stakeInfo.startTime.mul(1000).toNumber());
-                    document.getElementById("staking-time").textContent = stakingDate.toLocaleDateString();
-                }
-
-                // Get token balances
-                const y2kToken = new ethers.Contract(
-                    await contract.y2kToken(),
-                    ["function balanceOf(address) view returns (uint256)"],
-                    signer
-                );
-                const pogsToken = new ethers.Contract(
-                    await contract.pogsToken(),
-                    ["function balanceOf(address) view returns (uint256)"],
-                    signer
-                );
-
-                const y2kBalance = await y2kToken.balanceOf(address);
-                const pogsBalance = await pogsToken.balanceOf(address);
-
-                document.getElementById("y2k-balance").textContent = 
-                    ethers.utils.formatEther(y2kBalance);
-                document.getElementById("pogs-balance").textContent = 
-                    ethers.utils.formatEther(pogsBalance);
-
-                // Update other UI elements
-                const referralRewards = await contract.referralRewards(address);
-                document.getElementById("referral-rewards").textContent = 
-                    ethers.utils.formatEther(referralRewards);
-
-                const burnRate = await contract.burnRate();
-                document.getElementById("burn-rate").textContent = 
-                    burnRate.toString() + "%";
-
-            } catch (error) {
-                console.error("Error updating UI:", error);
-                showError("Failed to update information");
-            }
-        }
-
-        function setupEventListeners() {
-            document.getElementById("stake-button").addEventListener("click", stake);
-            document.getElementById("unstake-button").addEventListener("click", unstake);
-            document.getElementById("claim-rewards").addEventListener("click", claimRewards);
-            document.getElementById("approve-button").addEventListener("click", approveTokens);
-            
-            document.getElementById("max-button").addEventListener("click", async () => {
-                if (!contract || !signer) return;
-                
-                try {
-                    const y2kToken = new ethers.Contract(
-                        await contract.y2kToken(),
-                        ["function balanceOf(address) view returns (uint256)"],
-                        signer
-                    );
-                    
-                    const balance = await y2kToken.balanceOf(await signer.getAddress());
-                    document.getElementById("stake-amount").value = ethers.utils.formatEther(balance);
-                } catch (error) {
-                    console.error("Error setting max amount:", error);
-                    showError("Failed to set maximum amount");
-                }
-            });
-        }
-
-        async function approveTokens() {
-            if (!contract || !signer) return;
-            
-            try {
-                const amount = document.getElementById("stake-amount").value;
-                const amountWei = ethers.utils.parseEther(amount);
-                
-                const y2kToken = new ethers.Contract(
-                    await contract.y2kToken(),
-                    ["function approve(address spender, uint256 amount) public returns (bool)"],
-                    signer
-                );
-                
-                const tx = await y2kToken.approve(CONTRACT_ADDRESS, amountWei);
-                showStatus("Approving tokens...");
-                await tx.wait();
-                showStatus("Tokens approved successfully!");
-            } catch (error) {
-                console.error("Approval error:", error);
-                showError("Failed to approve tokens");
-            }
-        }
-
-        async function stake() {
-            if (!contract || !signer) return;
-            
-            try {
-                const amount = document.getElementById("stake-amount").value;
-                const referralAddress = document.getElementById("referral-address").value;
-                const amountWei = ethers.utils.parseEther(amount);
-                
-                const tx = await contract.stake(
-                    amountWei,
-                    referralAddress || ethers.constants.AddressZero
-                );
-                showStatus("Staking tokens...");
-                await tx.wait();
-                showStatus("Tokens staked successfully!");
-                await updateUI();
-            } catch (error) {
-                console.error("Staking error:", error);
-                showError("Failed to stake tokens");
-            }
-        }
-
-        async function unstake() {
-            if (!contract || !signer) return;
-            
-            try {
-                const amount = document.getElementById("stake-amount").value;
-                const amountWei = ethers.utils.parseEther(amount);
-                
-                const tx = await contract.unstake(amountWei);
-                showStatus("Unstaking tokens...");
-                await tx.wait();
-                showStatus("Tokens unstaked successfully!");
-                await updateUI();
-            } catch (error) {
-                console.error("Unstaking error:", error);
-                showError("Failed to unstake tokens");
-            }
-        }
-
-        async function claimRewards() {
-            if (!contract || !signer) return;
-            
-            try {
-                const tx = await contract.claimReward();
-                showStatus("Claiming rewards...");
-                await tx.wait();
-                showStatus("Rewards claimed successfully!");
-                await updateUI();
-            } catch (error) {
-                console.error("Claim error:", error);
-                showError("Failed to claim rewards");
-            }
-        }
-
-        function showStatus(message) {
-            const statusEl = document.getElementById("tx-status");
-            const messageEl = document.getElementById("tx-message");
-            messageEl.textContent = message;
-            statusEl.classList.remove('hidden');
-            setTimeout(() => {
-                statusEl.classList.add('hidden');
-            }, 5000);
-        }
-
-        function showError(message) {
-            showStatus("Error: " + message);
-        }
-
-        // Event Listeners
-        document.getElementById("connect-wallet")?.addEventListener("click", connectWallet);
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
         
-        // Update UI periodically
-        setInterval(updateUI, 30000);
-    </script>
+        const address = await signer.getAddress();
+        
+        // Request signature
+        const isSigned = await authManager.requestSignature(address);
+        if (!isSigned) throw new Error('Signature rejected');
+
+        // Initialize contract
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+        // Update UI
+        document.getElementById('wallet-address').textContent = 
+            `${address.substring(0, 6)}...${address.substring(38)}`;
+        document.getElementById('network-name').textContent = 'Cronos Mainnet';
+        document.getElementById('network-info').classList.remove('hidden');
+        document.getElementById('connect-wallet').classList.add('hidden');
+        document.getElementById('disconnect-wallet').classList.remove('hidden');
+
+        // Update staking interface
+        await UIManager.updateStakingInterface(address);
+
+        isWalletConnected = true;
+        UIManager.showNotification('Wallet connected successfully', 'success');
+
+    } catch (error) {
+        console.error('Connection error:', error);
+        UIManager.showNotification(error.message, 'error');
+    } finally {
+        UIManager.hideLoading();
+    }
+}
+
+async function disconnectWallet() {
+    provider = null;
+    signer = null;
+    contract = null;
+    isWalletConnected = false;
+
+    document.getElementById('network-info').classList.add('hidden');
+    document.getElementById('connect-wallet').classList.remove('hidden');
+    document.getElementById('disconnect-wallet').classList.add('hidden');
+    document.getElementById('staking-interface').classList.add('hidden');
+
+    UIManager.showNotification('Wallet disconnected', 'info');
+}
+
+// Staking Functions
+async function approveTokens() {
+    if (!isWalletConnected) return;
+    
+    try {
+        UIManager.showLoading('Approving tokens...');
+        const amount = document.getElementById('stake-amount').value;
+        const amountWei = ethers.utils.parseEther(amount);
+        
+        const tokenContract = new ethers.Contract(
+            await contract.y2kToken(),
+            ['function approve(address spender, uint256 amount) returns (bool)'],
+            signer
+        );
+        
+        const tx = await tokenContract.approve(CONTRACT_ADDRESS, amountWei);
+        await tx.wait();
+        
+        UIManager.showNotification('Tokens approved successfully', 'success');
+    } catch (error) {
+        console.error('Approval error:', error);
+        UIManager.showNotification('Failed to approve tokens', 'error');
+    } finally {
+        UIManager.hideLoading();
+    }
+}
+
+async function stake() {
+    if (!isWalletConnected) return;
+    
+    try {
+        UIManager.showLoading('Staking tokens...');
+        const amount = document.getElementById('stake-amount').value;
+        const referralAddress = document.getElementById('referral-address').value;
+        const amountWei = ethers.utils.parseEther(amount);
+        
+        const tx = await contract.stake(
+            amountWei,
+            referralAddress || ethers.constants.AddressZero
+        );
+        await tx.wait();
+        
+        await UIManager.updateStakingInterface(await signer.getAddress());
+        UIManager.showNotification('Tokens staked successfully', 'success');
+    } catch (error) {
+        console.error('Staking error:', error);
+        UIManager.showNotification('Failed to stake tokens', 'error');
+    } finally {
+        UIManager.hideLoading();
+    }
+}
+
+async function unstake() {
+    if (!isWalletConnected) return;
+    
+    try {
+        UIManager.showLoading('Unstaking tokens...');
+        const amount = document.getElementById('stake-amount').value;
+        const amountWei = ethers.utils.parseEther(amount);
+        
+        const tx = await contract.unstake(amountWei);
+        await tx.wait();
+        
+        await UIManager.updateStakingInterface(await signer.getAddress());
+        UIManager.showNotification('Tokens unstaked successfully', 'success');
+    } catch (error) {
+        console.error('Unstaking error:', error);
+        UIManager.showNotification('Failed to unstake tokens', 'error');
+    } finally {
+        UIManager.hideLoading();
+    }
+}
+
+async function claimRewards() {
+    if (!isWalletConnected) return;
+    
+    try {
+        UIManager.showLoading('Claiming rewards...');
+        const tx = await contract.claimReward();
+        await tx.wait();
+        
+        await UIManager.updateStakingInterface(await signer.getAddress());
+        UIManager.showNotification('Rewards claimed successfully', 'success');
+    } catch (error) {
+        console.error('Claim error:', error);
+        UIManager.showNotification('Failed to claim rewards', 'error');
+    } finally {
+        UIManager.hideLoading();
+    }
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => 
+                btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('active');
+            });
+            
+            const selectedTab = document.getElementById(tabId);
+            selectedTab.style.display = 'block';
+            setTimeout(() => selectedTab.classList.add('active'), 50);
+        });
+    });
+
+    // Wallet connection
+    document.getElementById('connect-wallet')?.addEventListener('click', connectWallet);
+    document.getElementById('disconnect-wallet')?.addEventListener('click', disconnectWallet);
+
+    // Network changes
+    if (window.ethereum) {
+        window.ethereum.on('chainChanged', () => window.location.reload());
+        window.ethereum.on('accountsChanged', accounts => {
+            if (accounts.length === 0) disconnectWallet();
+            else window.location.reload();
+        });
+    }
+});
+</script>
 </body>
 </html>
+        
+
