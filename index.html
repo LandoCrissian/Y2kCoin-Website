@@ -484,28 +484,54 @@
         }
 
         // Tab Management with State Persistence
-        function showTab(tabId, force = false) {
-            if (!force && tabId === 'staking' && !isInitialized) {
-                return; // Don't switch to staking if not initialized
-            }
+        // Replace the current showTab function with this updated version
+function showTab(tabId, force = false) {
+    console.log("Showing tab:", tabId); // Debug log
 
-            const tabContents = document.querySelectorAll(".tab-content");
-            const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+    const tabButtons = document.querySelectorAll(".tab-btn");
 
-            tabContents.forEach(content => {
-                content.style.display = 'none';
-            });
+    // Hide all tabs
+    tabContents.forEach(content => {
+        content.style.display = 'none';
+    });
 
-            tabButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
+    // Remove active class from all buttons
+    tabButtons.forEach(btn => {
+        btn.classList.remove('active');
+    });
 
-            const selectedTab = document.getElementById(tabId);
-            if (selectedTab) {
-                selectedTab.style.display = 'block';
-                currentTab = tabId;
-            }
+    // Show selected tab
+    const selectedTab = document.getElementById(tabId);
+    if (selectedTab) {
+        selectedTab.style.display = 'block';
+        currentTab = tabId;
+    }
 
+    // Activate the correct button
+    const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
+}
+
+// Update the event listeners setup
+function setupTabListeners() {
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    tabButtons.forEach(button => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const tabId = button.getAttribute("data-tab");
+            showTab(tabId);
+        });
+    });
+}
+
+// Add this to your initialization code (at the bottom of your script)
+document.addEventListener('DOMContentLoaded', () => {
+    setupTabListeners();
+    showTab('about'); // Show initial tab
+});
             const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
             if (activeButton) {
                 activeButton.classList.add('active');
