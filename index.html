@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Y2KCoin - A Digital Revolution</title>
-    <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -12,253 +11,272 @@
             font-family: 'Orbitron', sans-serif;
             background-color: #0a0a0a;
             color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
-        .glow-text { 
-            text-shadow: 0px 0px 8px cyan; 
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #00e6e6;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu-button {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 72px;
+                left: 0;
+                width: 100%;
+                background: #0a0a0a;
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .tab-btn {
+                width: 100%;
+                padding: 0.75rem;
+                text-align: center;
+                border: 1px solid #2d2d2d;
+                border-radius: 0.5rem;
+                background: #1a1a1a;
+            }
+
+            .tab-btn.active {
+                background: #00e6e6;
+                color: #0a0a0a;
+            }
+        }
+
+        /* Button Styles */
         .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
             font-weight: bold;
-            transition: all 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(255, 255, 255, 0.2) 0%,
-                rgba(255, 255, 255, 0.05) 40%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            transform: rotate(45deg);
-            transition: all 0.3s ease-in-out;
+
+        .btn-primary {
+            background: #00e6e6;
+            color: #0a0a0a;
         }
-        .btn:hover::after {
-            transform: rotate(45deg) translate(50%, 50%);
+
+        .btn-secondary {
+            background: #ff007f;
+            color: white;
         }
-        .btn-primary { 
-            background-color: #00e6e6; 
-            color: #0a0a0a; 
-            box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
-        }
-        .btn-primary:hover { 
-            background-color: #009999; 
+
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 230, 230, 0.5);
+            box-shadow: 0 0 15px rgba(0, 230, 230, 0.3);
         }
-        .btn-secondary { 
-            background-color: #ff007f; 
-            color: #fff; 
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
-        }
-        .btn-secondary:hover { 
-            background-color: #cc0066; 
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
-        }
+
+        /* Tab Content Styles */
         .tab-content {
             display: none;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease-in-out;
+            transition: opacity 0.3s ease;
         }
+
         .tab-content.active {
             display: block;
             opacity: 1;
-            transform: translateY(0);
-        }
-        .tab-btn {
-            position: relative;
-            padding: 8px 16px;
-            transition: all 0.3s ease;
-        }
-        .tab-btn::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #00e6e6;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-        .tab-btn:hover::after {
-            width: 100%;
-        }
-        .tab-btn.active {
-            color: #00e6e6;
-        }
-        .tab-btn.active::after {
-            width: 100%;
-        }
-        .info-card {
-            background-color: #111;
-            padding: 24px;
-            border-radius: 16px;
-            margin: 12px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid #222;
-        }
-        .info-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-            border-color: #00e6e6;
         }
     </style>
 </head>
-<body class="flex flex-col items-center text-center px-4 min-h-screen">
-    <!-- Header -->
-    <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 backdrop-blur-md bg-opacity-80">
-        <nav class="flex justify-between items-center max-w-5xl mx-auto px-4">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
-                 alt="Y2KCoin Logo" 
-                 class="w-16 hover:scale-105 transition-transform duration-300">
-            <ul class="flex flex-wrap justify-center gap-4">
-                <li><button class="tab-btn active" data-tab="about">About</button></li>
-                <li><button class="tab-btn" data-tab="mission">Mission</button></li>
-                <li><button class="tab-btn" data-tab="marketplace">Marketplace</button></li>
-                <li><button class="tab-btn" data-tab="nfts">NFTs</button></li>
-                <li><button class="tab-btn" data-tab="staking">Staking</button></li>
-                <li><button class="tab-btn" data-tab="gaming">Gaming</button></li>
-            </ul>
-        </nav>
-    </header>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="w-full max-w-4xl py-20 flex-grow mt-16">
-        <!-- Hero Section -->
-        <section id="hero" class="mb-10">
-            <h1 class="text-4xl sm:text-5xl font-bold glow-text">Welcome to Y2KCoin</h1>
-            <p class="text-lg sm:text-xl mt-4 text-gray-300">A digital revolution inspired by the past, built for the future.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
-                   class="btn btn-primary group">
-                    <span class="relative z-10">Buy Y2K</span>
-                </a>
-                <a href="https://discord.gg/jpFbSapSAh" 
-                   class="btn btn-secondary group">
-                    <span class="relative z-10">Join Discord</span>
-                </a>
-            </div>
-        </section>
+    <div id="main-content" class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 border-b border-gray-800">
+            <nav class="max-w-5xl mx-auto px-4">
+                <div class="flex justify-between items-center">
+                    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
+                         alt="Y2KCoin Logo" 
+                         class="w-12 h-12 object-contain">
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu-button p-2 text-cyan-400 md:hidden" id="mobile-menu-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16" />
+                        </svg>
+                    </button>
 
-        <!-- Tab Content -->
-        <section id="tab-content" class="mt-8">
-            <!-- About Tab -->
-            <div id="about" class="tab-content active">
-                <h2 class="text-3xl font-bold glow-text">About Y2KCoin</h2>
-                <p class="mt-4 text-gray-400">Y2KCoin merges nostalgia with Web3 innovation. Stake, earn, and trade digital assets in a retro-inspired metaverse.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                    <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400">Community Driven</h3>
-                        <p class="mt-2 text-gray-400">Built by the community, for the community. Every holder has a voice in our future.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3 class="text-xl font-bold text-cyan-400">Innovative Technology</h3>
-                        <p class="mt-2 text-gray-400">Leveraging blockchain technology to create a secure and transparent ecosystem.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mission Tab -->
-            <div id="mission" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Our Mission</h2>
-                <p class="mt-4 text-gray-400">We aim to build an engaging, sustainable digital ecosystem where holders benefit from staking, NFTs, and gaming.</p>
-                <div class="info-card mt-8">
-                    <h3 class="text-xl font-bold text-cyan-400">Core Values</h3>
-                    <ul class="mt-4 space-y-2 text-gray-400">
-                        <li>Community First</li>
-                        <li>Sustainable Growth</li>
-                        <li>Innovation & Development</li>
-                        <li>Transparency & Trust</li>
+                    <!-- Navigation Links -->
+                    <ul class="nav-links md:flex md:gap-6 hidden">
+                        <li><button class="tab-btn active" data-tab="about">About</button></li>
+                        <li><button class="tab-btn" data-tab="mission">Mission</button></li>
+                        <li><button class="tab-btn" data-tab="marketplace">Marketplace</button></li>
+                        <li><button class="tab-btn" data-tab="nfts">NFTs</button></li>
+                        <li><button class="tab-btn" data-tab="staking">Staking</button></li>
+                        <li><button class="tab-btn" data-tab="gaming">Gaming</button></li>
                     </ul>
                 </div>
-            </div>
+            </nav>
+        </header>
 
-            <!-- Marketplace Tab -->
-            <div id="marketplace" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Marketplace</h2>
-                <p class="mt-4 text-gray-400">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
-                <div class="info-card mt-8">
-                    <p class="text-gray-400">Coming Soon</p>
+        <!-- Main Content -->
+        <main class="flex-grow pt-24 px-4">
+            <section class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-bold mb-4">Welcome to Y2KCoin</h1>
+                <p class="text-lg mb-8">A digital revolution inspired by the past, built for the future.</p>
+                
+                <div class="flex flex-col md:flex-row justify-center gap-4 mb-12">
+                    <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
+                       class="btn btn-primary">
+                        Buy Y2K
+                    </a>
+                    <a href="https://discord.gg/jpFbSapSAh" 
+                       class="btn btn-secondary">
+                        Join Discord
+                    </a>
                 </div>
-            </div>
 
-            <!-- NFTs Tab -->
-            <div id="nfts" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K NFTs</h2>
-                <p class="mt-4 text-gray-400">Limited edition, community-driven digital collectibles with real utility.</p>
-                <div class="info-card mt-8">
-                    <p class="text-gray-400">Coming Soon</p>
+                <!-- Tab Content -->
+                <div id="tab-content" class="mt-8">
+                    <div id="about" class="tab-content active">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4">About Y2KCoin</h2>
+                        <p class="mb-8">Y2KCoin merges nostalgia with Web3 innovation.</p>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-gray-900 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-2">Community Driven</h3>
+                                <p>Built by the community, for the community.</p>
+                            </div>
+                            <div class="bg-gray-900 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold mb-2">Innovative Technology</h3>
+                                <p>Leveraging blockchain for the future.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other tab contents -->
+                    <div id="mission" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Our Mission</h2>
+                        <p class="mb-8">Building a sustainable digital ecosystem.</p>
+                    </div>
+
+                    <div id="marketplace" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Marketplace</h2>
+                        <p class="mb-8">Coming Soon</p>
+                    </div>
+
+                    <div id="nfts" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4">NFTs</h2>
+                        <p class="mb-8">Coming Soon</p>
+                    </div>
+
+                    <div id="staking" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Staking</h2>
+                        <p class="mb-8">Coming Soon</p>
+                    </div>
+
+                    <div id="gaming" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Gaming</h2>
+                        <p class="mb-8">Coming Soon</p>
+                    </div>
                 </div>
-            </div>
+            </section>
+        </main>
 
-            <!-- Staking Tab -->
-            <div id="staking" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Staking</h2>
-                <p class="mt-4 text-gray-400">Stake your Y2K tokens to earn rewards.</p>
-                <div class="info-card mt-8">
-                    <p class="text-gray-400">Coming Soon</p>
+        <!-- Footer -->
+        <footer class="w-full py-6 bg-[#0a0a0a] border-t border-gray-800 mt-12">
+            <div class="max-w-4xl mx-auto text-center px-4">
+                <h2 class="text-xl md:text-2xl font-bold mb-4">Follow Us</h2>
+                <div class="flex flex-wrap justify-center gap-4 mb-6">
+                    <a href="https://x.com/y2kc0in?s=21" class="btn btn-primary">𝕏</a>
+                    <a href="https://www.instagram.com/y2kcoin" class="btn btn-primary">Instagram</a>
+                    <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" class="btn btn-primary">Reddit</a>
                 </div>
+                <p class="text-gray-400">&copy; 2025 Y2KCoin. All rights reserved.</p>
             </div>
-
-            <!-- Gaming Tab -->
-            <div id="gaming" class="tab-content">
-                <h2 class="text-3xl font-bold glow-text">Y2K Gaming</h2>
-                <p class="mt-4 text-gray-400">An immersive gaming experience that rewards players through blockchain mechanics.</p>
-                <div class="info-card mt-8">
-                    <p class="text-gray-400">Coming Soon</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="w-full py-6 bg-[#0a0a0a] mt-auto">
-        <section id="social-links" class="mb-6">
-            <h2 class="text-2xl font-bold glow-text">Follow Us</h2>
-            <div class="flex justify-center gap-4 mt-4">
-                <a href="https://x.com/y2kc0in?s=21" target="_blank" class="btn btn-primary">𝕏</a>
-                <a href="https://www.instagram.com/y2kcoin" target="_blank" class="btn btn-primary">Instagram</a>
-                <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" target="_blank" class="btn btn-primary">Reddit</a>
-            </div>
-        </section>
-        <p class="text-gray-400">&copy; 2025 Y2KCoin. All rights reserved.</p>
-    </footer>
+        </footer>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const navLinks = document.querySelector('.nav-links');
+
+            mobileMenuButton.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
             // Tab switching
             document.querySelectorAll('.tab-btn').forEach(button => {
                 button.addEventListener('click', () => {
-                    const tabId = button.getAttribute('data-tab');
-                    
-                    // Update buttons
+                    // Close mobile menu when tab is selected
+                    if (window.innerWidth < 768) {
+                        navLinks.classList.remove('active');
+                    }
+
+                    // Update active tab
                     document.querySelectorAll('.tab-btn').forEach(btn => 
                         btn.classList.remove('active'));
                     button.classList.add('active');
-                    
+
                     // Update content
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.style.display = 'none';
-                        content.classList.remove('active');
-                    });
+                    document.querySelectorAll('.tab-content').forEach(content => 
+                        content.classList.remove('active'));
                     
-                    const selectedTab = document.getElementById(tabId);
-                    selectedTab.style.display = 'block';
-                    setTimeout(() => selectedTab.classList.add('active'), 50);
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
                 });
             });
+
+            // Loading sequence
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.classList.add('fade-out');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    document.getElementById('main-content').style.opacity = '1';
+                }, 500);
+            }, 1000);
         });
     </script>
 </body>
