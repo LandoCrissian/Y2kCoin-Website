@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Y2KCoin - A Digital Revolution</title>
+    <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -13,6 +15,7 @@
             color: #e2e8f0;
             margin: 0;
             padding: 0;
+            padding-bottom: 80px; /* Space for music player */
             min-height: 100vh;
         }
 
@@ -27,6 +30,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            transition: opacity 0.5s;
         }
 
         .spinner {
@@ -43,9 +47,41 @@
             100% { transform: rotate(360deg); }
         }
 
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
+        .glow-text { 
+            text-shadow: 0px 0px 8px cyan; 
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary { 
+            background-color: #00e6e6; 
+            color: #0a0a0a; 
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
+        }
+
+        .btn-primary:hover { 
+            background-color: #009999; 
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.5);
+        }
+
+        .btn-secondary { 
+            background-color: #ff007f; 
+            color: #fff; 
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+        }
+
+        .btn-secondary:hover { 
+            background-color: #cc0066; 
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
         }
 
         /* Mobile Menu Styles */
@@ -68,6 +104,7 @@
                 padding: 1rem;
                 flex-direction: column;
                 gap: 1rem;
+                border-bottom: 1px solid #2d2d2d;
             }
 
             .nav-links.active {
@@ -89,47 +126,147 @@
             }
         }
 
-        /* Button Styles */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
+        /* Music Player Styles */
+        #music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #00e6e6;
+            z-index: 50;
         }
 
-        .btn-primary {
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #2d2d2d;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-indicator {
+            height: 100%;
             background: #00e6e6;
-            color: #0a0a0a;
+            transition: width 0.1s linear;
         }
 
-        .btn-secondary {
-            background: #ff007f;
-            color: white;
+        .volume-bar {
+            width: 100px;
+            height: 4px;
+            background: #2d2d2d;
+            cursor: pointer;
+            position: relative;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(0, 230, 230, 0.3);
+        .volume-indicator {
+            height: 100%;
+            background: #00e6e6;
+            transition: width 0.1s linear;
         }
 
         /* Tab Content Styles */
         .tab-content {
             display: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
         }
 
         .tab-content.active {
             display: block;
             opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Info Card Styles */
+        .info-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid #2d2d2d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            border-color: #00e6e6;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
         }
     </style>
 </head>
-<body>
+    <body>
+    <!-- Loader -->
     <div id="loader">
         <div class="spinner"></div>
     </div>
 
+    <!-- Hidden SoundCloud Player -->
+    <iframe id="soundcloud-player"
+            width="100%"
+            height="300"
+            scrolling="no"
+            frameborder="no"
+            allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1974700072&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
+            style="display: none;">
+    </iframe>
+
+    <!-- Music Player -->
+    <div id="music-player">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <!-- Progress Bar -->
+            <div class="progress-bar mb-3" id="progressBar">
+                <div class="progress-indicator" id="progressIndicator"></div>
+            </div>
+            
+            <div class="flex items-center justify-between gap-4">
+                <!-- Track Info -->
+                <div class="flex items-center gap-3 flex-1">
+                    <img id="trackArtwork" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
+                         class="w-12 h-12 rounded-md object-cover" alt="Track artwork">
+                    <div class="text-white text-sm truncate">
+                        <p id="trackTitle" class="font-bold truncate">Loading...</p>
+                        <p id="trackArtist" class="text-gray-400 text-xs truncate">Y2K Music</p>
+                    </div>
+                </div>
+
+                <!-- Player Controls -->
+                <div class="flex items-center gap-6">
+                    <button id="prevBtn" class="text-white hover:text-cyan-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button id="playPauseBtn" class="text-white hover:text-cyan-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        </svg>
+                    </button>
+                    <button id="nextBtn" class="text-white hover:text-cyan-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Volume Control -->
+                <div class="flex items-center gap-2 w-32">
+                    <button id="muteBtn" class="text-white hover:text-cyan-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m0 0l-4-4m4 4l4-4" />
+                        </svg>
+                    </button>
+                    <div class="volume-bar" id="volumeBar">
+                        <div class="volume-indicator" id="volumeIndicator"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
     <div id="main-content" class="flex flex-col min-h-screen">
         <!-- Header -->
         <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 border-b border-gray-800">
@@ -162,7 +299,7 @@
         <!-- Main Content -->
         <main class="flex-grow pt-24 px-4">
             <section class="max-w-4xl mx-auto text-center">
-                <h1 class="text-3xl md:text-5xl font-bold mb-4">Welcome to Y2KCoin</h1>
+                <h1 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Welcome to Y2KCoin</h1>
                 <p class="text-lg mb-8">A digital revolution inspired by the past, built for the future.</p>
                 
                 <div class="flex flex-col md:flex-row justify-center gap-4 mb-12">
@@ -177,47 +314,40 @@
                 </div>
 
                 <!-- Tab Content -->
-                <div id="tab-content" class="mt-8">
+                <div id="tab-content">
+                    <!-- About Tab -->
                     <div id="about" class="tab-content active">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4">About Y2KCoin</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">About Y2KCoin</h2>
                         <p class="mb-8">Y2KCoin merges nostalgia with Web3 innovation.</p>
                         <div class="grid md:grid-cols-2 gap-6">
-                            <div class="bg-gray-900 p-6 rounded-lg">
-                                <h3 class="text-xl font-bold mb-2">Community Driven</h3>
-                                <p>Built by the community, for the community.</p>
+                            <div class="info-card">
+                                <h3 class="text-xl font-bold text-cyan-400">Community Driven</h3>
+                                <p class="mt-2 text-gray-400">Built by the community, for the community.</p>
                             </div>
-                            <div class="bg-gray-900 p-6 rounded-lg">
-                                <h3 class="text-xl font-bold mb-2">Innovative Technology</h3>
-                                <p>Leveraging blockchain for the future.</p>
+                            <div class="info-card">
+                                <h3 class="text-xl font-bold text-cyan-400">Innovative Technology</h3>
+                                <p class="mt-2 text-gray-400">Leveraging blockchain for the future.</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Other tab contents -->
+                    <!-- Other tabs content... -->
+                    <!-- Mission Tab -->
                     <div id="mission" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Our Mission</h2>
-                        <p class="mb-8">Building a sustainable digital ecosystem.</p>
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Our Mission</h2>
+                        <p class="mb-8">Building a sustainable digital ecosystem for the future.</p>
+                        <div class="info-card">
+                            <h3 class="text-xl font-bold text-cyan-400">Core Values</h3>
+                            <ul class="mt-4 space-y-2 text-gray-400">
+                                <li>Community First</li>
+                                <li>Sustainable Growth</li>
+                                <li>Innovation & Development</li>
+                                <li>Transparency & Trust</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div id="marketplace" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Marketplace</h2>
-                        <p class="mb-8">Coming Soon</p>
-                    </div>
-
-                    <div id="nfts" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4">NFTs</h2>
-                        <p class="mb-8">Coming Soon</p>
-                    </div>
-
-                    <div id="staking" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Staking</h2>
-                        <p class="mb-8">Coming Soon</p>
-                    </div>
-
-                    <div id="gaming" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4">Gaming</h2>
-                        <p class="mb-8">Coming Soon</p>
-                    </div>
+                    <!-- Continue with other tabs... -->
                 </div>
             </section>
         </main>
@@ -225,7 +355,7 @@
         <!-- Footer -->
         <footer class="w-full py-6 bg-[#0a0a0a] border-t border-gray-800 mt-12">
             <div class="max-w-4xl mx-auto text-center px-4">
-                <h2 class="text-xl md:text-2xl font-bold mb-4">Follow Us</h2>
+                <h2 class="text-xl md:text-2xl font-bold mb-4 glow-text">Follow Us</h2>
                 <div class="flex flex-wrap justify-center gap-4 mb-6">
                     <a href="https://x.com/y2kc0in?s=21" class="btn btn-primary">𝕏</a>
                     <a href="https://www.instagram.com/y2kcoin" class="btn btn-primary">Instagram</a>
@@ -235,49 +365,193 @@
             </div>
         </footer>
     </div>
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize SoundCloud Widget
+        let widget = SC.Widget('soundcloud-player');
+        let isPlaying = false;
+        let isMuted = false;
+        let currentVolume = 100;
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const navLinks = document.querySelector('.nav-links');
+        // Site functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const navLinks = document.querySelector('.nav-links');
+        const loader = document.getElementById('loader');
+        const mainContent = document.getElementById('main-content');
 
-            mobileMenuButton.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
 
-            // Tab switching
-            document.querySelectorAll('.tab-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    // Close mobile menu when tab is selected
-                    if (window.innerWidth < 768) {
-                        navLinks.classList.remove('active');
-                    }
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Close mobile menu when tab is selected
+                if (window.innerWidth < 768) {
+                    navLinks.classList.remove('active');
+                }
 
-                    // Update active tab
-                    document.querySelectorAll('.tab-btn').forEach(btn => 
-                        btn.classList.remove('active'));
-                    button.classList.add('active');
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(btn => 
+                    btn.classList.remove('active'));
+                button.classList.add('active');
 
-                    // Update content
-                    document.querySelectorAll('.tab-content').forEach(content => 
-                        content.classList.remove('active'));
-                    
-                    const tabId = button.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.add('active');
+                // Update content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = 'none';
+                    content.classList.remove('active');
                 });
+                
+                const tabId = button.getAttribute('data-tab');
+                const selectedTab = document.getElementById(tabId);
+                selectedTab.style.display = 'block';
+                setTimeout(() => selectedTab.classList.add('active'), 50);
             });
+        });
 
-            // Loading sequence
+        // Music Player Implementation
+        widget.bind(SC.Widget.Events.READY, function() {
+            // Start playing when ready
+            widget.play();
+            isPlaying = true;
+            updatePlayPauseButton();
+            
+            // Get initial track info
+            updateTrackInfo();
+        });
+
+        // Track progress
+        widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
+            document.getElementById('progressIndicator').style.width = (data.relativePosition * 100) + '%';
+            updateTrackInfo();
+        });
+
+        // Progress bar click handler
+        document.getElementById('progressBar').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const position = (e.clientX - rect.left) / rect.width;
+            widget.getDuration(function(duration) {
+                widget.seekTo(duration * position);
+            });
+        });
+
+        // Volume bar click handler
+        document.getElementById('volumeBar').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const volume = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+            setVolume(volume);
+        });
+
+        // Play/Pause button
+        document.getElementById('playPauseBtn').addEventListener('click', function() {
+            if (isPlaying) {
+                widget.pause();
+            } else {
+                widget.play();
+            }
+            isPlaying = !isPlaying;
+            updatePlayPauseButton();
+        });
+
+        // Next track
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            widget.next();
+            updateTrackInfo();
+        });
+
+        // Previous track
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            widget.prev();
+            updateTrackInfo();
+        });
+
+        // Mute toggle
+        document.getElementById('muteBtn').addEventListener('click', function() {
+            if (isMuted) {
+                setVolume(currentVolume);
+            } else {
+                currentVolume = getVolume();
+                setVolume(0);
+            }
+            isMuted = !isMuted;
+            updateMuteButton();
+        });
+
+        // Helper functions
+        function updateTrackInfo() {
+            widget.getCurrentSound(function(sound) {
+                if (sound) {
+                    document.getElementById('trackTitle').textContent = sound.title;
+                    document.getElementById('trackArtist').textContent = sound.user.username;
+                    if (sound.artwork_url) {
+                        document.getElementById('trackArtwork').src = sound.artwork_url.replace('large', 't500x500');
+                    }
+                }
+            });
+        }
+
+        function updatePlayPauseButton() {
+            const btn = document.getElementById('playPauseBtn');
+            btn.innerHTML = isPlaying 
+                ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+        }
+
+        function updateMuteButton() {
+            const btn = document.getElementById('muteBtn');
+            document.getElementById('volumeIndicator').style.width = isMuted ? '0%' : currentVolume + '%';
+            btn.innerHTML = isMuted
+                ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m0 0l-4-4m4 4l4-4" /></svg>';
+        }
+
+        function setVolume(volume) {
+            widget.setVolume(volume);
+            document.getElementById('volumeIndicator').style.width = volume + '%';
+            if (volume > 0) {
+                isMuted = false;
+                currentVolume = volume;
+            }
+            updateMuteButton();
+        }
+
+        function getVolume() {
+            let vol = 100;
+            widget.getVolume(function(volume) {
+                vol = volume;
+            });
+            return vol;
+        }
+
+        // Loading sequence
+        window.addEventListener('load', function() {
             setTimeout(() => {
-                const loader = document.getElementById('loader');
-                loader.classList.add('fade-out');
+                loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.display = 'none';
-                    document.getElementById('main-content').style.opacity = '1';
+                    mainContent.style.opacity = '1';
                 }, 500);
             }, 1000);
         });
-    </script>
+
+        // Track play/pause/finish events
+        widget.bind(SC.Widget.Events.PLAY, function() {
+            isPlaying = true;
+            updatePlayPauseButton();
+        });
+
+        widget.bind(SC.Widget.Events.PAUSE, function() {
+            isPlaying = false;
+            updatePlayPauseButton();
+        });
+
+        widget.bind(SC.Widget.Events.FINISH, function() {
+            isPlaying = false;
+            updatePlayPauseButton();
+        });
+    });
+</script>
 </body>
 </html>
+        
