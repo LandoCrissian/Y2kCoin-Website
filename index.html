@@ -261,8 +261,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Main Content -->
+        <!-- Main Content -->
     <div id="main-content" class="flex flex-col min-h-screen">
         <!-- Header -->
         <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 border-b border-gray-800">
@@ -362,10 +361,81 @@
 
                     <!-- Staking Tab -->
                     <div id="staking" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Staking</h2>
-                        <p class="mb-8">Stake your Y2K tokens to earn rewards.</p>
-                        <div class="info-card">
-                            <p class="text-gray-400">Coming Soon</p>
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Staking Platform</h2>
+                        <p class="mb-8 text-lg text-cyan-400">Earn passive rewards by staking your Y2K tokens</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="info-card">
+                                <h3 class="text-xl font-bold text-cyan-400 mb-3">Staking Benefits</h3>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Earn Daily Rewards
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Participate in Governance
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Access Premium Features
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="info-card">
+                                <h3 class="text-xl font-bold text-cyan-400 mb-3">How It Works</h3>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        Connect Your Wallet
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        Stake Your Y2K Tokens
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        Start Earning Rewards
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="info-card bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border-cyan-500/30">
+                            <div class="text-center">
+                                <h3 class="text-2xl font-bold text-cyan-400 mb-4">Ready to Start Staking?</h3>
+                                <p class="text-gray-300 mb-6">Join our staking platform and start earning rewards today</p>
+                                <a href="https://staking-y2kcoin.netlify.app/" 
+                                   class="btn btn-primary inline-flex items-center gap-2 text-lg px-8 py-4 transform hover:scale-105 transition-all duration-300">
+                                    Launch Staking Platform
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 text-center">
+                            <p class="text-sm text-gray-400">
+                                Note: Make sure you have Y2K tokens in your wallet before staking. 
+                                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
+                                   class="text-cyan-400 hover:text-cyan-300 underline">
+                                    Buy Y2K tokens here
+                                </a>
+                            </p>
                         </div>
                     </div>
 
@@ -446,7 +516,7 @@
                 updateTrackInfo();
             });
 
-            // Track progress with debouncing
+                        // Track progress with debouncing
             let progressUpdateTimeout;
             widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
                 clearTimeout(progressUpdateTimeout);
@@ -479,7 +549,7 @@
             // Next track
             document.getElementById('nextBtn').addEventListener('click', function() {
                 this.classList.add('scale-95');
-                                setTimeout(() => this.classList.remove('scale-95'), 200);
+                setTimeout(() => this.classList.remove('scale-95'), 200);
                 widget.next();
                 updateTrackInfo();
             });
@@ -550,5 +620,3 @@
     </script>
 </body>
 </html>
-                
-                
