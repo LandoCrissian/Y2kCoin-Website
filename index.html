@@ -9,7 +9,6 @@
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Your existing styles remain exactly the same */
         body {
             font-family: 'Orbitron', sans-serif;
             background-color: #0a0a0a;
@@ -48,7 +47,158 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Keep all your existing styles here */
+        .glow-text { 
+            text-shadow: 0px 0px 8px cyan; 
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary { 
+            background-color: #00e6e6; 
+            color: #0a0a0a; 
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
+        }
+
+        .btn-primary:hover { 
+            background-color: #009999; 
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.5);
+        }
+
+        .btn-secondary { 
+            background-color: #ff007f; 
+            color: #fff; 
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+        }
+
+        .btn-secondary:hover { 
+            background-color: #cc0066; 
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu-button {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 72px;
+                left: 0;
+                width: 100%;
+                background: #0a0a0a;
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                border-bottom: 1px solid #2d2d2d;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .tab-btn {
+                width: 100%;
+                padding: 0.75rem;
+                text-align: center;
+                border: 1px solid #2d2d2d;
+                border-radius: 0.5rem;
+                background: #1a1a1a;
+            }
+
+            .tab-btn.active {
+                background: #00e6e6;
+                color: #0a0a0a;
+            }
+        }
+
+        /* Progress Bar Styles */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(45, 45, 45, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar:hover .progress-hover-effect {
+            opacity: 0.2;
+        }
+
+        .progress-indicator {
+            height: 100%;
+            background: #00e6e6;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+
+        .progress-hover-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .shadow-glow {
+            box-shadow: 0 0 15px rgba(0, 230, 230, 0.3);
+        }
+
+        /* Tab Content Styles */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Info Card Styles */
+        .info-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid #2d2d2d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            border-color: #00e6e6;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+
+        @media (max-width: 640px) {
+            .progress-bar {
+                height: 3px;
+            }
+            
+            body {
+                padding-bottom: 80px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -70,10 +220,48 @@
 
     <!-- Music Player -->
     <div id="music-player" class="fixed bottom-0 left-0 w-full bg-black bg-opacity-95 backdrop-blur-md border-t border-cyan-500 z-50">
-        <!-- Your existing music player code remains exactly the same -->
-    </div>
+        <div class="max-w-7xl mx-auto px-4">
+            <!-- Progress Bar -->
+            <div class="progress-bar group cursor-pointer" id="progressBar">
+                <div class="progress-indicator" id="progressIndicator"></div>
+                <div class="progress-hover-effect"></div>
+            </div>
+            
+            <div class="flex items-center justify-between py-3">
+                <!-- Track Info -->
+                <div class="flex items-center gap-4 flex-1 min-w-0">
+                    <img id="trackArtwork" 
+                         src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
+                         class="w-12 h-12 rounded-lg object-cover shadow-glow"
+                         alt="Track artwork">
+                    <div class="min-w-0">
+                        <p id="trackTitle" class="font-bold text-white truncate text-sm md:text-base">Loading...</p>
+                        <p id="trackArtist" class="text-cyan-400 text-xs truncate mt-0.5">Y2K Music</p>
+                    </div>
+                </div>
 
-    <!-- Main Content -->
+                <!-- Player Controls -->
+                <div class="flex items-center gap-4 md:gap-6">
+                    <button id="prevBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button id="playPauseBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        </svg>
+                    </button>
+                    <button id="nextBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Main Content -->
     <div id="main-content" class="flex flex-col min-h-screen">
         <!-- Header -->
         <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 border-b border-gray-800">
@@ -98,12 +286,12 @@
                         <li><button class="tab-btn" data-tab="nfts">NFTs</button></li>
                         <li><button class="tab-btn" data-tab="staking">Staking</button></li>
                         <li><button class="tab-btn" data-tab="gaming">Gaming</button></li>
-                        <li><button class="tab-btn" data-tab="aiwar">AI War</button></li>
                     </ul>
                 </div>
             </nav>
         </header>
-                <!-- Main Content -->
+
+        <!-- Main Content -->
         <main class="flex-grow pt-24 px-4">
             <section class="max-w-4xl mx-auto text-center">
                 <h1 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Welcome to Y2KCoin</h1>
@@ -138,42 +326,101 @@
                         </div>
                     </div>
 
-                    <!-- Keep all your existing tabs (Mission, Marketplace, NFTs, Staking, Gaming) exactly as they are -->
+                    <!-- Mission Tab -->
+                    <div id="mission" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Our Mission</h2>
+                        <p class="mb-8">Building a sustainable digital ecosystem for the future.</p>
+                        <div class="info-card">
+                            <h3 class="text-xl font-bold text-cyan-400">Core Values</h3>
+                            <ul class="mt-4 space-y-2 text-gray-400">
+                                <li>Community First</li>
+                                <li>Sustainable Growth</li>
+                                <li>Innovation & Development</li>
+                                <li>Transparency & Trust</li>
+                            </ul>
+                        </div>
+                    </div>
 
-                    <!-- New AI War Tab -->
-                    <div id="aiwar" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI Blockchain War</h2>
-                        <p class="mb-8 text-lg text-cyan-400">The Future of Blockchain Warfare</p>
+                    <!-- Marketplace Tab -->
+                    <div id="marketplace" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Marketplace</h2>
+                        <p class="mb-8">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
+                        <div class="info-card">
+                            <p class="text-gray-400">Coming Soon</p>
+                        </div>
+                    </div>
+
+                    <!-- NFTs Tab -->
+                    <div id="nfts" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K NFTs</h2>
+                        <p class="mb-8">Limited edition, community-driven digital collectibles with real utility.</p>
+                        <div class="info-card">
+                            <p class="text-gray-400">Coming Soon</p>
+                        </div>
+                    </div>
+
+                    <!-- Staking Tab -->
+                    <div id="staking" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Staking Platform</h2>
+                        <p class="mb-8 text-lg text-cyan-400">Earn passive rewards by staking your Y2K tokens</p>
                         
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="info-card">
+                                <h3 class="text-xl font-bold text-cyan-400 mb-3">Staking Benefits</h3>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Earn Daily Rewards
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Participate in Governance
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Access Premium Features
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="info-card">
+                                <h3 class="text-xl font-bold text-cyan-400 mb-3">How It Works</h3>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        Connect Your Wallet
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        Stake Your Y2K Tokens
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        Start Earning Rewards
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div class="info-card bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border-cyan-500/30">
                             <div class="text-center">
-                                <h3 class="text-xl font-bold text-cyan-400 mb-4">Welcome to the Revolution</h3>
-                                <p class="text-gray-300 mb-6">
-                                    Enter a new era of blockchain warfare where AI-powered NeoBots fight for dominance. Choose your faction wisely - your decision will shape the future of this digital battlefield.
-                                </p>
-                                <div class="grid md:grid-cols-2 gap-6 mb-8">
-                                    <div class="text-left">
-                                        <h4 class="text-lg font-bold text-cyan-400 mb-3">Features</h4>
-                                        <ul class="space-y-2 text-gray-300">
-                                            <li>• Choose between CRO, SOL, ETH, or BNB factions</li>
-                                            <li>• Train AI-powered NeoBots</li>
-                                            <li>• Engage in strategic battles</li>
-                                            <li>• Compete for territory control</li>
-                                        </ul>
-                                    </div>
-                                    <div class="text-left">
-                                        <h4 class="text-lg font-bold text-cyan-400 mb-3">Coming Soon</h4>
-                                        <ul class="space-y-2 text-gray-300">
-                                            <li>• Dynamic faction wars</li>
-                                            <li>• NeoBot evolution system</li>
-                                            <li>• Territory raids</li>
-                                            <li>• Faction rewards</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <a href="https://y2k-ai-blockchain-war.netlify.app/" 
+                                <h3 class="text-2xl font-bold text-cyan-400 mb-4">Ready to Start Staking?</h3>
+                                <p class="text-gray-300 mb-6">Join our staking platform and start earning rewards today</p>
+                                <a href="https://staking-y2kcoin.netlify.app/" 
                                    class="btn btn-primary inline-flex items-center gap-2 text-lg px-8 py-4 transform hover:scale-105 transition-all duration-300">
-                                    Choose Your Faction
+                                    Launch Staking Platform
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                                     </svg>
@@ -183,14 +430,28 @@
 
                         <div class="mt-8 text-center">
                             <p class="text-sm text-gray-400">
-                                Note: Faction selection is permanent. Choose wisely and prepare for battle.
+                                Note: Make sure you have Y2K tokens in your wallet before staking. 
+                                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
+                                   class="text-cyan-400 hover:text-cyan-300 underline">
+                                    Buy Y2K tokens here
+                                </a>
                             </p>
+                        </div>
+                    </div>
+
+                    <!-- Gaming Tab -->
+                    <div id="gaming" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Gaming</h2>
+                        <p class="mb-8">An immersive gaming experience that rewards players through blockchain mechanics.</p>
+                        <div class="info-card">
+                            <p class="text-gray-400">Coming Soon</p>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
-                <!-- Footer -->
+
+        <!-- Footer -->
         <footer class="w-full py-6 bg-[#0a0a0a] border-t border-gray-800 mt-12">
             <div class="max-w-4xl mx-auto text-center px-4">
                 <h2 class="text-xl md:text-2xl font-bold mb-4 glow-text">Follow Us</h2>
@@ -205,154 +466,157 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Site functionality
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const navLinks = document.querySelector('.nav-links');
-        const loader = document.getElementById('loader');
-        const mainContent = document.getElementById('main-content');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize SoundCloud Widget
+            let widget = SC.Widget('soundcloud-player');
+            let isPlaying = false;
 
-        // Initialize SoundCloud Widget
-        let widget = SC.Widget('soundcloud-player');
-        let isPlaying = false;
+            // Site functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const navLinks = document.querySelector('.nav-links');
+            const loader = document.getElementById('loader');
+            const mainContent = document.getElementById('main-content');
 
-        // Hide loader immediately
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.style.display = 'none';
-            mainContent.style.opacity = '1';
-        }, 500);
-
-        // Mobile menu toggle
-        mobileMenuButton.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Tab switching
-        document.querySelectorAll('.tab-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                // Close mobile menu when tab is selected
-                if (window.innerWidth < 768) {
-                    navLinks.classList.remove('active');
-                }
-
-                // Update active tab
-                document.querySelectorAll('.tab-btn').forEach(btn => 
-                    btn.classList.remove('active'));
-                button.classList.add('active');
-
-                // Update content
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.style.display = 'none';
-                    content.classList.remove('active');
-                });
-                
-                const tabId = button.getAttribute('data-tab');
-                const selectedTab = document.getElementById(tabId);
-                selectedTab.style.display = 'block';
-                setTimeout(() => selectedTab.classList.add('active'), 50);
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
             });
-        });
 
-        // Music Player Implementation
-        widget.bind(SC.Widget.Events.READY, function() {
-            widget.play();
-            isPlaying = true;
-            updatePlayPauseButton();
-            updateTrackInfo();
-        });
-
-        // Track progress with debouncing
-        let progressUpdateTimeout;
-        widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
-            clearTimeout(progressUpdateTimeout);
-            progressUpdateTimeout = setTimeout(() => {
-                document.getElementById('progressIndicator').style.width = (data.relativePosition * 100) + '%';
-                updateTrackInfo();
-            }, 50);
-        });
-
-        // Progress bar interaction
-        document.getElementById('progressBar').addEventListener('click', function(e) {
-            const rect = this.getBoundingClientRect();
-            const position = (e.clientX - rect.left) / rect.width;
-            widget.getDuration(function(duration) {
-                widget.seekTo(duration * position);
-            });
-        });
-
-        // Play/Pause
-        document.getElementById('playPauseBtn').addEventListener('click', function() {
-            if (isPlaying) {
-                widget.pause();
-            } else {
-                widget.play();
-            }
-            isPlaying = !isPlaying;
-            updatePlayPauseButton();
-        });
-
-        // Next track
-        document.getElementById('nextBtn').addEventListener('click', function() {
-            this.classList.add('scale-95');
-            setTimeout(() => this.classList.remove('scale-95'), 200);
-            widget.next();
-            updateTrackInfo();
-        });
-
-        // Previous track
-        document.getElementById('prevBtn').addEventListener('click', function() {
-            this.classList.add('scale-95');
-            setTimeout(() => this.classList.remove('scale-95'), 200);
-            widget.prev();
-            updateTrackInfo();
-        });
-
-        // Enhanced track info update
-        function updateTrackInfo() {
-            widget.getCurrentSound(function(sound) {
-                if (sound) {
-                    const titleElement = document.getElementById('trackTitle');
-                    const artistElement = document.getElementById('trackArtist');
-                    const artworkElement = document.getElementById('trackArtwork');
-
-                    titleElement.textContent = sound.title;
-                    artistElement.textContent = sound.user.username;
-                    
-                    if (sound.artwork_url) {
-                        artworkElement.src = sound.artwork_url.replace('large', 't500x500');
-                        artworkElement.classList.add('opacity-100');
-                    } else {
-                        artworkElement.classList.add('opacity-70');
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Close mobile menu when tab is selected
+                    if (window.innerWidth < 768) {
+                        navLinks.classList.remove('active');
                     }
-                }
+
+                    // Update active tab
+                    document.querySelectorAll('.tab-btn').forEach(btn => 
+                        btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    // Update content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.style.display = 'none';
+                        content.classList.remove('active');
+                    });
+                    
+                    const tabId = button.getAttribute('data-tab');
+                    const selectedTab = document.getElementById(tabId);
+                    selectedTab.style.display = 'block';
+                    setTimeout(() => selectedTab.classList.add('active'), 50);
+                });
             });
-        }
 
-        function updatePlayPauseButton() {
-            const btn = document.getElementById('playPauseBtn');
-            btn.innerHTML = isPlaying 
-                ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
-                : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
-        }
+            // Music Player Implementation
+            widget.bind(SC.Widget.Events.READY, function() {
+                widget.play();
+                isPlaying = true;
+                updatePlayPauseButton();
+                updateTrackInfo();
+            });
 
-        // Track play/pause/finish events
-        widget.bind(SC.Widget.Events.PLAY, function() {
-            isPlaying = true;
-            updatePlayPauseButton();
+                        // Track progress with debouncing
+            let progressUpdateTimeout;
+            widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
+                clearTimeout(progressUpdateTimeout);
+                progressUpdateTimeout = setTimeout(() => {
+                    document.getElementById('progressIndicator').style.width = (data.relativePosition * 100) + '%';
+                    updateTrackInfo();
+                }, 50);
+            });
+
+            // Progress bar interaction
+            document.getElementById('progressBar').addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const position = (e.clientX - rect.left) / rect.width;
+                widget.getDuration(function(duration) {
+                    widget.seekTo(duration * position);
+                });
+            });
+
+            // Play/Pause
+            document.getElementById('playPauseBtn').addEventListener('click', function() {
+                if (isPlaying) {
+                    widget.pause();
+                } else {
+                    widget.play();
+                }
+                isPlaying = !isPlaying;
+                updatePlayPauseButton();
+            });
+
+            // Next track
+            document.getElementById('nextBtn').addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 200);
+                widget.next();
+                updateTrackInfo();
+            });
+
+            // Previous track
+            document.getElementById('prevBtn').addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 200);
+                widget.prev();
+                updateTrackInfo();
+            });
+
+            // Enhanced track info update
+            function updateTrackInfo() {
+                widget.getCurrentSound(function(sound) {
+                    if (sound) {
+                        const titleElement = document.getElementById('trackTitle');
+                        const artistElement = document.getElementById('trackArtist');
+                        const artworkElement = document.getElementById('trackArtwork');
+
+                        titleElement.textContent = sound.title;
+                        artistElement.textContent = sound.user.username;
+                        
+                        if (sound.artwork_url) {
+                            artworkElement.src = sound.artwork_url.replace('large', 't500x500');
+                            artworkElement.classList.add('opacity-100');
+                        } else {
+                            artworkElement.classList.add('opacity-70');
+                        }
+                    }
+                });
+            }
+
+            function updatePlayPauseButton() {
+                const btn = document.getElementById('playPauseBtn');
+                btn.innerHTML = isPlaying 
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+            }
+
+            // Loading sequence
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        mainContent.style.opacity = '1';
+                    }, 500);
+                }, 1000);
+            });
+
+            // Track play/pause/finish events
+            widget.bind(SC.Widget.Events.PLAY, function() {
+                isPlaying = true;
+                updatePlayPauseButton();
+            });
+
+            widget.bind(SC.Widget.Events.PAUSE, function() {
+                isPlaying = false;
+                updatePlayPauseButton();
+            });
+
+            widget.bind(SC.Widget.Events.FINISH, function() {
+                isPlaying = false;
+                updatePlayPauseButton();
+            });
         });
-
-        widget.bind(SC.Widget.Events.PAUSE, function() {
-            isPlaying = false;
-            updatePlayPauseButton();
-        });
-
-        widget.bind(SC.Widget.Events.FINISH, function() {
-            isPlaying = false;
-            updatePlayPauseButton();
-        });
-    });
-</script>
+    </script>
 </body>
 </html>
-        
