@@ -9,38 +9,46 @@
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Your existing styles remain the same */
-        /* Adding new AI War specific styles */
-        .faction-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
+        /* Your existing styles remain exactly the same */
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 85px;
+            min-height: 100vh;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #00e6e6;
+            border-top: 5px solid transparent;
             border-radius: 50%;
-            margin-right: 8px;
+            animation: spin 1s linear infinite;
         }
 
-        #aiwar .info-card {
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 230, 230, 0.1);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        #aiwar .info-card:hover {
-            transform: translateY(-5px);
-            border-color: #00e6e6;
-            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
-        }
-
-        @media (max-width: 768px) {
-            #aiwar .info-card {
-                padding: 1rem;
-            }
-            
-            #aiwar .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-        /* Rest of your existing styles remain the same */
+        /* Keep all your existing styles here */
     </style>
 </head>
 <body>
@@ -62,7 +70,7 @@
 
     <!-- Music Player -->
     <div id="music-player" class="fixed bottom-0 left-0 w-full bg-black bg-opacity-95 backdrop-blur-md border-t border-cyan-500 z-50">
-        <!-- Your existing music player code remains the same -->
+        <!-- Your existing music player code remains exactly the same -->
     </div>
 
     <!-- Main Content -->
@@ -130,68 +138,42 @@
                         </div>
                     </div>
 
-                    <!-- [Previous tabs remain the same: Mission, Marketplace, NFTs, Staking, Gaming] -->
+                    <!-- Keep all your existing tabs (Mission, Marketplace, NFTs, Staking, Gaming) exactly as they are -->
 
                     <!-- New AI War Tab -->
                     <div id="aiwar" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI Blockchain War</h2>
-                        <p class="mb-8 text-lg text-cyan-400">Choose your faction and join the revolution</p>
+                        <p class="mb-8 text-lg text-cyan-400">The Future of Blockchain Warfare</p>
                         
-                        <div class="grid md:grid-cols-2 gap-6 mb-8">
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400 mb-3">What is AI War?</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        AI-Powered Blockchain Warfare
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Train NeoBots for Battle
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Compete for Territory
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400 mb-3">Available Factions</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-center">
-                                        <span class="w-2 h-2 rounded-full bg-[#008cff] mr-2"></span>
-                                        CRO - Masters of Commerce
-                                    </li>
-                                    <li class="flex items-center">
-                                        <span class="w-2 h-2 rounded-full bg-[#9933ff] mr-2"></span>
-                                        SOL - Digital Warriors
-                                    </li>
-                                    <li class="flex items-center">
-                                        <span class="w-2 h-2 rounded-full bg-[#3c3c3d] mr-2"></span>
-                                        ETH - Blockchain Pioneers
-                                    </li>
-                                    <li class="flex items-center">
-                                        <span class="w-2 h-2 rounded-full bg-[#f3ba2f] mr-2"></span>
-                                        BNB - Economic Powerhouse
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
                         <div class="info-card bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border-cyan-500/30">
                             <div class="text-center">
-                                <h3 class="text-2xl font-bold text-cyan-400 mb-4">Ready to Choose Your Faction?</h3>
-                                <p class="text-gray-300 mb-6">Join the AI Blockchain War and shape the future of Web3</p>
+                                <h3 class="text-xl font-bold text-cyan-400 mb-4">Welcome to the Revolution</h3>
+                                <p class="text-gray-300 mb-6">
+                                    Enter a new era of blockchain warfare where AI-powered NeoBots fight for dominance. Choose your faction wisely - your decision will shape the future of this digital battlefield.
+                                </p>
+                                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                                    <div class="text-left">
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-3">Features</h4>
+                                        <ul class="space-y-2 text-gray-300">
+                                            <li>• Choose between CRO, SOL, ETH, or BNB factions</li>
+                                            <li>• Train AI-powered NeoBots</li>
+                                            <li>• Engage in strategic battles</li>
+                                            <li>• Compete for territory control</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-left">
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-3">Coming Soon</h4>
+                                        <ul class="space-y-2 text-gray-300">
+                                            <li>• Dynamic faction wars</li>
+                                            <li>• NeoBot evolution system</li>
+                                            <li>• Territory raids</li>
+                                            <li>• Faction rewards</li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <a href="https://y2k-ai-blockchain-war.netlify.app/" 
                                    class="btn btn-primary inline-flex items-center gap-2 text-lg px-8 py-4 transform hover:scale-105 transition-all duration-300">
-                                    Enter the Battlefield
+                                    Choose Your Faction
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                                     </svg>
@@ -201,7 +183,7 @@
 
                         <div class="mt-8 text-center">
                             <p class="text-sm text-gray-400">
-                                Note: Faction selection is permanent. Choose wisely.
+                                Note: Faction selection is permanent. Choose wisely and prepare for battle.
                             </p>
                         </div>
                     </div>
