@@ -205,158 +205,154 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize SoundCloud Widget
-            let widget = SC.Widget('soundcloud-player');
-            let isPlaying = false;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Site functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const navLinks = document.querySelector('.nav-links');
+        const loader = document.getElementById('loader');
+        const mainContent = document.getElementById('main-content');
 
-            // Site functionality
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const navLinks = document.querySelector('.nav-links');
-            const loader = document.getElementById('loader');
-            const mainContent = document.getElementById('main-content');
+        // Initialize SoundCloud Widget
+        let widget = SC.Widget('soundcloud-player');
+        let isPlaying = false;
 
-            // Mobile menu toggle
-            mobileMenuButton.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
+        // Hide loader immediately
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+            mainContent.style.opacity = '1';
+        }, 500);
 
-            // Tab switching
-            document.querySelectorAll('.tab-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    // Close mobile menu when tab is selected
-                    if (window.innerWidth < 768) {
-                        navLinks.classList.remove('active');
-                    }
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
 
-                    // Update active tab
-                    document.querySelectorAll('.tab-btn').forEach(btn => 
-                        btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    // Update content
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.style.display = 'none';
-                        content.classList.remove('active');
-                    });
-                    
-                    const tabId = button.getAttribute('data-tab');
-                    const selectedTab = document.getElementById(tabId);
-                    selectedTab.style.display = 'block';
-                    setTimeout(() => selectedTab.classList.add('active'), 50);
-                });
-            });
-
-            // Music Player Implementation
-            widget.bind(SC.Widget.Events.READY, function() {
-                widget.play();
-                isPlaying = true;
-                updatePlayPauseButton();
-                updateTrackInfo();
-            });
-
-            // Track progress with debouncing
-            let progressUpdateTimeout;
-            widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
-                clearTimeout(progressUpdateTimeout);
-                progressUpdateTimeout = setTimeout(() => {
-                    document.getElementById('progressIndicator').style.width = (data.relativePosition * 100) + '%';
-                    updateTrackInfo();
-                }, 50);
-            });
-
-            // Progress bar interaction
-            document.getElementById('progressBar').addEventListener('click', function(e) {
-                const rect = this.getBoundingClientRect();
-                const position = (e.clientX - rect.left) / rect.width;
-                widget.getDuration(function(duration) {
-                    widget.seekTo(duration * position);
-                });
-            });
-
-            // Play/Pause
-            document.getElementById('playPauseBtn').addEventListener('click', function() {
-                if (isPlaying) {
-                    widget.pause();
-                } else {
-                    widget.play();
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Close mobile menu when tab is selected
+                if (window.innerWidth < 768) {
+                    navLinks.classList.remove('active');
                 }
-                isPlaying = !isPlaying;
-                updatePlayPauseButton();
-            });
 
-            // Next track
-            document.getElementById('nextBtn').addEventListener('click', function() {
-                this.classList.add('scale-95');
-                setTimeout(() => this.classList.remove('scale-95'), 200);
-                widget.next();
-                updateTrackInfo();
-            });
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(btn => 
+                    btn.classList.remove('active'));
+                button.classList.add('active');
 
-            // Previous track
-            document.getElementById('prevBtn').addEventListener('click', function() {
-                this.classList.add('scale-95');
-                setTimeout(() => this.classList.remove('scale-95'), 200);
-                widget.prev();
-                updateTrackInfo();
-            });
-
-            // Enhanced track info update
-            function updateTrackInfo() {
-                widget.getCurrentSound(function(sound) {
-                    if (sound) {
-                        const titleElement = document.getElementById('trackTitle');
-                        const artistElement = document.getElementById('trackArtist');
-                        const artworkElement = document.getElementById('trackArtwork');
-
-                        titleElement.textContent = sound.title;
-                        artistElement.textContent = sound.user.username;
-                        
-                        if (sound.artwork_url) {
-                            artworkElement.src = sound.artwork_url.replace('large', 't500x500');
-                            artworkElement.classList.add('opacity-100');
-                        } else {
-                            artworkElement.classList.add('opacity-70');
-                        }
-                    }
+                // Update content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = 'none';
+                    content.classList.remove('active');
                 });
-            }
-
-            function updatePlayPauseButton() {
-                const btn = document.getElementById('playPauseBtn');
-                btn.innerHTML = isPlaying 
-                    ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
-                    : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
-            }
-
-            // Loading sequence
-            window.addEventListener('load', function() {
-                setTimeout(() => {
-                    loader.style.opacity = '0';
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                        mainContent.style.opacity = '1';
-                    }, 500);
-                }, 1000);
-            });
-
-            // Track play/pause/finish events
-            widget.bind(SC.Widget.Events.PLAY, function() {
-                isPlaying = true;
-                updatePlayPauseButton();
-            });
-
-            widget.bind(SC.Widget.Events.PAUSE, function() {
-                isPlaying = false;
-                updatePlayPauseButton();
-            });
-
-            widget.bind(SC.Widget.Events.FINISH, function() {
-                isPlaying = false;
-                updatePlayPauseButton();
+                
+                const tabId = button.getAttribute('data-tab');
+                const selectedTab = document.getElementById(tabId);
+                selectedTab.style.display = 'block';
+                setTimeout(() => selectedTab.classList.add('active'), 50);
             });
         });
-    </script>
+
+        // Music Player Implementation
+        widget.bind(SC.Widget.Events.READY, function() {
+            widget.play();
+            isPlaying = true;
+            updatePlayPauseButton();
+            updateTrackInfo();
+        });
+
+        // Track progress with debouncing
+        let progressUpdateTimeout;
+        widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
+            clearTimeout(progressUpdateTimeout);
+            progressUpdateTimeout = setTimeout(() => {
+                document.getElementById('progressIndicator').style.width = (data.relativePosition * 100) + '%';
+                updateTrackInfo();
+            }, 50);
+        });
+
+        // Progress bar interaction
+        document.getElementById('progressBar').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const position = (e.clientX - rect.left) / rect.width;
+            widget.getDuration(function(duration) {
+                widget.seekTo(duration * position);
+            });
+        });
+
+        // Play/Pause
+        document.getElementById('playPauseBtn').addEventListener('click', function() {
+            if (isPlaying) {
+                widget.pause();
+            } else {
+                widget.play();
+            }
+            isPlaying = !isPlaying;
+            updatePlayPauseButton();
+        });
+
+        // Next track
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            this.classList.add('scale-95');
+            setTimeout(() => this.classList.remove('scale-95'), 200);
+            widget.next();
+            updateTrackInfo();
+        });
+
+        // Previous track
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            this.classList.add('scale-95');
+            setTimeout(() => this.classList.remove('scale-95'), 200);
+            widget.prev();
+            updateTrackInfo();
+        });
+
+        // Enhanced track info update
+        function updateTrackInfo() {
+            widget.getCurrentSound(function(sound) {
+                if (sound) {
+                    const titleElement = document.getElementById('trackTitle');
+                    const artistElement = document.getElementById('trackArtist');
+                    const artworkElement = document.getElementById('trackArtwork');
+
+                    titleElement.textContent = sound.title;
+                    artistElement.textContent = sound.user.username;
+                    
+                    if (sound.artwork_url) {
+                        artworkElement.src = sound.artwork_url.replace('large', 't500x500');
+                        artworkElement.classList.add('opacity-100');
+                    } else {
+                        artworkElement.classList.add('opacity-70');
+                    }
+                }
+            });
+        }
+
+        function updatePlayPauseButton() {
+            const btn = document.getElementById('playPauseBtn');
+            btn.innerHTML = isPlaying 
+                ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+        }
+
+        // Track play/pause/finish events
+        widget.bind(SC.Widget.Events.PLAY, function() {
+            isPlaying = true;
+            updatePlayPauseButton();
+        });
+
+        widget.bind(SC.Widget.Events.PAUSE, function() {
+            isPlaying = false;
+            updatePlayPauseButton();
+        });
+
+        widget.bind(SC.Widget.Events.FINISH, function() {
+            isPlaying = false;
+            updatePlayPauseButton();
+        });
+    });
+</script>
 </body>
 </html>
         
