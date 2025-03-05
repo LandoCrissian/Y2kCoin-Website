@@ -8,7 +8,198 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 85px;
+            min-height: 100vh;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #00e6e6;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .glow-text { 
+            text-shadow: 0px 0px 8px cyan; 
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary { 
+            background-color: #00e6e6; 
+            color: #0a0a0a; 
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
+        }
+
+        .btn-primary:hover { 
+            background-color: #009999; 
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.5);
+        }
+
+        .btn-secondary { 
+            background-color: #ff007f; 
+            color: #fff; 
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+        }
+
+        .btn-secondary:hover { 
+            background-color: #cc0066; 
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu-button {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 72px;
+                left: 0;
+                width: 100%;
+                background: #0a0a0a;
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                border-bottom: 1px solid #2d2d2d;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .tab-btn {
+                width: 100%;
+                padding: 0.75rem;
+                text-align: center;
+                border: 1px solid #2d2d2d;
+                border-radius: 0.5rem;
+                background: #1a1a1a;
+            }
+
+            .tab-btn.active {
+                background: #00e6e6;
+                color: #0a0a0a;
+            }
+        }
+
+        /* Progress Bar Styles */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(45, 45, 45, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar:hover .progress-hover-effect {
+            opacity: 0.2;
+        }
+
+        .progress-indicator {
+            height: 100%;
+            background: #00e6e6;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+
+        .progress-hover-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .shadow-glow {
+            box-shadow: 0 0 15px rgba(0, 230, 230, 0.3);
+        }
+
+        /* Tab Content Styles */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Info Card Styles */
+        .info-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid #2d2d2d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            border-color: #00e6e6;
+            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
+        }
+
+        @media (max-width: 640px) {
+            .progress-bar {
+                height: 3px;
+            }
+            
+            body {
+                padding-bottom: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Loader -->
@@ -26,7 +217,8 @@
             src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1974700072&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
             style="display: none;">
     </iframe>
-        <!-- Music Player -->
+
+    <!-- Music Player -->
     <div id="music-player" class="fixed bottom-0 left-0 w-full bg-black bg-opacity-95 backdrop-blur-md border-t border-cyan-500 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <!-- Progress Bar -->
@@ -94,12 +286,12 @@
                         <li><button class="tab-btn" data-tab="nfts">NFTs</button></li>
                         <li><button class="tab-btn" data-tab="staking">Staking</button></li>
                         <li><button class="tab-btn" data-tab="gaming">Gaming</button></li>
-                        <li><button class="tab-btn" data-tab="aiwarportal">AI War Portal</button></li>
                     </ul>
                 </div>
             </nav>
         </header>
-                <!-- Main Content -->
+
+        <!-- Main Content -->
         <main class="flex-grow pt-24 px-4">
             <section class="max-w-4xl mx-auto text-center">
                 <h1 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Welcome to Y2KCoin</h1>
@@ -118,7 +310,7 @@
 
                 <!-- Tab Content -->
                 <div id="tab-content">
-                                        <!-- About Tab -->
+                    <!-- About Tab -->
                     <div id="about" class="tab-content active">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">About Y2KCoin</h2>
                         <p class="mb-8">Y2KCoin merges nostalgia with Web3 innovation.</p>
@@ -166,7 +358,8 @@
                             <p class="text-gray-400">Coming Soon</p>
                         </div>
                     </div>
-                                        <!-- Staking Tab -->
+
+                    <!-- Staking Tab -->
                     <div id="staking" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Staking Platform</h2>
                         <p class="mb-8 text-lg text-cyan-400">Earn passive rewards by staking your Y2K tokens</p>
@@ -254,85 +447,11 @@
                             <p class="text-gray-400">Coming Soon</p>
                         </div>
                     </div>
-
-                    <!-- AI War Portal Tab -->
-                    <div id="aiwarportal" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI War Portal</h2>
-                        <p class="mb-8 text-cyan-400">Enter the AI-driven Blockchain War DApp</p>
-
-                        <div class="grid md:grid-cols-2 gap-6 mb-8">
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400 mb-3">Getting Started</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Choose your faction
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Mint your NeoBot
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Train & Battle
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400 mb-3">Requirements</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Y2K Token Holdings
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        POGS Payment for Minting
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="info-card bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border-cyan-500/30">
-                            <div class="text-center">
-                                <h3 class="text-2xl font-bold text-cyan-400 mb-4">Ready to Join the War?</h3>
-                                <p class="text-gray-300 mb-6">Enter the AI War Portal and begin your journey</p>
-                                <a href="https://y2k-ai-blockchain-war.netlify.app/" 
-                                   target="_blank"
-                                   class="btn btn-primary inline-flex items-center gap-2 text-lg px-8 py-4 transform hover:scale-105 transition-all duration-300">
-                                    Launch AI War Portal
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 text-center">
-                            <p class="text-sm text-gray-400">
-                                Note: Make sure you have Y2K tokens and POGS before entering the war portal. 
-                                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
-                                   class="text-cyan-400 hover:text-cyan-300 underline">
-                                    Get Y2K tokens here
-                                </a>
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>
-                <!-- Footer -->
+
+        <!-- Footer -->
         <footer class="w-full py-6 bg-[#0a0a0a] border-t border-gray-800 mt-12">
             <div class="max-w-4xl mx-auto text-center px-4">
                 <h2 class="text-xl md:text-2xl font-bold mb-4 glow-text">Follow Us</h2>
@@ -345,7 +464,8 @@
             </div>
         </footer>
     </div>
-        <script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize SoundCloud Widget
             let widget = SC.Widget('soundcloud-player');
@@ -396,7 +516,7 @@
                 updateTrackInfo();
             });
 
-            // Track progress with debouncing
+                        // Track progress with debouncing
             let progressUpdateTimeout;
             widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
                 clearTimeout(progressUpdateTimeout);
