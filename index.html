@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Y2KCoin - A Digital Revolution</title>
     <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        html {
+            background-color: #0a0a0a;
+        }
+        
         body {
             font-family: 'Orbitron', sans-serif;
             background-color: #0a0a0a;
@@ -49,6 +53,26 @@
 
         .glow-text { 
             text-shadow: 0px 0px 8px cyan; 
+        }
+
+        .hero-banner {
+            background-image: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5121.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 300px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,1) 100%);
         }
 
         .btn {
@@ -190,6 +214,21 @@
             box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
         }
 
+        .dex-card {
+            background: rgba(0, 230, 230, 0.1);
+            border: 1px solid #00e6e6;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dex-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.2);
+        }
+
         @media (max-width: 640px) {
             .progress-bar {
                 height: 3px;
@@ -197,6 +236,10 @@
             
             body {
                 padding-bottom: 80px;
+            }
+
+            .hero-banner {
+                height: 200px;
             }
         }
     </style>
@@ -231,7 +274,7 @@
                 <!-- Track Info -->
                 <div class="flex items-center gap-4 flex-1 min-w-0">
                     <img id="trackArtwork" 
-                         src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
+                         src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/ED5708B1-755C-4CD7-9EAD-C355353EC85A.png" 
                          class="w-12 h-12 rounded-lg object-cover shadow-glow"
                          alt="Track artwork">
                     <div class="min-w-0">
@@ -261,13 +304,14 @@
             </div>
         </div>
     </div>
-        <!-- Main Content -->
+
+    <!-- Main Content -->
     <div id="main-content" class="flex flex-col min-h-screen">
         <!-- Header -->
         <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 border-b border-gray-800">
             <nav class="max-w-5xl mx-auto px-4">
                 <div class="flex justify-between items-center">
-                    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/52A313DE-90B7-4BFF-A5FD-DDC368B31A0F.jpeg" 
+                    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/ED5708B1-755C-4CD7-9EAD-C355353EC85A.png" 
                          alt="Y2KCoin Logo" 
                          class="w-12 h-12 object-contain">
                     
@@ -294,7 +338,21 @@
 
         <!-- Main Content -->
         <main class="flex-grow pt-24 px-4">
+            <!-- Hero Banner -->
+            <div class="hero-banner w-full"></div>
+
             <section class="max-w-4xl mx-auto text-center">
+                <!-- DEX Announcement -->
+                <div class="dex-card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Now Live on Cronos DEX! 🚀</h2>
+                    <p class="mb-4 text-cyan-400">Trade Y2KCoin on Cronos DEX</p>
+                    <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
+                       target="_blank"
+                       class="btn btn-primary">
+                        View on DEX Screener
+                    </a>
+                </div>
+
                 <h1 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Welcome to Y2KCoin</h1>
                 <p class="text-lg mb-8">A digital revolution inspired by the past, built for the future.</p>
                 
@@ -350,80 +408,6 @@
                             <p class="text-gray-400">Coming Soon</p>
                         </div>
                     </div>
-                    <!-- AI War Portal Tab -->
-<div id="aiwarportal" class="tab-content">
-    <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI War Portal</h2>
-    <p class="mb-8 text-cyan-400">Enter the AI-driven Blockchain War DApp</p>
-
-    <div class="grid md:grid-cols-2 gap-6 mb-8">
-        <div class="info-card">
-            <h3 class="text-xl font-bold text-cyan-400 mb-3">Getting Started</h3>
-            <ul class="space-y-3 text-gray-300">
-                <li class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Choose your faction
-                </li>
-                <li class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Mint your NeoBot
-                </li>
-                <li class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Train & Battle
-                </li>
-            </ul>
-        </div>
-
-        <div class="info-card">
-            <h3 class="text-xl font-bold text-cyan-400 mb-3">Requirements</h3>
-            <ul class="space-y-3 text-gray-300">
-                <li class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Y2K Token Holdings
-                </li>
-                <li class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    POGS Payment for Minting
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="info-card bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border-cyan-500/30">
-        <div class="text-center">
-            <h3 class="text-2xl font-bold text-cyan-400 mb-4">Ready to Join the War?</h3>
-            <p class="text-gray-300 mb-6">Enter the AI War Portal and begin your journey</p>
-            <a href="https://y2k-ai-blockchain-war.netlify.app/" 
-               target="_blank"
-               class="btn btn-primary inline-flex items-center gap-2 text-lg px-8 py-4 transform hover:scale-105 transition-all duration-300">
-                Launch AI War Portal
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-            </a>
-        </div>
-    </div>
-
-    <div class="mt-8 text-center">
-        <p class="text-sm text-gray-400">
-            Note: Make sure you have Y2K tokens and POGS before entering the war portal. 
-            <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
-               class="text-cyan-400 hover:text-cyan-300 underline">
-                Get Y2K tokens here
-            </a>
-        </p>
-    </div>
-</div>
 
                     <!-- NFTs Tab -->
                     <div id="nfts" class="tab-content">
@@ -434,83 +418,27 @@
                         </div>
                     </div>
 
+                    <!-- AI War Portal Tab -->
+                    <div id="aiwarportal" class="tab-content">
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI War Portal</h2>
+                        <p class="mb-8 text-cyan-400">Enter the AI-driven Blockchain War DApp</p>
+                        <div class="info-card">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-3">Ready to Join the War?</h3>
+                            <p class="text-gray-400 mb-6">Enter the AI War Portal and begin your journey</p>
+                            <a href="https://y2k-ai-blockchain-war.netlify.app/" 
+                               class="btn btn-primary w-full">Launch War Portal</a>
+                        </div>
+                    </div>
+
                     <!-- Staking Tab -->
                     <div id="staking" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Staking Platform</h2>
-                        <p class="mb-8 text-lg text-cyan-400">Earn passive rewards by staking your Y2K tokens</p>
-                        
-                        <div class="grid md:grid-cols-2 gap-6 mb-8">
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400 mb-3">Staking Benefits</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Earn Daily Rewards
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Participate in Governance
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Access Premium Features
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400 mb-3">How It Works</h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                        Connect Your Wallet
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                        Stake Your Y2K Tokens
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                        Start Earning Rewards
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="info-card bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border-cyan-500/30">
-                            <div class="text-center">
-                                <h3 class="text-2xl font-bold text-cyan-400 mb-4">Ready to Start Staking?</h3>
-                                <p class="text-gray-300 mb-6">Join our staking platform and start earning rewards today</p>
-                                <a href="https://staking-y2kcoin.netlify.app/" 
-                                   class="btn btn-primary inline-flex items-center gap-2 text-lg px-8 py-4 transform hover:scale-105 transition-all duration-300">
-                                    Launch Staking Platform
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 text-center">
-                            <p class="text-sm text-gray-400">
-                                Note: Make sure you have Y2K tokens in your wallet before staking. 
-                                <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
-                                   class="text-cyan-400 hover:text-cyan-300 underline">
-                                    Buy Y2K tokens here
-                                </a>
-                            </p>
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Staking</h2>
+                        <p class="mb-8">Earn passive rewards by staking your Y2K tokens.</p>
+                        <div class="info-card">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-3">Start Earning</h3>
+                            <p class="text-gray-400 mb-6">Stake your Y2K tokens and earn rewards</p>
+                            <a href="https://staking-y2kcoin.netlify.app/" 
+                               class="btn btn-primary w-full">Launch Staking Platform</a>
                         </div>
                     </div>
 
@@ -535,7 +463,7 @@
                     <a href="https://www.instagram.com/y2kcoin" class="btn btn-primary">Instagram</a>
                     <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" class="btn btn-primary">Reddit</a>
                 </div>
-                <p class="text-gray-400">&copy; 2025 Y2KCoin. All rights reserved.</p>
+                <p class="text-gray-400">&copy; 2024 Y2KCoin. All rights reserved.</p>
             </div>
         </footer>
     </div>
@@ -583,15 +511,7 @@
                 });
             });
 
-            // Music Player Implementation
-            widget.bind(SC.Widget.Events.READY, function() {
-                widget.play();
-                isPlaying = true;
-                updatePlayPauseButton();
-                updateTrackInfo();
-            });
-
-                        // Track progress with debouncing
+            // Track progress with debouncing
             let progressUpdateTimeout;
             widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
                 clearTimeout(progressUpdateTimeout);
@@ -623,16 +543,12 @@
 
             // Next track
             document.getElementById('nextBtn').addEventListener('click', function() {
-                this.classList.add('scale-95');
-                setTimeout(() => this.classList.remove('scale-95'), 200);
                 widget.next();
                 updateTrackInfo();
             });
 
             // Previous track
             document.getElementById('prevBtn').addEventListener('click', function() {
-                this.classList.add('scale-95');
-                setTimeout(() => this.classList.remove('scale-95'), 200);
                 widget.prev();
                 updateTrackInfo();
             });
@@ -643,17 +559,9 @@
                     if (sound) {
                         const titleElement = document.getElementById('trackTitle');
                         const artistElement = document.getElementById('trackArtist');
-                        const artworkElement = document.getElementById('trackArtwork');
-
+                        
                         titleElement.textContent = sound.title;
                         artistElement.textContent = sound.user.username;
-                        
-                        if (sound.artwork_url) {
-                            artworkElement.src = sound.artwork_url.replace('large', 't500x500');
-                            artworkElement.classList.add('opacity-100');
-                        } else {
-                            artworkElement.classList.add('opacity-70');
-                        }
                     }
                 });
             }
@@ -676,7 +584,14 @@
                 }, 1000);
             });
 
-            // Track play/pause/finish events
+            // Music player events
+            widget.bind(SC.Widget.Events.READY, function() {
+                widget.play();
+                isPlaying = true;
+                updatePlayPauseButton();
+                updateTrackInfo();
+            });
+
             widget.bind(SC.Widget.Events.PLAY, function() {
                 isPlaying = true;
                 updatePlayPauseButton();
