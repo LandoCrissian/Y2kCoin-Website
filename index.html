@@ -51,18 +51,13 @@
             100% { transform: rotate(360deg); }
         }
 
-        .glow-text { 
-            text-shadow: 0px 0px 8px cyan; 
-        }
-
         .hero-banner {
             background-image: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5121.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 300px;
+            height: 200px;
             position: relative;
-            margin-bottom: 2rem;
         }
 
         .hero-banner::after {
@@ -73,6 +68,10 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,1) 100%);
+        }
+
+        .glow-text { 
+            text-shadow: 0 0 8px #00e6e6;
         }
 
         .btn {
@@ -129,6 +128,7 @@
                 flex-direction: column;
                 gap: 1rem;
                 border-bottom: 1px solid #2d2d2d;
+                z-index: 40;
             }
 
             .nav-links.active {
@@ -142,11 +142,17 @@
                 border: 1px solid #2d2d2d;
                 border-radius: 0.5rem;
                 background: #1a1a1a;
+                color: #e2e8f0;
+                transition: all 0.3s ease;
             }
 
             .tab-btn.active {
                 background: #00e6e6;
                 color: #0a0a0a;
+            }
+
+            .tab-btn:hover {
+                border-color: #00e6e6;
             }
         }
 
@@ -214,21 +220,6 @@
             box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
         }
 
-        .dex-card {
-            background: rgba(0, 230, 230, 0.1);
-            border: 1px solid #00e6e6;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .dex-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 230, 230, 0.2);
-        }
-
         @media (max-width: 640px) {
             .progress-bar {
                 height: 3px;
@@ -239,7 +230,7 @@
             }
 
             .hero-banner {
-                height: 200px;
+                height: 150px;
             }
         }
     </style>
@@ -338,37 +329,56 @@
 
         <!-- Main Content -->
         <main class="flex-grow pt-24 px-4">
-            <!-- Hero Banner -->
-            <div class="hero-banner w-full"></div>
+            <!-- Banner -->
+            <div class="hero-banner w-full mb-8"></div>
 
             <section class="max-w-4xl mx-auto text-center">
-                <!-- DEX Announcement -->
-                <div class="dex-card">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Now Live on Cronos DEX! 🚀</h2>
-                    <p class="mb-4 text-cyan-400">Trade Y2KCoin on Cronos DEX</p>
-                    <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
-                       target="_blank"
-                       class="btn btn-primary">
-                        View on DEX Screener
-                    </a>
-                </div>
-
                 <h1 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Welcome to Y2KCoin</h1>
                 <p class="text-lg mb-8">A digital revolution inspired by the past, built for the future.</p>
                 
-                <div class="flex flex-col md:flex-row justify-center gap-4 mb-12">
-                    <a href="https://www.puush.fun/coin/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
-                       class="btn btn-primary">
-                        Buy Y2K
-                    </a>
-                    <a href="https://discord.gg/jpFbSapSAh" 
-                       class="btn btn-secondary">
-                        Join Discord
-                    </a>
-                </div>
+                <!-- DEX View Section -->
+                <section id="dex-view" class="mt-12 max-w-5xl mx-auto">
+                    <h2 class="text-3xl font-bold text-cyan-400 mb-6 glow-text">Live Y2K Market View</h2>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-8">
+                        <div class="info-card">
+                            <h3 class="text-lg font-bold text-cyan-300">Price</h3>
+                            <p id="price" class="text-white text-xl">Loading...</p>
+                        </div>
+                        <div class="info-card">
+                            <h3 class="text-lg font-bold text-cyan-300">24h Volume</h3>
+                            <p id="volume" class="text-white text-xl">Loading...</p>
+                        </div>
+                        <div class="info-card">
+                            <h3 class="text-lg font-bold text-cyan-300">Liquidity</h3>
+                            <p id="liquidity" class="text-white text-xl">Loading...</p>
+                        </div>
+                        <div class="info-card">
+                            <h3 class="text-lg font-bold text-cyan-300">Market Cap</h3>
+                            <p id="marketcap" class="text-white text-xl">Loading...</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 text-center">
+                        <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank" class="btn btn-primary mr-4">
+                            View on DEX Screener
+                        </a>
+                        <a href="https://vvs.finance/swap?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="btn btn-secondary">
+                            Trade Y2K
+                        </a>
+                    </div>
+
+                    <iframe src="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641?embed=1&theme=dark"
+                            height="400"
+                            width="100%"
+                            style="border:0; border-radius:12px;"
+                            allowfullscreen
+                            loading="lazy">
+                    </iframe>
+                </section>
 
                 <!-- Tab Content -->
-                <div id="tab-content">
+                <div id="tab-content" class="mt-12">
                     <!-- About Tab -->
                     <div id="about" class="tab-content active">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">About Y2KCoin</h2>
@@ -385,6 +395,7 @@
                         </div>
                     </div>
 
+                    <!-- Other tabs remain the same -->
                     <!-- Mission Tab -->
                     <div id="mission" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Our Mission</h2>
@@ -421,24 +432,18 @@
                     <!-- AI War Portal Tab -->
                     <div id="aiwarportal" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI War Portal</h2>
-                        <p class="mb-8 text-cyan-400">Enter the AI-driven Blockchain War DApp</p>
+                        <p class="mb-8">Enter the AI-driven blockchain war and compete for rewards!</p>
                         <div class="info-card">
-                            <h3 class="text-xl font-bold text-cyan-400 mb-3">Ready to Join the War?</h3>
-                            <p class="text-gray-400 mb-6">Enter the AI War Portal and begin your journey</p>
-                            <a href="https://y2k-ai-blockchain-war.netlify.app/" 
-                               class="btn btn-primary w-full">Launch War Portal</a>
+                            <a href="https://y2k-ai-blockchain-war.netlify.app/" class="btn btn-primary">Launch War Portal</a>
                         </div>
                     </div>
 
                     <!-- Staking Tab -->
                     <div id="staking" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Staking</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Staking</h2>
                         <p class="mb-8">Earn passive rewards by staking your Y2K tokens.</p>
                         <div class="info-card">
-                            <h3 class="text-xl font-bold text-cyan-400 mb-3">Start Earning</h3>
-                            <p class="text-gray-400 mb-6">Stake your Y2K tokens and earn rewards</p>
-                            <a href="https://staking-y2kcoin.netlify.app/" 
-                               class="btn btn-primary w-full">Launch Staking Platform</a>
+                            <a href="https://staking-y2kcoin.netlify.app/" class="btn btn-primary">Launch Staking Platform</a>
                         </div>
                     </div>
 
@@ -511,7 +516,37 @@
                 });
             });
 
-            // Track progress with debouncing
+            // DEX Data Fetching
+            async function fetchDexData() {
+                try {
+                    const res = await fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641');
+                    const data = await res.json();
+                    const pair = data.pair;
+
+                    document.getElementById('price').textContent = `$${parseFloat(pair.priceUsd).toFixed(6)}`;
+                    document.getElementById('volume').textContent = `$${Number(pair.volume.h24).toLocaleString()}`;
+                    document.getElementById('liquidity').textContent = `$${Number(pair.liquidity.usd).toLocaleString()}`;
+
+                    const marketCap = (pair.priceUsd * 100000000); // adjust based on actual supply
+                    document.getElementById('marketcap').textContent = `$${Number(marketCap).toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+                } catch (err) {
+                    console.error('DEX data fetch failed', err);
+                }
+            }
+
+            // Initial DEX data fetch and setup interval
+            fetchDexData();
+            setInterval(fetchDexData, 30000); // Refresh every 30s
+
+            // Music Player Implementation
+            widget.bind(SC.Widget.Events.READY, function() {
+                widget.play();
+                isPlaying = true;
+                updatePlayPauseButton();
+                updateTrackInfo();
+            });
+
+            // Track progress
             let progressUpdateTimeout;
             widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
                 clearTimeout(progressUpdateTimeout);
@@ -553,7 +588,6 @@
                 updateTrackInfo();
             });
 
-            // Enhanced track info update
             function updateTrackInfo() {
                 widget.getCurrentSound(function(sound) {
                     if (sound) {
@@ -585,13 +619,6 @@
             });
 
             // Music player events
-            widget.bind(SC.Widget.Events.READY, function() {
-                widget.play();
-                isPlaying = true;
-                updatePlayPauseButton();
-                updateTrackInfo();
-            });
-
             widget.bind(SC.Widget.Events.PLAY, function() {
                 isPlaying = true;
                 updatePlayPauseButton();
