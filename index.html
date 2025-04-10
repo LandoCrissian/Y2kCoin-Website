@@ -56,8 +56,11 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 200px;
+            height: 300px;
             position: relative;
+            border-radius: 20px;
+            margin: 20px;
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.2);
         }
 
         .hero-banner::after {
@@ -68,6 +71,7 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,1) 100%);
+            border-radius: 20px;
         }
 
         .glow-text { 
@@ -75,12 +79,15 @@
         }
 
         .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-weight: bold;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-primary { 
@@ -107,7 +114,6 @@
             box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
         }
 
-        /* Mobile Menu Styles */
         .mobile-menu-button {
             display: none;
         }
@@ -134,29 +140,8 @@
             .nav-links.active {
                 display: flex;
             }
-
-            .tab-btn {
-                width: 100%;
-                padding: 0.75rem;
-                text-align: center;
-                border: 1px solid #2d2d2d;
-                border-radius: 0.5rem;
-                background: #1a1a1a;
-                color: #e2e8f0;
-                transition: all 0.3s ease;
-            }
-
-            .tab-btn.active {
-                background: #00e6e6;
-                color: #0a0a0a;
-            }
-
-            .tab-btn:hover {
-                border-color: #00e6e6;
-            }
         }
 
-        /* Progress Bar Styles */
         .progress-bar {
             width: 100%;
             height: 4px;
@@ -165,33 +150,28 @@
             overflow: hidden;
         }
 
-        .progress-bar:hover .progress-hover-effect {
-            opacity: 0.2;
-        }
-
         .progress-indicator {
             height: 100%;
             background: #00e6e6;
             transition: width 0.1s linear;
-            position: relative;
         }
 
-        .progress-hover-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #fff;
-            opacity: 0;
-            transition: opacity 0.2s ease;
+        .trade-card {
+            background: rgba(0, 230, 230, 0.05);
+            border: 1px solid rgba(0, 230, 230, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            margin: 20px;
         }
 
-        .shadow-glow {
-            box-shadow: 0 0 15px rgba(0, 230, 230, 0.3);
+        .trade-card:hover {
+            border-color: #00e6e6;
+            box-shadow: 0 0 30px rgba(0, 230, 230, 0.2);
+            transform: translateY(-2px);
         }
 
-        /* Tab Content Styles */
         .tab-content {
             display: none;
             opacity: 0;
@@ -205,7 +185,24 @@
             transform: translateY(0);
         }
 
-        /* Info Card Styles */
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            color: #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .tab-btn:hover {
+            border-color: #00e6e6;
+            background: rgba(0, 230, 230, 0.1);
+        }
+
+        .tab-btn.active {
+            background: #00e6e6;
+            color: #0a0a0a;
+        }
+
         .info-card {
             background: rgba(26, 26, 26, 0.8);
             border: 1px solid #2d2d2d;
@@ -219,29 +216,13 @@
             border-color: #00e6e6;
             box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
         }
-
-        @media (max-width: 640px) {
-            .progress-bar {
-                height: 3px;
-            }
-            
-            body {
-                padding-bottom: 80px;
-            }
-
-            .hero-banner {
-                height: 150px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Loader -->
     <div id="loader">
         <div class="spinner"></div>
     </div>
 
-    <!-- Hidden SoundCloud Player -->
     <iframe id="soundcloud-player"
             width="100%"
             height="300"
@@ -252,17 +233,13 @@
             style="display: none;">
     </iframe>
 
-    <!-- Music Player -->
     <div id="music-player" class="fixed bottom-0 left-0 w-full bg-black bg-opacity-95 backdrop-blur-md border-t border-cyan-500 z-50">
         <div class="max-w-7xl mx-auto px-4">
-            <!-- Progress Bar -->
             <div class="progress-bar group cursor-pointer" id="progressBar">
                 <div class="progress-indicator" id="progressIndicator"></div>
-                <div class="progress-hover-effect"></div>
             </div>
             
             <div class="flex items-center justify-between py-3">
-                <!-- Track Info -->
                 <div class="flex items-center gap-4 flex-1 min-w-0">
                     <img id="trackArtwork" 
                          src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/ED5708B1-755C-4CD7-9EAD-C355353EC85A.png" 
@@ -274,19 +251,18 @@
                     </div>
                 </div>
 
-                <!-- Player Controls -->
                 <div class="flex items-center gap-4 md:gap-6">
-                    <button id="prevBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110">
+                    <button id="prevBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110" aria-label="Previous Track">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                         </svg>
                     </button>
-                    <button id="playPauseBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110">
+                    <button id="playPauseBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110" aria-label="Play/Pause">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                         </svg>
                     </button>
-                    <button id="nextBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110">
+                    <button id="nextBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110" aria-label="Next Track">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                         </svg>
@@ -296,9 +272,7 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div id="main-content" class="flex flex-col min-h-screen">
-        <!-- Header -->
         <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 border-b border-gray-800">
             <nav class="max-w-5xl mx-auto px-4">
                 <div class="flex justify-between items-center">
@@ -306,14 +280,12 @@
                          alt="Y2KCoin Logo" 
                          class="w-12 h-12 object-contain">
                     
-                    <!-- Mobile Menu Button -->
-                    <button class="mobile-menu-button p-2 text-cyan-400 md:hidden" id="mobile-menu-button">
+                    <button class="mobile-menu-button p-2 text-cyan-400 md:hidden" id="mobile-menu-button" aria-label="Toggle Menu">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16" />
                         </svg>
                     </button>
 
-                    <!-- Navigation Links -->
                     <ul class="nav-links md:flex md:gap-6 hidden">
                         <li><button class="tab-btn active" data-tab="about">About</button></li>
                         <li><button class="tab-btn" data-tab="mission">Mission</button></li>
@@ -327,59 +299,37 @@
             </nav>
         </header>
 
-        <!-- Main Content -->
         <main class="flex-grow pt-24 px-4">
-            <!-- Banner -->
             <div class="hero-banner w-full mb-8"></div>
 
             <section class="max-w-4xl mx-auto text-center">
                 <h1 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Welcome to Y2KCoin</h1>
                 <p class="text-lg mb-8">A digital revolution inspired by the past, built for the future.</p>
                 
-                <!-- DEX View Section -->
-                <section id="dex-view" class="mt-12 max-w-5xl mx-auto">
-                    <h2 class="text-3xl font-bold text-cyan-400 mb-6 glow-text">Live Y2K Market View</h2>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-8">
-                        <div class="info-card">
-                            <h3 class="text-lg font-bold text-cyan-300">Price</h3>
-                            <p id="price" class="text-white text-xl">Loading...</p>
-                        </div>
-                        <div class="info-card">
-                            <h3 class="text-lg font-bold text-cyan-300">24h Volume</h3>
-                            <p id="volume" class="text-white text-xl">Loading...</p>
-                        </div>
-                        <div class="info-card">
-                            <h3 class="text-lg font-bold text-cyan-300">Liquidity</h3>
-                            <p id="liquidity" class="text-white text-xl">Loading...</p>
-                        </div>
-                        <div class="info-card">
-                            <h3 class="text-lg font-bold text-cyan-300">Market Cap</h3>
-                            <p id="marketcap" class="text-white text-xl">Loading...</p>
-                        </div>
-                    </div>
-
-                    <div class="mb-6 text-center">
-                        <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank" class="btn btn-primary mr-4">
-                            View on DEX Screener
+                <div class="trade-card">
+                    <h2 class="text-2xl font-bold text-cyan-400 mb-6">Trade Y2KCoin</h2>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
+                           target="_blank" 
+                           class="btn btn-primary">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                            </svg>
+                            View Chart
                         </a>
-                        <a href="https://vvs.finance/swap?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="btn btn-secondary">
-                            Trade Y2K
+                        <a href="https://vvs.finance/swap?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
+                           target="_blank" 
+                           class="btn btn-secondary">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"/>
+                            </svg>
+                            Trade Now
                         </a>
                     </div>
+                </div>
 
-                    <iframe src="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641?embed=1&theme=dark"
-                            height="400"
-                            width="100%"
-                            style="border:0; border-radius:12px;"
-                            allowfullscreen
-                            loading="lazy">
-                    </iframe>
-                </section>
-
-                <!-- Tab Content -->
                 <div id="tab-content" class="mt-12">
-                    <!-- About Tab -->
                     <div id="about" class="tab-content active">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">About Y2KCoin</h2>
                         <p class="mb-8">Y2KCoin merges nostalgia with Web3 innovation.</p>
@@ -395,8 +345,6 @@
                         </div>
                     </div>
 
-                    <!-- Other tabs remain the same -->
-                    <!-- Mission Tab -->
                     <div id="mission" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Our Mission</h2>
                         <p class="mb-8">Building a sustainable digital ecosystem for the future.</p>
@@ -411,7 +359,6 @@
                         </div>
                     </div>
 
-                    <!-- Marketplace Tab -->
                     <div id="marketplace" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Marketplace</h2>
                         <p class="mb-8">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
@@ -420,7 +367,6 @@
                         </div>
                     </div>
 
-                    <!-- NFTs Tab -->
                     <div id="nfts" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K NFTs</h2>
                         <p class="mb-8">Limited edition, community-driven digital collectibles with real utility.</p>
@@ -429,7 +375,6 @@
                         </div>
                     </div>
 
-                    <!-- AI War Portal Tab -->
                     <div id="aiwarportal" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI War Portal</h2>
                         <p class="mb-8">Enter the AI-driven blockchain war and compete for rewards!</p>
@@ -438,7 +383,6 @@
                         </div>
                     </div>
 
-                    <!-- Staking Tab -->
                     <div id="staking" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Staking</h2>
                         <p class="mb-8">Earn passive rewards by staking your Y2K tokens.</p>
@@ -447,7 +391,6 @@
                         </div>
                     </div>
 
-                    <!-- Gaming Tab -->
                     <div id="gaming" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Gaming</h2>
                         <p class="mb-8">An immersive gaming experience that rewards players through blockchain mechanics.</p>
@@ -459,7 +402,6 @@
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="w-full py-6 bg-[#0a0a0a] border-t border-gray-800 mt-12">
             <div class="max-w-4xl mx-auto text-center px-4">
                 <h2 class="text-xl md:text-2xl font-bold mb-4 glow-text">Follow Us</h2>
@@ -475,35 +417,28 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize SoundCloud Widget
             let widget = SC.Widget('soundcloud-player');
             let isPlaying = false;
 
-            // Site functionality
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const navLinks = document.querySelector('.nav-links');
             const loader = document.getElementById('loader');
             const mainContent = document.getElementById('main-content');
 
-            // Mobile menu toggle
             mobileMenuButton.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
             });
 
-            // Tab switching
             document.querySelectorAll('.tab-btn').forEach(button => {
                 button.addEventListener('click', () => {
-                    // Close mobile menu when tab is selected
                     if (window.innerWidth < 768) {
                         navLinks.classList.remove('active');
                     }
 
-                    // Update active tab
                     document.querySelectorAll('.tab-btn').forEach(btn => 
                         btn.classList.remove('active'));
                     button.classList.add('active');
 
-                    // Update content
                     document.querySelectorAll('.tab-content').forEach(content => {
                         content.style.display = 'none';
                         content.classList.remove('active');
@@ -516,29 +451,6 @@
                 });
             });
 
-            // DEX Data Fetching
-            async function fetchDexData() {
-                try {
-                    const res = await fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641');
-                    const data = await res.json();
-                    const pair = data.pair;
-
-                    document.getElementById('price').textContent = `$${parseFloat(pair.priceUsd).toFixed(6)}`;
-                    document.getElementById('volume').textContent = `$${Number(pair.volume.h24).toLocaleString()}`;
-                    document.getElementById('liquidity').textContent = `$${Number(pair.liquidity.usd).toLocaleString()}`;
-
-                    const marketCap = (pair.priceUsd * 100000000); // adjust based on actual supply
-                    document.getElementById('marketcap').textContent = `$${Number(marketCap).toLocaleString(undefined, {maximumFractionDigits: 0})}`;
-                } catch (err) {
-                    console.error('DEX data fetch failed', err);
-                }
-            }
-
-            // Initial DEX data fetch and setup interval
-            fetchDexData();
-            setInterval(fetchDexData, 30000); // Refresh every 30s
-
-            // Music Player Implementation
             widget.bind(SC.Widget.Events.READY, function() {
                 widget.play();
                 isPlaying = true;
@@ -546,7 +458,6 @@
                 updateTrackInfo();
             });
 
-            // Track progress
             let progressUpdateTimeout;
             widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
                 clearTimeout(progressUpdateTimeout);
@@ -556,7 +467,6 @@
                 }, 50);
             });
 
-            // Progress bar interaction
             document.getElementById('progressBar').addEventListener('click', function(e) {
                 const rect = this.getBoundingClientRect();
                 const position = (e.clientX - rect.left) / rect.width;
@@ -565,7 +475,6 @@
                 });
             });
 
-            // Play/Pause
             document.getElementById('playPauseBtn').addEventListener('click', function() {
                 if (isPlaying) {
                     widget.pause();
@@ -576,13 +485,11 @@
                 updatePlayPauseButton();
             });
 
-            // Next track
             document.getElementById('nextBtn').addEventListener('click', function() {
                 widget.next();
                 updateTrackInfo();
             });
 
-            // Previous track
             document.getElementById('prevBtn').addEventListener('click', function() {
                 widget.prev();
                 updateTrackInfo();
@@ -607,7 +514,6 @@
                     : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
             }
 
-            // Loading sequence
             window.addEventListener('load', function() {
                 setTimeout(() => {
                     loader.style.opacity = '0';
@@ -618,7 +524,6 @@
                 }, 1000);
             });
 
-            // Music player events
             widget.bind(SC.Widget.Events.PLAY, function() {
                 isPlaying = true;
                 updatePlayPauseButton();
