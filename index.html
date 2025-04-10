@@ -56,11 +56,37 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 300px;
+            height: 400px;
             position: relative;
             border-radius: 20px;
-            margin: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            width: calc(100% - 40px);
             box-shadow: 0 0 30px rgba(0, 230, 230, 0.2);
+        }
+
+        .logo-img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+                margin: 10px auto;
+                width: calc(100% - 20px);
+            }
+
+            .logo-img {
+                width: 40px;
+                height: 40px;
+            }
         }
 
         .hero-banner::after {
@@ -278,7 +304,7 @@
                 <div class="flex justify-between items-center">
                     <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/ED5708B1-755C-4CD7-9EAD-C355353EC85A.png" 
                          alt="Y2KCoin Logo" 
-                         class="w-12 h-12 object-contain">
+                         class="logo-img">
                     
                     <button class="mobile-menu-button p-2 text-cyan-400 md:hidden" id="mobile-menu-button" aria-label="Toggle Menu">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
