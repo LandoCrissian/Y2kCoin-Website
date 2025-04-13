@@ -394,12 +394,65 @@
                     </div>
 
                     <div id="nfts" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K NFTs</h2>
-                        <p class="mb-8">Limited edition, community-driven digital collectibles with real utility.</p>
-                        <div class="info-card">
-                            <p class="text-gray-400">Coming Soon</p>
-                        </div>
-                    </div>
+    <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K NFTs</h2>
+    <p class="mb-8">Limited edition, community-driven digital collectibles with real utility.</p>
+    
+    <div class="info-card">
+        <h3 class="text-xl font-bold text-cyan-400 mb-4">Official NFT Collection</h3>
+        <p class="text-gray-400 mb-6">Collect Y2K music drops and CroFam anthems. Fully on-chain. Community-backed.</p>
+        
+        <div class="nft-widget-container rounded-lg overflow-hidden shadow-xl bg-black bg-opacity-50 p-4">
+            <iframe 
+                id="iframe-widget" 
+                src="https://0xe45f227b1630d0cd62d73564eb9187be97accaa1_25.nfts2.me/?widget=classic" 
+                style="height: 515px; width: 100%; border: none"
+                class="w-full rounded-lg"
+                allow="web3"
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nft-widget-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        transition: transform 0.3s ease;
+    }
+
+    .nft-widget-container:hover {
+        transform: translateY(-2px);
+    }
+
+    #iframe-widget {
+        background: transparent;
+        transition: opacity 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+        .nft-widget-container {
+            padding: 1rem;
+        }
+        
+        #iframe-widget {
+            height: 480px;
+        }
+    }
+
+    #iframe-widget.loading {
+        opacity: 0.7;
+    }
+</style>
+
+<script>
+    document.getElementById('iframe-widget').addEventListener('load', function() {
+        this.classList.remove('loading');
+    });
+    document.getElementById('iframe-widget').classList.add('loading');
+</script>
 
                     <div id="aiwarportal" class="tab-content">
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI War Portal</h2>
