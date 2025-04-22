@@ -1,571 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Y2KCoin - A Digital Revolution</title>
-    <meta name="description" content="Y2KCoin is a community-driven cryptocurrency blending nostalgia with blockchain innovation.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://w.soundcloud.com/player/api.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        html {
-            background-color: #0a0a0a;
-        }
-        
-        body {
-            font-family: 'Orbitron', sans-serif;
-            background-color: #0a0a0a;
-            color: #e2e8f0;
-            margin: 0;
-            padding: 0;
-            padding-bottom: 85px;
-            min-height: 100vh;
-        }
-
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #0a0a0a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #00e6e6;
-            border-top: 5px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hero-banner {
-            background-image: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5121.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 400px;
-            position: relative;
-            border-radius: 20px;
-            margin: 20px auto;
-            max-width: 1200px;
-            width: calc(100% - 40px);
-            box-shadow: 0 0 30px rgba(0, 230, 230, 0.2);
-        }
-
-        .logo-img {
-            width: 48px;
-            height: 48px;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-
-        .logo-img:hover {
-            transform: scale(1.05);
-        }
-
-        @media (max-width: 768px) {
-            .hero-banner {
-                height: 300px;
-                margin: 10px auto;
-                width: calc(100% - 20px);
-            }
-
-            .logo-img {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        .hero-banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,1) 100%);
-            border-radius: 20px;
-        }
-
-        .glow-text { 
-            text-shadow: 0 0 8px #00e6e6;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary { 
-            background-color: #00e6e6; 
-            color: #0a0a0a; 
-            box-shadow: 0 0 20px rgba(0, 230, 230, 0.3);
-        }
-
-        .btn-primary:hover { 
-            background-color: #009999; 
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 230, 230, 0.5);
-        }
-
-        .btn-secondary { 
-            background-color: #ff007f; 
-            color: #fff; 
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
-        }
-
-        .btn-secondary:hover { 
-            background-color: #cc0066; 
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
-        }
-
-        .mobile-menu-button {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-menu-button {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: fixed;
-                top: 72px;
-                left: 0;
-                width: 100%;
-                background: #0a0a0a;
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-                border-bottom: 1px solid #2d2d2d;
-                z-index: 40;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(45, 45, 45, 0.6);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-indicator {
-            height: 100%;
-            background: #00e6e6;
-            transition: width 0.1s linear;
-        }
-
-        .trade-card {
-            background: rgba(0, 230, 230, 0.05);
-            border: 1px solid rgba(0, 230, 230, 0.2);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            margin: 20px;
-        }
-
-        .trade-card:hover {
-            border-color: #00e6e6;
-            box-shadow: 0 0 30px rgba(0, 230, 230, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .tab-content {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .tab-content.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .tab-btn {
-            padding: 0.75rem 1.5rem;
-            color: #e2e8f0;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-
-        .tab-btn:hover {
-            border-color: #00e6e6;
-            background: rgba(0, 230, 230, 0.1);
-        }
-
-        .tab-btn.active {
-            background: #00e6e6;
-            color: #0a0a0a;
-        }
-
-        .info-card {
-            background: rgba(26, 26, 26, 0.8);
-            border: 1px solid #2d2d2d;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .info-card:hover {
-            transform: translateY(-2px);
-            border-color: #00e6e6;
-            box-shadow: 0 0 20px rgba(0, 230, 230, 0.2);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Y2K x ROAST | Dual Chain Chaos</title>
+  <meta name="description" content="The Y2K x ROAST fusion hub. Explore NFTs, burn mechanics, and trading portals across Cronos and Solana."/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      font-family: 'Rubik', sans-serif;
+      color: #e2e8f0;
+    }
+    .glitch {
+      text-shadow: 2px 0 red, -2px 0 cyan;
+    }
+    .neon-border {
+      border: 2px solid #ff00ff;
+      box-shadow: 0 0 10px #ff00ff;
+    }
+    .glow {
+      box-shadow: 0 0 20px #ff0077;
+    }
+  </style>
 </head>
-<body>
-    <div id="loader">
-        <div class="spinner"></div>
+<body class="bg-black text-white">
+  <!-- HEADER -->
+  <header class="w-full p-4 bg-[#111] flex justify-between items-center">
+    <h1 class="text-3xl glitch font-bold">Y2K x $ROAST</h1>
+    <nav class="space-x-6 text-sm">
+      <a href="#nfts" class="hover:text-[#ff00ff]">NFTs</a>
+      <a href="#mint" class="hover:text-[#ff00ff]">Mint</a>
+      <a href="#dex" class="hover:text-[#ff00ff]">Trade</a>
+      <a href="#connect" class="hover:text-[#ff00ff]">Connect</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="text-center py-16 px-6 bg-gradient-to-b from-[#1a1a1a] to-black">
+    <h2 class="text-4xl md:text-6xl glitch font-bold mb-4">Dual Chain. No Mercy.</h2>
+    <p class="text-lg max-w-3xl mx-auto text-gray-400">From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.</p>
+    <div class="mt-8 flex flex-col md:flex-row justify-center gap-4">
+      <a href="#mint" class="px-6 py-3 neon-border">Mint NFT</a>
+      <a href="#dex" class="px-6 py-3 neon-border">Trade Now</a>
     </div>
+  </section>
 
-    <iframe id="soundcloud-player"
-            width="100%"
-            height="300"
-            scrolling="no"
-            frameborder="no"
-            allow="autoplay"
-            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1974700072&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-            style="display: none;">
-    </iframe>
-
-    <div id="music-player" class="fixed bottom-0 left-0 w-full bg-black bg-opacity-95 backdrop-blur-md border-t border-cyan-500 z-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="progress-bar group cursor-pointer" id="progressBar">
-                <div class="progress-indicator" id="progressIndicator"></div>
-            </div>
-            
-            <div class="flex items-center justify-between py-3">
-                <div class="flex items-center gap-4 flex-1 min-w-0">
-                    <img id="trackArtwork" 
-                         src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/ED5708B1-755C-4CD7-9EAD-C355353EC85A.png" 
-                         class="w-12 h-12 rounded-lg object-cover shadow-glow"
-                         alt="Track artwork">
-                    <div class="min-w-0">
-                        <p id="trackTitle" class="font-bold text-white truncate text-sm md:text-base">Loading...</p>
-                        <p id="trackArtist" class="text-cyan-400 text-xs truncate mt-0.5">Y2K Music</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4 md:gap-6">
-                    <button id="prevBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110" aria-label="Previous Track">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button id="playPauseBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110" aria-label="Play/Pause">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        </svg>
-                    </button>
-                    <button id="nextBtn" class="p-2 text-white hover:text-cyan-400 transition-all hover:scale-110" aria-label="Next Track">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- NFT SHOWCASE -->
+  <section id="nfts" class="px-6 py-16 bg-[#111]">
+    <h3 class="text-3xl font-bold glitch text-center mb-8">Featured Drops</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-[#1e1e1e] p-4 rounded neon-border">
+        <img src="https://gateway.pinata.cloud/ipfs/bafybeiadfqziqmsq6hsl2choxakk5i5o52ezwemq5gkjwmvpbs2yiltkpu" class="w-full mb-4" alt="Cards of Cronos">
+        <h4 class="text-xl">Cards of Cronos</h4>
+        <p class="text-gray-400 text-sm">70% burned | 30% back into Y2K</p>
+      </div>
+      <!-- Repeat for other NFTs... -->
     </div>
+  </section>
 
-    <div id="main-content" class="flex flex-col min-h-screen">
-        <header class="w-full py-4 bg-[#0a0a0a] fixed top-0 z-40 border-b border-gray-800">
-            <nav class="max-w-5xl mx-auto px-4">
-                <div class="flex justify-between items-center">
-                    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/ED5708B1-755C-4CD7-9EAD-C355353EC85A.png" 
-                         alt="Y2KCoin Logo" 
-                         class="logo-img">
-                    
-                    <button class="mobile-menu-button p-2 text-cyan-400 md:hidden" id="mobile-menu-button" aria-label="Toggle Menu">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16" />
-                        </svg>
-                    </button>
+  <!-- MINT SECTION -->
+  <section id="mint" class="bg-black py-16 px-6 text-center">
+    <h3 class="text-3xl glitch font-bold mb-4">Mint the Madness</h3>
+    <p class="text-gray-400 max-w-xl mx-auto mb-6">Live mint available for limited drops. Funds go directly to burn Y2K and ROAST.</p>
+    <a href="https://nfts2me.com/your-drop-link" target="_blank" class="px-6 py-3 neon-border inline-block">Go to Mint Page</a>
+  </section>
 
-                    <ul class="nav-links md:flex md:gap-6 hidden">
-                        <li><button class="tab-btn active" data-tab="about">About</button></li>
-                        <li><button class="tab-btn" data-tab="mission">Mission</button></li>
-                        <li><button class="tab-btn" data-tab="marketplace">Marketplace</button></li>
-                        <li><button class="tab-btn" data-tab="nfts">NFTs</button></li>
-                        <li><button class="tab-btn" data-tab="aiwarportal">AI War Portal</button></li>
-                        <li><button class="tab-btn" data-tab="staking">Staking</button></li>
-                        <li><button class="tab-btn" data-tab="gaming">Gaming</button></li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-
-        <main class="flex-grow pt-24 px-4">
-            <div class="hero-banner w-full mb-8"></div>
-
-            <section class="max-w-4xl mx-auto text-center">
-                <h1 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Welcome to Y2KCoin</h1>
-                <p class="text-lg mb-8">A digital revolution inspired by the past, built for the future.</p>
-                
-                <div class="trade-card">
-                    <h2 class="text-2xl font-bold text-cyan-400 mb-6">Trade Y2KCoin</h2>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
-                           target="_blank" 
-                           class="btn btn-primary">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                            </svg>
-                            View Chart
-                        </a>
-                        <a href="https://vvs.finance/swap?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" 
-                           target="_blank" 
-                           class="btn btn-secondary">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"/>
-                            </svg>
-                            Trade Now
-                        </a>
-                    </div>
-                </div>
-
-                <div id="tab-content" class="mt-12">
-                    <div id="about" class="tab-content active">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">About Y2KCoin</h2>
-                        <p class="mb-8">Y2KCoin merges nostalgia with Web3 innovation.</p>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400">Community Driven</h3>
-                                <p class="mt-2 text-gray-400">Built by the community, for the community.</p>
-                            </div>
-                            <div class="info-card">
-                                <h3 class="text-xl font-bold text-cyan-400">Innovative Technology</h3>
-                                <p class="mt-2 text-gray-400">Leveraging blockchain for the future.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="mission" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Our Mission</h2>
-                        <p class="mb-8">Building a sustainable digital ecosystem for the future.</p>
-                        <div class="info-card">
-                            <h3 class="text-xl font-bold text-cyan-400">Core Values</h3>
-                            <ul class="mt-4 space-y-2 text-gray-400">
-                                <li>Community First</li>
-                                <li>Sustainable Growth</li>
-                                <li>Innovation & Development</li>
-                                <li>Transparency & Trust</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div id="marketplace" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Marketplace</h2>
-                        <p class="mb-8">A decentralized marketplace where users can trade and collect Y2K digital assets.</p>
-                        <div class="info-card">
-                            <p class="text-gray-400">Coming Soon</p>
-                        </div>
-                    </div>
-
-                    <div id="nfts" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K NFTs</h2>
-                        <p class="mb-8">Limited edition, community-driven digital collectibles with real utility.</p>
-                        <div class="info-card">
-                            <p class="text-gray-400">Coming Soon</p>
-                        </div>
-                    </div>
-
-                    <div id="aiwarportal" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">AI War Portal</h2>
-                        <p class="mb-8">Enter the AI-driven blockchain war and compete for rewards!</p>
-                        <div class="info-card">
-                            <a href="https://y2k-ai-blockchain-war.netlify.app/" class="btn btn-primary">Launch War Portal</a>
-                        </div>
-                    </div>
-
-                    <div id="staking" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Staking</h2>
-                        <p class="mb-8">Earn passive rewards by staking your Y2K tokens.</p>
-                        <div class="info-card">
-                            <a href="https://staking-y2kcoin.netlify.app/" class="btn btn-primary">Launch Staking Platform</a>
-                        </div>
-                    </div>
-
-                    <div id="gaming" class="tab-content">
-                        <h2 class="text-2xl md:text-3xl font-bold mb-4 glow-text">Y2K Gaming</h2>
-                        <p class="mb-8">An immersive gaming experience that rewards players through blockchain mechanics.</p>
-                        <div class="info-card">
-                            <p class="text-gray-400">Coming Soon</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="w-full py-6 bg-[#0a0a0a] border-t border-gray-800 mt-12">
-    <div class="max-w-4xl mx-auto text-center px-4">
-        <h2 class="text-xl md:text-2xl font-bold mb-4 glow-text">Follow Us</h2>
-        <div class="flex flex-wrap justify-center gap-4 mb-6">
-            <a href="https://x.com/y2kc0in?s=21" class="btn btn-primary">𝕏</a>
-            <a href="https://www.instagram.com/y2kcoin" class="btn btn-primary">Instagram</a>
-            <a href="https://www.reddit.com/r/Y2KCoin/s/0Lk00ZsGCz" class="btn btn-primary">Reddit</a>
-            <a href="https://discord.gg/XxtpYNXX4a" class="btn btn-primary">Discord</a>
-        </div>
-        <p class="text-gray-400">&copy; 2024 Y2KCoin. All rights reserved.</p>
+  <!-- DEX SECTION -->
+  <section id="dex" class="bg-[#111] py-16 px-6 text-center">
+    <h3 class="text-3xl glitch font-bold mb-4">Trade with Fire</h3>
+    <div class="flex flex-col md:flex-row justify-center gap-6 mt-6">
+      <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank" class="px-6 py-3 glow">Trade $Y2K (Cronos)</a>
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="px-6 py-3 glow">Trade $ROAST (Solana)</a>
     </div>
-</footer>
+  </section>
+
+  <!-- CONNECT SECTION -->
+  <section id="connect" class="py-16 px-6 text-center">
+    <h3 class="text-3xl glitch font-bold mb-4">Stay Plugged In</h3>
+    <p class="text-gray-400 mb-6">Join the fam. Talk your shit. Earn your spot.</p>
+    <div class="flex justify-center gap-4">
+      <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2">Discord</a>
+      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2">𝕏 (Twitter)</a>
     </div>
+  </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let widget = SC.Widget('soundcloud-player');
-            let isPlaying = false;
-
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const navLinks = document.querySelector('.nav-links');
-            const loader = document.getElementById('loader');
-            const mainContent = document.getElementById('main-content');
-
-            mobileMenuButton.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
-
-            document.querySelectorAll('.tab-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    if (window.innerWidth < 768) {
-                        navLinks.classList.remove('active');
-                    }
-
-                    document.querySelectorAll('.tab-btn').forEach(btn => 
-                        btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.style.display = 'none';
-                        content.classList.remove('active');
-                    });
-                    
-                    const tabId = button.getAttribute('data-tab');
-                    const selectedTab = document.getElementById(tabId);
-                    selectedTab.style.display = 'block';
-                    setTimeout(() => selectedTab.classList.add('active'), 50);
-                });
-            });
-
-            widget.bind(SC.Widget.Events.READY, function() {
-                widget.play();
-                isPlaying = true;
-                updatePlayPauseButton();
-                updateTrackInfo();
-            });
-
-            let progressUpdateTimeout;
-            widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
-                clearTimeout(progressUpdateTimeout);
-                progressUpdateTimeout = setTimeout(() => {
-                    document.getElementById('progressIndicator').style.width = (data.relativePosition * 100) + '%';
-                    updateTrackInfo();
-                }, 50);
-            });
-
-            document.getElementById('progressBar').addEventListener('click', function(e) {
-                const rect = this.getBoundingClientRect();
-                const position = (e.clientX - rect.left) / rect.width;
-                widget.getDuration(function(duration) {
-                    widget.seekTo(duration * position);
-                });
-            });
-
-            document.getElementById('playPauseBtn').addEventListener('click', function() {
-                if (isPlaying) {
-                    widget.pause();
-                } else {
-                    widget.play();
-                }
-                isPlaying = !isPlaying;
-                updatePlayPauseButton();
-            });
-
-            document.getElementById('nextBtn').addEventListener('click', function() {
-                widget.next();
-                updateTrackInfo();
-            });
-
-            document.getElementById('prevBtn').addEventListener('click', function() {
-                widget.prev();
-                updateTrackInfo();
-            });
-
-            function updateTrackInfo() {
-                widget.getCurrentSound(function(sound) {
-                    if (sound) {
-                        const titleElement = document.getElementById('trackTitle');
-                        const artistElement = document.getElementById('trackArtist');
-                        
-                        titleElement.textContent = sound.title;
-                        artistElement.textContent = sound.user.username;
-                    }
-                });
-            }
-
-            function updatePlayPauseButton() {
-                const btn = document.getElementById('playPauseBtn');
-                btn.innerHTML = isPlaying 
-                    ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
-                    : '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-9 md:w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
-            }
-
-            window.addEventListener('load', function() {
-                setTimeout(() => {
-                    loader.style.opacity = '0';
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                        mainContent.style.opacity = '1';
-                    }, 500);
-                }, 1000);
-            });
-
-            widget.bind(SC.Widget.Events.PLAY, function() {
-                isPlaying = true;
-                updatePlayPauseButton();
-            });
-
-            widget.bind(SC.Widget.Events.PAUSE, function() {
-                isPlaying = false;
-                updatePlayPauseButton();
-            });
-
-            widget.bind(SC.Widget.Events.FINISH, function() {
-                isPlaying = false;
-                updatePlayPauseButton();
-            });
-        });
-    </script>
+  <!-- FOOTER -->
+  <footer class="bg-black text-center text-sm py-8 text-gray-600">
+    Y2KCoin & $ROAST — Contract Addresses:<br/>
+    Cronos: 0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d | Solana: A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray
+  </footer>
 </body>
 </html>
