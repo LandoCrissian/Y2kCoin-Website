@@ -11,29 +11,59 @@
 </head>
 <body class="bg-black text-white">
 
-<div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 hidden">
-  <div class="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg border border-pink-500">
-    <span id="toastMessage"></span>
-  </div>
+<div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 hidden bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg border border-pink-500">
+  <span id="toastMessage"></span>
 </div>
 
 <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
   <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
-  <button id="menuBtn" class="md:hidden">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"></path>
-    </svg>
-  </button>
-  <nav id="nav" class="hidden md:block md:space-x-4 text-sm absolute md:relative top-16 md:top-0 right-0 bg-[#111] md:bg-transparent w-full md:w-auto p-4 md:p-0">
-    <a href="#nfts" class="block md:inline-block py-2 hover:text-[#ff00ff]">Mint</a>
-    <a href="#dex" class="block md:inline-block py-2 hover:text-[#ff00ff]">Trade</a>
-    <a href="#connect" class="block md:inline-block py-2 hover:text-[#ff00ff]">Connect</a>
-    <a href="#submit-roast" class="block md:inline-block py-2 hover:text-[#ff00ff]">Submit</a>
-    <a href="#roasted" class="block md:inline-block py-2 hover:text-[#ff00ff]">ROASTED</a>
+  <nav class="space-x-4 text-sm">
+    <a href="#nfts" class="hover:text-[#ff00ff]">Mint</a>
+    <a href="#dex" class="hover:text-[#ff00ff]">Trade</a>
+    <a href="#connect" class="hover:text-[#ff00ff]">Connect</a>
+    <a href="#submit-roast" class="hover:text-[#ff00ff]">Submit</a>
+    <a href="#roasted" class="hover:text-[#ff00ff]">ROASTED</a>
   </nav>
 </header>
 
-<!-- Rest of your sections remain the same until the roast form -->
+<section class="text-center py-24 px-4 bg-gradient-to-b from-[#1a1a1a] to-black mt-14">
+  <h2 class="text-4xl glitch font-bold mb-4">Dual Chain. No Mercy.</h2>
+  <p class="text-lg mx-auto text-gray-400">From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.</p>
+  <div class="mt-8 flex flex-col gap-4">
+    <a href="#nfts" class="px-6 py-3 neon-border">View NFTs</a>
+    <a href="#dex" class="px-6 py-3 neon-border">Trade Now</a>
+  </div>
+</section>
+
+<section id="nfts" class="bg-[#111] py-12 px-4">
+  <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
+  <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
+    <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
+             alt="Eric Mode" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+      </a>
+    </div>
+    <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+      <a href="https://cronoshadow.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
+             alt="Cards of Cronos" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+      </a>
+    </div>
+    <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+      <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
+             alt="DiamondHands" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+      </a>
+    </div>
+    <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+      <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
+             alt="Dojo Warriors" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+      </a>
+    </div>
+  </div>
+</section>
 
 <section id="submit-roast" class="py-16 px-6 bg-black text-center">
   <h3 class="text-4xl glitch font-bold mb-4">Submit a Roast Target</h3>
@@ -53,14 +83,8 @@
     <input type="text" id="targetName" name="target" placeholder="@name or project from 𝕏"
            class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
     <button type="button" id="submitBtn" onclick="submitWithCRO()"
-            class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600 relative">
-      <span id="btnText">Submit with CRO</span>
-      <span id="btnLoader" class="hidden absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-      </span>
+            class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
+      Submit with CRO
     </button>
   </form>
 
@@ -68,7 +92,36 @@
   <div id="shareRoast" class="mt-4"></div>
 </section>
 
-<!-- Rest of your sections remain the same -->
+<section id="roasted" class="py-16 px-6 bg-[#111] text-center">
+  <h3 class="text-4xl glitch font-bold mb-8">ROASTED</h3>
+  <p class="text-gray-400 max-w-xl mx-auto mb-6">
+    These names got scorched this week. Fire them up or drop your own below.
+  </p>
+  <div id="roastList" class="grid gap-4 max-w-2xl mx-auto text-left text-sm text-gray-200"></div>
+</section>
+
+<section id="dex" class="bg-[#111] py-12 px-4 text-center">
+  <h3 class="text-3xl glitch font-bold mb-4">Trade with Fire</h3>
+  <div class="flex flex-col gap-4 mt-6">
+    <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank" class="px-6 py-3 glow">Trade $Y2K (Cronos)</a>
+    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="px-6 py-3 glow">Trade $ROAST (Solana)</a>
+  </div>
+</section>
+
+<section id="connect" class="py-12 px-4 text-center">
+  <h3 class="text-3xl glitch font-bold mb-4">Stay Plugged In</h3>
+  <p class="text-gray-400 mb-6">Join the fam. Talk your shit. Earn your spot.</p>
+  <div class="flex justify-center gap-4">
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2">Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2">𝕏 (Twitter)</a>
+  </div>
+</section>
+
+<footer class="bg-black text-center text-sm py-8 px-4 text-gray-600">
+  Y2KCoin & $ROAST — Contract Addresses:<br/>
+  <span class="break-all">Cronos: 0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d</span><br/>
+  <span class="break-all">Solana: A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray</span>
+</footer>
 
 <style>
   html { background-color: #0a0a0a; }
@@ -81,12 +134,6 @@
   .glitch {
     text-shadow: 2px 0 red, -2px 0 cyan;
     font-family: 'Orbitron', sans-serif;
-    animation: glitch 2s infinite;
-  }
-  @keyframes glitch {
-    2%, 64% { transform: translate(2px,0) skew(0deg); }
-    4%, 60% { transform: translate(-2px,0) skew(0deg); }
-    62% { transform: translate(0,0) skew(5deg); }
   }
   .neon-border {
     border: 2px solid #ff00ff;
@@ -111,205 +158,205 @@
     object-fit: cover;
     display: block;
   }
-  
-  @keyframes slideIn {
-    from { transform: translateY(-100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
-  
   #toast.show {
     display: block;
-    animation: slideIn 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out;
   }
 </style>
 
 <script>
-  // Mobile menu toggle
-  document.getElementById('menuBtn').addEventListener('click', () => {
-    const nav = document.getElementById('nav');
-    nav.classList.toggle('hidden');
-  });
+// Toast notification system
+function showToast(message, duration = 3000) {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toastMessage');
+  toastMessage.textContent = message;
+  toast.classList.add('show');
+  toast.classList.remove('hidden');
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.classList.add('hidden');
+  }, duration);
+}
 
-  // Toast notification system
-  function showToast(message, duration = 3000) {
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toastMessage');
-    toastMessage.textContent = message;
-    toast.classList.add('show');
-    toast.classList.remove('hidden');
-    
-    setTimeout(() => {
-      toast.classList.remove('show');
-      toast.classList.add('hidden');
-    }, duration);
+// Update wallet status display
+async function updateWalletStatus() {
+  const walletStatus = document.getElementById('walletStatus');
+  
+  if (typeof window.ethereum === "undefined") {
+    walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-red-900">No Wallet Detected</span>';
+    return false;
   }
 
-  // Wallet connection check
-  async function checkWalletConnection() {
-    const walletStatus = document.getElementById('walletStatus');
-    
-    if (typeof window.ethereum === "undefined") {
-      walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-red-900">No Wallet Detected</span>';
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    if (accounts.length > 0) {
+      const shortenedAccount = accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
+      walletStatus.innerHTML = `<span class="px-3 py-1 rounded-full bg-green-900">Connected: ${shortenedAccount}</span>`;
+      return true;
+    } else {
+      walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-yellow-900">Wallet Not Connected</span>';
       return false;
     }
+  } catch (err) {
+    console.error('Error checking wallet:', err);
+    walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-red-900">Connection Error</span>';
+    return false;
+  }
+}
 
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-      if (accounts.length > 0) {
-        const shortenedAccount = accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
-        walletStatus.innerHTML = `<span class="px-3 py-1 rounded-full bg-green-900">Connected: ${shortenedAccount}</span>`;
+// Switch to Cronos network
+async function switchToCronosChain() {
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x19' }],
+    });
+    return true;
+  } catch (switchError) {
+    // This error code indicates that the chain has not been added to MetaMask
+    if (switchError.code === 4902) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '0x19',
+            chainName: 'Cronos Mainnet',
+            nativeCurrency: {
+              name: 'CRO',
+              symbol: 'CRO',
+              decimals: 18
+            },
+            rpcUrls: ['https://evm.cronos.org'],
+            blockExplorerUrls: ['https://cronoscan.com/']
+          }]
+        });
         return true;
-      } else {
-        walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-yellow-900">Wallet Not Connected</span>';
+      } catch (addError) {
+        showToast('Failed to add Cronos network');
         return false;
       }
-    } catch (err) {
-      console.error('Error checking wallet connection:', err);
-      walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-red-900">Connection Error</span>';
-      return false;
     }
+    showToast('Failed to switch to Cronos network');
+    return false;
   }
+}
 
-  // Check wallet connection on page load
-  window.addEventListener('load', checkWalletConnection);
+async function submitWithCRO() {
+  const submitBtn = document.getElementById('submitBtn');
+  const target = document.getElementById('targetName').value.trim();
+  const resultBox = document.getElementById('roastResult');
+  const shareBox = document.getElementById('shareRoast');
 
-  // Handle chain switching
-  async function switchToCronosChain() {
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x19' }],
-      });
-      return true;
-    } catch (error) {
-      if (error.code === 4902) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [{
-              chainId: '0x19',
-              chainName: 'Cronos Mainnet',
-              nativeCurrency: {
-                name: 'CRO',
-                symbol: 'CRO',
-                decimals: 18
-              },
-              rpcUrls: ['https://evm.cronos.org'],
-              blockExplorerUrls: ['https://cronoscan.com/']
-            }]
-          });
-          return true;
-        } catch (addError) {
-          showToast('Failed to add Cronos network');
-          return false;
-        }
-      }
-      showToast('Failed to switch to Cronos network');
-      return false;
-    }
-  }
+  // Disable button during processing
+  submitBtn.disabled = true;
+  const originalBtnText = submitBtn.innerText;
+  submitBtn.innerText = 'Processing...';
 
-  async function submitWithCRO() {
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-    const btnLoader = document.getElementById('btnLoader');
-    const target = document.getElementById('targetName').value.trim();
-    const resultBox = document.getElementById('roastResult');
-    const shareBox = document.getElementById('shareRoast');
-
+  try {
     // Input validation
     if (!target || target.length < 3 || !target.startsWith('@')) {
       showToast('Enter a valid 𝕏 username or project (start with @)');
       return;
     }
 
-    // Wallet detection
+    // Check if MetaMask is installed
     if (typeof window.ethereum === 'undefined') {
-      showToast('MetaMask not detected');
+      showToast('MetaMask not detected. Please install MetaMask.');
       return;
     }
 
-    // Show loading state
-    btnText.classList.add('invisible');
-    btnLoader.classList.remove('hidden');
-    submitBtn.disabled = true;
-
-    try {
-      // Request account access
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      if (!accounts || accounts.length === 0) {
-        throw new Error('No accounts found');
-      }
-
-      // Switch to Cronos chain
-      if (!await switchToCronosChain()) {
-        throw new Error('Failed to switch to Cronos network');
-      }
-
-      // Setup provider and signer
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-
-      // Send transaction
-      const tx = await signer.sendTransaction({
-        to: '0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100',
-        value: ethers.utils.parseUnits('60', 'ether'),
-        gasLimit: 100000, // Explicitly set gas limit
-      });
-
-      // Wait for transaction confirmation
-      const receipt = await tx.wait();
-
-      // Handle successful transaction
-      showToast('Roast submitted successfully!');
-      resultBox.innerHTML = `
-        <div class="p-4 bg-green-900 rounded-lg">
-          <p>Roast for "${target}" submitted via CRO.</p>
-          <a href="https://cronoscan.com/tx/${tx.hash}" target="_blank" 
-             class="text-blue-400 hover:text-blue-300 underline">
-            View Transaction
-          </a>
-        </div>
-      `;
-
-      // Update local storage
-      const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
-      roasts.unshift({ target, chain: 'Cronos', likes: 0, tx: tx.hash });
-      localStorage.setItem('roasts', JSON.stringify(roasts));
-
-      // Setup share button
-      const tweetText = encodeURIComponent(
-        `I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.`
-      );
-      const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
-      shareBox.innerHTML = `
-        <a href="${tweetURL}" target="_blank" 
-           class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
-          Share on 𝕏
-        </a>
-      `;
-
-    } catch (err) {
-      console.error('Transaction failed:', err);
-      showToast(err.message || 'Transaction failed. Check console.');
-      resultBox.innerHTML = `
-        <div class="p-4 bg-red-900 rounded-lg">
-          ${err.message || 'Transaction failed. Please try again.'}
-        </div>
-      `;
-    } finally {
-      // Reset button state
-      btnText.classList.remove('invisible');
-      btnLoader.classList.add('hidden');
-      submitBtn.disabled = false;
+    // Request account access
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    if (!accounts || accounts.length === 0) {
+      showToast('Please connect your wallet');
+      return;
     }
-  }
 
+    // Switch to Cronos chain
+    if (!await switchToCronosChain()) {
+      return;
+    }
+
+    // Setup provider and send transaction
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    showToast('Confirming transaction...');
+
+    const tx = await signer.sendTransaction({
+      to: '0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100',
+      value: ethers.utils.parseUnits('60', 'ether'),
+      gasLimit: 100000
+    });
+
+    showToast('Transaction submitted, waiting for confirmation...');
+
+    // Wait for transaction to be mined
+    const receipt = await tx.wait();
+    
+    // Update UI with success
+    resultBox.innerHTML = `
+      <div class="p-4 bg-green-900/50 rounded-lg mt-4">
+        <p>🎯 Roast for "${target}" submitted!</p>
+        <a href="https://cronoscan.com/tx/${tx.hash}" target="_blank" 
+           class="text-blue-400 hover:underline text-sm">
+          View Transaction
+        </a>
+      </div>
+    `;
+
+    // Store in local storage
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    roasts.unshift({ target, chain: 'Cronos', likes: 0, tx: tx.hash });
+    localStorage.setItem('roasts', JSON.stringify(roasts));
+
+    // Setup share button
+    const tweetText = encodeURIComponent(
+      `I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.`
+    );
+    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
+    
+    shareBox.innerHTML = `
+      <a href="${tweetURL}" target="_blank" 
+         class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
+        Share on 𝕏
+      </a>
+    `;
+
+    showToast('Roast submitted successfully! 🔥');
+
+  } catch (err) {
+    console.error('Transaction failed:', err);
+    resultBox.innerHTML = `
+      <div class="p-4 bg-red-900/50 rounded-lg mt-4">
+        <p>❌ Transaction failed:</p>
+        <p class="text-sm">${err.message || 'Something went wrong. Please try again.'}</p>
+      </div>
+    `;
+    showToast('Transaction failed. Check details below.');
+  } finally {
+    // Re-enable button
+    submitBtn.disabled = false;
+    submitBtn.innerText = originalBtnText;
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  updateWalletStatus();
+  
   // Update wallet status when accounts change
   if (window.ethereum) {
-    window.ethereum.on('accountsChanged', checkWalletConnection);
-    window.ethereum.on('chainChanged', checkWalletConnection);
+    window.ethereum.on('accountsChanged', updateWalletStatus);
+    window.ethereum.on('chainChanged', updateWalletStatus);
   }
+});
 </script>
+
 </body>
 </html>
