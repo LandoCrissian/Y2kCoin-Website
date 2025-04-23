@@ -164,85 +164,55 @@
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const storedRoasts = JSON.parse(localStorage.getItem("roasts")) || [];
-    const roastList = document.getElementById("roastList");
-    storedRoasts.forEach(roast => {
-      const div = document.createElement("div");
-      div.className = "bg-[#1a1a1a] neon-border p-4 rounded";
-      div.innerHTML = `
-        <div><strong>Target:</strong> ${roast.target}</div>
-        <div><strong>Chain:</strong> ${roast.chain}</div>
-        <div><strong>Support:</strong> <span class="text-pink-400 fire-count">🔥 x${roast.likes}</span></div>
-        <button onclick="likeRoast(this)" class="mt-2 px-3 py-1 text-xs bg-pink-600 rounded hover:bg-pink-700">+🔥 Fire This Roast</button>
-      `;
-      roastList.appendChild(div);
-    });
+  async function submitWithCRO() {
+    const target = document.getElementById("targetName").value.trim();
+    const resultBox = document.getElementById("roastResult");
+    const shareBox = document.getElementById("shareRoast");
 
-    // Prize pool (manual)
-    updatePrizePool(360, 0.096); // <-- change values as needed
-  });
+    if (!target || target.length < 3 || !target.startsWith("@")) {
+      resultBox.textContent = "Enter a valid 𝕏 username or project (start with @).";
+      return;
+    }
 
-  function updatePrizePool(cro, sol) {
-    document.getElementById("poolCRO").textContent = `${cro} CRO`;
-    document.getElementById("poolSOL").textContent = `${sol} SOL`;
+    if (typeof window.ethereum === "undefined") {
+      resultBox.textContent = "MetaMask not detected.";
+      return;
+    }
+
+    try {
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x19" }],
+      });
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const tx = await signer.sendTransaction({
+        to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+        value: ethers.utils.parseUnits("60", "ether"),
+      });
+
+      console.log("Transaction:", tx);
+
+      resultBox.textContent = `Roast for "${target}" submitted via CRO. TX: ${tx.hash}`;
+
+      const roasts = JSON.parse(localStorage.getItem("roasts")) || [];
+      roasts.unshift({ target, chain: "Cronos", likes: 0 });
+      localStorage.setItem("roasts", JSON.stringify(roasts));
+
+      const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.`);
+      const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
+
+      shareBox.innerHTML = `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
+
+    } catch (err) {
+      console.error("CRO TX Failed:", err);
+      resultBox.textContent = `Error: ${err.message || "Something went wrong. Check console."}`;
+    }
   }
-
-  <script>
-async function submitWithCRO() {
-  const target = document.getElementById("targetName").value.trim();
-  const resultBox = document.getElementById("roastResult");
-  const shareBox = document.getElementById("shareRoast");
-
-  if (!target || target.length < 3 || !target.startsWith("@")) {
-    resultBox.textContent = "Enter a valid 𝕏 username or project (start with @).";
-    return;
-  }
-
-  if (typeof window.ethereum === "undefined") {
-    resultBox.textContent = "MetaMask not detected.";
-    return;
-  }
-
-  try {
-    // Connect to wallet
-    await window.ethereum.request({ method: "eth_requestAccounts" });
-
-    // Force switch to Cronos (chainId 25 = 0x19)
-    await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x19" }],
-    });
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-
-    // Send 60 CRO
-    const tx = await signer.sendTransaction({
-      to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
-      value: ethers.utils.parseUnits("60", "ether"),
-    });
-
-    console.log("Transaction:", tx);
-
-    resultBox.textContent = `Roast for "${target}" submitted via CRO. TX: ${tx.hash}`;
-
-    // Add roast to local leaderboard
-    const roasts = JSON.parse(localStorage.getItem("roasts")) || [];
-    roasts.unshift({ target, chain: "Cronos", likes: 0 });
-    localStorage.setItem("roasts", JSON.stringify(roasts));
-
-    // Build 𝕏 share link
-    const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.`);
-    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
-
-    shareBox.innerHTML = `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
-
-  } catch (err) {
-    console.error("CRO TX Failed:", err);
-    resultBox.textContent = `Error: ${err.message || "Something went wrong. Check console."}`;
-  }
-}
 </script>
 </body>
 </html>
