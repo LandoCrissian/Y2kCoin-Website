@@ -7,18 +7,18 @@
   <meta name="description" content="The Y2K x ROAST fusion hub. Explore NFTs, burn mechanics, and trading portals across Cronos and Solana."/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body class="bg-black text-white">
 
- <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
+<header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
   <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
   <nav class="space-x-4 text-sm">
-    <a href="#nfts" class="hover:text-[#ff00ff] touch-action-manipulation">Mint</a>
-    <a href="#dex" class="hover:text-[#ff00ff] touch-action-manipulation">Trade</a>
-    <a href="#connect" class="hover:text-[#ff00ff] touch-action-manipulation">Connect</a>
-    <a href="#submit-roast" class="hover:text-[#ff00ff] touch-action-manipulation">Submit</a>
-    <a href="#roasted" class="hover:text-[#ff00ff] touch-action-manipulation">ROASTED</a>
+    <a href="#nfts" class="hover:text-[#ff00ff]">Mint</a>
+    <a href="#dex" class="hover:text-[#ff00ff]">Trade</a>
+    <a href="#connect" class="hover:text-[#ff00ff]">Connect</a>
+    <a href="#submit-roast" class="hover:text-[#ff00ff]">Submit</a>
+    <a href="#roasted" class="hover:text-[#ff00ff]">ROASTED</a>
   </nav>
 </header>
 
@@ -26,95 +26,63 @@
   <h2 class="text-4xl glitch font-bold mb-4">Dual Chain. No Mercy.</h2>
   <p class="text-lg mx-auto text-gray-400">From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.</p>
   <div class="mt-8 flex flex-col gap-4">
-    <a href="#nfts" class="px-6 py-3 neon-border touch-action-manipulation">View NFTs</a>
-    <a href="#dex" class="px-6 py-3 neon-border touch-action-manipulation">Trade Now</a>
+    <a href="#nfts" class="px-6 py-3 neon-border">View NFTs</a>
+    <a href="#dex" class="px-6 py-3 neon-border">Trade Now</a>
   </div>
 </section>
-  
+
 <section id="nfts" class="bg-[#111] py-12 px-4">
   <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
   <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
-
-    <!-- ERIC MODE -->
     <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
       <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
         <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
-             alt="Eric Mode"
-             class="w-48 h-48 rounded neon-border object-cover"
-             loading="lazy"/>
+             alt="Eric Mode" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
       </a>
     </div>
-
-    <!-- CARDS OF CRONOS -->
     <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
       <a href="https://cronoshadow.nfts2.me/" target="_blank">
         <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
-             alt="Cards of Cronos"
-             class="w-48 h-48 rounded neon-border object-cover"
-             loading="lazy"/>
+             alt="Cards of Cronos" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
       </a>
     </div>
-
-    <!-- DIAMONDHANDS -->
     <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
       <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
         <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
-             alt="DiamondHands"
-             class="w-48 h-48 rounded neon-border object-cover"
-             loading="lazy"/>
+             alt="DiamondHands" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
       </a>
     </div>
-
-    <!-- DOJO -->
     <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
       <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
         <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
-             alt="Dojo Warriors"
-             class="w-48 h-48 rounded neon-border object-cover"
-             loading="lazy"/>
+             alt="Dojo Warriors" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
       </a>
     </div>
-
   </div>
 </section>
 
 <section id="submit-roast" class="py-16 px-6 bg-black text-center">
   <h3 class="text-4xl glitch font-bold mb-4">Submit a Roast Target</h3>
   <p class="text-gray-400 max-w-xl mx-auto mb-4">
-    Drop a name from 𝕏. Send CRO or SOL to enter. Winner takes half the pot. The rest? Burned.
+    Submit a name from 𝕏. Pay with CRO. The top roast wins the prize pot.
   </p>
 
-  <!-- Live Pool Display -->
   <div class="text-lg text-pink-400 font-bold mb-6">
     This Week’s Pool: <span id="poolCRO">0 CRO</span> + <span id="poolSOL">0 SOL</span>
   </div>
 
   <form id="roastForm" class="max-w-md mx-auto space-y-4">
-    <!-- Token Select -->
-    <select id="tokenChoice" class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border">
-      <option value="CRO">CRO (60 required)</option>
-      <option value="SOL">SOL (0.032 required)</option>
-    </select>
-
-    <!-- Target Input -->
     <input type="text" id="targetName" name="target" placeholder="@name or project from 𝕏"
            class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
-
-    <!-- TX Hash Input -->
-    <input type="text" id="txHash" name="txhash" placeholder="Paste your TX hash after payment"
-           class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
-
-    <!-- Wallet Info with Copy Button -->
-<div id="walletDisplay" class="text-sm text-gray-400 text-left hidden">
-  <p>
-    <strong id="walletLabel"></strong><br/>
-    <span id="walletAddress" class="block break-all mt-1"></span>
-    <button onclick="copyWallet()" class="mt-2 text-xs bg-pink-600 px-3 py-1 rounded hover:bg-pink-700">
-      Copy Address
+    <button type="button" onclick="submitWithCRO()"
+            class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
+      Submit with CRO
     </button>
-    <span id="copyConfirm" class="text-green-400 text-xs ml-2 hidden">Copied!</span>
-  </p>
-</div>
+  </form>
+
+  <div id="roastResult" class="mt-4 text-green-400 text-sm"></div>
+  <div id="shareRoast" class="mt-4"></div>
+</section>
 
     <!-- Submit Button -->
     <button type="button" onclick="submitWithCRO()"
