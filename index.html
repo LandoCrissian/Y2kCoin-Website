@@ -216,8 +216,8 @@
       roastList.appendChild(div);
     });
 
-    // Update pool total manually here
-    updatePrizePool(000, 000); // <--- CHANGE weekly totals here
+    // Prize pool tracker (manually updated)
+    updatePrizePool(360, 0.096);
   });
 
   function updatePrizePool(cro, sol) {
@@ -273,6 +273,36 @@
       match.likes = count;
       localStorage.setItem("roasts", JSON.stringify(roasts));
     }
+  }
+
+  // Wallet reveal logic
+  document.getElementById("tokenChoice").addEventListener("change", function () {
+    const selected = this.value;
+    const walletDisplay = document.getElementById("walletDisplay");
+    const walletLabel = document.getElementById("walletLabel");
+    const walletAddress = document.getElementById("walletAddress");
+
+    if (selected === "CRO") {
+      walletLabel.textContent = "Send 60 CRO to:";
+      walletAddress.textContent = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+      walletDisplay.classList.remove("hidden");
+    } else if (selected === "SOL") {
+      walletLabel.textContent = "Send 0.032 SOL to:";
+      walletAddress.textContent = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
+      walletDisplay.classList.remove("hidden");
+    } else {
+      walletDisplay.classList.add("hidden");
+    }
+  });
+
+  // Copy to clipboard function
+  function copyWallet() {
+    const walletText = document.getElementById("walletAddress").textContent;
+    navigator.clipboard.writeText(walletText).then(() => {
+      const confirm = document.getElementById("copyConfirm");
+      confirm.classList.remove("hidden");
+      setTimeout(() => confirm.classList.add("hidden"), 1500);
+    });
   }
 </script>
 </body>
