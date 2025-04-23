@@ -322,115 +322,314 @@ function showToast(message, duration = 3000) {
   }, duration);
 }
 
-// Wallet Support Configuration
-const SUPPORTED_SOLANA_WALLETS = {
-  PHANTOM: 'Phantom',
-  SOLFLARE: 'Solflare',
-  BACKPACK: 'Backpack',
-  GLOW: 'Glow',
-  EXODUS: 'Exodus',
-  BRAVE: 'Brave',
-  SLOPE: 'Slope',
-  COIN98: 'Coin98',
-  CLOVER: 'Clover',
-  MATHWALLET: 'MathWallet'
-};
+// CRO Transaction Handler
+async function submitWithCRO() {
+  const submitBtn = document.getElementById('submitCroBtn');
+  const target = document.getElementById('targetName').value.trim();
+  const resultBox = document.getElementById('roastResult');
+  const shareBox = document.getElementById('shareRoast');
 
-async function detectSolanaWallets() {
-  const availableWallets = [];
-
-  // Phantom
-  if (window.phantom?.solana || window.solana?.isPhantom) {
-    availableWallets.push({
-      name: SUPPORTED_SOLANA_WALLETS.PHANTOM,
-      adapter: window.phantom?.solana || window.solana
-    });
+  if (!target || target.length < 3 || !target.startsWith('@')) {
+    showToast('Enter a valid 𝕏 username or project (start with @)');
+    return;
   }
 
-  // Solflare
-  if (window.solflare) {
-    availableWallets.push({
-      name: SUPPORTED_SOLANA_WALLETS.SOLFLARE,
-      adapter: window.solflare
-    });
-  }
+  submitBtn.disabled = true;
+  submitBtn.innerText = 'Processing...';
 
-  // Backpack
-  if (window.backpack?.solana) {
-    availableWallets.push({
-      name: SUPPORTED_SOLANA_WALLETS.BACKPACK,
-      adapter: window.backpack.solana
-    });
-  }
-
-  // Add other wallet checks here...
-
-  return availableWallets;
-}
-
-// Wallet modal handlers
-function showSolanaWalletModal() {
-  const modal = document.getElementById('solanaWalletModal');
-  const walletList = document.getElementById('solanaWalletList');
-  modal.classList.remove('hidden');
-  
-  detectSolanaWallets().then(wallets => {
-    if (wallets.length === 0) {
-      walletList.innerHTML = `
-        <div class="p-4 text-center text-gray-400">
-          No Solana wallets detected. Please install a wallet to continue.
-          <div class="mt-4 grid grid-cols-2 gap-2">
-            <a href="https://phantom.app/" target="_blank" 
-               class="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700">
-              Get Phantom
-            </a>
-            <a href="https://solflare.com/" target="_blank"
-               class="px-4 py-2 bg-orange-600 rounded hover:bg-orange-700">
-              Get Solflare
-            </a>
-          </div>
-        </div>
-      `;
-      return;
+  try {
+    if (typeof window.ethereum === "undefined") {
+      throw new Error('MetaMask not detected');
     }
 
-    walletList.innerHTML = wallets.map(wallet => `
-      <button onclick="connectToSolanaWallet('${wallet.name}')"
-              class="w-full px-4 py-3 bg-[#222] hover:bg-[#333] rounded-lg flex items-center justify-between">
-        <span>${wallet.name}</span>
-        <img src="/images/${wallet.name.toLowerCase()}.png" alt="${wallet.name}" class="w-6 h-6"/>
-      </button>
-    `).join('');
-  });
+    // Request account access
+    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    if (!accounts || accounts.length === 0) {
+      throw new Error('Please connect your wallet');
+    }
+
+    // Switch to Cronos network
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x19" }],
+      });
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [{
+            chainId: "0x19",
+            chainName: "Cronos Mainnet",
+            nativeCurrency: {
+              name: "CRO",
+              symbol: "CRO",
+              decimals: 18
+            },
+            rpcUrls: ["https://evm.cronos.org"],
+            blockExplorerUrls: ["https://cronoscan.com/"]
+          }]
+        });
+      } else {
+        throw switchError;
+      }
+    }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    showToast('Confirm the transaction in your wallet...');
+
+    const tx = await signer.sendTransaction({
+      to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100", // Replace with your CRO wallet address
+      value: ethers.utils.parseEther("60"),
+      gasLimit: 100000
+    });
+
+    showToast('Transaction submitted, waiting for confirmation...');
+    const receipt = await tx.wait();
+
+    resultBox.innerHTML = `
+      <div class="p-4 bg-green-900/50 rounded-lg mt-4">
+        <p>🎯 Roast for "${target}" submitted!</p>
+        <a href="https://cronoscan.com/tx/${receipt.transactionHash}" target="_blank" 
+           class="text-blue-400 hover:underline text-sm">
+          View Transaction
+        </a>
+      </div>
+    `;
+
+    const tweetText = encodeURIComponent(
+      `I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.`
+    );
+    const tweetURL = `https://twitter.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
+    
+    shareBox.innerHTML = `
+      <a href="${tweetURL}" target="_blank" 
+         class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
+        Share on 𝕏
+      </a>
+    `;
+
+    showToast('Roast submitted successfully! 🔥');
+
+  } catch (err) {
+    console.error('CRO Transaction failed:', err);
+    resultBox.innerHTML = `
+      <div class="p-4 bg-red-900/50 rounded-lg mt-4">
+        <p>❌ Transaction failed:</p>
+        <p class="text-sm">${err.message}</p>
+      </div>
+    `;
+    showToast('Transaction failed. Check details below.');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'Pay with CRO';
+  }
 }
 
-function closeSolanaWalletModal() {
-  document.getElementById('solanaWalletModal').classList.add('hidden');
+// Solana Transaction Handler
+async function submitWithSOL() {
+  const submitBtn = document.getElementById('submitSolBtn');
+  const target = document.getElementById('targetName').value.trim();
+  const resultBox = document.getElementById('roastResult');
+  const shareBox = document.getElementById('shareRoast');
+
+  if (!target || target.length < 3 || !target.startsWith('@')) {
+    showToast('Enter a valid 𝕏 username or project (start with @)');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerText = 'Processing...';
+
+  try {
+    const wallet = await getSolanaWallet();
+    if (!wallet) {
+      showSolanaWalletModal();
+      throw new Error('Please connect a Solana wallet');
+    }
+
+    if (!wallet.isConnected) {
+      await wallet.connect();
+    }
+
+    const connection = new solanaWeb3.Connection(
+      'https://api.mainnet-beta.solana.com',
+      'confirmed'
+    );
+
+    const transaction = new solanaWeb3.Transaction().add(
+      solanaWeb3.SystemProgram.transfer({
+        fromPubkey: wallet.publicKey,
+        toPubkey: new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq'), // Replace with your SOL wallet address
+        lamports: solanaWeb3.LAMPORTS_PER_SOL * 0.1 // 0.1 SOL
+      })
+    );
+
+    const { blockhash } = await connection.getLatestBlockhash('finalized');
+    transaction.recentBlockhash = blockhash;
+    transaction.feePayer = wallet.publicKey;
+
+    showToast('Confirm the transaction in your wallet...');
+
+    const signature = await wallet.sendTransaction(transaction, connection);
+    showToast('Transaction submitted, waiting for confirmation...');
+
+    await connection.confirmTransaction(signature, 'confirmed');
+
+    resultBox.innerHTML = `
+      <div class="p-4 bg-green-900/50 rounded-lg mt-4">
+        <p>🎯 Roast for "${target}" submitted!</p>
+        <a href="https://solscan.io/tx/${signature}" target="_blank" 
+           class="text-blue-400 hover:underline text-sm">
+          View Transaction
+        </a>
+      </div>
+    `;
+
+    const tweetText = encodeURIComponent(
+      `I just submitted ${target} to be roasted using $ROAST on Solana.\nWeb3 verified. Vote or die.`
+    );
+    const tweetURL = `https://twitter.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,Solana`;
+    
+    shareBox.innerHTML = `
+      <a href="${tweetURL}" target="_blank" 
+         class="inline-block mt-4 px-4 py-2 bg-[#00ffff] text-black font-bold rounded hover:bg-cyan-400">
+        Share on 𝕏
+      </a>
+    `;
+
+    showToast('Roast submitted successfully! 🔥');
+
+  } catch (err) {
+    console.error('SOL Transaction failed:', err);
+    resultBox.innerHTML = `
+      <div class="p-4 bg-red-900/50 rounded-lg mt-4">
+        <p>❌ Transaction failed:</p>
+        <p class="text-sm">${err.message}</p>
+      </div>
+    `;
+    showToast('Transaction failed. Check details below.');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'Pay with SOL';
+  }
+}
+
+// Wallet detection and status updates
+async function getSolanaWallet() {
+  if (window.phantom?.solana && window.phantom.solana.isPhantom) {
+    return window.phantom.solana;
+  }
+  if (window.solana?.isPhantom) {
+    return window.solana;
+  }
+  if (window.solflare) {
+    return window.solflare;
+  }
+  return null;
+}
+
+async function updateWalletStatuses() {
+  const walletStatus = document.getElementById('walletStatus').querySelector('.flex.gap-4');
+  const disconnectCroBtn = document.getElementById('disconnectCroBtn');
+  const disconnectSolBtn = document.getElementById('disconnectSolBtn');
+
+  // Check CRO wallet
+  if (typeof window.ethereum === "undefined") {
+    walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-red-900">CRO: No Wallet</span>';
+    disconnectCroBtn.classList.add('hidden');
+  } else {
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts && accounts.length > 0) {
+        walletStatus.innerHTML = `<span class="px-3 py-1 rounded-full bg-green-900">
+          CRO: ${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}
+        </span>`;
+        disconnectCroBtn.classList.remove('hidden');
+      } else {
+        walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-yellow-900">CRO: Not Connected</span>';
+        disconnectCroBtn.classList.add('hidden');
+      }
+    } catch (err) {
+      walletStatus.innerHTML = '<span class="px-3 py-1 rounded-full bg-red-900">CRO: Error</span>';
+      disconnectCroBtn.classList.add('hidden');
+    }
+  }
+
+  // Check Solana wallet
+  const solanaWallet = await getSolanaWallet();
+  if (!solanaWallet) {
+    walletStatus.innerHTML += '<span class="px-3 py-1 rounded-full bg-red-900">SOL: No Wallet</span>';
+    disconnectSolBtn.classList.add('hidden');
+  } else if (solanaWallet.isConnected) {
+    const pubKey = solanaWallet.publicKey.toString();
+    walletStatus.innerHTML += `<span class="px-3 py-1 rounded-full bg-green-900">
+      SOL: ${pubKey.slice(0, 6)}...${pubKey.slice(-4)}
+    </span>`;
+    disconnectSolBtn.classList.remove('hidden');
+  } else {
+    walletStatus.innerHTML += '<span class="px-3 py-1 rounded-full bg-yellow-900">SOL: Not Connected</span>';
+    disconnectSolBtn.classList.add('hidden');
+  }
+}
+
+// Disconnect handlers
+async function disconnectCRO() {
+  if (window.ethereum) {
+    try {
+      localStorage.removeItem('walletconnect');
+      localStorage.removeItem('WALLETCONNECT_DEEPLINK_CHOICE');
+      showToast('Disconnecting CRO wallet...');
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      console.error('Error disconnecting CRO wallet:', err);
+      showToast('Error disconnecting CRO wallet');
+    }
+  }
+}
+
+async function disconnectSOL() {
+  const wallet = await getSolanaWallet();
+  if (wallet && wallet.isConnected) {
+    try {
+      await wallet.disconnect();
+      showToast('Disconnecting SOL wallet...');
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      console.error('Error disconnecting SOL wallet:', err);
+      showToast('Error disconnecting SOL wallet');
+    }
+  }
 }
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
   updateWalletStatuses();
   
-  // Setup listeners for all detected wallets
-  const wallets = await detectSolanaWallets();
-  wallets.forEach(wallet => {
-    if (wallet.adapter.on) {
-      wallet.adapter.on('connect', () => {
-        updateWalletStatuses();
-        showToast(`${wallet.name} connected`);
-      });
-      
-      wallet.adapter.on('disconnect', () => {
-        updateWalletStatuses();
-        showToast(`${wallet.name} disconnected`);
-      });
-      
-      wallet.adapter.on('accountChanged', () => {
-        updateWalletStatuses();
-      });
+  // Setup CRO wallet events
+  if (window.ethereum) {
+    window.ethereum.on('accountsChanged', updateWalletStatuses);
+    window.ethereum.on('chainChanged', () => window.location.reload());
+    window.ethereum.on('disconnect', () => window.location.reload());
+  }
+  
+  // Setup Solana wallet events
+  const solanaWallet = await getSolanaWallet();
+  if (solanaWallet) {
+    solanaWallet.on('connect', () => {
+      updateWalletStatuses();
+      showToast('Solana wallet connected');
+    });
+    solanaWallet.on('disconnect', () => {
+      updateWalletStatuses();
+      showToast('Solana wallet disconnected');
+    });
+    if (solanaWallet.on) {
+      solanaWallet.on('accountChanged', updateWalletStatuses);
     }
-  });
+  }
 });
 </script>
 
