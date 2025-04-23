@@ -103,11 +103,10 @@
     <input type="text" id="txHash" name="txhash" placeholder="Paste your TX hash after payment"
            class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
 
-    <!-- Wallet Info -->
-    <div class="text-sm text-gray-400 text-left">
-      <p><strong>CRO Wallet:</strong> 0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100</p>
-      <p><strong>SOL Wallet:</strong> HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq</p>
-    </div>
+    <!-- Wallet Info (Dynamically Shown) -->
+<div id="walletDisplay" class="text-sm text-gray-400 text-left hidden">
+  <p><strong id="walletLabel"></strong> <span id="walletAddress"></span></p>
+</div>
 
     <!-- Submit Button -->
     <button type="button" onclick="submitRoast()"
