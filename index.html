@@ -12,31 +12,6 @@
 </head>
 <body class="bg-black text-white">
 
-<!-- Toast Notification -->
-<div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 hidden">
-  <div class="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg border border-pink-500">
-    <span id="toastMessage"></span>
-  </div>
-</div>
-
-<!-- Solana Wallet Selection Modal -->
-<div id="solanaWalletModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-  <div class="bg-[#111] rounded-lg p-6 max-w-md w-full mx-4">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-bold">Connect Solana Wallet</h3>
-      <button onclick="closeSolanaWalletModal()" class="text-gray-500 hover:text-white">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-    <div id="solanaWalletList" class="space-y-2">
-      <!-- Wallet buttons will be inserted here -->
-    </div>
-  </div>
-</div>
-
-<!-- Header -->
 <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
   <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
   <nav class="space-x-4 text-sm">
@@ -48,7 +23,6 @@
   </nav>
 </header>
 
-<!-- Hero Section -->
 <section class="text-center py-24 px-4 bg-gradient-to-b from-[#1a1a1a] to-black mt-14">
   <h2 class="text-4xl glitch font-bold mb-4">Dual Chain. No Mercy.</h2>
   <p class="text-lg mx-auto text-gray-400">From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.</p>
@@ -58,7 +32,6 @@
   </div>
 </section>
 
-<!-- NFTs Section -->
 <section id="nfts" class="bg-[#111] py-12 px-4">
   <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
   <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
@@ -89,53 +62,36 @@
   </div>
 </section>
 
-  <!-- Submit Roast Section -->
 <section id="submit-roast" class="py-16 px-6 bg-black text-center">
   <h3 class="text-4xl glitch font-bold mb-4">Submit a Roast Target</h3>
   <p class="text-gray-400 max-w-xl mx-auto mb-4">
-    Submit a name from 𝕏. Pay with CRO or SOL. The top roast wins the prize pot.
+    Drop a name from 𝕏. Choose SOL or CRO. The top roast wins half the pot — the rest gets burned.
   </p>
 
   <div class="text-lg text-pink-400 font-bold mb-6">
-    This Week's Pool: <span id="poolCRO">0 CRO</span> + <span id="poolSOL">0 SOL</span>
-  </div>
-
-  <div id="walletStatus" class="mb-4 text-sm flex flex-col items-center gap-2">
-    <div class="flex gap-4">
-      <span class="px-3 py-1 rounded-full bg-gray-800">CRO: Not Connected</span>
-      <span class="px-3 py-1 rounded-full bg-gray-800">SOL: Not Connected</span>
-    </div>
-    <div class="flex gap-2">
-      <button onclick="disconnectCRO()" id="disconnectCroBtn" class="hidden px-2 py-1 text-xs rounded bg-red-900 hover:bg-red-800">
-        Disconnect CRO
-      </button>
-      <button onclick="disconnectSOL()" id="disconnectSolBtn" class="hidden px-2 py-1 text-xs rounded bg-red-900 hover:bg-red-800">
-        Disconnect SOL
-      </button>
-    </div>
+    This Week’s Pool: <span id="poolCRO">0 CRO</span> + <span id="poolSOL">0 SOL</span>
   </div>
 
   <form id="roastForm" class="max-w-md mx-auto space-y-4">
+    <select id="tokenChoice" class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border">
+      <option value="CRO">Submit with CRO (60)</option>
+      <option value="SOL">Submit with SOL (0.032)</option>
+    </select>
+
     <input type="text" id="targetName" name="target" placeholder="@name or project from 𝕏"
            class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
-    <div class="grid grid-cols-2 gap-4">
-      <button type="button" id="submitCroBtn" onclick="submitWithCRO()"
-              class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600 transition-all">
-        Pay with CRO
-      </button>
-      <button type="button" id="submitSolBtn" onclick="submitWithSOL()"
-              class="w-full bg-[#00ffff] text-black font-bold py-2 rounded hover:bg-cyan-400 transition-all">
-        Pay with SOL
-      </button>
-    </div>
+
+    <button type="button" onclick="handleSubmit()"
+            class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
+      Submit Roast
+    </button>
   </form>
 
   <div id="roastResult" class="mt-4 text-green-400 text-sm"></div>
   <div id="shareRoast" class="mt-4"></div>
 </section>
 
-<!-- Roasted Section -->
-<section id="roasted" class="py-16 px-6 bg-[#111] text-center">
+  <section id="roasted" class="py-16 px-6 bg-[#111] text-center">
   <h3 class="text-4xl glitch font-bold mb-8">ROASTED</h3>
   <p class="text-gray-400 max-w-xl mx-auto mb-6">
     These names got scorched this week. Fire them up or drop your own below.
@@ -143,34 +99,23 @@
   <div id="roastList" class="grid gap-4 max-w-2xl mx-auto text-left text-sm text-gray-200"></div>
 </section>
 
-<!-- DEX Section -->
 <section id="dex" class="bg-[#111] py-12 px-4 text-center">
   <h3 class="text-3xl glitch font-bold mb-4">Trade with Fire</h3>
   <div class="flex flex-col gap-4 mt-6">
-    <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
-       target="_blank" 
-       class="px-6 py-3 glow bg-opacity-20 bg-pink-600 hover:bg-opacity-30 transition-all">
-      Trade $Y2K (Cronos)
-    </a>
-    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" 
-       target="_blank" 
-       class="px-6 py-3 glow bg-opacity-20 bg-cyan-600 hover:bg-opacity-30 transition-all">
-      Trade $ROAST (Solana)
-    </a>
+    <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank" class="px-6 py-3 glow">Trade $Y2K (Cronos)</a>
+    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="px-6 py-3 glow">Trade $ROAST (Solana)</a>
   </div>
 </section>
 
-<!-- Connect Section -->
 <section id="connect" class="py-12 px-4 text-center">
   <h3 class="text-3xl glitch font-bold mb-4">Stay Plugged In</h3>
   <p class="text-gray-400 mb-6">Join the fam. Talk your shit. Earn your spot.</p>
   <div class="flex justify-center gap-4">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2 hover:bg-[#ff00ff] hover:bg-opacity-20 transition-all">Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2 hover:bg-[#ff00ff] hover:bg-opacity-20 transition-all">𝕏 (Twitter)</a>
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2">Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2">𝕏 (Twitter)</a>
   </div>
 </section>
 
-<!-- Footer -->
 <footer class="bg-black text-center text-sm py-8 px-4 text-gray-600">
   Y2KCoin & $ROAST — Contract Addresses:<br/>
   <span class="break-all">Cronos: 0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d</span><br/>
@@ -178,356 +123,181 @@
 </footer>
 
 <style>
-  html { 
-    background-color: #0a0a0a; 
-    scroll-behavior: smooth;
-  }
-  
+  html { background-color: #0a0a0a; }
   body {
     background-color: #0a0a0a;
     font-family: 'Rubik', sans-serif;
     color: #e2e8f0;
     overflow-x: hidden;
   }
-  
   .glitch {
     text-shadow: 2px 0 red, -2px 0 cyan;
     font-family: 'Orbitron', sans-serif;
-    animation: glitch 4s infinite;
   }
-  
-  @keyframes glitch {
-    0%, 100% { text-shadow: 2px 0 red, -2px 0 cyan; }
-    25% { text-shadow: -2px 0 red, 2px 0 cyan; }
-    50% { text-shadow: 2px 0 cyan, -2px 0 red; }
-    75% { text-shadow: -2px 0 cyan, 2px 0 red; }
-  }
-  
   .neon-border {
     border: 2px solid #ff00ff;
     box-shadow: 0 0 10px #ff00ff;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
   }
-  
-  .neon-border:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 0, 255, 0.2),
-      transparent
-    );
-    transition: 0.5s;
-  }
-  
-  .neon-border:hover:before {
-    left: 100%;
-  }
-  
   .neon-border:active {
     transform: scale(0.95);
     box-shadow: 0 0 5px #ff00ff;
   }
-  
   .glow {
     box-shadow: 0 0 20px #ff0077;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
   }
-  
-  .glow:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 0, 119, 0.2),
-      transparent
-    );
-    transition: 0.5s;
-  }
-  
-  .glow:hover:before {
-    left: 100%;
-  }
-  
   .glow:active {
     transform: scale(0.95);
     box-shadow: 0 0 10px #ff0077;
   }
-  
   #nfts img {
     width: 192px;
     height: 192px;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s ease;
-  }
-  
-  #nfts img:hover {
-    transform: scale(1.05);
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  #toast.show {
-    display: block;
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  /* Mobile optimizations */
-  @media (max-width: 640px) {
-    .glitch {
-      font-size: 1.5rem;
-    }
-    
-    nav {
-      font-size: 0.875rem;
-    }
-    
-    #nfts img {
-      width: 160px;
-      height: 160px;
-    }
   }
 </style>
 
-// Replace all the existing JavaScript with this:
 <script>
-// Toast notification system
-function showToast(message, duration = 3000) {
-  const toast = document.getElementById('toast');
-  const toastMessage = document.getElementById('toastMessage');
-  toastMessage.textContent = message;
-  toast.classList.add('show');
-  toast.classList.remove('hidden');
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-    toast.classList.add('hidden');
-  }, duration);
-}
+  document.addEventListener("DOMContentLoaded", () => {
+    const roasts = JSON.parse(localStorage.getItem("roasts")) || [];
+    const roastList = document.getElementById("roastList");
 
-// Simple CRO Payment Handler
-async function submitWithCRO() {
-  const target = document.getElementById('targetName').value.trim();
-  const submitBtn = document.getElementById('submitCroBtn');
-  const resultBox = document.getElementById('roastResult');
-
-  if (!target || target.length < 3 || !target.startsWith('@')) {
-    showToast('Enter a valid 𝕏 username or project (start with @)');
-    return;
-  }
-
-  if (!window.ethereum) {
-    showToast('Please install MetaMask or a compatible wallet');
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.innerText = 'Processing...';
-
-  try {
-    // Connect to wallet
-    const accounts = await window.ethereum.request({ 
-      method: 'eth_requestAccounts' 
+    roasts.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "bg-[#1a1a1a] neon-border p-4 rounded";
+      div.innerHTML = `
+        <div><strong>Target:</strong> ${r.target}</div>
+        <div><strong>Chain:</strong> ${r.chain}</div>
+        <div><strong>Support:</strong> <span class="text-pink-400 fire-count">🔥 x${r.likes}</span></div>
+        <button onclick="likeRoast(this)" class="mt-2 px-3 py-1 text-xs bg-pink-600 rounded hover:bg-pink-700">+🔥 Fire This Roast</button>
+      `;
+      roastList.appendChild(div);
     });
 
-    // Switch to Cronos
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: '0x25' }],
-    }).catch(async (error) => {
-      if (error.code === 4902) {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainId: '0x25',
-            chainName: 'Cronos Mainnet',
-            nativeCurrency: { name: 'CRO', symbol: 'CRO', decimals: 18 },
-            rpcUrls: ['https://evm.cronos.org'],
-            blockExplorerUrls: ['https://cronoscan.com']
-          }]
-        });
-      } else {
-        throw error;
-      }
-    });
+    updatePrizePool(360, 0.096); // example pool
+  });
 
-    // Send transaction
-    const transactionParameters = {
-      to: '0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100', // Replace with your address
-      from: accounts[0],
-      value: '0x' + (60 * 1e18).toString(16), // 60 CRO
-    };
-
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [transactionParameters],
-    });
-
-    resultBox.innerHTML = `
-      <div class="p-4 bg-green-900/50 rounded-lg mt-4">
-        <p>🎯 Roast for "${target}" submitted!</p>
-        <a href="https://cronoscan.com/tx/${txHash}" target="_blank" 
-           class="text-blue-400 hover:underline text-sm">
-          View Transaction
-        </a>
-      </div>
-    `;
-
-    showToast('Transaction submitted! 🎯');
-
-  } catch (error) {
-    console.error(error);
-    showToast('Transaction failed: ' + error.message);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'Pay with CRO';
-  }
-}
-
-// Simple Solana Payment Handler
-async function submitWithSOL() {
-  const target = document.getElementById('targetName').value.trim();
-  const submitBtn = document.getElementById('submitSolBtn');
-  const resultBox = document.getElementById('roastResult');
-
-  if (!target || target.length < 3 || !target.startsWith('@')) {
-    showToast('Enter a valid 𝕏 username or project (start with @)');
-    return;
+  function updatePrizePool(cro, sol) {
+    document.getElementById("poolCRO").textContent = `${cro} CRO`;
+    document.getElementById("poolSOL").textContent = `${sol} SOL`;
   }
 
-  // Check for Phantom Wallet
-  const solana = window?.phantom?.solana;
-  if (!solana || !solana.isPhantom) {
-    showToast('Please install Phantom Wallet');
-    return;
-  }
+  function likeRoast(btn) {
+    const fireDisplay = btn.parentElement.querySelector(".fire-count");
+    let count = parseInt(fireDisplay.textContent.replace(/\D/g, "")) || 0;
+    fireDisplay.textContent = `🔥 x${++count}`;
+    btn.disabled = true;
+    btn.textContent = "Fired!";
+    btn.classList.add("bg-gray-700");
 
-  submitBtn.disabled = true;
-  submitBtn.innerText = 'Processing...';
-
-  try {
-    // Connect to wallet
-    const resp = await solana.connect();
-    const publicKey = resp.publicKey;
-
-    // Create transaction
-    const connection = new solanaWeb3.Connection(
-      'https://api.mainnet-beta.solana.com',
-      'confirmed'
-    );
-
-    const transaction = new solanaWeb3.Transaction().add(
-      solanaWeb3.SystemProgram.transfer({
-        fromPubkey: publicKey,
-        toPubkey: new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq'), // Replace with your address
-        lamports: 0.1 * solanaWeb3.LAMPORTS_PER_SOL // 0.1 SOL
-      })
-    );
-
-    // Get latest blockhash
-    const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = publicKey;
-
-    // Send transaction
-    const signature = await solana.signAndSendTransaction(transaction);
-
-    resultBox.innerHTML = `
-      <div class="p-4 bg-green-900/50 rounded-lg mt-4">
-        <p>🎯 Roast for "${target}" submitted!</p>
-        <a href="https://solscan.io/tx/${signature.signature}" target="_blank" 
-           class="text-blue-400 hover:underline text-sm">
-          View Transaction
-        </a>
-      </div>
-    `;
-
-    showToast('Transaction submitted! 🎯');
-
-  } catch (error) {
-    console.error(error);
-    showToast('Transaction failed: ' + error.message);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'Pay with SOL';
-  }
-}
-
-// Wallet Status Updates
-async function updateWalletStatus() {
-  const walletStatus = document.getElementById('walletStatus').querySelector('.flex.gap-4');
-  let statusHTML = '';
-
-  // CRO Status
-  if (window.ethereum) {
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-      if (accounts.length > 0) {
-        statusHTML += `<span class="px-3 py-1 rounded-full bg-green-900">CRO: ${accounts[0].slice(0,6)}...${accounts[0].slice(-4)}</span>`;
-      } else {
-        statusHTML += '<span class="px-3 py-1 rounded-full bg-yellow-900">CRO: Not Connected</span>';
-      }
-    } catch {
-      statusHTML += '<span class="px-3 py-1 rounded-full bg-red-900">CRO: Error</span>';
+    const target = btn.parentElement.querySelector("strong").textContent;
+    const roasts = JSON.parse(localStorage.getItem("roasts")) || [];
+    const match = roasts.find(r => r.target === target);
+    if (match) {
+      match.likes = count;
+      localStorage.setItem("roasts", JSON.stringify(roasts));
     }
-  } else {
-    statusHTML += '<span class="px-3 py-1 rounded-full bg-red-900">CRO: No Wallet</span>';
   }
 
-  // SOL Status
-  const solana = window?.phantom?.solana;
-  if (solana) {
-    try {
-      if (solana.isConnected) {
-        const key = solana.publicKey.toString();
-        statusHTML += `<span class="px-3 py-1 rounded-full bg-green-900">SOL: ${key.slice(0,6)}...${key.slice(-4)}</span>`;
-      } else {
-        statusHTML += '<span class="px-3 py-1 rounded-full bg-yellow-900">SOL: Not Connected</span>';
-      }
-    } catch {
-      statusHTML += '<span class="px-3 py-1 rounded-full bg-red-900">SOL: Error</span>';
+  async function handleSubmit() {
+    const token = document.getElementById("tokenChoice").value;
+    if (token === "CRO") {
+      submitWithCRO();
+    } else {
+      submitWithSOL();
     }
-  } else {
-    statusHTML += '<span class="px-3 py-1 rounded-full bg-red-900">SOL: No Wallet</span>';
   }
 
-  walletStatus.innerHTML = statusHTML;
-}
+  async function submitWithCRO() {
+    const target = document.getElementById("targetName").value.trim();
+    const resultBox = document.getElementById("roastResult");
+    const shareBox = document.getElementById("shareRoast");
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-  updateWalletStatus();
+    if (!target || !target.startsWith("@")) {
+      resultBox.textContent = "Enter a valid 𝕏 name (start with @).";
+      return;
+    }
 
-  // Setup wallet event listeners
-  if (window.ethereum) {
-    window.ethereum.on('accountsChanged', updateWalletStatus);
-    window.ethereum.on('chainChanged', () => window.location.reload());
+    if (!window.ethereum) {
+      resultBox.textContent = "MetaMask not detected.";
+      return;
+    }
+
+    try {
+      await ethereum.request({ method: "eth_requestAccounts" });
+      await ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x19" }] });
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const tx = await signer.sendTransaction({
+        to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+        value: ethers.utils.parseUnits("60", "ether"),
+      });
+
+      resultBox.textContent = `Roast submitted via CRO. TX: ${tx.hash}`;
+      saveRoast(target, "Cronos");
+      shareRoast(target, "CROFam");
+
+    } catch (err) {
+      resultBox.textContent = `Error: ${err.message}`;
+    }
   }
 
-  const solana = window?.phantom?.solana;
-  if (solana) {
-    solana.on('connect', updateWalletStatus);
-    solana.on('disconnect', updateWalletStatus);
+  async function submitWithSOL() {
+    const target = document.getElementById("targetName").value.trim();
+    const resultBox = document.getElementById("roastResult");
+    const shareBox = document.getElementById("shareRoast");
+
+    if (!target || !target.startsWith("@")) {
+      resultBox.textContent = "Enter a valid 𝕏 name (start with @).";
+      return;
+    }
+
+    try {
+      const provider = window.phantom?.solana || window.solflare?.solana || window.backpack?.solana;
+      if (!provider?.isConnected && provider?.connect) await provider.connect();
+
+      const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
+      const publicKey = provider.publicKey;
+      const tx = new solanaWeb3.Transaction().add(
+        solanaWeb3.SystemProgram.transfer({
+          fromPubkey: publicKey,
+          toPubkey: new solanaWeb3.PublicKey("HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq"),
+          lamports: solanaWeb3.LAMPORTS_PER_SOL * 0.032,
+        })
+      );
+
+      const { blockhash } = await connection.getLatestBlockhash();
+      tx.recentBlockhash = blockhash;
+      tx.feePayer = publicKey;
+
+      const signed = await provider.signTransaction(tx);
+      const sig = await connection.sendRawTransaction(signed.serialize());
+      await connection.confirmTransaction(sig);
+
+      resultBox.textContent = `Roast submitted via SOL. TX: ${sig}`;
+      saveRoast(target, "Solana");
+      shareRoast(target, "SolanaGang");
+
+    } catch (err) {
+      resultBox.textContent = `Error: ${err.message}`;
+    }
   }
-});
+
+  function saveRoast(target, chain) {
+    const roasts = JSON.parse(localStorage.getItem("roasts")) || [];
+    roasts.unshift({ target, chain, likes: 0 });
+    localStorage.setItem("roasts", JSON.stringify(roasts));
+  }
+
+  function shareRoast(target, tag) {
+    const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted on $ROAST.\nVote or burn.\n`);
+    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,${tag}`;
+    document.getElementById("shareRoast").innerHTML =
+      `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
+  }
 </script>
 
 </body>
