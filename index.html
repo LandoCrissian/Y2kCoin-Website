@@ -10,7 +10,7 @@
 </head>
 <body class="bg-black text-white">
 
-  <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
+ <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
   <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
   <nav class="space-x-4 text-sm">
     <a href="#nfts" class="hover:text-[#ff00ff] touch-action-manipulation">Mint</a>
@@ -29,10 +29,11 @@
     <a href="#dex" class="px-6 py-3 neon-border touch-action-manipulation">Trade Now</a>
   </div>
 </section>
-
-  <section id="nfts" class="bg-[#111] py-12 px-4">
+  
+<section id="nfts" class="bg-[#111] py-12 px-4">
   <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
   <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
+
     <!-- ERIC MODE -->
     <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
       <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
@@ -72,45 +73,61 @@
              loading="lazy"/>
       </a>
     </div>
+
   </div>
 </section>
 
-  <section id="submit-roast" class="py-16 px-6 bg-black text-center">
+<section id="submit-roast" class="py-16 px-6 bg-black text-center">
   <h3 class="text-4xl glitch font-bold mb-4">Submit a Roast Target</h3>
   <p class="text-gray-400 max-w-xl mx-auto mb-4">
-    Drop a 𝕏 name or project. Burn 500,000. Then share your roast with the world. The most 🔥 wins by Sunday.
+    Drop a name from 𝕏. Send CRO or SOL to enter. Winner takes half the pot. The rest? Burned.
   </p>
 
+  <!-- Live Pool Display -->
+  <div class="text-lg text-pink-400 font-bold mb-6">
+    This Week’s Pool: <span id="poolCRO">0 CRO</span> + <span id="poolSOL">0 SOL</span>
+  </div>
+
   <form id="roastForm" class="max-w-md mx-auto space-y-4">
+    <!-- Token Select -->
     <select id="tokenChoice" class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border">
-      <option value="Y2K">Y2K (Cronos)</option>
-      <option value="ROAST">ROAST (Solana)</option>
+      <option value="CRO">CRO (60 required)</option>
+      <option value="SOL">SOL (0.032 required)</option>
     </select>
 
-    <input type="text" id="targetName" name="target" placeholder="@name or project name from 𝕏"
+    <!-- Target Input -->
+    <input type="text" id="targetName" name="target" placeholder="@name or project from 𝕏"
            class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
 
-    <button type="button" onclick="connectAndSend()"
-            class="px-6 py-3 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
-      Burn & Submit Roast
+    <!-- TX Hash Input -->
+    <input type="text" id="txHash" name="txhash" placeholder="Paste your TX hash after payment"
+           class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
+
+    <!-- Wallet Info -->
+    <div class="text-sm text-gray-400 text-left">
+      <p><strong>CRO Wallet:</strong> 0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100</p>
+      <p><strong>SOL Wallet:</strong> HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq</p>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="button" onclick="submitRoast()"
+            class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
+      Submit Roast Entry
     </button>
   </form>
 
-  <div id="roastResult" class="mt-6 text-sm text-green-400"></div>
+  <div id="roastResult" class="mt-4 text-green-400 text-sm"></div>
   <div id="shareRoast" class="mt-4"></div>
 </section>
 
-  <section id="roasted" class="py-16 px-6 bg-[#111] text-center">
+<section id="roasted" class="py-16 px-6 bg-[#111] text-center">
   <h3 class="text-4xl glitch font-bold mb-8">ROASTED</h3>
   <p class="text-gray-400 max-w-xl mx-auto mb-6">
     These names got scorched this week. Fire them up or drop your own below.
   </p>
-  <div id="roastList" class="grid gap-4 max-w-2xl mx-auto text-left text-sm text-gray-200">
-    <!-- Roast entries appear here dynamically -->
-  </div>
+  <div id="roastList" class="grid gap-4 max-w-2xl mx-auto text-left text-sm text-gray-200"></div>
 </section>
 
-  <!-- DEX SECTION -->
 <section id="dex" class="bg-[#111] py-12 px-4 text-center">
   <h3 class="text-3xl glitch font-bold mb-4">Trade with Fire</h3>
   <div class="flex flex-col gap-4 mt-6">
@@ -119,7 +136,6 @@
   </div>
 </section>
 
-<!-- CONNECT SECTION -->
 <section id="connect" class="py-12 px-4 text-center">
   <h3 class="text-3xl glitch font-bold mb-4">Stay Plugged In</h3>
   <p class="text-gray-400 mb-6">Join the fam. Talk your shit. Earn your spot.</p>
@@ -129,14 +145,13 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="bg-black text-center text-sm py-8 px-4 text-gray-600">
   Y2KCoin & $ROAST — Contract Addresses:<br/>
   <span class="break-all">Cronos: 0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d</span><br/>
   <span class="break-all">Solana: A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray</span>
 </footer>
 
-  <style>
+<style>
   html { background-color: #0a0a0a; }
   body {
     background-color: #0a0a0a;
@@ -178,19 +193,8 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // Reset on Sundays
-    const lastReset = localStorage.getItem("roast_reset");
-    const now = new Date();
-    const isSunday = now.getDay() === 0;
-    const hour = now.getHours();
-    if (isSunday && hour === 0 && lastReset !== now.toDateString()) {
-      localStorage.removeItem("roasts");
-      localStorage.setItem("roast_reset", now.toDateString());
-    }
-
     const storedRoasts = JSON.parse(localStorage.getItem("roasts")) || [];
     const roastList = document.getElementById("roastList");
-
     storedRoasts.forEach(roast => {
       const div = document.createElement("div");
       div.className = "bg-[#1a1a1a] neon-border p-4 rounded";
@@ -202,48 +206,46 @@
       `;
       roastList.appendChild(div);
     });
+
+    // Update pool total manually here
+    updatePrizePool(360, 0.096); // <--- CHANGE weekly totals here
   });
 
-  function connectAndSend() {
+  function updatePrizePool(cro, sol) {
+    document.getElementById("poolCRO").textContent = `${cro} CRO`;
+    document.getElementById("poolSOL").textContent = `${sol} SOL`;
+  }
+
+  function submitRoast() {
     const token = document.getElementById("tokenChoice").value;
     const target = document.getElementById("targetName").value.trim();
+    const txHash = document.getElementById("txHash").value.trim();
     const resultBox = document.getElementById("roastResult");
     const shareBox = document.getElementById("shareRoast");
 
-    if (!target || (!target.startsWith("@") && target.length < 3)) {
-      resultBox.textContent = "Please enter a valid 𝕏 handle or project name.";
+    if (!target || target.length < 3 || !target.startsWith("@")) {
+      resultBox.textContent = "Enter a valid 𝕏 username or project (start with @).";
       return;
     }
 
-    if (token === "Y2K") {
-      alert("Send 500,000 Y2K to:\n\n0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100\n\nUse MetaMask, Crypto.com DeFi, or any WalletConnect-supported wallet.");
-    } else {
-      alert("Send 500,000 ROAST to:\n\nHQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq\n\nUse Phantom, Solflare, Backpack, or any Solana wallet.");
+    if (!txHash || txHash.length < 15) {
+      resultBox.textContent = "Please paste a valid transaction hash from your payment.";
+      return;
     }
 
-    resultBox.textContent = `Roast for "${target}" submitted. It’s now on the board.`;
+    const chain = token === "CRO" ? "Cronos" : "Solana";
+    resultBox.textContent = `Roast for "${target}" submitted — pending verification.`;
 
-    const roastList = document.getElementById("roastList");
-    const div = document.createElement("div");
-    div.className = "bg-[#1a1a1a] neon-border p-4 rounded";
-    const chain = token === "Y2K" ? "Cronos" : "Solana";
-    div.innerHTML = `
-      <div><strong>Target:</strong> ${target}</div>
-      <div><strong>Chain:</strong> ${chain}</div>
-      <div><strong>Support:</strong> <span class="text-pink-400 fire-count">🔥 x0</span></div>
-      <button onclick="likeRoast(this)" class="mt-2 px-3 py-1 text-xs bg-pink-600 rounded hover:bg-pink-700">+🔥 Fire This Roast</button>
-    `;
-    roastList.prepend(div);
+    const pending = JSON.parse(localStorage.getItem("pendingRoasts") || "[]");
+    pending.unshift({ target, chain, tx: txHash });
+    localStorage.setItem("pendingRoasts", JSON.stringify(pending));
 
-    const roasts = JSON.parse(localStorage.getItem("roasts")) || [];
-    roasts.unshift({ target, chain, likes: 0 });
-    localStorage.setItem("roasts", JSON.stringify(roasts));
-
-    const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted by $ROAST & $Y2KCoin.\nGo vote — most 🔥 wins at the end of the week!\n`);
-    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,Crofam`;
+    const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted in the $ROAST arena.\nCRO vs SOL. Winner gets paid. Losers get lit.\nVote now & light the fire.`);
+    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CryptoBloodbath`;
     shareBox.innerHTML = `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
 
     document.getElementById("targetName").value = "";
+    document.getElementById("txHash").value = "";
   }
 
   function likeRoast(button) {
