@@ -322,7 +322,7 @@ function showToast(message, duration = 3000) {
   }, duration);
 }
 
-// CRO Transaction Handler
+// Update the CRO transaction handler
 async function submitWithCRO() {
   const submitBtn = document.getElementById('submitCroBtn');
   const target = document.getElementById('targetName').value.trim();
@@ -348,32 +348,95 @@ async function submitWithCRO() {
       throw new Error('Please connect your wallet');
     }
 
-    // Switch to Cronos network
+    // Switch to Cronos network with updated parameters
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x19" }],
+        params: [{ chainId: "0x25" }], // Updated Cronos chainId
       });
     } catch (switchError) {
       if (switchError.code === 4902) {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [{
-            chainId: "0x19",
-            chainName: "Cronos Mainnet",
-            nativeCurrency: {
-              name: "CRO",
-              symbol: "CRO",
-              decimals: 18
-            },
-            rpcUrls: ["https://evm.cronos.org"],
-            blockExplorerUrls: ["https://cronoscan.com/"]
-          }]
-        });
+        try {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: "0x25",
+              chainName: "Cronos Mainnet Beta",
+              nativeCurrency: {
+                name: "CRO",
+                symbol: "CRO",
+                decimals: 18
+              },
+              rpcUrls: ["https://evm.cronos.org"],
+              blockExplorerUrls: ["https://cronoscan.com/"],
+              iconUrls: ["https://cronos.org/favicon.png"]
+            }]
+          });
+        } catch (addError) {
+          throw new Error('Failed to add Cronos network: ' + addError.message);
+        }
       } else {
         throw switchError;
       }
     }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    showToast('Preparing transaction...');
+
+    // Create transaction with explicit gas parameters
+    const tx = {
+      to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+      value: ethers.utils.parseEther("60"),
+      gasLimit: ethers.utils.hexlify(100000),
+      gasPrice: await provider.getGasPrice()
+    };
+
+    showToast('Please confirm in your wallet...');
+    const transaction = await signer.sendTransaction(tx);
+
+    showToast('Transaction submitted, waiting for confirmation...');
+    const receipt = await transaction.wait();
+
+    resultBox.innerHTML = `
+      <div class="p-4 bg-green-900/50 rounded-lg mt-4">
+        <p>🎯 Roast for "${target}" submitted!</p>
+        <a href="https://cronoscan.com/tx/${receipt.transactionHash}" target="_blank" 
+           class="text-blue-400 hover:underline text-sm">
+          View Transaction
+        </a>
+      </div>
+    `;
+
+    const tweetText = encodeURIComponent(
+      `I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.`
+    );
+    const tweetURL = `https://twitter.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
+    
+    shareBox.innerHTML = `
+      <a href="${tweetURL}" target="_blank" 
+         class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
+        Share on 𝕏
+      </a>
+    `;
+
+    showToast('Roast submitted successfully! 🔥');
+
+  } catch (err) {
+    console.error('CRO Transaction failed:', err);
+    resultBox.innerHTML = `
+      <div class="p-4 bg-red-900/50 rounded-lg mt-4">
+        <p>❌ Transaction failed:</p>
+        <p class="text-sm">${err.message}</p>
+      </div>
+    `;
+    showToast('Transaction failed. Check details below.');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'Pay with CRO';
+  }
+}
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -428,7 +491,7 @@ async function submitWithCRO() {
   }
 }
 
-// Solana Transaction Handler
+// Update the Solana transaction handler
 async function submitWithSOL() {
   const submitBtn = document.getElementById('submitSolBtn');
   const target = document.getElementById('targetName').value.trim();
@@ -454,29 +517,44 @@ async function submitWithSOL() {
       await wallet.connect();
     }
 
+    // Use a more reliable RPC endpoint
     const connection = new solanaWeb3.Connection(
-      'https://api.mainnet-beta.solana.com',
+      'https://solana-mainnet.rpc.extrnode.com',
       'confirmed'
     );
+
+    showToast('Creating transaction...');
 
     const transaction = new solanaWeb3.Transaction().add(
       solanaWeb3.SystemProgram.transfer({
         fromPubkey: wallet.publicKey,
-        toPubkey: new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq'), // Replace with your SOL wallet address
-        lamports: solanaWeb3.LAMPORTS_PER_SOL * 0.1 // 0.1 SOL
+        toPubkey: new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq'),
+        lamports: solanaWeb3.LAMPORTS_PER_SOL * 0.1
       })
     );
 
-    const { blockhash } = await connection.getLatestBlockhash('finalized');
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = wallet.publicKey;
+    try {
+      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.lastValidBlockHeight = lastValidBlockHeight;
+      transaction.feePayer = wallet.publicKey;
+    } catch (err) {
+      console.error('Failed to get blockhash:', err);
+      throw new Error('Network error: Failed to prepare transaction');
+    }
 
-    showToast('Confirm the transaction in your wallet...');
+    showToast('Please confirm in your wallet...');
 
-    const signature = await wallet.sendTransaction(transaction, connection);
-    showToast('Transaction submitted, waiting for confirmation...');
-
-    await connection.confirmTransaction(signature, 'confirmed');
+    const signed = await wallet.signTransaction(transaction);
+    const signature = await connection.sendRawTransaction(signed.serialize());
+    
+    showToast('Confirming transaction...');
+    
+    await connection.confirmTransaction({
+      signature,
+      blockhash: transaction.recentBlockhash,
+      lastValidBlockHeight: transaction.lastValidBlockHeight
+    });
 
     resultBox.innerHTML = `
       <div class="p-4 bg-green-900/50 rounded-lg mt-4">
