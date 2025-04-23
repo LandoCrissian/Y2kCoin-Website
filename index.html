@@ -106,8 +106,8 @@
 <section id="dex" class="bg-[#111] py-12 px-4 text-center">
   <h3 class="text-3xl glitch font-bold mb-4">Trade with Fire</h3>
   <div class="flex flex-col gap-4 mt-6">
-    <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank" class="px-6 py-3 glow touch-action-manipulation">Trade $Y2K (Cronos)</a>
-    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="px-6 py-3 glow touch-action-manipulation">Trade $ROAST (Solana)</a>
+    <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank" class="px-6 py-3 glow">Trade $Y2K (Cronos)</a>
+    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="px-6 py-3 glow">Trade $ROAST (Solana)</a>
   </div>
 </section>
 
@@ -115,8 +115,8 @@
   <h3 class="text-3xl glitch font-bold mb-4">Stay Plugged In</h3>
   <p class="text-gray-400 mb-6">Join the fam. Talk your shit. Earn your spot.</p>
   <div class="flex justify-center gap-4">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2 touch-action-manipulation">Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2 touch-action-manipulation">𝕏 (Twitter)</a>
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2">Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2">𝕏 (Twitter)</a>
   </div>
 </section>
 
@@ -127,9 +127,6 @@
 </footer>
 
 <style>
- #walletAddress {
-  cursor: pointer;
-} 
   html { background-color: #0a0a0a; }
   body {
     background-color: #0a0a0a;
@@ -158,9 +155,6 @@
     transform: scale(0.95);
     box-shadow: 0 0 10px #ff0077;
   }
-  .touch-action-manipulation {
-    touch-action: manipulation;
-  }
   #nfts img {
     width: 192px;
     height: 192px;
@@ -185,8 +179,8 @@
       roastList.appendChild(div);
     });
 
-    // Prize pool tracker (manually updated)
-    updatePrizePool(360, 0.096);
+    // Prize pool (manual)
+    updatePrizePool(360, 0.096); // <-- change values as needed
   });
 
   function updatePrizePool(cro, sol) {
@@ -194,10 +188,8 @@
     document.getElementById("poolSOL").textContent = `${sol} SOL`;
   }
 
-  function submitRoast() {
-    const token = document.getElementById("tokenChoice").value;
+  async function submitWithCRO() {
     const target = document.getElementById("targetName").value.trim();
-    const txHash = document.getElementById("txHash").value.trim();
     const resultBox = document.getElementById("roastResult");
     const shareBox = document.getElementById("shareRoast");
 
@@ -206,24 +198,33 @@
       return;
     }
 
-    if (!txHash || txHash.length < 15) {
-      resultBox.textContent = "Please paste a valid transaction hash from your payment.";
+    if (typeof window.ethereum === "undefined") {
+      resultBox.textContent = "MetaMask not detected.";
       return;
     }
 
-    const chain = token === "CRO" ? "Cronos" : "Solana";
-    resultBox.textContent = `Roast for "${target}" submitted — pending verification.`;
+    try {
+      await ethereum.request({ method: "eth_requestAccounts" });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const tx = await signer.sendTransaction({
+        to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+        value: ethers.utils.parseUnits("60", "ether")
+      });
 
-    const pending = JSON.parse(localStorage.getItem("pendingRoasts") || "[]");
-    pending.unshift({ target, chain, tx: txHash });
-    localStorage.setItem("pendingRoasts", JSON.stringify(pending));
+      resultBox.textContent = `Roast for "${target}" submitted via CRO. TX: ${tx.hash}`;
 
-    const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted in the $ROAST arena.\nCRO vs SOL. Winner gets paid. Losers get lit.\nVote now & light the fire.`);
-    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CryptoBloodbath`;
-    shareBox.innerHTML = `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
+      const roasts = JSON.parse(localStorage.getItem("roasts")) || [];
+      roasts.unshift({ target, chain: "Cronos", likes: 0 });
+      localStorage.setItem("roasts", JSON.stringify(roasts));
 
-    document.getElementById("targetName").value = "";
-    document.getElementById("txHash").value = "";
+      const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.\n`);
+      const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
+      shareBox.innerHTML = `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
+
+    } catch (err) {
+      resultBox.textContent = `Error: ${err.message}`;
+    }
   }
 
   function likeRoast(button) {
@@ -243,72 +244,6 @@
       localStorage.setItem("roasts", JSON.stringify(roasts));
     }
   }
-
-  // Wallet reveal logic
-  document.getElementById("tokenChoice").addEventListener("change", function () {
-    const selected = this.value;
-    const walletDisplay = document.getElementById("walletDisplay");
-    const walletLabel = document.getElementById("walletLabel");
-    const walletAddress = document.getElementById("walletAddress");
-
-    if (selected === "CRO") {
-      walletLabel.textContent = "Send 60 CRO to:";
-      walletAddress.textContent = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-      walletDisplay.classList.remove("hidden");
-    } else if (selected === "SOL") {
-      walletLabel.textContent = "Send 0.032 SOL to:";
-      walletAddress.textContent = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
-      walletDisplay.classList.remove("hidden");
-    } else {
-      walletDisplay.classList.add("hidden");
-    }
-  });
-
-  // Copy to clipboard function
-  function copyWallet() {
-    const walletText = document.getElementById("walletAddress").textContent;
-    navigator.clipboard.writeText(walletText).then(() => {
-      const confirm = document.getElementById("copyConfirm");
-      confirm.classList.remove("hidden");
-      setTimeout(() => confirm.classList.add("hidden"), 1500);
-    });
-  }
-
-  async function submitWithCRO() {
-  const target = document.getElementById("targetName").value.trim();
-  const resultBox = document.getElementById("roastResult");
-  const shareBox = document.getElementById("shareRoast");
-
-  if (!target || target.length < 3 || !target.startsWith("@")) {
-    resultBox.textContent = "Enter a valid 𝕏 username or project (start with @).";
-    return;
-  }
-
-  if (typeof window.ethereum === "undefined") {
-    resultBox.textContent = "MetaMask not detected.";
-    return;
-  }
-
-  try {
-    await ethereum.request({ method: "eth_requestAccounts" });
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const tx = await signer.sendTransaction({
-      to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
-      value: ethers.utils.parseEther("60.0")
-    });
-
-    resultBox.textContent = `Roast for "${target}" submitted via CRO. TX: ${tx.hash}`;
-
-    const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.\n`);
-    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
-    shareBox.innerHTML = `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
-
-  } catch (err) {
-    resultBox.textContent = `Error: ${err.message}`;
-  }
-}
 </script>
 </body>
 </html>
