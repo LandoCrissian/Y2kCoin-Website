@@ -78,9 +78,19 @@
     This Week's Pool: <span id="poolCRO">0 CRO</span> + <span id="poolSOL">0 SOL</span>
   </div>
 
-  <div id="walletStatus" class="mb-4 text-sm flex justify-center gap-4">
-    <span class="px-3 py-1 rounded-full bg-gray-800">CRO: Not Connected</span>
-    <span class="px-3 py-1 rounded-full bg-gray-800">SOL: Not Connected</span>
+  <div id="walletStatus" class="mb-4 text-sm flex flex-col items-center gap-2">
+    <div class="flex gap-4">
+      <span class="px-3 py-1 rounded-full bg-gray-800">CRO: Not Connected</span>
+      <span class="px-3 py-1 rounded-full bg-gray-800">SOL: Not Connected</span>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="disconnectCRO()" id="disconnectCroBtn" class="hidden px-2 py-1 text-xs rounded bg-red-900 hover:bg-red-800">
+        Disconnect CRO
+      </button>
+      <button onclick="disconnectSOL()" id="disconnectSolBtn" class="hidden px-2 py-1 text-xs rounded bg-red-900 hover:bg-red-800">
+        Disconnect SOL
+      </button>
+    </div>
   </div>
 
   <form id="roastForm" class="max-w-md mx-auto space-y-4">
@@ -208,23 +218,29 @@ async function checkSolanaWallet() {
 
 // Update both wallet statuses
 async function updateWalletStatuses() {
-  const walletStatus = document.getElementById('walletStatus');
+  const walletStatus = document.getElementById('walletStatus').querySelector('.flex.gap-4');
+  const disconnectCroBtn = document.getElementById('disconnectCroBtn');
+  const disconnectSolBtn = document.getElementById('disconnectSolBtn');
   let statusHTML = '';
 
   // Check CRO wallet
   if (typeof window.ethereum === "undefined") {
     statusHTML += '<span class="px-3 py-1 rounded-full bg-red-900">CRO: No Wallet</span>';
+    disconnectCroBtn.classList.add('hidden');
   } else {
     try {
       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
       if (accounts.length > 0) {
         const shortenedAccount = accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
         statusHTML += `<span class="px-3 py-1 rounded-full bg-green-900">CRO: ${shortenedAccount}</span>`;
+        disconnectCroBtn.classList.remove('hidden');
       } else {
         statusHTML += '<span class="px-3 py-1 rounded-full bg-yellow-900">CRO: Not Connected</span>';
+        disconnectCroBtn.classList.add('hidden');
       }
     } catch (err) {
       statusHTML += '<span class="px-3 py-1 rounded-full bg-red-900">CRO: Error</span>';
+      disconnectCroBtn.classList.add('hidden');
     }
   }
 
@@ -232,14 +248,49 @@ async function updateWalletStatuses() {
   const solPubKey = await checkSolanaWallet();
   if (!window.solana) {
     statusHTML += '<span class="px-3 py-1 rounded-full bg-red-900">SOL: No Wallet</span>';
+    disconnectSolBtn.classList.add('hidden');
   } else if (solPubKey) {
     const shortSolAddress = solPubKey.slice(0, 6) + '...' + solPubKey.slice(-4);
     statusHTML += `<span class="px-3 py-1 rounded-full bg-green-900">SOL: ${shortSolAddress}</span>`;
+    disconnectSolBtn.classList.remove('hidden');
   } else {
     statusHTML += '<span class="px-3 py-1 rounded-full bg-yellow-900">SOL: Not Connected</span>';
+    disconnectSolBtn.classList.add('hidden');
   }
 
   walletStatus.innerHTML = statusHTML;
+}
+
+// Disconnect handlers
+async function disconnectCRO() {
+  if (window.ethereum) {
+    try {
+      await window.ethereum.request({
+        method: "wallet_requestPermissions",
+        params: [{
+          eth_accounts: {}
+        }]
+      });
+      showToast('CRO wallet disconnected');
+      updateWalletStatuses();
+    } catch (err) {
+      console.error('Error disconnecting CRO wallet:', err);
+      showToast('Error disconnecting CRO wallet');
+    }
+  }
+}
+
+async function disconnectSOL() {
+  if (window.solana && window.solana.isConnected) {
+    try {
+      await window.solana.disconnect();
+      showToast('SOL wallet disconnected');
+      updateWalletStatuses();
+    } catch (err) {
+      console.error('Error disconnecting SOL wallet:', err);
+      showToast('Error disconnecting SOL wallet');
+    }
+  }
 }
 
 // CRO payment handler
@@ -380,7 +431,33 @@ async function submitWithSOL() {
       return;
     }
 
-    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
+    // Try multiple RPC endpoints
+    const rpcEndpoints = [
+      'https://api.mainnet-beta.solana.com',
+      'https://solana-api.projectserum.com',
+      'https://rpc.ankr.com/solana'
+    ];
+
+    let connection;
+    let validConnection = false;
+
+    for (const endpoint of rpcEndpoints) {
+      try {
+        connection = new solanaWeb3.Connection(endpoint);
+        await connection.getLatestBlockhash(); // Test the connection
+        validConnection = true;
+        break;
+      } catch (err) {
+        console.warn(`RPC endpoint ${endpoint} failed, trying next...`);
+        continue;
+      }
+    }
+
+    if (!validConnection) {
+      throw new Error('Unable to connect to Solana network. Please try again later.');
+    }
+
+    showToast('Creating transaction...');
     
     const transaction = new solanaWeb3.Transaction().add(
       solanaWeb3.SystemProgram.transfer({
@@ -390,17 +467,29 @@ async function submitWithSOL() {
       })
     );
 
-    const { blockhash } = await connection.getLatestBlockhash();
+    const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = window.solana.publicKey;
 
-    showToast('Confirming transaction...');
+    showToast('Please confirm in your wallet...');
 
     const signed = await window.solana.signAndSendTransaction(transaction);
     
-    const confirmation = await connection.confirmTransaction(signed.signature);
+    showToast('Confirming transaction...');
 
-    if (confirmation.value.err) throw new Error('Transaction failed');
+    // Wait for confirmation with timeout
+    const confirmation = await Promise.race([
+      connection.confirmTransaction({
+        signature: signed.signature,
+        blockhash: blockhash,
+        lastValidBlockHeight: lastValidBlockHeight
+      }),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Transaction confirmation timeout')), 30000)
+      )
+    ]);
+
+    if (confirmation.value?.err) throw new Error('Transaction failed');
 
     resultBox.innerHTML = `
       <div class="p-4 bg-green-900/50 rounded-lg mt-4">
@@ -457,8 +546,14 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Update when Solana wallet changes
   if (window.solana) {
-    window.solana.on('connect', updateWalletStatuses);
-    window.solana.on('disconnect', updateWalletStatuses);
+    window.solana.on('connect', () => {
+      updateWalletStatuses();
+      showToast('Solana wallet connected');
+    });
+    window.solana.on('disconnect', () => {
+      updateWalletStatuses();
+      showToast('Solana wallet disconnected');
+    });
   }
 });
 </script>
