@@ -290,7 +290,7 @@
   }
 </style>
 
-<script>
+  <script>
 // Toast notification system
 function showToast(message, duration = 3000) {
   const toast = document.getElementById('toast');
@@ -305,11 +305,18 @@ function showToast(message, duration = 3000) {
   }, duration);
 }
 
-// Get Solana wallet provider
+// Simplified Solana wallet handler
 async function getSolanaWallet() {
-  if (window.phantom?.solana) return window.phantom.solana;
-  if (window.solflare) return window.solflare;
-  if (window.solana) return window.solana;
+  // Check for various Solana wallets in order of priority
+  if (window.phantom?.solana && window.phantom.solana.isPhantom) {
+    return window.phantom.solana;
+  }
+  if (window.solana?.isPhantom) {
+    return window.solana;
+  }
+  if (window.solflare) {
+    return window.solflare;
+  }
   return null;
 }
 
@@ -363,11 +370,9 @@ async function updateWalletStatuses() {
 async function disconnectCRO() {
   if (window.ethereum) {
     try {
-      // Clear local storage
       localStorage.removeItem('walletconnect');
       localStorage.removeItem('WALLETCONNECT_DEEPLINK_CHOICE');
       
-      // Clear any cached permissions
       try {
         await window.ethereum.request({
           method: "wallet_requestPermissions",
@@ -389,16 +394,16 @@ async function disconnectCRO() {
 }
 
 async function disconnectSOL() {
-  try {
-    const wallet = await getSolanaWallet();
-    if (wallet) {
+  const wallet = await getSolanaWallet();
+  if (wallet && wallet.isConnected) {
+    try {
       await wallet.disconnect();
       showToast('Disconnecting SOL wallet...');
       setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      console.error('Error disconnecting SOL wallet:', err);
+      showToast('Error disconnecting SOL wallet');
     }
-  } catch (err) {
-    console.error('Error disconnecting SOL wallet:', err);
-    showToast('Error disconnecting SOL wallet');
   }
 }
 
@@ -532,16 +537,17 @@ async function submitWithSOL() {
       return;
     }
 
+    // Get Solana wallet
     const wallet = await getSolanaWallet();
     if (!wallet) {
       showToast('Please install Phantom or Solflare wallet');
       return;
     }
 
+    // Connect wallet if needed
     if (!wallet.isConnected) {
       try {
         await wallet.connect();
-        showToast('Wallet connected');
       } catch (err) {
         showToast('Please connect your Solana wallet');
         return;
@@ -549,12 +555,14 @@ async function submitWithSOL() {
     }
 
     showToast('Creating transaction...');
-    
+
+    // Create connection
     const connection = new solanaWeb3.Connection(
       'https://api.mainnet-beta.solana.com',
       'confirmed'
     );
 
+    // Create the transaction
     const transaction = new solanaWeb3.Transaction().add(
       solanaWeb3.SystemProgram.transfer({
         fromPubkey: wallet.publicKey,
@@ -563,28 +571,31 @@ async function submitWithSOL() {
       })
     );
 
+    // Get latest blockhash
     const { blockhash } = await connection.getLatestBlockhash('finalized');
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = wallet.publicKey;
 
     showToast('Please confirm in your wallet...');
 
-    // Handle different wallet interfaces
+    // Send transaction
     let signature;
-    if (wallet.signAndSendTransaction) {
-      const result = await wallet.signAndSendTransaction(transaction);
-      signature = result.signature;
-    } else if (wallet.sendTransaction) {
+    try {
       signature = await wallet.sendTransaction(transaction, connection);
-    } else {
-      throw new Error('Wallet does not support transactions');
+    } catch (err) {
+      throw new Error('Transaction rejected by wallet');
     }
 
     showToast('Confirming transaction...');
-
+    
     // Wait for confirmation
-    await connection.confirmTransaction(signature, 'confirmed');
+    try {
+      await connection.confirmTransaction(signature, 'confirmed');
+    } catch (err) {
+      throw new Error('Failed to confirm transaction');
+    }
 
+    // Update UI with success
     resultBox.innerHTML = `
       <div class="p-4 bg-green-900/50 rounded-lg mt-4">
         <p>🎯 Roast for "${target}" submitted!</p>
@@ -595,10 +606,12 @@ async function submitWithSOL() {
       </div>
     `;
 
+    // Store in local storage
     const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
     roasts.unshift({ target, chain: 'Solana', likes: 0, tx: signature });
     localStorage.setItem('roasts', JSON.stringify(roasts));
 
+    // Setup share button
     const tweetText = encodeURIComponent(
       `I just submitted ${target} to be roasted using $ROAST on Solana.\nWeb3 verified. Vote or die.`
     );
@@ -657,9 +670,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.reload();
         showToast('Solana wallet disconnected');
       });
-      wallet.on('accountChanged', () => {
-        updateWalletStatuses();
-      });
+      if (wallet.on) {
+        wallet.on('accountChanged', updateWalletStatuses);
+      }
     }
   };
   
@@ -669,3 +682,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+  
