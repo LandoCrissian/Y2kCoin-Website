@@ -7,6 +7,7 @@
   <meta name="description" content="The Y2K x ROAST fusion hub. Explore NFTs, burn mechanics, and trading portals across Cronos and Solana."/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
 </head>
 <body class="bg-black text-white">
 
@@ -116,10 +117,10 @@
 </div>
 
     <!-- Submit Button -->
-    <button type="button" onclick="submitRoast()"
-            class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
-      Submit Roast Entry
-    </button>
+    <button type="button" onclick="submitWithCRO()"
+        class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
+  Submit with CRO
+</button>
   </form>
 
   <div id="roastResult" class="mt-4 text-green-400 text-sm"></div>
@@ -304,6 +305,42 @@
       setTimeout(() => confirm.classList.add("hidden"), 1500);
     });
   }
+
+  async function submitWithCRO() {
+  const target = document.getElementById("targetName").value.trim();
+  const resultBox = document.getElementById("roastResult");
+  const shareBox = document.getElementById("shareRoast");
+
+  if (!target || target.length < 3 || !target.startsWith("@")) {
+    resultBox.textContent = "Enter a valid 𝕏 username or project (start with @).";
+    return;
+  }
+
+  if (typeof window.ethereum === "undefined") {
+    resultBox.textContent = "MetaMask not detected.";
+    return;
+  }
+
+  try {
+    await ethereum.request({ method: "eth_requestAccounts" });
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const tx = await signer.sendTransaction({
+      to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+      value: ethers.utils.parseEther("60.0")
+    });
+
+    resultBox.textContent = `Roast for "${target}" submitted via CRO. TX: ${tx.hash}`;
+
+    const tweetText = encodeURIComponent(`I just submitted ${target} to be roasted using $Y2KCoin on CRO.\nWeb3 verified. Vote or die.\n`);
+    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,CROFam`;
+    shareBox.innerHTML = `<a href="${tweetURL}" target="_blank" class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">Share on 𝕏</a>`;
+
+  } catch (err) {
+    resultBox.textContent = `Error: ${err.message}`;
+  }
+}
 </script>
 </body>
 </html>
