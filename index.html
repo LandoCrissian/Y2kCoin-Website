@@ -385,7 +385,7 @@ async function connectSOL() {
         const publicKey = provider.publicKey.toString();
         
         // Get SOL balance
-        const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
+        const connection = new solanaWeb3.Connection("https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0");
         const balance = await connection.getBalance(provider.publicKey);
         const balanceInSOL = balance / solanaWeb3.LAMPORTS_PER_SOL;
 
@@ -508,7 +508,7 @@ async function submitWithSOL(target) {
 
         showTxStatus('Preparing SOL transaction...', 'processing');
 
-        const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
+        const connection = new solanaWeb3.Connection("https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0");
         
         // Check balance
         const balance = await connection.getBalance(solWallet.publicKey);
