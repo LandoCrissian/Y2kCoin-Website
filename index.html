@@ -1,2305 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <meta name="theme-color" content="#000000"/>
-    <meta name="description" content="Y2K x ROAST - The premiere dual-chain community-driven roasting platform on Cronos and Solana. Mint NFTs, trade tokens, and participate in community roasts."/>
-    <meta property="og:title" content="Y2K x ROAST | Dual Chain Chaos"/>
-    <meta property="og:description" content="The ultimate fusion of CRO and SOL communities. Mint, trade, and roast."/>
-    <meta property="og:type" content="website"/>
-    <meta name="twitter:card" content="summary_large_image"/>
-    <title>Y2K x ROAST | Dual Chain Chaos</title>
-    
-    <!-- Preload key resources -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Core Scripts -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+  <title>Y2K x ROAST | Dual Chain Chaos</title>
+  <meta name="description" content="The Y2K x ROAST fusion hub. Explore NFTs, burn mechanics, and trading portals across Cronos and Solana."/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 </head>
-<body class="bg-black text-white antialiased">
+<body class="bg-black text-white">
 
-<!-- Loading Overlay -->
-<div id="loadingOverlay" class="fixed inset-0 bg-black z-50 flex items-center justify-center transition-opacity duration-500">
-    <div class="text-center">
-        <div class="glitch text-4xl mb-4">Y2K x ROAST</div>
-        <div class="loading-spinner"></div>
+<div id="app" class="min-h-screen flex flex-col">
+  <!-- Top Navigation -->
+  <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
+    <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="#nfts" class="hover:text-[#ff00ff]">Mint</a>
+      <a href="#dex" class="hover:text-[#ff00ff]">Trade</a>
+      <a href="#connect" class="hover:text-[#ff00ff]">Connect</a>
+      <a href="#submit-roast" class="hover:text-[#ff00ff]">Submit</a>
+      <a href="#roasted" class="hover:text-[#ff00ff]">ROASTED</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="text-center py-24 px-4 bg-gradient-to-b from-[#1a1a1a] to-black mt-14">
+    <h2 class="text-4xl glitch font-bold mb-4">Dual Chain. No Mercy.</h2>
+    <p class="text-lg mx-auto text-gray-400">From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.</p>
+    <div class="mt-8 flex flex-col gap-4">
+      <a href="#nfts" class="px-6 py-3 neon-border">View NFTs</a>
+      <a href="#dex" class="px-6 py-3 neon-border">Trade Now</a>
     </div>
-</div>
+  </section>
 
-<!-- Main App Container -->
-<div id="app" class="min-h-screen flex flex-col opacity-0 transition-opacity duration-500">
-
-<!-- Navigation -->
-<header class="fixed w-full z-40 backdrop-blur-md bg-black/80 border-b border-pink-500/20">
-    <div class="max-w-7xl mx-auto px-4">
-        <nav class="flex items-center justify-between h-16">
-            <!-- Logo -->
-            <div class="flex-shrink-0">
-                <h1 class="text-2xl md:text-3xl glitch font-bold tracking-wider">
-                    Y2K x $ROAST
-                </h1>
-            </div>
-
-            <!-- Mobile menu button -->
-            <button id="menuBtn" class="md:hidden neon-button p-2" aria-label="Menu">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
-
-            <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#nfts" class="nav-link">Mint</a>
-                <a href="#dex" class="nav-link">Trade</a>
-                <a href="#submit-roast" class="nav-link">Submit</a>
-                <a href="#roasted" class="nav-link">ROASTED</a>
-                <div class="flex space-x-2">
-                    <button onclick="connectCRO()" class="connect-button">
-                        <span class="flex items-center">
-                            <img src="cro-icon.svg" alt="CRO" class="w-4 h-4 mr-2"/>
-                            Connect CRO
-                        </span>
-                    </button>
-                    <button onclick="connectSOL()" class="connect-button">
-                        <span class="flex items-center">
-                            <img src="sol-icon.svg" alt="SOL" class="w-4 h-4 mr-2"/>
-                            Connect SOL
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </nav>
+  <!-- NFT Section -->
+  <section id="nfts" class="bg-[#111] py-12 px-4">
+    <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
+    <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+        <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
+               alt="Eric Mode" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+        </a>
+      </div>
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+        <a href="https://cronoshadow.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
+               alt="Cards of Cronos" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+        </a>
+      </div>
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+        <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
+               alt="DiamondHands" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+        </a>
+      </div>
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+        <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
+               alt="Dojo Warriors" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+        </a>
+      </div>
     </div>
-
-    <!-- Mobile Navigation Menu -->
-    <div id="mobileMenu" class="hidden md:hidden">
-        <div class="px-2 pt-2 pb-3 space-y-1 bg-black/95 backdrop-blur-md border-b border-pink-500/20">
-            <a href="#nfts" class="mobile-nav-link">Mint</a>
-            <a href="#dex" class="mobile-nav-link">Trade</a>
-            <a href="#submit-roast" class="mobile-nav-link">Submit</a>
-            <a href="#roasted" class="mobile-nav-link">ROASTED</a>
-            <button onclick="connectCRO()" class="mobile-connect-button">Connect CRO</button>
-            <button onclick="connectSOL()" class="mobile-connect-button">Connect SOL</button>
-        </div>
-    </div>
-</header>
-
- <!-- Hero Section -->
-<section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-    <!-- Animated Background -->
-    <div class="absolute inset-0 z-0">
-        <div class="grid-animation"></div>
-    </div>
-    
-    <!-- Hero Content -->
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl md:text-6xl lg:text-7xl glitch font-bold mb-6 tracking-tight">
-            Dual Chain
-            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-                No Mercy
-            </span>
-        </h2>
-        
-        <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 mb-10 leading-relaxed">
-            From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.
-            Join the revolution of decentralized criticism.
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="#nfts" class="hero-button primary-button group">
-                <span class="relative z-10">Explore NFTs</span>
-                <div class="button-glow"></div>
-            </a>
-            <a href="#dex" class="hero-button secondary-button group">
-                <span class="relative z-10">Trade Now</span>
-                <div class="button-glow"></div>
-            </a>
-        </div>
-
-        <!-- Stats Container -->
-        <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            <div class="stat-card">
-                <span class="stat-value" id="totalBurned">0</span>
-                <span class="stat-label">Total Burned</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="activeRoasts">0</span>
-                <span class="stat-label">Active Roasts</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="holdersCount">0</span>
-                <span class="stat-label">Holders</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="totalVolume">$0</span>
-                <span class="stat-label">Volume</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scroll Indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <svg class="w-6 h-6 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-        </svg>
-    </div>
-</section>
-
-<!-- NFT Section with Enhanced Gallery -->
-<section id="nfts" class="py-20 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4">
-        <h3 class="text-3xl md:text-4xl glitch font-bold text-center mb-12">
-            Live Music NFT Drops
-        </h3>
-
-        <!-- NFT Gallery -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="nft-card group" data-aos="fade-up">
-                <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="block relative">
-                    <div class="aspect-square overflow-hidden rounded-xl">
-                        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
-                             alt="Eric Mode" 
-                             class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
-                             loading="lazy"/>
-                    </div>
-                    <div class="nft-overlay">
-                        <span class="text-lg font-bold">Eric Mode</span>
-                        <span class="text-sm">Limited Edition</span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Repeat for other NFTs with similar structure -->
-            <!-- Additional NFT cards... -->
-        </div>
-
-        <!-- NFT Stats -->
-        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="nft-stat-card">
-                <span class="text-2xl font-bold" id="totalMinted">0</span>
-                <span class="text-sm text-gray-400">Total Minted</span>
-            </div>
-            <div class="nft-stat-card">
-                <span class="text-2xl font-bold" id="floorPrice">0 CRO</span>
-                <span class="text-sm text-gray-400">Floor Price</span>
-            </div>
-            <div class="nft-stat-card">
-                <span class="text-2xl font-bold" id="totalOwners">0</span>
-                <span class="text-sm text-gray-400">Unique Owners</span>
-            </div>
-            <div class="nft-stat-card">
-                <span class="text-2xl font-bold" id="tradingVolume">0 CRO</span>
-                <span class="text-sm text-gray-400">Trading Volume</span>
-            </div>
-        </div>
-    </div>
-</section> 
+  </section>
 
   <!-- Submit Roast Section -->
-<section id="submit-roast" class="py-20 relative">
-    <div class="max-w-4xl mx-auto px-4">
-        <h3 class="text-4xl glitch font-bold text-center mb-6">Submit a Roast Target</h3>
-        
-        <!-- Prize Pool Display -->
-        <div class="prize-pool-container mb-12">
-            <div class="bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-2xl p-6 backdrop-blur-sm border border-pink-500/30">
-                <h4 class="text-xl font-semibold mb-4 text-center">Current Prize Pool</h4>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="prize-card">
-                        <img src="cro-icon.svg" alt="CRO" class="w-6 h-6"/>
-                        <span class="text-2xl font-bold" id="poolCRO">0 CRO</span>
-                        <span class="text-sm text-gray-400">Cronos Chain</span>
-                    </div>
-                    <div class="prize-card">
-                        <img src="sol-icon.svg" alt="SOL" class="w-6 h-6"/>
-                        <span class="text-2xl font-bold" id="poolSOL">0 SOL</span>
-                        <span class="text-sm text-gray-400">Solana Chain</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <section id="submit-roast" class="py-16 px-6 bg-black text-center">
+    <h3 class="text-4xl glitch font-bold mb-4">Submit a Roast Target</h3>
+    <p class="text-gray-400 max-w-xl mx-auto mb-4">
+      Drop a name from 𝕏. Choose SOL or CRO. The top roast wins half the pot — the rest gets burned.
+    </p>
 
-        <!-- Wallet Connection Status -->
-        <div class="wallet-status-container mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="wallet-card" id="croWalletCard">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm font-medium">CRO Wallet</span>
-                        <span class="status-badge" id="croStatus">Not Connected</span>
-                    </div>
-                    <div class="balance-display" id="croBalance">
-                        <span class="text-xl font-bold">0 CRO</span>
-                    </div>
-                    <button onclick="connectCRO()" class="wallet-connect-btn">
-                        Connect CRO Wallet
-                    </button>
-                </div>
-
-                <div class="wallet-card" id="solWalletCard">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm font-medium">SOL Wallet</span>
-                        <span class="status-badge" id="solStatus">Not Connected</span>
-                    </div>
-                    <div class="balance-display" id="solBalance">
-                        <span class="text-xl font-bold">0 SOL</span>
-                    </div>
-                    <button onclick="connectSOL()" class="wallet-connect-btn">
-                        Connect SOL Wallet
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Roast Submission Form -->
-        <form id="roastForm" class="submission-form">
-            <div class="form-group">
-                <label for="tokenChoice" class="form-label">Select Chain</label>
-                <select id="tokenChoice" class="form-select">
-                    <option value="CRO">Submit with CRO (60 CRO)</option>
-                    <option value="SOL">Submit with SOL (0.032 SOL)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="targetName" class="form-label">Target Handle</label>
-                <div class="relative">
-                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">@</span>
-                    <input type="text" 
-                           id="targetName" 
-                           class="form-input pl-8" 
-                           placeholder="Enter Twitter handle"
-                           pattern="^@?[A-Za-z0-9_]{1,15}$"
-                           title="Valid Twitter handle required"/>
-                </div>
-            </div>
-
-            <button type="button" 
-                    onclick="handleSubmit()" 
-                    class="submit-button">
-                <span>Submit Roast</span>
-                <div class="button-glow"></div>
-            </button>
-        </form>
-
-        <!-- Transaction Status -->
-        <div id="txStatus" class="transaction-status hidden">
-            <div class="status-content">
-                <div class="status-icon"></div>
-                <div class="status-message"></div>
-            </div>
-        </div>
-
-        <!-- Share Section -->
-        <div id="shareRoast" class="share-section hidden">
-            <div class="share-content">
-                <h4 class="text-xl font-bold mb-4">Share Your Roast</h4>
-                <div class="share-buttons">
-                    <button class="share-twitter">
-                        Share on Twitter
-                    </button>
-                    <button class="share-discord">
-                        Share on Discord
-                    </button>
-                </div>
-            </div>
-        </div>
+    <!-- Prize Pool Display -->
+    <div class="text-lg text-pink-400 font-bold mb-6">
+      This Week's Pool: <span id="poolCRO">0 CRO</span> + <span id="poolSOL">0 SOL</span>
     </div>
-</section>
 
-<!-- DEX Section -->
-<section id="dex" class="py-20 bg-gradient-to-b from-black to-purple-900/20">
-    <div class="max-w-7xl mx-auto px-4">
-        <h3 class="text-4xl glitch font-bold text-center mb-12">Trade with Fire</h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Cronos Trading Card -->
-            <div class="trading-card">
-                <div class="card-header">
-                    <img src="cro-icon.svg" alt="CRO" class="w-8 h-8"/>
-                    <h4 class="text-xl font-bold">Trade on Cronos</h4>
-                </div>
-                <div class="token-stats">
-                    <div class="stat-item">
-                        <span class="label">Price</span>
-                        <span class="value" id="croPrice">$0.00</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">24h Volume</span>
-                        <span class="value" id="croVolume">$0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Market Cap</span>
-                        <span class="value" id="croMcap">$0</span>
-                    </div>
-                </div>
-                <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
-                   target="_blank" 
-                   class="trade-button">
-                    Trade $Y2K
-                </a>
-            </div>
-
-            <!-- Solana Trading Card -->
-            <div class="trading-card">
-                <div class="card-header">
-                    <img src="sol-icon.svg" alt="SOL" class="w-8 h-8"/>
-                    <h4 class="text-xl font-bold">Trade on Solana</h4>
-                </div>
-                <div class="token-stats">
-                    <div class="stat-item">
-                        <span class="label">Price</span>
-                        <span class="value" id="solPrice">$0.00</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">24h Volume</span>
-                        <span class="value" id="solVolume">$0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Market Cap</span>
-                        <span class="value" id="solMcap">$0</span>
-                    </div>
-                </div>
-                <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" 
-                   target="_blank" 
-                   class="trade-button">
-                    Trade $ROAST
-                </a>
-            </div>
-        </div>
-
-        <!-- Live Chart -->
-        <div class="mt-12">
-            <div class="chart-container">
-                <div id="priceChart" class="w-full h-[400px]"></div>
-            </div>
-        </div>
+    <!-- Wallet Connection Status -->
+    <div class="wallet-status bg-[#1a1a1a] p-4 rounded-lg mb-6 max-w-md mx-auto">
+      <div id="croStatus" class="mb-2 text-gray-300">CRO Wallet: Not Connected</div>
+      <div id="solStatus" class="text-gray-300">SOL Wallet: Not Connected</div>
+      <div id="balanceStatus" class="mt-2 text-gray-300"></div>
+      <div class="flex gap-4 mt-4 justify-center">
+        <button onclick="connectCRO()" class="px-4 py-2 bg-[#ff00ff] text-black rounded hover:bg-pink-600">
+          Connect CRO
+        </button>
+        <button onclick="connectSOL()" class="px-4 py-2 bg-[#ff00ff] text-black rounded hover:bg-pink-600">
+          Connect SOL
+        </button>
+      </div>
     </div>
-</section>
+
+    <!-- Roast Submission Form -->
+    <form id="roastForm" class="max-w-md mx-auto space-y-4">
+      <select id="tokenChoice" class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border">
+        <option value="CRO">Submit with CRO (60)</option>
+        <option value="SOL">Submit with SOL (0.032)</option>
+      </select>
+
+      <input type="text" id="targetName" name="target" 
+             placeholder="@name or project from 𝕏"
+             class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
+
+      <button type="button" onclick="handleSubmit()"
+              class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
+        Submit Roast
+      </button>
+    </form>
+
+    <!-- Transaction Status -->
+    <div id="txStatus" class="mt-4 p-4 rounded-lg hidden"></div>
+    <div id="shareRoast" class="mt-4"></div>
+  </section>
 
   <!-- Roasted Section -->
-<section id="roasted" class="py-20 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4">
-        <h3 class="text-4xl glitch font-bold text-center mb-8">ROASTED</h3>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto text-center mb-12">
-            These names got scorched this week. Vote to increase their burn or submit your own roast below.
-        </p>
+  <section id="roasted" class="py-16 px-6 bg-[#111] text-center">
+    <h3 class="text-4xl glitch font-bold mb-8">ROASTED</h3>
+    <p class="text-gray-400 max-w-xl mx-auto mb-6">
+      These names got scorched this week. Fire them up or drop your own below.
+    </p>
+    <div id="roastList" class="grid gap-4 max-w-2xl mx-auto"></div>
+  </section>
 
-        <!-- Filters and Sort -->
-        <div class="flex flex-wrap gap-4 justify-center mb-8">
-            <div class="filter-group">
-                <select id="chainFilter" class="filter-select">
-                    <option value="all">All Chains</option>
-                    <option value="CRO">Cronos</option>
-                    <option value="SOL">Solana</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <select id="timeFilter" class="filter-select">
-                    <option value="24h">Last 24h</option>
-                    <option value="week">This Week</option>
-                    <option value="all">All Time</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <select id="sortBy" class="filter-select">
-                    <option value="newest">Newest First</option>
-                    <option value="popular">Most Popular</option>
-                    <option value="burned">Most Burned</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Roast List -->
-        <div id="roastList" class="grid gap-6">
-            <!-- Roast items will be dynamically inserted here -->
-        </div>
-
-        <!-- Load More -->
-        <div class="text-center mt-8">
-            <button id="loadMore" class="load-more-button">
-                Load More
-                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-            </button>
-        </div>
+  <!-- DEX Section -->
+  <section id="dex" class="bg-[#111] py-12 px-4 text-center">
+    <h3 class="text-3xl glitch font-bold mb-4">Trade with Fire</h3>
+    <div class="flex flex-col gap-4 mt-6">
+      <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
+         target="_blank" class="px-6 py-3 glow">Trade $Y2K (Cronos)</a>
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" 
+         target="_blank" class="px-6 py-3 glow">Trade $ROAST (Solana)</a>
     </div>
-</section>
+  </section>
 
-<!-- Footer -->
-<footer class="bg-black/90 border-t border-pink-500/20 pt-16 pb-8">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <!-- About -->
-            <div class="col-span-1 md:col-span-2">
-                <h4 class="text-xl font-bold mb-4">Y2KCoin & $ROAST</h4>
-                <p class="text-gray-400 mb-4">
-                    The ultimate fusion of CRO and SOL communities, bringing unprecedented burn mechanics 
-                    and community engagement to both chains.
-                </p>
-                <div class="flex space-x-4">
-                    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="social-link">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <!-- Discord SVG path -->
-                        </svg>
-                    </a>
-                    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="social-link">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <!-- Twitter SVG path -->
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Quick Links -->
-            <div>
-                <h4 class="text-lg font-bold mb-4">Quick Links</h4>
-                <ul class="space-y-2">
-                    <li><a href="#nfts" class="footer-link">NFT Collection</a></li>
-                    <li><a href="#dex" class="footer-link">Trade Tokens</a></li>
-                    <li><a href="#submit-roast" class="footer-link">Submit Roast</a></li>
-                    <li><a href="#roasted" class="footer-link">View Roasts</a></li>
-                </ul>
-            </div>
-
-            <!-- Resources -->
-            <div>
-                <h4 class="text-lg font-bold mb-4">Resources</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="footer-link">Documentation</a></li>
-                    <li><a href="#" class="footer-link">Token Economics</a></li>
-                    <li><a href="#" class="footer-link">Audit Reports</a></li>
-                    <li><a href="#" class="footer-link">Brand Assets</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Contract Addresses -->
-        <div class="border-t border-pink-500/20 pt-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="contract-address">
-                    <span class="text-sm text-gray-400">Cronos Contract:</span>
-                    <code class="text-pink-400 break-all">0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d</code>
-                </div>
-                <div class="contract-address">
-                    <span class="text-sm text-gray-400">Solana Contract:</span>
-                    <code class="text-pink-400 break-all">A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray</code>
-                </div>
-            </div>
-        </div>
-
-        <!-- Copyright -->
-        <div class="text-center text-sm text-gray-500 mt-8">
-            © 2024 Y2KCoin & $ROAST. All rights reserved.
-        </div>
+  <!-- Connect Section -->
+  <section id="connect" class="py-12 px-4 text-center">
+    <h3 class="text-3xl glitch font-bold mb-4">Stay Plugged In</h3>
+    <p class="text-gray-400 mb-6">Join the fam. Talk your shit. Earn your spot.</p>
+    <div class="flex justify-center gap-4">
+      <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2">Discord</a>
+      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2">𝕏 (Twitter)</a>
     </div>
-</footer>
+  </section>
 
-<!-- Enhanced Styling -->
+  <!-- Footer -->
+  <footer class="bg-black text-center text-sm py-8 px-4 text-gray-600 mt-auto">
+    Y2KCoin & $ROAST — Contract Addresses:<br/>
+    <span class="break-all">Cronos: 0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d</span><br/>
+    <span class="break-all">Solana: A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray</span>
+  </footer>
+</div>
+
 <style>
-/* Base Styles */
-:root {
-    --primary: #ff00ff;
-    --primary-dark: #cc00cc;
-    --secondary: #00ffff;
-    --accent: #ff0077;
-    --background: #0a0a0a;
-    --surface: #1a1a1a;
-    --text: #e2e8f0;
-    --text-secondary: #94a3b8;
-}
+  html { 
+    background-color: #0a0a0a; 
+  }
+  
+  body {
+    background-color: #0a0a0a;
+    font-family: 'Rubik', sans-serif;
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
+  .glitch {
+    text-shadow: 2px 0 red, -2px 0 cyan;
+    font-family: 'Orbitron', sans-serif;
+    animation: glitch 2s infinite;
+  }
 
-::-webkit-scrollbar-track {
-    background: var(--surface);
-}
+  @keyframes glitch {
+    0% { text-shadow: 2px 0 red, -2px 0 cyan; }
+    25% { text-shadow: -2px 0 red, 2px 0 cyan; }
+    50% { text-shadow: 2px 0 cyan, -2px 0 red; }
+    75% { text-shadow: -2px 0 cyan, 2px 0 red; }
+    100% { text-shadow: 2px 0 red, -2px 0 cyan; }
+  }
 
-::-webkit-scrollbar-thumb {
-    background: var(--primary-dark);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
-}
-
-/* Animation Keyframes */
-@keyframes glitch {
-    0% {
-        text-shadow: 0.05em 0 0 var(--primary), -0.05em -0.025em 0 var(--secondary),
-                     -0.025em 0.05em 0 var(--accent);
-    }
-    14% {
-        text-shadow: 0.05em 0 0 var(--primary), -0.05em -0.025em 0 var(--secondary),
-                     -0.025em 0.05em 0 var(--accent);
-    }
-    15% {
-        text-shadow: -0.05em -0.025em 0 var(--primary), 0.025em 0.025em 0 var(--secondary),
-                     -0.05em -0.05em 0 var(--accent);
-    }
-    49% {
-        text-shadow: -0.05em -0.025em 0 var(--primary), 0.025em 0.025em 0 var(--secondary),
-                     -0.05em -0.05em 0 var(--accent);
-    }
-    50% {
-        text-shadow: 0.025em 0.05em 0 var(--primary), 0.05em 0 0 var(--secondary),
-                     0 -0.05em 0 var(--accent);
-    }
-    99% {
-        text-shadow: 0.025em 0.05em 0 var(--primary), 0.05em 0 0 var(--secondary),
-                     0 -0.05em 0 var(--accent);
-    }
-    100% {
-        text-shadow: -0.025em 0 0 var(--primary), -0.025em -0.025em 0 var(--secondary),
-                     -0.025em -0.05em 0 var(--accent);
-    }
-}
-
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Continuing Advanced Styling */
-.nav-link {
-    position: relative;
-    color: var(--text);
-    transition: color 0.3s ease;
-    font-weight: 500;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
-
-/* Cards and Containers */
-.trading-card {
-    background: linear-gradient(145deg, var(--surface), rgba(26, 26, 26, 0.5));
-    border: 1px solid rgba(255, 0, 255, 0.1);
-    border-radius: 16px;
-    padding: 24px;
+  .neon-border {
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 10px #ff00ff;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
+    border-radius: 8px;
+  }
 
-.trading-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px -10px var(--primary-dark);
-}
+  .neon-border:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 5px #ff00ff;
+  }
 
-.nft-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 16px;
-    background: var(--surface);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+  .glow {
+    background: rgba(255, 0, 255, 0.1);
+    border: 2px solid #ff0077;
+    box-shadow: 0 0 20px #ff0077;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
 
-.nft-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-    transform: translateY(100%);
+  .glow:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px #ff0077;
+  }
+
+  #nfts img {
+    width: 192px;
+    height: 192px;
+    object-fit: cover;
+    display: block;
     transition: transform 0.3s ease;
-}
+  }
 
-.nft-card:hover .nft-overlay {
-    transform: translateY(0);
-}
+  #nfts img:hover {
+    transform: scale(1.05);
+  }
 
-/* Buttons and Interactive Elements */
-.primary-button {
-    position: relative;
-    background: linear-gradient(45deg, var(--primary), var(--accent));
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    overflow: hidden;
+  #txStatus {
     transition: all 0.3s ease;
-}
+  }
 
-.primary-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-    );
-    transition: all 0.6s ease;
-}
+  #txStatus.success {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
+  }
 
-.primary-button:hover::before {
-    left: 100%;
-}
+  #txStatus.error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0000;
+  }
 
-.button-glow {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-        circle,
-        rgba(255, 0, 255, 0.3) 0%,
-        transparent 70%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+  .wallet-status button:disabled {
+    background: #666;
+    cursor: not-allowed;
+  }
 
-.primary-button:hover .button-glow {
-    opacity: 1;
-}
+  input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #ff00ff;
+  }
 
-/* Form Elements */
-.form-input {
-    background: rgba(26, 26, 26, 0.8);
-    border: 1px solid rgba(255, 0, 255, 0.2);
-    border-radius: 8px;
-    padding: 12px 16px;
-    color: var(--text);
+  .roast-item {
+    transform: translateZ(0);
     transition: all 0.3s ease;
+  }
+
+  .roast-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.2);
+  }
+
+  .processing {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ffffff;
+  }
+
+  .success {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
+  }
+
+  .error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0000;
+  }
+</style>
+
+<script>
+// Network Configurations
+const CRONOS_MAINNET = {
+    chainId: '0x19',
+    chainName: 'Cronos Mainnet',
+    nativeCurrency: {
+        name: 'CRO',
+        symbol: 'CRO',
+        decimals: 18
+    },
+    rpcUrls: ['https://evm.cronos.org'],
+    blockExplorerUrls: ['https://cronoscan.com/']
+};
+
+// State Management
+let croWallet = null;
+let solWallet = null;
+let isProcessing = false;
+
+// Constants
+const CRO_RECIPIENT = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+const SOL_RECIPIENT = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
+const CRO_AMOUNT = "60";
+const SOL_AMOUNT = "0.032";
+
+// Helper Functions
+function getProvider() {
+    if (window.ethereum) return window.ethereum;
+    if (window.deficonnectProvider) return window.deficonnectProvider;
+    throw new Error('No Web3 provider detected. Please install MetaMask or DeFi Wallet');
 }
 
-.form-input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(255, 0, 255, 0.2);
-}
-
-/* Loading Animation */
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 0, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: var(--primary);
-    animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* Grid Animation Background */
-.grid-animation {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-size: 50px 50px;
-    background-image: 
-        linear-gradient(to right, rgba(255, 0, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
-    animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(50px); }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-content {
-        padding: 60px 20px;
-    }
+function showTxStatus(message, type) {
+    const status = document.getElementById('txStatus');
+    status.textContent = message;
+    status.className = `mt-4 p-4 rounded-lg ${type} block`;
     
-    .trading-card {
-        margin: 10px;
-    }
-    
-    .grid-cols-4 {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .grid-cols-2 {
-        grid-template-columns: 1fr;
-    }
-    
-    .nav-link {
-        padding: 12px;
-        width: 100%;
-        text-align: center;
-    }
-}
-
-  // Enhanced JavaScript Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the application
-    initializeApp();
-    
-    // Setup event listeners
-    setupEventListeners();
-    
-    // Start loading animations
-    startLoadingAnimations();
-});
-
-// Application Initialization
-function initializeApp() {
-    // Hide loading overlay with animation
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const app = document.getElementById('app');
-    
-    setTimeout(() => {
-        loadingOverlay.style.opacity = '0';
-        app.style.opacity = '1';
-        
+    if (type !== 'processing') {
         setTimeout(() => {
-            loadingOverlay.style.display = 'none';
-        }, 500);
-    }, 1500);
-
-    // Initialize Web3 connections
-    initializeWeb3();
-    
-    // Load initial data
-    loadInitialData();
-    
-    // Setup real-time updates
-    setupRealTimeUpdates();
-}
-
-// Web3 Initialization
-async function initializeWeb3() {
-    // Setup providers
-    window.providers = {
-        cronos: null,
-        solana: null
-    };
-
-    // Setup contract instances
-    window.contracts = {
-        y2k: null,
-        roast: null
-    };
-
-    try {
-        // Initialize Cronos provider
-        if (window.ethereum) {
-            window.providers.cronos = new ethers.providers.Web3Provider(window.ethereum);
-        }
-
-        // Initialize Solana connection
-        const solanaConnection = new solanaWeb3.Connection(
-            "https://api.mainnet-beta.solana.com",
-            "confirmed"
-        );
-        window.providers.solana = solanaConnection;
-
-        // Setup contract instances
-        setupContractInstances();
-
-    } catch (error) {
-        console.error('Web3 initialization error:', error);
-        showError('Failed to initialize Web3 connections');
+            status.className = 'mt-4 p-4 rounded-lg hidden';
+        }, 5000);
     }
 }
 
-// Contract Setup
-function setupContractInstances() {
-    const Y2K_CONTRACT_ADDRESS = '0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d';
-    const Y2K_ABI = [/* Contract ABI here */];
-
+// Wallet Connections
+async function connectCRO() {
     try {
-        if (window.providers.cronos) {
-            window.contracts.y2k = new ethers.Contract(
-                Y2K_CONTRACT_ADDRESS,
-                Y2K_ABI,
-                window.providers.cronos
-            );
-        }
-    } catch (error) {
-        console.error('Contract setup error:', error);
-        showError('Failed to initialize contracts');
-    }
-}
-
-// Real-time Price Updates
-function setupRealTimeUpdates() {
-    // Setup WebSocket connections for price feeds
-    const ws = new WebSocket('wss://your-price-feed-endpoint');
-    
-    ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        updatePriceDisplays(data);
-    };
-
-    // Fallback to polling if WebSocket fails
-    ws.onerror = function() {
-        setInterval(pollPriceUpdates, 30000);
-    };
-}
-
-// UI Updates
-function updatePriceDisplays(data) {
-    const elements = {
-        croPrice: document.getElementById('croPrice'),
-        solPrice: document.getElementById('solPrice'),
-        croVolume: document.getElementById('croVolume'),
-        solVolume: document.getElementById('solVolume'),
-        croMcap: document.getElementById('croMcap'),
-        solMcap: document.getElementById('solMcap')
-    };
-
-    // Update with animations
-    Object.entries(elements).forEach(([key, element]) => {
-        if (element && data[key]) {
-            animateValue(element, data[key]);
-        }
-    });
-}
-
-// Value Animation
-function animateValue(element, endValue) {
-    const startValue = parseFloat(element.textContent);
-    const duration = 1000;
-    const steps = 60;
-    const step = (endValue - startValue) / steps;
-    
-    let current = startValue;
-    const interval = duration / steps;
-    
-    const animation = setInterval(() => {
-        current += step;
-        element.textContent = current.toFixed(2);
+        showTxStatus('Connecting to CRO wallet...', 'processing');
         
-        if ((step > 0 && current >= endValue) || 
-            (step < 0 && current <= endValue)) {
-            clearInterval(animation);
-            element.textContent = endValue.toFixed(2);
+        const provider = getProvider();
+        const accounts = await provider.request({ method: 'eth_requestAccounts' });
+        
+        if (!accounts || accounts.length === 0) {
+            throw new Error('No accounts found');
         }
-    }, interval);
+
+        // Switch to Cronos network
+        try {
+            await provider.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: CRONOS_MAINNET.chainId }],
+            });
+        } catch (switchError) {
+            if (switchError.code === 4902) {
+                await provider.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [CRONOS_MAINNET],
+                });
+            } else {
+                throw switchError;
+            }
+        }
+
+        // Initialize ethers provider
+        croWallet = new ethers.providers.Web3Provider(provider);
+        const network = await croWallet.getNetwork();
+        
+        if (network.chainId !== parseInt(CRONOS_MAINNET.chainId, 16)) {
+            throw new Error('Please switch to Cronos Mainnet');
+        }
+
+        const signer = croWallet.getSigner();
+        const address = await signer.getAddress();
+        const balance = await croWallet.getBalance(address);
+        const balanceInCRO = ethers.utils.formatEther(balance);
+
+        document.getElementById('croStatus').textContent = 
+            `CRO Wallet: Connected (${address.slice(0,6)}...)`;
+        document.getElementById('balanceStatus').textContent = 
+            `Balance: ${parseFloat(balanceInCRO).toFixed(4)} CRO`;
+        showTxStatus('CRO Wallet connected successfully', 'success');
+        
+        // Enhanced event listeners
+        provider.on('accountsChanged', handleAccountsChanged);
+        provider.on('chainChanged', handleChainChanged);
+
+    } catch (error) {
+        croWallet = null;
+        showTxStatus(`CRO Connection error: ${error.message}`, 'error');
+    }
 }
 
-      // Wallet Connection and Transaction Handling
-class WalletManager {
-    constructor() {
-        this.connections = {
-            cro: null,
-            sol: null
-        };
-        this.balances = {
-            cro: 0,
-            sol: 0
-        };
-        this.transactions = new Map();
-        this.initializeEventListeners();
-    }
-
-    async connectCRO() {
-        try {
-            showLoadingState('connecting-cro');
-            
-            if (!window.ethereum && !window.deficonnectProvider) {
-                throw new Error('Please install MetaMask or DeFi Wallet');
-            }
-
-            const provider = window.ethereum || window.deficonnectProvider;
-            const accounts = await provider.request({ method: 'eth_requestAccounts' });
-            
-            if (!accounts.length) throw new Error('No accounts found');
-
-            // Switch to Cronos network
-            await this.switchToCronosNetwork(provider);
-
-            // Initialize ethers provider and signer
-            const ethersProvider = new ethers.providers.Web3Provider(provider);
-            const signer = ethersProvider.getSigner();
-            const address = await signer.getAddress();
-
-            this.connections.cro = {
-                provider: ethersProvider,
-                signer,
-                address
-            };
-
-            // Update UI
-            await this.updateCROBalance();
-            this.updateConnectionStatus('cro', true);
-            
-            // Setup listeners
-            this.setupCronosListeners(provider);
-            
-            showSuccess('CRO Wallet Connected');
-            return true;
-
-        } catch (error) {
-            console.error('CRO connection error:', error);
-            showError(error.message);
-            return false;
-        } finally {
-            hideLoadingState('connecting-cro');
+async function connectSOL() {
+    try {
+        showTxStatus('Connecting to SOL wallet...', 'processing');
+        
+        const provider = window.phantom?.solana || window.solflare?.solana || window.backpack?.solana;
+        if (!provider) {
+            throw new Error('Please install Phantom, Solflare, or Backpack wallet');
         }
-    }
 
-    async connectSOL() {
-        try {
-            showLoadingState('connecting-sol');
-            
-            const provider = window.phantom?.solana || 
-                           window.solflare?.solana || 
-                           window.backpack?.solana;
-                           
-            if (!provider) {
-                throw new Error('Please install Phantom, Solflare, or Backpack wallet');
-            }
-
-            const connection = await provider.connect();
-            const publicKey = connection.publicKey.toString();
-
-            this.connections.sol = {
-                provider,
-                publicKey,
-                connection: new solanaWeb3.Connection(
-                    "https://api.mainnet-beta.solana.com",
-                    "confirmed"
-                )
-            };
-
-            // Update UI
-            await this.updateSOLBalance();
-            this.updateConnectionStatus('sol', true);
-            
-            // Setup listeners
-            this.setupSolanaListeners(provider);
-            
-            showSuccess('SOL Wallet Connected');
-            return true;
-
-        } catch (error) {
-            console.error('SOL connection error:', error);
-            showError(error.message);
-            return false;
-        } finally {
-            hideLoadingState('connecting-sol');
+        if (!provider.isConnected) {
+            await provider.connect();
         }
+
+        solWallet = provider;
+        const publicKey = provider.publicKey.toString();
+        
+        // Get SOL balance
+        const connection = new solanaWeb3.Connection("https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0");
+        const balance = await connection.getBalance(provider.publicKey);
+        const balanceInSOL = balance / solanaWeb3.LAMPORTS_PER_SOL;
+
+        document.getElementById('solStatus').textContent = 
+            `SOL Wallet: Connected (${publicKey.slice(0,6)}...)`;
+        document.getElementById('balanceStatus').textContent += 
+            `\nSOL Balance: ${balanceInSOL.toFixed(4)} SOL`;
+        showTxStatus('SOL Wallet connected successfully', 'success');
+
+        // Listen for disconnect
+        provider.on('disconnect', () => {
+            solWallet = null;
+            document.getElementById('solStatus').textContent = 'SOL Wallet: Not Connected';
+            showTxStatus('SOL Wallet disconnected', 'error');
+        });
+
+    } catch (error) {
+        solWallet = null;
+        showTxStatus(`SOL Connection error: ${error.message}`, 'error');
+    }
+}
+
+// Transaction Handling
+async function handleSubmit() {
+    if (isProcessing) {
+        showTxStatus('Please wait for the current transaction to complete', 'error');
+        return;
     }
 
-    // Transaction Handling
-    async submitRoast(target, chain) {
-        try {
-            if (!target.startsWith('@')) {
-                throw new Error('Target must start with @');
-            }
+    const target = document.getElementById('targetName').value.trim();
+    const token = document.getElementById('tokenChoice').value;
 
-            const connection = this.connections[chain.toLowerCase()];
-            if (!connection) {
-                throw new Error(`Please connect your ${chain} wallet first`);
-            }
+    if (!target || !target.startsWith('@')) {
+        showTxStatus('Please enter a valid 𝕏 username starting with @', 'error');
+        return;
+    }
 
-            showLoadingState('submitting-roast');
-            
-            const txHash = await (chain === 'CRO' ? 
-                this.submitCROTransaction(target) : 
-                this.submitSOLTransaction(target));
-
-            // Save transaction details
-            this.transactions.set(txHash, {
-                target,
-                chain,
-                timestamp: Date.now(),
-                status: 'pending'
-            });
-
-            // Start monitoring transaction
-            this.monitorTransaction(txHash, chain);
-            
-            return txHash;
-
-        } catch (error) {
-            console.error('Roast submission error:', error);
-            showError(error.message);
-            throw error;
-        } finally {
-            hideLoadingState('submitting-roast');
+    isProcessing = true;
+    try {
+        if (token === 'CRO') {
+            await submitWithCRO(target);
+        } else {
+            await submitWithSOL(target);
         }
+    } finally {
+        isProcessing = false;
     }
+}
 
-    async submitCROTransaction(target) {
-        const amount = ethers.utils.parseEther('60');
-        const signer = this.connections.cro.signer;
+async function submitWithCRO(target) {
+    try {
+        if (!croWallet) {
+            throw new Error('Please connect CRO wallet first');
+        }
 
+        showTxStatus('Preparing CRO transaction...', 'processing');
+        
+        const signer = croWallet.getSigner();
+        const address = await signer.getAddress();
+        
+        // Check balance
+        const balance = await croWallet.getBalance(address);
+        const amount = ethers.utils.parseUnits(CRO_AMOUNT, "ether");
+        
+        if (balance.lt(amount)) {
+            throw new Error('Insufficient CRO balance');
+        }
+
+        // Estimate gas
+        const gasPrice = await croWallet.getGasPrice();
+        const gasLimit = await croWallet.estimateGas({
+            to: CRO_RECIPIENT,
+            value: amount,
+            from: address
+        });
+
+        // Calculate total cost including gas
+        const totalCost = amount.add(gasPrice.mul(gasLimit));
+        if (balance.lt(totalCost)) {
+            throw new Error('Insufficient balance for gas fees');
+        }
+
+        // Send transaction
         const tx = await signer.sendTransaction({
             to: CRO_RECIPIENT,
             value: amount,
-            gasLimit: await this.estimateGasLimit()
+            gasLimit: gasLimit,
+            gasPrice: gasPrice
         });
 
-        return tx.hash;
+        showTxStatus('Confirming CRO transaction...', 'processing');
+        const receipt = await tx.wait();
+
+        if (receipt.status === 1) {
+            showTxStatus(`Roast submitted successfully! TX: ${tx.hash}`, 'success');
+            saveRoast(target, 'Cronos', tx.hash);
+            shareRoast(target, 'CROFam');
+            
+            // Update balance display
+            const newBalance = await croWallet.getBalance(address);
+            const balanceInCRO = ethers.utils.formatEther(newBalance);
+            document.getElementById('balanceStatus').textContent = 
+                `Balance: ${parseFloat(balanceInCRO).toFixed(4)} CRO`;
+        } else {
+            throw new Error('Transaction failed');
+        }
+        
+    } catch (error) {
+        console.error('CRO Payment error:', error);
+        showTxStatus(`CRO Payment error: ${error.message}`, 'error');
+        throw error;
     }
+}
 
-    async submitSOLTransaction(target) {
-        const amount = solanaWeb3.LAMPORTS_PER_SOL * 0.032;
-        const connection = this.connections.sol.connection;
-        const publicKey = new solanaWeb3.PublicKey(this.connections.sol.publicKey);
-        const recipientKey = new solanaWeb3.PublicKey(SOL_RECIPIENT);
+async function submitWithSOL(target) {
+    try {
+        if (!solWallet) {
+            throw new Error('Please connect SOL wallet first');
+        }
 
-        const transaction = new solanaWeb3.Transaction().add(
+        showTxStatus('Preparing SOL transaction...', 'processing');
+
+        const connection = new solanaWeb3.Connection("https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0");
+        
+        // Check balance
+        const balance = await connection.getBalance(solWallet.publicKey);
+        const amount = solanaWeb3.LAMPORTS_PER_SOL * parseFloat(SOL_AMOUNT);
+        
+        if (balance < amount) {
+            throw new Error('Insufficient SOL balance');
+        }
+
+        const tx = new solanaWeb3.Transaction().add(
             solanaWeb3.SystemProgram.transfer({
-                fromPubkey: publicKey,
-                toPubkey: recipientKey,
-                lamports: amount
+                fromPubkey: solWallet.publicKey,
+                toPubkey: new solanaWeb3.PublicKey(SOL_RECIPIENT),
+                lamports: amount,
             })
         );
 
         const { blockhash } = await connection.getLatestBlockhash();
-        transaction.recentBlockhash = blockhash;
-        transaction.feePayer = publicKey;
+        tx.recentBlockhash = blockhash;
+        tx.feePayer = solWallet.publicKey;
 
-        const signed = await this.connections.sol.provider.signTransaction(transaction);
+        const signed = await solWallet.signTransaction(tx);
         const signature = await connection.sendRawTransaction(signed.serialize());
-
-        return signature;
-    }
-
-    // Transaction Monitoring
-    async monitorTransaction(txHash, chain) {
-        const checkInterval = chain === 'CRO' ? 5000 : 2000;
-        const maxAttempts = 30;
-        let attempts = 0;
-
-        const checkStatus = async () => {
-            try {
-                const status = await this.getTransactionStatus(txHash, chain);
-                
-                if (status === 'confirmed') {
-                    this.handleTransactionSuccess(txHash);
-                    return;
-                }
-                
-                if (status === 'failed') {
-                    this.handleTransactionFailure(txHash);
-                    return;
-                }
-
-                attempts++;
-                if (attempts >= maxAttempts) {
-                    this.handleTransactionTimeout(txHash);
-                    return;
-                }
-
-                setTimeout(checkStatus, checkInterval);
-
-            } catch (error) {
-                console.error('Transaction monitoring error:', error);
-                this.handleTransactionError(txHash, error);
-            }
-        };
-
-        setTimeout(checkStatus, checkInterval);
-    }
-
-    // UI Updates
-    updateUI() {
-        this.updateBalances();
-        this.updateTransactionList();
-        this.updateStatistics();
-    }
-
-    // Event Listeners
-    initializeEventListeners() {
-        document.getElementById('submitRoast').addEventListener('click', async () => {
-            const target = document.getElementById('targetInput').value;
-            const chain = document.getElementById('chainSelect').value;
-            
-            try {
-                await this.submitRoast(target, chain);
-            } catch (error) {
-                console.error('Roast submission error:', error);
-            }
-        });
-
-        // Add more event listeners...
-    }
-}
-
-// UI Enhancement Functions
-const UI = {
-    showToast(message, type = 'info') {
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.textContent = message;
         
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }, 100);
-    },
+        showTxStatus('Confirming SOL transaction...', 'processing');
+        await connection.confirmTransaction(signature);
 
-    updateStatistics(stats) {
-        Object.entries(stats).forEach(([key, value]) => {
-            const element = document.getElementById(`stat-${key}`);
-            if (element) {
-                this.animateNumber(element, value);
-            }
-        });
-    },
+        showTxStatus(`Roast submitted successfully! TX: ${signature}`, 'success');
+        saveRoast(target, 'Solana', signature);
+        shareRoast(target, 'SolanaGang');
 
-    animateNumber(element, endValue) {
-        const startValue = parseFloat(element.textContent);
-        const duration = 1000;
-        const steps = 60;
-        const increment = (endValue - startValue) / steps;
-        
-        let currentValue = startValue;
-        const stepInterval = duration / steps;
+        // Update balance display
+        const newBalance = await connection.getBalance(solWallet.publicKey);
+        const balanceInSOL = newBalance / solanaWeb3.LAMPORTS_PER_SOL;
+        document.getElementById('balanceStatus').textContent = 
+            `SOL Balance: ${balanceInSOL.toFixed(4)} SOL`;
 
-        const animation = setInterval(() => {
-            currentValue += increment;
-            
-            if ((increment > 0 && currentValue >= endValue) || 
-                (increment < 0 && currentValue <= endValue)) {
-                clearInterval(animation);
-                currentValue = endValue;
-            }
-
-            element.textContent = currentValue.toFixed(2);
-        }, stepInterval);
-    }
-};
-
-// Initialize the application
-const walletManager = new WalletManager();
-document.addEventListener('DOMContentLoaded', () => walletManager.initialize());
-
-              // Advanced UI Components and Real-time Updates
-class UIController {
-    constructor() {
-        this.charts = new ChartController();
-        this.animations = new AnimationController();
-        this.notifications = new NotificationSystem();
-        this.realtime = new RealtimeUpdates();
-        this.initialize();
-    }
-
-    initialize() {
-        this.setupCharts();
-        this.initializeAnimations();
-        this.setupRealtimeUpdates();
-        this.initializeIntersectionObserver();
-    }
-
-    // Chart Management
-    setupCharts() {
-        // Price Chart
-        this.charts.createPriceChart('priceChart', {
-            theme: 'dark',
-            animations: {
-                enabled: true,
-                easing: 'easeinout',
-                speed: 800,
-                animateGradually: {
-                    enabled: true,
-                    delay: 150
-                }
-            },
-            background: 'transparent',
-            foreColor: '#94a3b8',
-            toolbar: {
-                show: true,
-                tools: {
-                    download: false,
-                    selection: true,
-                    zoom: true,
-                    zoomin: true,
-                    zoomout: true,
-                    pan: true,
-                    reset: true
-                }
-            }
-        });
+    } catch (error) {
+        console.error('SOL Payment error:', error);
+        showTxStatus(`SOL Payment error: ${error.message}`, 'error');
+        throw error;
     }
 }
 
-// Chart Controller
-class ChartController {
-    constructor() {
-        this.charts = new Map();
-        this.updateInterval = null;
-    }
-
-    createPriceChart(containerId, options) {
-        const chartOptions = {
-            series: [{
-                name: 'C
-            }, {
-                name: 'SOL Price',
-                : {
-                type: 'area',
-                height: 350,
-                ...options
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 2
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.3,
-                    stops: [0, 90, 100]
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            grid: {
-                borderColor: '#334155',
-                xaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            }
-        };
-
-        const chart = new ApexCharts(document.getElementById(containerId), chartOptions);
-        chart.render();
-        this.charts.set(containerId, chart);
-        
-        // Start real-time updates
-        this.startRealtimeUpdates(containerId);
-    }
-
-    async updateChartData(chartId, newData) {
-        const chart = this.charts.get(chartId);
-        if (!chart) return;
-
-        await chart.updateSeries}]);
-    }
-}
-
-// Animation Controller
-class AnimationController {
-    constructor() {
-        this.observers = new Map();
-        this.animations = new Map();
-    }
-
-    initializeAnimations() {
-        // Setup scroll-based animations
-        this.setupScrollAnimations();
-        
-        // Setup hover animations
-        this.setupHoverEffects();
-        
-        // Setup continuous animations
-        this.setupContinuousAnimations();
-    }
-
-    setupScrollAnimations() {
-        const options = {
-            root: null,
-            threshold: 0.1,
-            rootMargin: '0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    this.playAnimation(entry.target);
-                }
-            });
-        }, options);
-
-        document.querySelectorAll('[data-animate]').forEach(element => {
-            observer.observe(element);
-        });
-    }
-
-    playAnimation(element) {
-        const animation = element.dataset.animate;
-        
-        switch(animation) {
-            case 'fade-up':
-                element.style.opacity = '0';
-                element.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    element.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }, 100);
-                break;
-                
-            case 'scale-in':
-                element.style.opacity = '0';
-                element.style.transform = 'scale(0.95)';
-                
-                setTimeout(() => {
-                    element.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                    element.style.opacity = '1';
-                    element.style.transform = 'scale(1)';
-                }, 100);
-                break;
-        }
-    }
-}
-
-// Real-time Updates System
-class RealtimeUpdates {
-    constructor() {
-        this.connections = new Map();
-        this.subscribers = new Map();
-        this.reconnectAttempts = 0;
-        this.maxReconnectAttempts = 5;
-    }
-
-    initialize() {
-        this.setupWebSocket();
-        this.setupPriceFeeds();
-        this.setupActivityFeed();
-    }
-
-    setupWebSocket() {
-        const ws = new WebSocket('wss://your-websocket-endpoint');
-        
-        ws.onopen = () => {
-            console.log('WebSocket connected');
-            this.reconnectAttempts = 0;
-        };
-
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            this.handleWebSocketMessage(data);
-        };
-
-        ws.onclose = () => {
-            if (this.reconnectAttempts < this.maxReconnectAttempts) {
-                setTimeout(() => {
-                    this.reconnectAttempts++;
-                    this.setupWebSocket();
-                }, 3000 * Math.pow(2, this.reconnectAttempts));
-            }
-        };
-    }
-
-    handleWebSocketMessage(data) {
-        switch(data.type) {
-            case 'price':
-                this.updatePriceDisplays(data);
-                break;
-            case 'transaction':
-                this.handleNewTransaction(data);
-                break;
-            case 'roast':
-                this.handleNewRoast(data);
-                break;
-        }
-    }
-
-    updatePriceDisplays(data) {
-        const animations = {
-            duration: 800,
-            easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
-        };
-
-        Object.entries(data.prices).forEach(([token, price]) => {
-            const element = document.getElementById(`${token.toLowerCase()}Price`);
-            if (!element) return;
-
-            const currentPrice = parseFloat(element.dataset.value || '0');
-            const newPrice = parseFloat(price);
-
-            // Add price change indication
-            element.classList.remove('price-up', 'price-down');
-            element.classList.add(newPrice > currentPrice ? 'price-up' : 'price-down');
-
-            // Animate the price change
-            this.animateValue(element, currentPrice, newPrice, animations);
-            
-            element.dataset.value = price;
-        });
-    }
-}
-
-// Advanced Loading States
-class LoadingController {
-    constructor() {
-        this.states = new Map();
-        this.defaultOptions = {
-            minDuration: 500,
-            maxDuration: 5000,
-            fadeOutDuration: 300
-        };
-    }
-
-    show(id, options = {}) {
-        const opts = { ...this.defaultOptions, ...options };
-        const loader = document.createElement('div');
-        
-        loader.className = 'loader-container';
-        loader.innerHTML = `
-            <div class="loader-content">
-                <div class="loader-spinner"></div>
-                <div class="loader-text">${opts.text || 'Loading...'}</div>
-            </div>
-        `;
-
-        document.body.appendChild(loader);
-        this.states.set(id, {
-            element: loader,
-            startTime: Date.now(),
-            minDuration: opts.minDuration
-        });
-
-        // Ensure minimum loading time
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve();
-            }, opts.minDuration);
-        });
-    }
-
-    hide(id) {
-        const state = this.states.get(id);
-        if (!state) return;
-
-        const elapsedTime = Date.now() - state.startTime;
-        const remainingTime = Math.max(0, state.minDuration - elapsedTime);
-
-        setTimeout(() => {
-            state.element.classList.add('fade-out');
-            setTimeout(() => {
-                state.element.remove();
-                this.states.delete(id);
-            }, 300);
-        }, remainingTime);
-    }
-}
-
-// Initialize all controllers
-document.addEventListener('DOMContentLoaded', () => {
-    window.uiController = new UIController();
-    window.loadingController = new LoadingController();
-});
-
-      // Security and Error Handling System
-class SecurityManager {
-    constructor() {
-        this.rateLimiter = new RateLimiter();
-        this.inputValidator = new InputValidator();
-        this.antiBot = new AntiBotProtection();
-        this.errorHandler = new ErrorHandler();
-    }
-
-    // Rate Limiting Implementation
-    class RateLimiter {
-        constructor() {
-            this.attempts = new Map();
-            this.windowMs = 60000; // 1 minute
-            this.maxAttempts = 5;
-        }
-
-        checkLimit(action, userAddress) {
-            const key = `${action}-${userAddress}`;
-            const now = Date.now();
-            const userAttempts = this.attempts.get(key) || [];
-
-            // Clean old attempts
-            const recentAttempts = userAttempts.filter(
-                timestamp => now - timestamp < this.windowMs
-            );
-
-            if (recentAttempts.length >= this.maxAttempts) {
-                throw new Error('Rate limit exceeded. Please try again later.');
-            }
-
-            recentAttempts.push(now);
-            this.attempts.set(key, recentAttempts);
-            return true;
-        }
-    }
-
-    // Input Validation
-    class InputValidator {
-        validateTransactionInput(input) {
-            const rules = {
-                target: {
-                    pattern: /^@[A-Za-z0-9_]{1,15}$/,
-                    message: 'Invalid target format. Must be a valid Twitter handle.'
-                },
-                amount: {
-                    min: 0,
-                    max: 1000000,
-                    message: 'Amount out of acceptable range.'
-                }
-            };
-
-            for (const [field, rule] of Object.entries(rules)) {
-                if (rule.pattern && !rule.pattern.test(input[field])) {
-                    throw new ValidationError(rule.message);
-                }
-                if (rule.min !== undefined && input[field] < rule.min) {
-                    throw new ValidationError(rule.message);
-                }
-                if (rule.max !== undefined && input[field] > rule.max) {
-                    throw new ValidationError(rule.message);
-                }
-            }
-
-            // Sanitize input
-            return this.sanitizeInput(input);
-        }
-
-        sanitizeInput(input) {
-            return Object.entries(input).reduce((acc, [key, value]) => {
-                acc[key] = typeof value === 'string' 
-                    ? DOMPurify.sanitize(value.trim())
-                    : value;
-                return acc;
-            }, {});
-        }
-    }
-}
-
-// Enhanced Error Handling
-class ErrorHandler {
-    constructor() {
-        this.errorLog = new Map();
-        this.setupGlobalErrorHandling();
-    }
-
-    setupGlobalErrorHandling() {
-        window.onerror = (msg, url, lineNo, columnNo, error) => {
-            this.handleError(error, {
-                type: 'global',
-                location: `${url}:${lineNo}:${columnNo}`
-            });
-            return false;
-        };
-
-        window.addEventListener('unhandledrejection', (event) => {
-            this.handleError(event.reason, {
-                type: 'promise',
-                location: 'unhandled rejection'
-            });
-        });
-    }
-
-    handleError(error, context = {}) {
-        const errorId = crypto.randomUUID();
-        const timestamp = Date.now();
-
-        const errorInfo = {
-            id: errorId,
-            timestamp,
-            message: error.message,
-            stack: error.stack,
-            context,
-            userAgent: navigator.userAgent,
-            ...context
-        };
-
-        // Log error
-        this.logError(errorInfo);
-
-        // Show user-friendly message
-        this.showErrorMessage(error, errorId);
-
-        // Report to monitoring service
-        this.reportError(errorInfo);
-
-        return errorId;
-    }
-
-    showErrorMessage(error, errorId) {
-        const userMessage = this.getUserFriendlyMessage(error);
-        
-        UI.showToast({
-            message: userMessage,
-            type: 'error',
-            duration: 5000,
-            errorId
-        });
-    }
-
-    getUserFriendlyMessage(error) {
-        const errorMessages = {
-            ValidationError: 'Please check your input and try again.',
-            ConnectionError: 'Unable to connect. Please check your internet connection.',
-            TransactionError: 'Transaction failed. Please try again.',
-            WalletError: 'Wallet connection error. Please reconnect.',
-            RateLimitError: 'Too many attempts. Please wait a moment.',
-            default: 'An unexpected error occurred. Please try again.'
-        };
-
-        return errorMessages[error.name] || errorMessages.default;
-    }
-}
-
-// Performance Optimizations
-class PerformanceOptimizer {
-    constructor() {
-        this.imageLoader = new LazyImageLoader();
-        this.codeOptimizer = new CodeOptimizer();
-        this.cacheManager = new CacheManager();
-    }
-
-    initialize() {
-        this.setupLazyLoading();
-        this.setupIntersectionObserver();
-        this.optimizeEventListeners();
-        this.setupCaching();
-    }
-
-    // Lazy Loading Implementation
-    class LazyImageLoader {
-        constructor() {
-            this.observer = new IntersectionObserver(
-                (entries) => this.handleIntersection(entries),
-                {
-                    rootMargin: '50px 0px',
-                    threshold: 0.01
-                }
-            );
-        }
-
-        observe() {
-            document.querySelectorAll('img[data-src]').forEach(img => {
-                this.observer.observe(img);
-            });
-        }
-
-        handleIntersection(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    this.loadImage(entry.target);
-                    this.observer.unobserve(entry.target);
-                }
-            });
-        }
-
-        loadImage(img) {
-            const src = img.dataset.src;
-            if (!src) return;
-
-            // Preload image
-            const preloadImg = new Image();
-            preloadImg.onload = () => {
-                img.src = src;
-                img.classList.add('loaded');
-            };
-            preloadImg.src = src;
-        }
-    }
-
-    // Code Optimization
-    class CodeOptimizer {
-        constructor() {
-            this.debounceTimers = new Map();
-            this.throttleTimers = new Map();
-        }
-
-        debounce(fn, delay) {
-            return (...args) => {
-                clearTimeout(this.debounceTimers.get(fn));
-                this.debounceTimers.set(fn, setTimeout(() => {
-                    fn.apply(this, args);
-                }, delay));
-            };
-        }
-
-        throttle(fn, limit) {
-            return (...args) => {
-                if (!this.throttleTimers.get(fn)) {
-                    fn.apply(this, args);
-                    this.throttleTimers.set(fn, true);
-                    setTimeout(() => {
-                        this.throttleTimers.delete(fn);
-                    }, limit);
-                }
-            };
-        }
-    }
-
-    // Cache Management
-    class CacheManager {
-        constructor() {
-            this.cache = new Map();
-            this.maxAge = 5 * 60 * 1000; // 5 minutes
-        }
-
-        async get(key) {
-            const cached = this.cache.get(key);
-            if (!cached) return null;
-
-            if (Date.now() - cached.timestamp > this.maxAge) {
-                this.cache.delete(key);
-                return null;
-            }
-
-            return cached.value;
-        }
-
-        set(key, value) {
-            this.cache.set(key, {
-                value,
-                timestamp: Date.now()
-            });
-        }
-
-        clear() {
-            this.cache.clear();
-        }
-    }
-}
-
-// Initialize Security and Performance Systems
-const security = new SecurityManager();
-const performance = new PerformanceOptimizer();
-
-// Setup Error Boundaries for React-like Error Handling
-class ErrorBoundary {
-    constructor(fallbackComponent) {
-        this.fallbackComponent = fallbackComponent;
-        this.state = { hasError: false, error: null };
-    }
-
-    static getDerivedStateFromError(error) {
-        return { hasError: true, error };
-    }
-
-    componentDidCatch(error, errorInfo) {
-        security.errorHandler.handleError(error, errorInfo);
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return this.fallbackComponent;
-        }
-        return this.children;
-    }
-}
-
-// Initialize all systems
-document.addEventListener('DOMContentLoaded', () => {
-    security.initialize();
-    performance.initialize();
-});
-
-      // Testing Setup and Configuration
-class TestSuite {
-    constructor() {
-        this.tests = new Map();
-        this.mocks = new Map();
-        this.assertions = 0;
-        this.failures = 0;
-    }
-
-    // Test Runner
-    async runTests() {
-        console.log('Starting test suite...');
-        const startTime = performance.now();
-
-        for (const [name, test] of this.tests) {
-            try {
-                await this.runTest(name, test);
-            } catch (error) {
-                this.failures++;
-                console.error(`Test ${name} failed:`, error);
-            }
-        }
-
-        const duration = (performance.now() - startTime).toFixed(2);
-        this.reportResults(duration);
-    }
-
-    async runTest(name, test) {
-        console.group(`Running test: ${name}`);
-        const context = this.createTestContext();
-        
-        try {
-            await test(context);
-            console.log('✓ Test passed');
-        } catch (error) {
-            console.error('✗ Test failed:', error);
-            throw error;
-        } finally {
-            console.groupEnd();
-        }
-    }
-
-    // Test Utilities
-    mock(object, method, implementation) {
-        const original = object[method];
-        this.mocks.set(`${object.constructor.name}.${method}`, original);
-        object[method] = implementation;
-    }
-
-    restore(object, method) {
-        const key = `${object.constructor.name}.${method}`;
-        const original = this.mocks.get(key);
-        if (original) {
-            object[method] = original;
-            this.mocks.delete(key);
-        }
-    }
-}
-
-// Deployment Configuration
-class DeploymentManager {
-    constructor() {
-        this.env = process.env.NODE_ENV || 'development';
-        this.config = this.loadConfig();
-    }
-
-    loadConfig() {
-        const configs = {
-            development: {
-                apiUrl: 'http://localhost:3000',
-                wsUrl: 'ws://localhost:3001',
-                features: {
-                    analytics: false,
-                    monitoring: false
-                }
-            },
-            staging: {
-                apiUrl: 'https://staging-api.y2kroast.com',
-                wsUrl: 'wss://staging-ws.y2kroast.com',
-                features: {
-                    analytics: true,
-                    monitoring: true
-                }
-            },
-            production: {
-                apiUrl: 'https://api.y2kroast.com',
-                wsUrl: 'wss://ws.y2kroast.com',
-                features: {
-                    analytics: true,
-                    monitoring: true
-                }
-            }
-        };
-
-        return configs[this.env];
-    }
-
-    async deploy() {
-        console.log(`Starting deployment to ${this.env}...`);
-
-        try {
-            await this.runPreDeploymentChecks();
-            await this.optimizeAssets();
-            await this.deployAssets();
-            await this.runPostDeploymentChecks();
-            
-            console.log('Deployment completed successfully');
-        } catch (error) {
-            console.error('Deployment failed:', error);
-            throw error;
-        }
-    }
-
-    async optimizeAssets() {
-        // Implement asset optimization
-        await Promise.all([
-            this.optimizeImages(),
-            this.minifyCode(),
-            this.generateSourceMaps()
-        ]);
-    }
-}
-
-// Analytics and Monitoring
-class AnalyticsManager {
-    constructor() {
-        this.events = [];
-        this.metrics = new Map();
-        this.initialized = false;
-    }
-
-    initialize() {
-        if (this.initialized) return;
-
-        // Setup performance monitoring
-        this.setupPerformanceMonitoring();
-        
-        // Setup user tracking
-        this.setupUserTracking();
-        
-        // Setup error tracking
-        this.setupErrorTracking();
-
-        this.initialized = true;
-    }
-
-    trackEvent(eventName, data = {}) {
-        const event = {
-            name: eventName,
-            timestamp: Date.now(),
-            data: {
-                ...data,
-                url: window.location.href,
-                userAgent: navigator.userAgent
-            }
-        };
-
-        this.events.push(event);
-        this.sendToAnalytics(event);
-    }
-
-    // Performance Monitoring
-    setupPerformanceMonitoring() {
-        // Track page load metrics
-        window.addEventListener('load', () => {
-            const navigationTiming = performance.getEntriesByType('navigation')[0];
-            const paintTiming = performance.getEntriesByType('paint');
-
-            this.trackMetric('pageLoad', {
-                domComplete: navigationTiming.domComplete,
-                loadComplete: navigationTiming.loadEventEnd,
-                firstPaint: paintTiming.find(p => p.name === 'first-paint')?.startTime,
-                firstContentfulPaint: paintTiming.find(p => p.name === 'first-contentful-paint')?.startTime
-            });
-        });
-
-        // Track network requests
-        this.setupNetworkMonitoring();
-    }
-
-    // User Tracking
-    setupUserTracking() {
-        // Track user interactions
-        document.addEventListener('click', this.handleUserInteraction.bind(this));
-        document.addEventListener('scroll', this.throttle(this.handleScroll.bind(this), 1000));
-
-        // Track form interactions
-        document.addEventListener('submit', this.handleFormSubmission.bind(this));
-    }
-
-    // Error Tracking
-    setupErrorTracking() {
-        window.addEventListener('error', (event) => {
-            this.trackError({
-                type: 'error',
-                message: event.message,
-                stack: event.error?.stack,
-                location: `${event.filename}:${event.lineno}:${event.colno}`
-            });
-        });
-
-        window.addEventListener('unhandledrejection', (event) => {
-            this.trackError({
-                type: 'unhandledRejection',
-                message: event.reason?.message || 'Promise rejected',
-                stack: event.reason?.stack
-            });
-        });
-    }
-
-    // Utility Functions
-    throttle(func, limit) {
-        let inThrottle;
-        return function(...args) {
-            if (!inThrottle) {
-                func.apply(this, args);
-                inThrottle = true;
-                setTimeout(() => inThrottle = false, limit);
-            }
-        };
-    }
-
-    // Analytics Data Processing
-    processAnalyticsData(data) {
-        return {
-            ...data,
-            timestamp: Date.now(),
-            session: this.getSessionId(),
-            user: this.getUserId(),
-            environment: deploymentManager.env
-        };
-    }
-
-    async sendToAnalytics(data) {
-        if (!deploymentManager.config.features.analytics) return;
-
-        const processedData = this.processAnalyticsData(data);
-        
-        try {
-            await fetch(`${deploymentManager.config.apiUrl}/analytics`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(processedData)
-            });
-        } catch (error) {
-            console.error('Failed to send analytics:', error);
-        }
-    }
-}
-
-// Initialize Systems
-const testSuite = new TestSuite();
-const deploymentManager = new DeploymentManager();
-const analytics = new AnalyticsManager();
-
-// Setup on load
-document.addEventListener('DOMContentLoaded', () => {
-    if (deploymentManager.config.features.analytics) {
-        analytics.initialize();
-    }
-});
-
-// Export for testing
-if (process.env.NODE_ENV === 'test') {
-    module.exports = {
-        TestSuite,
-        DeploymentManager,
-        AnalyticsManager
-    };
-}
-
-      // Final Initialization and Cleanup
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all core systems
-    const app = {
-        init: async () => {
-            try {
-                // Show loading screen
-                loadingController.show('initial-load');
-
-                // Initialize core systems
-                await Promise.all([
-                    walletManager.initialize(),
-                    uiController.initialize(),
-                    analytics.initialize()
-                ]);
-
-                // Setup event listeners
-                setupEventListeners();
-
-                // Load initial data
-                await loadInitialData();
-
-                // Hide loading screen with fade
-                loadingController.hide('initial-load');
-
-                // Show success message
-                UI.showToast('Application loaded successfully', 'success');
-
-            } catch (error) {
-                console.error('Initialization error:', error);
-                UI.showToast('Failed to initialize application', 'error');
-            }
-        }
-    };
-
-    // Start the application
-    app.init();
-});
-
-// Final cleanup and optimization
-window.addEventListener('beforeunload', () => {
-    // Cleanup WebSocket connections
-    if (window.ws) window.ws.close();
-    
-    // Save any necessary state
-    saveApplicationState();
-    
-    // Clear sensitive data
-    clearSensitiveData();
-});
-
-// Save application state
-function saveApplicationState() {
-    const state = {
-        timestamp: Date.now(),
-        lastRoute: window.location.hash,
-        theme: document.documentElement.dataset.theme
-    };
-    
-    localStorage.setItem('y2k_roast_state', JSON.stringify(state));
-}
-
-// Clear sensitive data
-function clearSensitiveData() {
-    // Clear any sensitive data from memory
-    if (window.walletManager) {
-        window.walletManager.disconnect();
-    }
-    
-    // Clear any temporary storage
-    sessionStorage.clear();
-}
-
-// Final performance optimizations
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        // Pause non-essential operations when tab is hidden
-        pauseNonEssentialOperations();
+// Event Handlers
+function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+        croWallet = null;
+        document.getElementById('croStatus').textContent = 'CRO Wallet: Not Connected';
+        document.getElementById('balanceStatus').textContent = '';
+        showTxStatus('CRO Wallet disconnected', 'error');
     } else {
-        // Resume operations when tab is visible
-        resumeOperations();
+        document.getElementById('croStatus').textContent = 
+            `CRO Wallet: Connected (${accounts[0].slice(0,6)}...)`;
     }
-});
-
-// Export production bundle
-if (process.env.NODE_ENV === 'production') {
-    // Remove console logs in production
-    console.log = () => {};
-    console.debug = () => {};
-    
-    // Enable production mode optimizations
-    enableProductionMode();
 }
 
-// Final error boundary
-window.addEventListener('error', (event) => {
-    // Prevent default error handling
-    event.preventDefault();
-    
-    // Log error to analytics
-    if (window.analytics) {
-        window.analytics.trackError(event);
+function handleChainChanged(chainId) {
+    if (chainId !== CRONOS_MAINNET.chainId) {
+        showTxStatus('Please switch to Cronos Mainnet', 'error');
     }
-    
-    // Show user-friendly error message
-    UI.showToast('An unexpected error occurred', 'error');
-});
+}
 
-// Service Worker Registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
-            console.log('ServiceWorker registration successful');
-        }).catch(err => {
-            console.error('ServiceWorker registration failed:', err);
+// Roast Management
+function saveRoast(target, chain, txHash) {
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    roasts.unshift({ 
+        target, 
+        chain, 
+        txHash,
+        likes: 0, 
+        timestamp: Date.now() 
+    });
+    localStorage.setItem('roasts', JSON.stringify(roasts));
+    updateRoastList();
+}
+
+function shareRoast(target, tag) {
+    const tweetText = encodeURIComponent(
+        `I just submitted ${target} to be roasted on $ROAST.\nVote or burn.\n`
+    );
+    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,${tag}`;
+    document.getElementById('shareRoast').innerHTML =
+        `<a href="${tweetURL}" target="_blank" 
+            class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
+            Share on 𝕏
+        </a>`;
+}
+
+function likeRoast(btn) {
+    const roastEl = btn.closest('.roast-item');
+    const target = roastEl.dataset.target;
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    const roast = roasts.find(r => r.target === target);
+    
+    if (roast) {
+        roast.likes++;
+        localStorage.setItem('roasts', JSON.stringify(roasts));
+        const likeCount = roastEl.querySelector('.like-count');
+        likeCount.textContent = `🔥 ${roast.likes}`;
+        btn.disabled = true;
+        btn.textContent = 'Fired!';
+        btn.className = 'mt-2 px-3 py-1 text-xs bg-gray-600 rounded cursor-not-allowed';
+    }
+}
+
+function updateRoastList() {
+    const roastList = document.getElementById('roastList');
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    
+    roastList.innerHTML = roasts.map(roast => `
+        <div class="roast-item bg-[#1a1a1a] p-4 rounded neon-border" data-target="${roast.target}">
+            <div class="flex justify-between items-start">
+                <div>
+                    <div class="font-bold">${roast.target}</div>
+                    <div class="text-sm text-gray-400">${roast.chain}</div>
+                    <div class="text-xs text-gray-500 mt-1">
+                        TX: ${roast.txHash ? roast.txHash.slice(0,8) + '...' : 'Pending'}
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="like-count text-pink-400">🔥 ${roast.likes}</div>
+                    <button onclick="likeRoast(this)" 
+                            class="mt-2 px-3 py-1 text-xs bg-pink-600 rounded hover:bg-pink-700">
+                        +🔥 Fire
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    updateRoastList();
+    updatePrizePool(360, 0.096); // Example pool values
+    
+    // Add touch event listeners for mobile
+    const buttons = document.querySelectorAll('button, .neon-border, .glow');
+    buttons.forEach(button => {
+        button.addEventListener('touchstart', () => {
+            button.style.transform = 'scale(0.95)';
+        });
+        button.addEventListener('touchend', () => {
+            button.style.transform = 'scale(1)';
         });
     });
+});
+
+function updatePrizePool(cro, sol) {
+    document.getElementById("poolCRO").textContent = `${cro} CRO`;
+    document.getElementById("poolSOL").textContent = `${sol} SOL`;
 }
+</script>
 
-      <!-- Loading Spinner Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
-        <div class="text-center">
-            <div class="loading-spinner mb-4"></div>
-            <div class="text-xl glitch">Loading Y2K x ROAST...</div>
-        </div>
-    </div>
-
-    <!-- Toast Notifications Container -->
-    <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
-
-    <!-- Modal Container -->
-    <div id="modalContainer" class="fixed inset-0 z-50 hidden">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content"></div>
-    </div>
-
-    <!-- Final Scripts -->
-    <script>
-        // Check if the site is ready
-        document.addEventListener('readystatechange', event => {
-            if (event.target.readyState === 'complete') {
-                document.getElementById('loadingOverlay').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loadingOverlay').style.display = 'none';
-                }, 500);
-            }
-        });
-
-        // Handle visibility changes
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                document.title = "Come back to Y2K x ROAST! 🔥";
-            } else {
-                document.title = "Y2K x ROAST | Dual Chain Chaos";
-            }
-        });
-
-        // Prevent form submission refresh
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-            });
-        });
-
-        // Enable smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
-
-    <!-- Deferred Script Loading -->
-    <script defer src="path-to-your-main-bundle.js"></script>
-    
-    <!-- Analytics (load last) -->
-    <script async src="path-to-your-analytics.js"></script>
-
-    <!-- PWA Support -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(err => {
-                        console.error('ServiceWorker registration failed:', err);
-                    });
-            });
-        }
-    </script>
 </body>
 </html>
-
-  
