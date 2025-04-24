@@ -82,6 +82,7 @@
     <div class="wallet-status bg-[#1a1a1a] p-4 rounded-lg mb-6 max-w-md mx-auto">
       <div id="croStatus" class="mb-2 text-gray-300">CRO Wallet: Not Connected</div>
       <div id="solStatus" class="text-gray-300">SOL Wallet: Not Connected</div>
+      <div id="balanceStatus" class="mt-2 text-gray-300"></div>
       <div class="flex gap-4 mt-4 justify-center">
         <button onclick="connectCRO()" class="px-4 py-2 bg-[#ff00ff] text-black rounded hover:bg-pink-600">
           Connect CRO
@@ -248,6 +249,21 @@
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 0, 255, 0.2);
   }
+
+  .processing {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ffffff;
+  }
+
+  .success {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
+  }
+
+  .error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0000;
+  }
 </style>
 
 <script>
@@ -275,7 +291,13 @@ const SOL_RECIPIENT = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
 const CRO_AMOUNT = "60";
 const SOL_AMOUNT = "0.032";
 
-// UI Updates
+// Helper Functions
+function getProvider() {
+    if (window.ethereum) return window.ethereum;
+    if (window.deficonnectProvider) return window.deficonnectProvider;
+    throw new Error('No Web3 provider detected. Please install MetaMask or DeFi Wallet');
+}
+
 function showTxStatus(message, type) {
     const status = document.getElementById('txStatus');
     status.textContent = message;
@@ -293,13 +315,14 @@ async function connectCRO() {
     try {
         showTxStatus('Connecting to CRO wallet...', 'processing');
         
-        const provider = window.ethereum || window.deficonnectProvider;
-        if (!provider) {
-            throw new Error('Please install MetaMask or Crypto.com DeFi Wallet');
-        }
-
+        const provider = getProvider();
         const accounts = await provider.request({ method: 'eth_requestAccounts' });
         
+        if (!accounts || accounts.length === 0) {
+            throw new Error('No accounts found');
+        }
+
+        // Switch to Cronos network
         try {
             await provider.request({
                 method: 'wallet_switchEthereumChain',
@@ -316,22 +339,28 @@ async function connectCRO() {
             }
         }
 
+        // Initialize ethers provider
         croWallet = new ethers.providers.Web3Provider(provider);
+        const network = await croWallet.getNetwork();
+        
+        if (network.chainId !== parseInt(CRONOS_MAINNET.chainId, 16)) {
+            throw new Error('Please switch to Cronos Mainnet');
+        }
+
+        const signer = croWallet.getSigner();
+        const address = await signer.getAddress();
+        const balance = await croWallet.getBalance(address);
+        const balanceInCRO = ethers.utils.formatEther(balance);
+
         document.getElementById('croStatus').textContent = 
-            `CRO Wallet: Connected (${accounts[0].slice(0,6)}...)`;
+            `CRO Wallet: Connected (${address.slice(0,6)}...)`;
+        document.getElementById('balanceStatus').textContent = 
+            `Balance: ${parseFloat(balanceInCRO).toFixed(4)} CRO`;
         showTxStatus('CRO Wallet connected successfully', 'success');
         
-        // Listen for account changes
-        provider.on('accountsChanged', (accounts) => {
-            if (accounts.length === 0) {
-                croWallet = null;
-                document.getElementById('croStatus').textContent = 'CRO Wallet: Not Connected';
-                showTxStatus('CRO Wallet disconnected', 'error');
-            } else {
-                document.getElementById('croStatus').textContent = 
-                    `CRO Wallet: Connected (${accounts[0].slice(0,6)}...)`;
-            }
-        });
+        // Enhanced event listeners
+        provider.on('accountsChanged', handleAccountsChanged);
+        provider.on('chainChanged', handleChainChanged);
 
     } catch (error) {
         croWallet = null;
@@ -353,8 +382,17 @@ async function connectSOL() {
         }
 
         solWallet = provider;
+        const publicKey = provider.publicKey.toString();
+        
+        // Get SOL balance
+        const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
+        const balance = await connection.getBalance(provider.publicKey);
+        const balanceInSOL = balance / solanaWeb3.LAMPORTS_PER_SOL;
+
         document.getElementById('solStatus').textContent = 
-            `SOL Wallet: Connected (${provider.publicKey.toString().slice(0,6)}...)`;
+            `SOL Wallet: Connected (${publicKey.slice(0,6)}...)`;
+        document.getElementById('balanceStatus').textContent += 
+            `\nSOL Balance: ${balanceInSOL.toFixed(4)} SOL`;
         showTxStatus('SOL Wallet connected successfully', 'success');
 
         // Listen for disconnect
@@ -406,20 +444,59 @@ async function submitWithCRO(target) {
         showTxStatus('Preparing CRO transaction...', 'processing');
         
         const signer = croWallet.getSigner();
+        const address = await signer.getAddress();
+        
+        // Check balance
+        const balance = await croWallet.getBalance(address);
+        const amount = ethers.utils.parseUnits(CRO_AMOUNT, "ether");
+        
+        if (balance.lt(amount)) {
+            throw new Error('Insufficient CRO balance');
+        }
+
+        // Estimate gas
+        const gasPrice = await croWallet.getGasPrice();
+        const gasLimit = await croWallet.estimateGas({
+            to: CRO_RECIPIENT,
+            value: amount,
+            from: address
+        });
+
+        // Calculate total cost including gas
+        const totalCost = amount.add(gasPrice.mul(gasLimit));
+        if (balance.lt(totalCost)) {
+            throw new Error('Insufficient balance for gas fees');
+        }
+
+        // Send transaction
         const tx = await signer.sendTransaction({
             to: CRO_RECIPIENT,
-            value: ethers.utils.parseUnits(CRO_AMOUNT, "ether")
+            value: amount,
+            gasLimit: gasLimit,
+            gasPrice: gasPrice
         });
 
         showTxStatus('Confirming CRO transaction...', 'processing');
-        await tx.wait();
+        const receipt = await tx.wait();
 
-        showTxStatus(`Roast submitted via CRO! TX: ${tx.hash}`, 'success');
-        saveRoast(target, 'Cronos', tx.hash);
-        shareRoast(target, 'CROFam');
+        if (receipt.status === 1) {
+            showTxStatus(`Roast submitted successfully! TX: ${tx.hash}`, 'success');
+            saveRoast(target, 'Cronos', tx.hash);
+            shareRoast(target, 'CROFam');
+            
+            // Update balance display
+            const newBalance = await croWallet.getBalance(address);
+            const balanceInCRO = ethers.utils.formatEther(newBalance);
+            document.getElementById('balanceStatus').textContent = 
+                `Balance: ${parseFloat(balanceInCRO).toFixed(4)} CRO`;
+        } else {
+            throw new Error('Transaction failed');
+        }
         
     } catch (error) {
+        console.error('CRO Payment error:', error);
         showTxStatus(`CRO Payment error: ${error.message}`, 'error');
+        throw error;
     }
 }
 
@@ -433,11 +510,19 @@ async function submitWithSOL(target) {
 
         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
         
+        // Check balance
+        const balance = await connection.getBalance(solWallet.publicKey);
+        const amount = solanaWeb3.LAMPORTS_PER_SOL * parseFloat(SOL_AMOUNT);
+        
+        if (balance < amount) {
+            throw new Error('Insufficient SOL balance');
+        }
+
         const tx = new solanaWeb3.Transaction().add(
             solanaWeb3.SystemProgram.transfer({
                 fromPubkey: solWallet.publicKey,
                 toPubkey: new solanaWeb3.PublicKey(SOL_RECIPIENT),
-                lamports: solanaWeb3.LAMPORTS_PER_SOL * parseFloat(SOL_AMOUNT),
+                lamports: amount,
             })
         );
 
@@ -451,12 +536,39 @@ async function submitWithSOL(target) {
         showTxStatus('Confirming SOL transaction...', 'processing');
         await connection.confirmTransaction(signature);
 
-        showTxStatus(`Roast submitted via SOL! TX: ${signature}`, 'success');
+        showTxStatus(`Roast submitted successfully! TX: ${signature}`, 'success');
         saveRoast(target, 'Solana', signature);
         shareRoast(target, 'SolanaGang');
 
+        // Update balance display
+        const newBalance = await connection.getBalance(solWallet.publicKey);
+        const balanceInSOL = newBalance / solanaWeb3.LAMPORTS_PER_SOL;
+        document.getElementById('balanceStatus').textContent = 
+            `SOL Balance: ${balanceInSOL.toFixed(4)} SOL`;
+
     } catch (error) {
+        console.error('SOL Payment error:', error);
         showTxStatus(`SOL Payment error: ${error.message}`, 'error');
+        throw error;
+    }
+}
+
+// Event Handlers
+function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+        croWallet = null;
+        document.getElementById('croStatus').textContent = 'CRO Wallet: Not Connected';
+        document.getElementById('balanceStatus').textContent = '';
+        showTxStatus('CRO Wallet disconnected', 'error');
+    } else {
+        document.getElementById('croStatus').textContent = 
+            `CRO Wallet: Connected (${accounts[0].slice(0,6)}...)`;
+    }
+}
+
+function handleChainChanged(chainId) {
+    if (chainId !== CRONOS_MAINNET.chainId) {
+        showTxStatus('Please switch to Cronos Mainnet', 'error');
     }
 }
 
@@ -533,15 +645,8 @@ function updateRoastList() {
 document.addEventListener('DOMContentLoaded', () => {
     updateRoastList();
     updatePrizePool(360, 0.096); // Example pool values
-});
-
-function updatePrizePool(cro, sol) {
-    document.getElementById("poolCRO").textContent = `${cro} CRO`;
-    document.getElementById("poolSOL").textContent = `${sol} SOL`;
-}
-
-// Add touch event listeners for mobile
-document.addEventListener('DOMContentLoaded', () => {
+    
+    // Add touch event listeners for mobile
     const buttons = document.querySelectorAll('button, .neon-border, .glow');
     buttons.forEach(button => {
         button.addEventListener('touchstart', () => {
@@ -552,6 +657,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+function updatePrizePool(cro, sol) {
+    document.getElementById("poolCRO").textContent = `${cro} CRO`;
+    document.getElementById("poolSOL").textContent = `${sol} SOL`;
+}
 </script>
 
 </body>
