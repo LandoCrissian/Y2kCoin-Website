@@ -10,646 +10,659 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 </head>
-<body class="antialiased bg-gradient-to-b from-black via-[#0a0a0a] to-black text-white overflow-x-hidden">
+<body class="bg-black text-white">
 
-<div id="particles"></div>
-
-<div id="app" class="min-h-screen flex flex-col relative z-10">
+<div id="app" class="min-h-screen flex flex-col">
   <!-- Top Navigation -->
-  <header class="w-full p-4 bg-black/80 backdrop-blur-lg flex justify-between items-center fixed top-0 z-50 border-b border-pink-500/20">
-    <h1 class="text-2xl cyber-glitch font-bold tracking-wider">Y2K x $ROAST</h1>
-    <nav class="space-x-6 text-sm hidden md:block">
-      <a href="#nfts" class="nav-link">Mint</a>
-      <a href="#dex" class="nav-link">Trade</a>
-      <a href="#connect" class="nav-link">Connect</a>
-      <a href="#submit-roast" class="nav-link">Submit</a>
-      <a href="#roasted" class="nav-link">ROASTED</a>
+  <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
+    <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
+    <nav class="space-x-4 text-sm">
+      <a href="#nfts" class="hover:text-[#ff00ff]">Mint</a>
+      <a href="#dex" class="hover:text-[#ff00ff]">Trade</a>
+      <a href="#connect" class="hover:text-[#ff00ff]">Connect</a>
+      <a href="#submit-roast" class="hover:text-[#ff00ff]">Submit</a>
+      <a href="#roasted" class="hover:text-[#ff00ff]">ROASTED</a>
     </nav>
-    <button id="menuBtn" class="md:hidden text-2xl">☰</button>
   </header>
 
-  <!-- Mobile Menu -->
-  <div id="mobileMenu" class="fixed inset-0 bg-black/95 z-40 hidden flex-col items-center justify-center gap-8 backdrop-blur-lg">
-    <a href="#nfts" class="mobile-nav-link">Mint</a>
-    <a href="#dex" class="mobile-nav-link">Trade</a>
-    <a href="#connect" class="mobile-nav-link">Connect</a>
-    <a href="#submit-roast" class="mobile-nav-link">Submit</a>
-    <a href="#roasted" class="mobile-nav-link">ROASTED</a>
-    <button id="closeMenu" class="absolute top-4 right-4 text-2xl">✕</button>
-  </div>
-
   <!-- Hero Section -->
-  <section class="relative text-center py-32 px-4 mt-14 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-radial from-pink-500/10 via-transparent to-transparent"></div>
-    <h2 class="text-5xl cyber-glitch font-bold mb-6 tracking-wider">Dual Chain. No Mercy.</h2>
-    <p class="text-xl mx-auto text-gray-300 max-w-2xl mb-12 leading-relaxed">
-      From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.
-    </p>
-    <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
-      <a href="#nfts" class="cyber-button w-64">View NFTs</a>
-      <a href="#dex" class="cyber-button-alt w-64">Trade Now</a>
+  <section class="text-center py-24 px-4 bg-gradient-to-b from-[#1a1a1a] to-black mt-14">
+    <h2 class="text-4xl glitch font-bold mb-4">Dual Chain. No Mercy.</h2>
+    <p class="text-lg mx-auto text-gray-400">From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.</p>
+    <div class="mt-8 flex flex-col gap-4">
+      <a href="#nfts" class="px-6 py-3 neon-border">View NFTs</a>
+      <a href="#dex" class="px-6 py-3 neon-border">Trade Now</a>
     </div>
   </section>
 
   <!-- NFT Section -->
-  <section id="nfts" class="glass-panel py-16 px-4">
-    <h3 class="text-4xl cyber-glitch font-bold text-center mb-12">Live Music NFT Drops</h3>
-    <div class="overflow-x-auto whitespace-nowrap space-x-6 flex px-4 pb-6 snap-x snap-mandatory">
-      <div class="nft-card">
+  <section id="nfts" class="bg-[#111] py-12 px-4">
+    <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
+    <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
         <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
           <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
-               alt="Eric Mode" loading="lazy"/>
-          <div class="nft-overlay">
-            <span>Eric Mode</span>
-          </div>
+               alt="Eric Mode" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
         </a>
       </div>
-      <div class="nft-card">
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
         <a href="https://cronoshadow.nfts2.me/" target="_blank">
           <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
-               alt="Cards of Cronos" loading="lazy"/>
-          <div class="nft-overlay">
-            <span>Cards of Cronos</span>
-          </div>
+               alt="Cards of Cronos" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
         </a>
       </div>
-      <div class="nft-card">
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
         <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
           <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
-               alt="DiamondHands" loading="lazy"/>
-          <div class="nft-overlay">
-            <span>DiamondHands</span>
-          </div>
+               alt="DiamondHands" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
         </a>
       </div>
-      <div class="nft-card">
+      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
         <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
           <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
-               alt="Dojo Warriors" loading="lazy"/>
-          <div class="nft-overlay">
-            <span>Dojo Warriors</span>
-          </div>
+               alt="Dojo Warriors" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
         </a>
       </div>
     </div>
   </section>
 
   <!-- Submit Roast Section -->
-  <section id="submit-roast" class="py-20 px-6 relative">
-    <div class="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-purple-500/5 to-pink-500/5"></div>
-    <div class="relative z-10 max-w-4xl mx-auto">
-      <h3 class="text-4xl cyber-glitch font-bold mb-6 text-center">Submit a Roast Target</h3>
-      <p class="text-gray-300 max-w-2xl mx-auto mb-8 text-center text-lg">
-        Drop a name from 𝕏. Choose SOL or CRO. The top roast wins half the pot — the rest gets burned.
-      </p>
+  <section id="submit-roast" class="py-16 px-6 bg-black text-center">
+    <h3 class="text-4xl glitch font-bold mb-4">Submit a Roast Target</h3>
+    <p class="text-gray-400 max-w-xl mx-auto mb-4">
+      Drop a name from 𝕏. Choose SOL or CRO. The top roast wins half the pot — the rest gets burned.
+    </p>
 
-      <!-- Prize Pool Display -->
-      <div class="glass-card text-center p-6 mb-12">
-        <h4 class="text-2xl mb-4 text-pink-400 font-bold">This Week's Prize Pool</h4>
-        <div class="flex justify-center gap-8 text-xl">
-          <div class="pool-display">
-            <span id="poolCRO">0 CRO</span>
-          </div>
-          <div class="pool-display">
-            <span id="poolSOL">0 SOL</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wallet Connection Status -->
-      <div class="glass-card p-6 mb-12">
-        <div id="croStatus" class="status-item">CRO Wallet: Not Connected</div>
-        <div id="solStatus" class="status-item">SOL Wallet: Not Connected</div>
-        <div id="balanceStatus" class="status-item mt-4"></div>
-        <div class="flex gap-4 mt-6 justify-center">
-          <button onclick="connectCRO()" class="connect-button">
-            Connect CRO
-          </button>
-          <button onclick="connectSOL()" class="connect-button">
-            Connect SOL
-          </button>
-        </div>
-      </div>
-
-      <!-- Roast Submission Form -->
-      <form id="roastForm" class="glass-card p-6">
-        <select id="tokenChoice" class="form-select mb-4">
-          <option value="CRO">Submit with CRO (60)</option>
-          <option value="SOL">Submit with SOL (0.032)</option>
-        </select>
-
-        <input type="text" id="targetName" name="target" 
-               placeholder="@name or project from 𝕏"
-               class="form-input mb-4"/>
-
-        <button type="button" onclick="handleSubmit()"
-                class="submit-button">
-          Submit Roast
-        </button>
-      </form>
-
-      <!-- Transaction Status -->
-      <div id="txStatus" class="mt-6 p-4 rounded-lg hidden"></div>
-      <div id="shareRoast" class="mt-6 text-center"></div>
+    <!-- Prize Pool Display -->
+    <div class="text-lg text-pink-400 font-bold mb-6">
+      This Week's Pool: <span id="poolCRO">0 CRO</span> + <span id="poolSOL">0 SOL</span>
     </div>
+
+    <!-- Wallet Connection Status -->
+    <div class="wallet-status bg-[#1a1a1a] p-4 rounded-lg mb-6 max-w-md mx-auto">
+      <div id="croStatus" class="mb-2 text-gray-300">CRO Wallet: Not Connected</div>
+      <div id="solStatus" class="text-gray-300">SOL Wallet: Not Connected</div>
+      <div id="balanceStatus" class="mt-2 text-gray-300"></div>
+      <div class="flex gap-4 mt-4 justify-center">
+        <button onclick="connectCRO()" class="px-4 py-2 bg-[#ff00ff] text-black rounded hover:bg-pink-600">
+          Connect CRO
+        </button>
+        <button onclick="connectSOL()" class="px-4 py-2 bg-[#ff00ff] text-black rounded hover:bg-pink-600">
+          Connect SOL
+        </button>
+      </div>
+    </div>
+
+    <!-- Roast Submission Form -->
+    <form id="roastForm" class="max-w-md mx-auto space-y-4">
+      <select id="tokenChoice" class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border">
+        <option value="CRO">Submit with CRO (60)</option>
+        <option value="SOL">Submit with SOL (0.032)</option>
+      </select>
+
+      <input type="text" id="targetName" name="target" 
+             placeholder="@name or project from 𝕏"
+             class="w-full p-3 rounded bg-[#1a1a1a] text-white neon-border"/>
+
+      <button type="button" onclick="handleSubmit()"
+              class="w-full bg-[#ff00ff] text-black font-bold py-2 rounded hover:bg-pink-600">
+        Submit Roast
+      </button>
+    </form>
+
+    <!-- Transaction Status -->
+    <div id="txStatus" class="mt-4 p-4 rounded-lg hidden"></div>
+    <div id="shareRoast" class="mt-4"></div>
   </section>
 
   <!-- Roasted Section -->
-  <section id="roasted" class="glass-panel py-20 px-6">
-    <h3 class="text-4xl cyber-glitch font-bold mb-8 text-center">ROASTED</h3>
-    <p class="text-gray-300 max-w-2xl mx-auto mb-12 text-center text-lg">
+  <section id="roasted" class="py-16 px-6 bg-[#111] text-center">
+    <h3 class="text-4xl glitch font-bold mb-8">ROASTED</h3>
+    <p class="text-gray-400 max-w-xl mx-auto mb-6">
       These names got scorched this week. Fire them up or drop your own below.
     </p>
-    <div id="roastList" class="grid gap-6 max-w-3xl mx-auto"></div>
+    <div id="roastList" class="grid gap-4 max-w-2xl mx-auto"></div>
   </section>
 
   <!-- DEX Section -->
-  <section id="dex" class="py-20 px-4 text-center relative">
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-pink-500/5 to-transparent"></div>
-    <div class="relative z-10">
-      <h3 class="text-4xl cyber-glitch font-bold mb-8">Trade with Fire</h3>
-      <div class="flex flex-col gap-6 mt-8 max-w-md mx-auto">
-        <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
-           target="_blank" class="trade-button">
-          Trade $Y2K (Cronos)
-        </a>
-        <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" 
-           target="_blank" class="trade-button-alt">
-          Trade $ROAST (Solana)
-        </a>
-      </div>
+  <section id="dex" class="bg-[#111] py-12 px-4 text-center">
+    <h3 class="text-3xl glitch font-bold mb-4">Trade with Fire</h3>
+    <div class="flex flex-col gap-4 mt-6">
+      <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" 
+         target="_blank" class="px-6 py-3 glow">Trade $Y2K (Cronos)</a>
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" 
+         target="_blank" class="px-6 py-3 glow">Trade $ROAST (Solana)</a>
     </div>
   </section>
 
   <!-- Connect Section -->
-  <section id="connect" class="glass-panel py-20 px-4 text-center">
-    <h3 class="text-4xl cyber-glitch font-bold mb-8">Stay Plugged In</h3>
-    <p class="text-gray-300 mb-12 text-lg">Join the fam. Talk your shit. Earn your spot.</p>
-    <div class="flex flex-col md:flex-row justify-center gap-6">
-      <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="social-button">
-        <span class="social-icon">󰙯</span>Discord
-      </a>
-      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="social-button">
-        <span class="social-icon">󰕄</span>𝕏 (Twitter)
-      </a>
+  <section id="connect" class="py-12 px-4 text-center">
+    <h3 class="text-3xl glitch font-bold mb-4">Stay Plugged In</h3>
+    <p class="text-gray-400 mb-6">Join the fam. Talk your shit. Earn your spot.</p>
+    <div class="flex justify-center gap-4">
+      <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="neon-border px-4 py-2">Discord</a>
+      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="neon-border px-4 py-2">𝕏 (Twitter)</a>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-black/80 backdrop-blur-sm text-center py-12 px-4 text-gray-400 mt-auto border-t border-pink-500/20">
-    <div class="max-w-4xl mx-auto">
-      <div class="font-mono mb-4">Y2KCoin & $ROAST</div>
-      <div class="text-sm space-y-2">
-        <div class="contract-address">
-          <span class="text-gray-500">Cronos:</span>
-          <span class="break-all">0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d</span>
-        </div>
-        <div class="contract-address">
-          <span class="text-gray-500">Solana:</span>
-          <span class="break-all">A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray</span>
-        </div>
-      </div>
-    </div>
+  <footer class="bg-black text-center text-sm py-8 px-4 text-gray-600 mt-auto">
+    Y2KCoin & $ROAST — Contract Addresses:<br/>
+    <span class="break-all">Cronos: 0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d</span><br/>
+    <span class="break-all">Solana: A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray</span>
   </footer>
 </div>
 
 <style>
   html { 
-    background-color: #000000;
-    scroll-behavior: smooth;
+    background-color: #0a0a0a; 
   }
   
   body {
+    background-color: #0a0a0a;
     font-family: 'Rubik', sans-serif;
     color: #e2e8f0;
     overflow-x: hidden;
-    min-height: 100vh;
   }
 
-  /* Particle Background */
-  #particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  /* Typography & Effects */
-  .cyber-glitch {
-    text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+  .glitch {
+    text-shadow: 2px 0 red, -2px 0 cyan;
     font-family: 'Orbitron', sans-serif;
-    position: relative;
-    animation: glitch 4s infinite;
+    animation: glitch 2s infinite;
   }
 
   @keyframes glitch {
-    0%, 100% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
-    25% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
-    50% { text-shadow: 2px 0 #00ffff, -2px 0 #ff00ff; }
-    75% { text-shadow: -2px 0 #00ffff, 2px 0 #ff00ff; }
+    0% { text-shadow: 2px 0 red, -2px 0 cyan; }
+    25% { text-shadow: -2px 0 red, 2px 0 cyan; }
+    50% { text-shadow: 2px 0 cyan, -2px 0 red; }
+    75% { text-shadow: -2px 0 cyan, 2px 0 red; }
+    100% { text-shadow: 2px 0 red, -2px 0 cyan; }
   }
 
-  /* Navigation */
-  .nav-link {
-    position: relative;
-    padding: 0.5rem;
-    transition: all 0.3s ease;
-    color: #e2e8f0;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 50%;
-    background: #ff00ff;
-    transition: all 0.3s ease;
-  }
-
-  .nav-link:hover::after {
-    width: 100%;
-    left: 0;
-  }
-
-  .mobile-nav-link {
-    font-size: 1.5rem;
-    padding: 1rem;
-    transition: all 0.3s ease;
-    color: #e2e8f0;
-  }
-
-  .mobile-nav-link:active {
-    color: #ff00ff;
-    transform: scale(0.95);
-  }
-
-  /* Buttons */
-  .cyber-button {
-    background: rgba(255, 0, 255, 0.1);
+  .neon-border {
     border: 2px solid #ff00ff;
-    padding: 1rem 2rem;
-    color: #ffffff;
-    font-weight: bold;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 0 10px #ff00ff;
     transition: all 0.3s ease;
-    border-radius: 4px;
-  }
-
-  .cyber-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 0, 255, 0.2),
-      transparent
-    );
-    transition: 0.5s;
-  }
-
-  .cyber-button:hover::before {
-    left: 100%;
-  }
-
-  .cyber-button-alt {
-    background: rgba(0, 255, 255, 0.1);
-    border: 2px solid #00ffff;
-    padding: 1rem 2rem;
-    color: #ffffff;
-    font-weight: bold;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border-radius: 4px;
-  }
-
-  .cyber-button-alt::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(0, 255, 255, 0.2),
-      transparent
-    );
-    transition: 0.5s;
-  }
-
-  .cyber-button-alt:hover::before {
-    left: 100%;
-  }
-
-  /* Cards & Panels */
-  .glass-panel {
-    background: rgba(26, 26, 26, 0.8);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 0, 255, 0.1);
-  }
-
-  .glass-card {
-    background: rgba(26, 26, 26, 0.8);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 0, 255, 0.1);
     border-radius: 8px;
+  }
+
+  .neon-border:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 5px #ff00ff;
+  }
+
+  .glow {
+    background: rgba(255, 0, 255, 0.1);
+    border: 2px solid #ff0077;
+    box-shadow: 0 0 20px #ff0077;
     transition: all 0.3s ease;
+    border-radius: 8px;
   }
 
-  .glass-card:hover {
-    border-color: rgba(255, 0, 255, 0.3);
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.1);
+  .glow:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px #ff0077;
   }
 
-  /* NFT Cards */
-  .nft-card {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    flex-shrink: 0;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-
-  .nft-card img {
-    width: 100%;
-    height: 100%;
+  #nfts img {
+    width: 192px;
+    height: 192px;
     object-fit: cover;
-    transition: all 0.3s ease;
+    display: block;
+    transition: transform 0.3s ease;
   }
 
-  .nft-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    transform: translateY(100%);
-    transition: all 0.3s ease;
-  }
-
-  .nft-card:hover .nft-overlay {
-    transform: translateY(0);
-  }
-
-  .nft-card:hover img {
+  #nfts img:hover {
     transform: scale(1.05);
   }
 
-  /* Form Elements */
-  .form-select {
-    width: 100%;
-    padding: 1rem;
-    background: rgba(26, 26, 26, 0.8);
-    border: 1px solid rgba(255, 0, 255, 0.2);
-    color: white;
-    border-radius: 4px;
-    backdrop-filter: blur(5px);
+  #txStatus {
     transition: all 0.3s ease;
   }
 
-  .form-input {
-    width: 100%;
-    padding: 1rem;
-    background: rgba(26, 26, 26, 0.8);
-    border: 1px solid rgba(255, 0, 255, 0.2);
-    color: white;
-    border-radius: 4px;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
+  #txStatus.success {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
   }
 
-  .form-input:focus,
-  .form-select:focus {
+  #txStatus.error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0000;
+  }
+
+  .wallet-status button:disabled {
+    background: #666;
+    cursor: not-allowed;
+  }
+
+  input:focus, select:focus {
     outline: none;
-    border-color: #ff00ff;
-    box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+    box-shadow: 0 0 0 2px #ff00ff;
   }
 
-  /* Status Elements */
-  .status-item {
-    padding: 0.75rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-  }
-
-  .pool-display {
-    padding: 1rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    border: 1px solid rgba(255, 0, 255, 0.2);
-  }
-
-  /* Buttons */
-  .connect-button {
-    padding: 0.75rem 1.5rem;
-    background: rgba(255, 0, 255, 0.1);
-    border: 1px solid rgba(255, 0, 255, 0.3);
-    color: white;
-    border-radius: 4px;
+  .roast-item {
+    transform: translateZ(0);
     transition: all 0.3s ease;
   }
 
-  .connect-button:hover {
-    background: rgba(255, 0, 255, 0.2);
-    border-color: rgba(255, 0, 255, 0.5);
-  }
-
-  .submit-button {
-    width: 100%;
-    padding: 1rem;
-    background: #ff00ff;
-    color: black;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-  }
-
-  .submit-button:hover {
-    background: #ff33ff;
-    transform: translateY(-1px);
-  }
-
-  .trade-button,
-  .trade-button-alt {
-    padding: 1rem 2rem;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .trade-button {
-    background: rgba(255, 0, 255, 0.1);
-    border: 2px solid #ff00ff;
-  }
-
-  .trade-button-alt {
-    background: rgba(0, 255, 255, 0.1);
-    border: 2px solid #00ffff;
-  }
-
-  .social-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    transition: all 0.3s ease;
-  }
-
-  .social-button:hover {
-    background: rgba(255, 255, 255, 0.2);
+  .roast-item:hover {
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.2);
   }
 
-  .social-icon {
-    font-size: 1.5rem;
+  .processing {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ffffff;
   }
 
-  /* Contract Addresses */
-  .contract-address {
-    padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
+  .success {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
   }
 
-  /* Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .fade-in {
-    animation: fadeIn 0.5s ease forwards;
+  .error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0000;
   }
 </style>
 
 <script>
-// All previous JavaScript code remains the same, with these additions:
+// Network Configurations
+const CRONOS_MAINNET = {
+    chainId: '0x19',
+    chainName: 'Cronos Mainnet',
+    nativeCurrency: {
+        name: 'CRO',
+        symbol: 'CRO',
+        decimals: 18
+    },
+    rpcUrls: ['https://evm.cronos.org'],
+    blockExplorerUrls: ['https://cronoscan.com/']
+};
 
-// Mobile Menu
-document.getElementById('menuBtn').addEventListener('click', () => {
-  const menu = document.getElementById('mobileMenu');
-  menu.style.display = 'flex';
-  menu.classList.add('fade-in');
-});
+// State Management
+let croWallet = null;
+let solWallet = null;
+let isProcessing = false;
 
-document.getElementById('closeMenu').addEventListener('click', () => {
-  document.getElementById('mobileMenu').style.display = 'none';
-});
+// Constants
+const CRO_RECIPIENT = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+const SOL_RECIPIENT = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
+const CRO_AMOUNT = "60";
+const SOL_AMOUNT = "0.032";
 
-// Close menu when clicking a link
-document.querySelectorAll('.mobile-nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    document.getElementById('mobileMenu').style.display = 'none';
-  });
-});
-
-// Particle Effect
-function createParticle() {
-  const particle = document.createElement('div');
-  particle.style.position = 'absolute';
-  particle.style.width = '2px';
-  particle.style.height = '2px';
-  particle.style.background = `rgba(255, ${Math.random() < 0.5 ? '0' : '255'}, 255, ${Math.random() * 0.5 + 0.1})`;
-  particle.style.left = Math.random() * window.innerWidth + 'px';
-  particle.style.top = Math.random() * window.innerHeight + 'px';
-  particle.style.boxShadow = '0 0 10px currentColor';
-  particle.style.transition = 'all 3s linear';
-  
-  document.getElementById('particles').appendChild(particle);
-  
-  setTimeout(() => {
-    particle.style.transform = `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px)`;
-    particle.style.opacity = '0';
-  }, 100);
-  
-  setTimeout(() => {
-    particle.remove();
-  }, 3000);
+// Helper Functions
+function getProvider() {
+    if (window.ethereum) return window.ethereum;
+    if (window.deficonnectProvider) return window.deficonnectProvider;
+    throw new Error('No Web3 provider detected. Please install MetaMask or DeFi Wallet');
 }
 
-setInterval(createParticle, 100);
-
-// Intersection Observer for animations
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('fade-in');
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('section').forEach(section => {
-  observer.observe(section);
-});
-
-// Enhanced Roast List Display
-function updateRoastList() {
-  const roastList = document.getElementById('roastList');
-  const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
-  
-  roastList.innerHTML = roasts.map(roast => `
-    <div class="glass-card p-6 roast-item fade-in" data-target="${roast.target}">
-      <div class="flex justify-between items-start">
-        <div>
-          <div class="font-bold text-xl mb-2">${roast.target}</div>
-          <div class="text-sm text-pink-400">${roast.chain}</div>
-          <div class="text-xs text-gray-500 mt-2 font-mono">
-            TX: ${roast.txHash ? roast.txHash.slice(0,8) + '...' : 'Pending'}
-          </div>
-        </div>
-        <div class="text-right">
-          <div class="like-count text-2xl text-pink-400 mb-2">🔥 ${roast.likes}</div>
-          <button onclick="likeRoast(this)" 
-                  class="px-4 py-2 bg-pink-600/20 border border-pink-500/30 rounded-lg hover:bg-pink-600/30 transition-all">
-            +🔥 Fire
-          </button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-// Touch Event Handlers
-function addTouchEffects() {
-  const buttons = document.querySelectorAll('button, a');
-  buttons.forEach(button => {
-    button.addEventListener('touchstart', (e) => {
-      button.style.transform = 'scale(0.98)';
-    });
+function showTxStatus(message, type) {
+    const status = document.getElementById('txStatus');
+    status.textContent = message;
+    status.className = `mt-4 p-4 rounded-lg ${type} block`;
     
-    button.addEventListener('touchend', (e) => {
-      button.style.transform = 'scale(1)';
-    });
-  });
+    if (type !== 'processing') {
+        setTimeout(() => {
+            status.className = 'mt-4 p-4 rounded-lg hidden';
+        }, 5000);
+    }
 }
 
+// Wallet Connections
+async function connectCRO() {
+    try {
+        showTxStatus('Connecting to CRO wallet...', 'processing');
+        
+        const provider = getProvider();
+        const accounts = await provider.request({ method: 'eth_requestAccounts' });
+        
+        if (!accounts || accounts.length === 0) {
+            throw new Error('No accounts found');
+        }
+
+        // Switch to Cronos network
+        try {
+            await provider.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: CRONOS_MAINNET.chainId }],
+            });
+        } catch (switchError) {
+            if (switchError.code === 4902) {
+                await provider.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [CRONOS_MAINNET],
+                });
+            } else {
+                throw switchError;
+            }
+        }
+
+        // Initialize ethers provider
+        croWallet = new ethers.providers.Web3Provider(provider);
+        const network = await croWallet.getNetwork();
+        
+        if (network.chainId !== parseInt(CRONOS_MAINNET.chainId, 16)) {
+            throw new Error('Please switch to Cronos Mainnet');
+        }
+
+        const signer = croWallet.getSigner();
+        const address = await signer.getAddress();
+        const balance = await croWallet.getBalance(address);
+        const balanceInCRO = ethers.utils.formatEther(balance);
+
+        document.getElementById('croStatus').textContent = 
+            `CRO Wallet: Connected (${address.slice(0,6)}...)`;
+        document.getElementById('balanceStatus').textContent = 
+            `Balance: ${parseFloat(balanceInCRO).toFixed(4)} CRO`;
+        showTxStatus('CRO Wallet connected successfully', 'success');
+        
+        // Enhanced event listeners
+        provider.on('accountsChanged', handleAccountsChanged);
+        provider.on('chainChanged', handleChainChanged);
+
+    } catch (error) {
+        croWallet = null;
+        showTxStatus(`CRO Connection error: ${error.message}`, 'error');
+    }
+}
+
+async function connectSOL() {
+    try {
+        showTxStatus('Connecting to SOL wallet...', 'processing');
+        
+        const provider = window.phantom?.solana || window.solflare?.solana || window.backpack?.solana;
+        if (!provider) {
+            throw new Error('Please install Phantom, Solflare, or Backpack wallet');
+        }
+
+        if (!provider.isConnected) {
+            await provider.connect();
+        }
+
+        solWallet = provider;
+        const publicKey = provider.publicKey.toString();
+        
+        // Get SOL balance
+        const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
+        const balance = await connection.getBalance(provider.publicKey);
+        const balanceInSOL = balance / solanaWeb3.LAMPORTS_PER_SOL;
+
+        document.getElementById('solStatus').textContent = 
+            `SOL Wallet: Connected (${publicKey.slice(0,6)}...)`;
+        document.getElementById('balanceStatus').textContent += 
+            `\nSOL Balance: ${balanceInSOL.toFixed(4)} SOL`;
+        showTxStatus('SOL Wallet connected successfully', 'success');
+
+        // Listen for disconnect
+        provider.on('disconnect', () => {
+            solWallet = null;
+            document.getElementById('solStatus').textContent = 'SOL Wallet: Not Connected';
+            showTxStatus('SOL Wallet disconnected', 'error');
+        });
+
+    } catch (error) {
+        solWallet = null;
+        showTxStatus(`SOL Connection error: ${error.message}`, 'error');
+    }
+}
+
+// Transaction Handling
+async function handleSubmit() {
+    if (isProcessing) {
+        showTxStatus('Please wait for the current transaction to complete', 'error');
+        return;
+    }
+
+    const target = document.getElementById('targetName').value.trim();
+    const token = document.getElementById('tokenChoice').value;
+
+    if (!target || !target.startsWith('@')) {
+        showTxStatus('Please enter a valid 𝕏 username starting with @', 'error');
+        return;
+    }
+
+    isProcessing = true;
+    try {
+        if (token === 'CRO') {
+            await submitWithCRO(target);
+        } else {
+            await submitWithSOL(target);
+        }
+    } finally {
+        isProcessing = false;
+    }
+}
+
+async function submitWithCRO(target) {
+    try {
+        if (!croWallet) {
+            throw new Error('Please connect CRO wallet first');
+        }
+
+        showTxStatus('Preparing CRO transaction...', 'processing');
+        
+        const signer = croWallet.getSigner();
+        const address = await signer.getAddress();
+        
+        // Check balance
+        const balance = await croWallet.getBalance(address);
+        const amount = ethers.utils.parseUnits(CRO_AMOUNT, "ether");
+        
+        if (balance.lt(amount)) {
+            throw new Error('Insufficient CRO balance');
+        }
+
+        // Estimate gas
+        const gasPrice = await croWallet.getGasPrice();
+        const gasLimit = await croWallet.estimateGas({
+            to: CRO_RECIPIENT,
+            value: amount,
+            from: address
+        });
+
+        // Calculate total cost including gas
+        const totalCost = amount.add(gasPrice.mul(gasLimit));
+        if (balance.lt(totalCost)) {
+            throw new Error('Insufficient balance for gas fees');
+        }
+
+        // Send transaction
+        const tx = await signer.sendTransaction({
+            to: CRO_RECIPIENT,
+            value: amount,
+            gasLimit: gasLimit,
+            gasPrice: gasPrice
+        });
+
+        showTxStatus('Confirming CRO transaction...', 'processing');
+        const receipt = await tx.wait();
+
+        if (receipt.status === 1) {
+            showTxStatus(`Roast submitted successfully! TX: ${tx.hash}`, 'success');
+            saveRoast(target, 'Cronos', tx.hash);
+            shareRoast(target, 'CROFam');
+            
+            // Update balance display
+            const newBalance = await croWallet.getBalance(address);
+            const balanceInCRO = ethers.utils.formatEther(newBalance);
+            document.getElementById('balanceStatus').textContent = 
+                `Balance: ${parseFloat(balanceInCRO).toFixed(4)} CRO`;
+        } else {
+            throw new Error('Transaction failed');
+        }
+        
+    } catch (error) {
+        console.error('CRO Payment error:', error);
+        showTxStatus(`CRO Payment error: ${error.message}`, 'error');
+        throw error;
+    }
+}
+
+async function submitWithSOL(target) {
+    try {
+        if (!solWallet) {
+            throw new Error('Please connect SOL wallet first');
+        }
+
+        showTxStatus('Preparing SOL transaction...', 'processing');
+
+        const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
+        
+        // Check balance
+        const balance = await connection.getBalance(solWallet.publicKey);
+        const amount = solanaWeb3.LAMPORTS_PER_SOL * parseFloat(SOL_AMOUNT);
+        
+        if (balance < amount) {
+            throw new Error('Insufficient SOL balance');
+        }
+
+        const transaction = new solanaWeb3.Transaction().add(
+            solanaWeb3.SystemProgram.transfer({
+                fromPubkey: solWallet.publicKey,
+                toPubkey: new solanaWeb3.PublicKey(SOL_RECIPIENT),
+                lamports: amount,
+            })
+        );
+
+        const { blockhash } = await connection.getLatestBlockhash();
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = solWallet.publicKey;
+
+        // Sign and send transaction
+        const signed = await solWallet.signTransaction(transaction);
+        const signature = await connection.sendRawTransaction(signed.serialize());
+        
+        showTxStatus('Confirming SOL transaction...', 'processing');
+        await connection.confirmTransaction(signature);
+
+        showTxStatus(`Roast submitted successfully! TX: ${signature}`, 'success');
+        saveRoast(target, 'Solana', signature);
+        shareRoast(target, 'SolanaGang');
+
+        // Update balance display
+        const newBalance = await connection.getBalance(solWallet.publicKey);
+        const balanceInSOL = newBalance / solanaWeb3.LAMPORTS_PER_SOL;
+        document.getElementById('balanceStatus').textContent = 
+            `SOL Balance: ${balanceInSOL.toFixed(4)} SOL`;
+
+    } catch (error) {
+        console.error('SOL Payment error:', error);
+        showTxStatus(`SOL Payment error: ${error.message}`, 'error');
+        throw error;
+    }
+}
+
+// Event Handlers
+function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+        croWallet = null;
+        document.getElementById('croStatus').textContent = 'CRO Wallet: Not Connected';
+        document.getElementById('balanceStatus').textContent = '';
+        showTxStatus('CRO Wallet disconnected', 'error');
+    } else {
+        document.getElementById('croStatus').textContent = 
+            `CRO Wallet: Connected (${accounts[0].slice(0,6)}...)`;
+    }
+}
+
+function handleChainChanged(chainId) {
+    if (chainId !== CRONOS_MAINNET.chainId) {
+        showTxStatus('Please switch to Cronos Mainnet', 'error');
+    }
+}
+
+// Roast Management
+function saveRoast(target, chain, txHash) {
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    roasts.unshift({ 
+        target, 
+        chain, 
+        txHash,
+        likes: 0, 
+        timestamp: Date.now() 
+    });
+    localStorage.setItem('roasts', JSON.stringify(roasts));
+    updateRoastList();
+}
+
+function shareRoast(target, tag) {
+    const tweetText = encodeURIComponent(
+        `I just submitted ${target} to be roasted on $ROAST.\nVote or burn.\n`
+    );
+    const tweetURL = `https://x.com/intent/tweet?text=${tweetText}&hashtags=Y2KRoast,${tag}`;
+    document.getElementById('shareRoast').innerHTML =
+        `<a href="${tweetURL}" target="_blank" 
+            class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
+            Share on 𝕏
+        </a>`;
+}
+
+function likeRoast(btn) {
+    const roastEl = btn.closest('.roast-item');
+    const target = roastEl.dataset.target;
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    const roast = roasts.find(r => r.target === target);
+    
+    if (roast) {
+        roast.likes++;
+        localStorage.setItem('roasts', JSON.stringify(roasts));
+        const likeCount = roastEl.querySelector('.like-count');
+        likeCount.textContent = `🔥 ${roast.likes}`;
+        btn.disabled = true;
+        btn.textContent = 'Fired!';
+        btn.className = 'mt-2 px-3 py-1 text-xs bg-gray-600 rounded cursor-not-allowed';
+    }
+}
+
+function updateRoastList() {
+    const roastList = document.getElementById('roastList');
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    
+    roastList.innerHTML = roasts.map(roast => `
+        <div class="roast-item bg-[#1a1a1a] p-4 rounded neon-border" data-target="${roast.target}">
+            <div class="flex justify-between items-start">
+                <div>
+                    <div class="font-bold">${roast.target}</div>
+                    <div class="text-sm text-gray-400">${roast.chain}</div>
+                    <div class="text-xs text-gray-500 mt-1">
+                        TX: ${roast.txHash ? roast.txHash.slice(0,8) + '...' : 'Pending'}
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="like-count text-pink-400">🔥 ${roast.likes}</div>
+                    <button onclick="likeRoast(this)" 
+                            class="mt-2 px-3 py-1 text-xs bg-pink-600 rounded hover:bg-pink-700">
+                        +🔥 Fire
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  updateRoastList();
-  updatePrizePool(360, 0.096);
-  addTouchEffects();
+    updateRoastList();
+    updatePrizePool(360, 0.096);
+    
+    // Add touch event listeners for mobile
+    const buttons = document.querySelectorAll('button, .neon-border, .glow');
+    buttons.forEach(button => {
+        button.addEventListener('touchstart', () => {
+            button.style.transform = 'scale(0.95)';
+        });
+        button.addEventListener('touchend', () => {
+            button.style.transform = 'scale(1)';
+        });
+    });
 });
+
+function updatePrizePool(cro, sol) {
+    document.getElementById("poolCRO").textContent = `${cro} CRO`;
+    document.getElementById("poolSOL").textContent = `${sol} SOL`;
+}
 </script>
 
 </body>
