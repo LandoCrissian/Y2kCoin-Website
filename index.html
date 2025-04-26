@@ -308,6 +308,27 @@
   }
 </style>
 
+  <!-- ====== FIREBASE SDK + FIRESTORE INTEGRATION ====== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+    authDomain: "y2kroast-512ee.firebaseapp.com",
+    projectId: "y2kroast-512ee",
+    storageBucket: "y2kroast-512ee.appspot.com",
+    messagingSenderId: "602588659855",
+    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Initialize Firestore
+  const db = getFirestore(app);
+</script>
+  
 <script>
 // Network Configurations
 const CRONOS_MAINNET = {
@@ -694,28 +715,6 @@ function likeRoast(btn) {
         btn.className = 'mt-2 px-3 py-1 text-xs bg-gray-600 rounded cursor-not-allowed';
     }
 }
-</script>
-
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
-    authDomain: "y2kroast-512ee.firebaseapp.com",
-    projectId: "y2kroast-512ee",
-    storageBucket: "y2kroast-512ee.firebasestorage.app",
-    messagingSenderId: "602588659855",
-    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-
-  // Initialize Firestore (database)
-  const db = getFirestore(app);
 </script>
 
 </body>
