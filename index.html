@@ -10,12 +10,25 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 </head>
-<body class="bg-black text-white">
+<body class="bg-[#0a0a0a] text-white">
 
 <div id="app" class="min-h-screen flex flex-col">
+  <!-- Hero Banner -->
+  <div class="w-full h-[200px] relative overflow-hidden">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" 
+         alt="Y2K x ROAST Banner"
+         class="w-full h-full object-cover"/>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]"></div>
+  </div>
+
   <!-- Top Navigation -->
-  <header class="w-full p-4 bg-[#111] flex justify-between items-center fixed top-0 z-50">
-    <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
+  <header class="w-full p-4 bg-[#0f0f0f]/90 backdrop-blur-md flex justify-between items-center fixed top-0 z-50">
+    <div class="flex items-center gap-3">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5456.png" 
+           alt="Y2K Token" 
+           class="w-8 h-8 glow-token"/>
+      <h1 class="text-2xl glitch font-bold">Y2K x $ROAST</h1>
+    </div>
     <nav class="space-x-4 text-sm">
       <a href="#nfts" class="hover:text-[#ff00ff]">Mint</a>
       <a href="#dex" class="hover:text-[#ff00ff]">Trade</a>
@@ -26,7 +39,12 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="text-center py-24 px-4 bg-gradient-to-b from-[#1a1a1a] to-black mt-14">
+  <section class="text-center py-24 px-4 bg-gradient-to-b from-[#0a0a0a] to-[#0f0f0f] mt-14">
+    <div class="flex justify-center mb-8">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5456.png" 
+           alt="Y2K Token" 
+           class="w-32 h-32 glow-token animate-float"/>
+    </div>
     <h2 class="text-4xl glitch font-bold mb-4">Dual Chain. No Mercy.</h2>
     <p class="text-lg mx-auto text-gray-400">From CRO to SOL, we roast devs, reward the fearless, and burn it all to the ground.</p>
     <div class="mt-8 flex flex-col gap-4">
@@ -35,33 +53,36 @@
     </div>
   </section>
 
-  <!-- NFT Section -->
-  <section id="nfts" class="bg-[#111] py-12 px-4">
-    <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
-    <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
-      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
-        <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
-               alt="Eric Mode" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
-        </a>
-      </div>
-      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
-        <a href="https://cronoshadow.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
-               alt="Cards of Cronos" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
-        </a>
-      </div>
-      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
-        <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
-               alt="DiamondHands" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
-        </a>
-      </div>
-      <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
-        <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
-               alt="Dojo Warriors" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
-        </a>
+  <!-- NFT Section with Banner as Background -->
+  <section id="nfts" class="relative bg-[#111] py-12 px-4">
+    <div class="absolute inset-0 opacity-20" style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg') center/cover no-repeat;"></div>
+    <div class="relative z-10">
+      <h3 class="text-3xl glitch font-bold text-center mb-8">Live Music NFT Drops</h3>
+      <div class="overflow-x-auto whitespace-nowrap space-x-4 flex px-2 pb-4 snap-x snap-mandatory">
+        <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+          <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
+                 alt="Eric Mode" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+          </a>
+        </div>
+        <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+          <a href="https://cronoshadow.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
+                 alt="Cards of Cronos" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+          </a>
+        </div>
+        <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+          <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
+                 alt="DiamondHands" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+          </a>
+        </div>
+        <div class="inline-block w-48 h-48 flex-shrink-0 snap-center">
+          <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
+                 alt="Dojo Warriors" class="w-48 h-48 rounded neon-border object-cover" loading="lazy"/>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -177,6 +198,27 @@
     50% { text-shadow: 2px 0 cyan, -2px 0 red; }
     75% { text-shadow: -2px 0 cyan, 2px 0 red; }
     100% { text-shadow: 2px 0 red, -2px 0 cyan; }
+  }
+
+  .glow-token {
+    box-shadow: 0 0 20px #ff00ff;
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0% { box-shadow: 0 0 20px #ff00ff; }
+    50% { box-shadow: 0 0 30px #ff00ff; }
+    100% { box-shadow: 0 0 20px #ff00ff; }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 
   .neon-border {
@@ -322,7 +364,6 @@ async function connectCRO() {
             throw new Error('No accounts found');
         }
 
-        // Switch to Cronos network
         try {
             await provider.request({
                 method: 'wallet_switchEthereumChain',
@@ -339,7 +380,6 @@ async function connectCRO() {
             }
         }
 
-        // Initialize ethers provider
         croWallet = new ethers.providers.Web3Provider(provider);
         const network = await croWallet.getNetwork();
         
@@ -358,7 +398,6 @@ async function connectCRO() {
             `Balance: ${parseFloat(balanceInCRO).toFixed(4)} CRO`;
         showTxStatus('CRO Wallet connected successfully', 'success');
         
-        // Enhanced event listeners
         provider.on('accountsChanged', handleAccountsChanged);
         provider.on('chainChanged', handleChainChanged);
 
@@ -384,7 +423,6 @@ async function connectSOL() {
         solWallet = provider;
         const publicKey = provider.publicKey.toString();
         
-        // Get SOL balance
         const connection = new solanaWeb3.Connection("https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0");
         const balance = await connection.getBalance(provider.publicKey);
         const balanceInSOL = balance / solanaWeb3.LAMPORTS_PER_SOL;
@@ -395,7 +433,6 @@ async function connectSOL() {
             `\nSOL Balance: ${balanceInSOL.toFixed(4)} SOL`;
         showTxStatus('SOL Wallet connected successfully', 'success');
 
-        // Listen for disconnect
         provider.on('disconnect', () => {
             solWallet = null;
             document.getElementById('solStatus').textContent = 'SOL Wallet: Not Connected';
@@ -408,7 +445,33 @@ async function connectSOL() {
     }
 }
 
-// Transaction Handling
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    updatePrizePool(360, 0.096);
+});
+
+function updatePrizePool(cro, sol) {
+    document.getElementById("poolCRO").textContent = `${cro} CRO`;
+    document.getElementById("poolSOL").textContent = `${sol} SOL`;
+}
+
+// Handle Account Changes
+function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+        croWallet = null;
+        document.getElementById('croStatus').textContent = 'CRO Wallet: Not Connected';
+        document.getElementById('balanceStatus').textContent = '';
+        showTxStatus('CRO Wallet disconnected', 'error');
+    } else {
+        connectCRO(); // Reconnect to update the display
+    }
+}
+
+function handleChainChanged() {
+    window.location.reload();
+}
+
+// Handle form submission
 async function handleSubmit() {
     if (isProcessing) {
         showTxStatus('Please wait for the current transaction to complete', 'error');
@@ -430,11 +493,16 @@ async function handleSubmit() {
         } else {
             await submitWithSOL(target);
         }
+    } catch (error) {
+        showTxStatus(`Transaction failed: ${error.message}`, 'error');
     } finally {
         isProcessing = false;
     }
 }
 
+  // Add these to the script section
+
+// Transaction Handling for CRO
 async function submitWithCRO(target) {
     try {
         if (!croWallet) {
@@ -500,6 +568,7 @@ async function submitWithCRO(target) {
     }
 }
 
+// Transaction Handling for SOL
 async function submitWithSOL(target) {
     try {
         if (!solWallet) {
@@ -508,7 +577,10 @@ async function submitWithSOL(target) {
 
         showTxStatus('Preparing SOL transaction...', 'processing');
 
-        const connection = new solanaWeb3.Connection("https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0");
+        const connection = new solanaWeb3.Connection(
+            "https://api.mainnet-beta.solana.com",
+            'confirmed'
+        );
         
         // Check balance
         const balance = await connection.getBalance(solWallet.publicKey);
@@ -554,26 +626,7 @@ async function submitWithSOL(target) {
     }
 }
 
-// Event Handlers
-function handleAccountsChanged(accounts) {
-    if (accounts.length === 0) {
-        croWallet = null;
-        document.getElementById('croStatus').textContent = 'CRO Wallet: Not Connected';
-        document.getElementById('balanceStatus').textContent = '';
-        showTxStatus('CRO Wallet disconnected', 'error');
-    } else {
-        document.getElementById('croStatus').textContent = 
-            `CRO Wallet: Connected (${accounts[0].slice(0,6)}...)`;
-    }
-}
-
-function handleChainChanged(chainId) {
-    if (chainId !== CRONOS_MAINNET.chainId) {
-        showTxStatus('Please switch to Cronos Mainnet', 'error');
-    }
-}
-
-// Roast Management
+// Roast Management Functions
 function saveRoast(target, chain, txHash) {
     const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
     roasts.unshift({ 
@@ -597,23 +650,6 @@ function shareRoast(target, tag) {
             class="inline-block mt-4 px-4 py-2 bg-[#ff00ff] text-black font-bold rounded hover:bg-pink-600">
             Share on 𝕏
         </a>`;
-}
-
-function likeRoast(btn) {
-    const roastEl = btn.closest('.roast-item');
-    const target = roastEl.dataset.target;
-    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
-    const roast = roasts.find(r => r.target === target);
-    
-    if (roast) {
-        roast.likes++;
-        localStorage.setItem('roasts', JSON.stringify(roasts));
-        const likeCount = roastEl.querySelector('.like-count');
-        likeCount.textContent = `🔥 ${roast.likes}`;
-        btn.disabled = true;
-        btn.textContent = 'Fired!';
-        btn.className = 'mt-2 px-3 py-1 text-xs bg-gray-600 rounded cursor-not-allowed';
-    }
 }
 
 function updateRoastList() {
@@ -642,26 +678,21 @@ function updateRoastList() {
     `).join('');
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    updateRoastList();
-    updatePrizePool(360, 0.096);
+function likeRoast(btn) {
+    const roastEl = btn.closest('.roast-item');
+    const target = roastEl.dataset.target;
+    const roasts = JSON.parse(localStorage.getItem('roasts')) || [];
+    const roast = roasts.find(r => r.target === target);
     
-    // Add touch event listeners for mobile
-    const buttons = document.querySelectorAll('button, .neon-border, .glow');
-    buttons.forEach(button => {
-        button.addEventListener('touchstart', () => {
-            button.style.transform = 'scale(0.95)';
-        });
-        button.addEventListener('touchend', () => {
-            button.style.transform = 'scale(1)';
-        });
-    });
-});
-
-function updatePrizePool(cro, sol) {
-    document.getElementById("poolCRO").textContent = `${cro} CRO`;
-    document.getElementById("poolSOL").textContent = `${sol} SOL`;
+    if (roast) {
+        roast.likes++;
+        localStorage.setItem('roasts', JSON.stringify(roasts));
+        const likeCount = roastEl.querySelector('.like-count');
+        likeCount.textContent = `🔥 ${roast.likes}`;
+        btn.disabled = true;
+        btn.textContent = 'Fired!';
+        btn.className = 'mt-2 px-3 py-1 text-xs bg-gray-600 rounded cursor-not-allowed';
+    }
 }
 </script>
 
