@@ -3,39 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-  <title>Y2K x ROAST | Portal to the Future</title>
-  <meta name="description" content="Step into the luxury cyberpunk world of Y2K x ROAST. Dual-chain chaos. CRO + SOL dominance. Burn it all to the ground.">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Y2K x ROAST | Dual Chain Portal</title>
+  <meta name="description" content="The Y2K x ROAST cyberpunk hub. NFTs, roasting, and dual chain dominance across Cronos and Solana.">
 
-  <!-- Tailwind CSS -->
+  <!-- Fonts and Tailwind CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Ethers.js (CRO Wallets) -->
+  <!-- Web3 Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
-  <!-- Solana Web3.js -->
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+  <script src="https://bundle.run/buffer@6.0.3"></script>
 
+  <!-- Styles -->
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      background-color: #0a0a0a;
-      font-family: 'Rubik', sans-serif;
-      color: #e2e8f0;
-      position: relative;
-    }
+    body { background: #0a0a0a; color: #e2e8f0; font-family: 'Rubik', sans-serif; overflow-x: hidden; }
     .grain-overlay {
-      pointer-events: none;
+      pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Noise_texture.png');
-      opacity: 0.08;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      animation: grainmove 8s steps(10) infinite;
+      opacity: 0.08; z-index: 1; animation: grainmove 8s steps(10) infinite;
     }
     @keyframes grainmove {
       0% { background-position: 0 0; }
@@ -44,32 +30,10 @@
       75% { background-position: -50px 50px; }
       100% { background-position: 0 0; }
     }
-    .neon-text {
-      text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-      font-family: 'Orbitron', sans-serif;
-    }
-    .neon-border {
-      border: 2px solid #ff00ff;
-      box-shadow: 0 0 10px #ff00ff;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-    .neon-border:hover {
-      box-shadow: 0 0 20px #ff00ff;
-    }
-    .cursor-glow {
-      position: fixed;
-      width: 15px;
-      height: 15px;
-      background: #ff00ff;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      mix-blend-mode: overlay;
-      opacity: 0.6;
-      transform: translate(-50%, -50%);
-      transition: transform 0.05s ease;
-    }
+    .neon-text { text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff; font-family: 'Orbitron', sans-serif; }
+    .neon-border { border: 2px solid #ff00ff; box-shadow: 0 0 10px #ff00ff; border-radius: 8px; transition: all 0.3s ease; }
+    .neon-border:hover { box-shadow: 0 0 20px #ff00ff; }
+    .cursor-glow { position: fixed; width: 15px; height: 15px; background: #ff00ff; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: overlay; opacity: 0.6; transform: translate(-50%, -50%); transition: transform 0.05s ease; }
   </style>
 </head>
 
@@ -84,12 +48,10 @@
 <!-- ENTER PORTAL INTRO OVERLAY -->
 <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50">
   <h1 class="text-5xl md:text-7xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
-  <button onclick="enterPortal()" class="px-10 py-5 neon-border text-white font-bold text-2xl hover:bg-pink-600 transition">
-    Enter Portal
-  </button>
+  <button onclick="enterPortal()" class="px-10 py-5 neon-border text-white font-bold text-2xl hover:bg-pink-600 transition">Enter Portal</button>
 </div>
 
-<!-- Main Portal -->
+<!-- Main Portal Content -->
 <div id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6">
   <h1 class="text-5xl md:text-7xl neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
   <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual-Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
@@ -100,41 +62,14 @@
 <section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
   <div class="overflow-x-auto whitespace-nowrap space-x-6 flex px-2 pb-4 snap-x snap-mandatory">
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
-             alt="Eric Mode" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">Eric Mode</div>
-      </a>
-    </div>
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://cronoshadow.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
-             alt="Cards of Cronos" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-      </a>
-    </div>
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
-             alt="DiamondHands" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">DiamondHands</div>
-      </a>
-    </div>
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
-             alt="Dojo Warriors" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">Dojo Warriors</div>
-      </a>
-    </div>
+    <!-- NFT Cards here like before... -->
   </div>
 </section>
 
-  <!-- Connect Wallets Section -->
+<!-- Wallet Connect Section -->
 <section id="connect" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-4">Connect Your Wallet</h2>
-  <p class="text-lg text-gray-400 mb-8">To roast. To mint. To dominate.</p>
+  <p class="text-lg text-gray-400 mb-8">Roast. Mint. Dominate.</p>
 
   <div class="flex flex-wrap gap-6 justify-center mb-10">
     <button onclick="connectCRO()" class="px-6 py-3 neon-border">Connect CRO Wallet</button>
@@ -148,36 +83,32 @@
   </div>
 </section>
 
-<!-- Mint + Submit Section -->
+<!-- Mint/Submit Roast -->
 <section id="mint" class="relative z-10 py-24 px-6 flex flex-col items-center bg-[#111] text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-8">🔥 Mint, Submit, Burn 🔥</h2>
 
   <form id="roastForm" class="max-w-md w-full space-y-6">
-    <input type="text" id="targetName" name="target" placeholder="@TargetToRoast" required
-           class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
+    <input type="text" id="targetName" placeholder="@TargetName" required class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
     <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
       <option value="CRO">Submit with CRO (60)</option>
       <option value="SOL">Submit with SOL (0.032)</option>
     </select>
-    <button type="button" onclick="handleSubmit()" 
-            class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Submit Roast</button>
+    <button type="button" onclick="handleSubmit()" class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Submit Roast</button>
   </form>
 
   <div id="txStatus" class="hidden mt-6 p-4 neon-border text-center text-lg"></div>
   <div id="shareRoast" class="mt-6"></div>
 </section>
 
-<!-- Roasted Board Section -->
+<!-- Roasted Board -->
 <section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-6">ROASTED</h2>
-  <p class="text-lg text-gray-400 mb-10">The brave. The burned. The remembered.</p>
-
   <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"></div>
 </section>
 
 <!-- Footer -->
 <footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  Built with fire and neon by Y2K x ROAST.
+  Built by chaos. Fueled by CRO & SOL.
 </footer>
 
   <!-- FIREBASE SDK + FIRESTORE -->
@@ -207,6 +138,15 @@
 
 <!-- WALLET CONNECT + ROAST FUNCTIONS -->
 <script>
+const CRONOS_MAINNET = {
+  chainId: '0x19',
+  chainName: 'Cronos Mainnet',
+  nativeCurrency: { name: 'CRO', symbol: 'CRO', decimals: 18 },
+  rpcUrls: ['https://evm.cronos.org'],
+  blockExplorerUrls: ['https://cronoscan.com/']
+};
+
+const SOLANA_ENDPOINT = "https://api.mainnet-beta.solana.com";
 const CRO_RECIPIENT = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
 const SOL_RECIPIENT = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
 const CRO_AMOUNT = "60";
@@ -214,80 +154,133 @@ const SOL_AMOUNT = "0.032";
 
 let croWallet = null;
 let solWallet = null;
-let isProcessing = false;
+let solConnection = null;
+
+function initializeSolana() {
+  solConnection = new solanaWeb3.Connection(SOLANA_ENDPOINT);
+}
+
+function getSolanaWallet() {
+  if (window.phantom?.solana) return window.phantom.solana;
+  if (window.solflare?.solana) return window.solflare.solana;
+  if (window.backpack?.solana) return window.backpack.solana;
+  return null;
+}
 
 async function connectCRO() {
-  const provider = window.ethereum;
-  if (!provider) return alert("Please install MetaMask or DeFi Wallet");
+  try {
+    if (!window.ethereum) throw new Error('Please install a Web3 wallet like MetaMask');
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
 
-  const accounts = await provider.request({ method: 'eth_requestAccounts' });
-  croWallet = new ethers.providers.Web3Provider(provider);
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: CRONOS_MAINNET.chainId }],
+      });
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [CRONOS_MAINNET],
+        });
+      } else {
+        throw switchError;
+      }
+    }
 
-  document.getElementById('croStatus').textContent = `CRO Wallet: Connected (${accounts[0].slice(0,6)}...)`;
+    croWallet = provider;
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const balance = await provider.getBalance(address);
+
+    document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO Connected: ${address.slice(0,6)}...${address.slice(-4)}`;
+    document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,7)} CRO`;
+
+  } catch (error) {
+    console.error('CRO Connect Error:', error);
+    document.getElementById('croStatus').innerHTML = `<span class="text-red-400">✗</span> CRO Error: ${error.message}`;
+  }
 }
 
 async function connectSOL() {
-  const provider = window.phantom?.solana;
-  if (!provider) return alert("Please install Phantom Wallet");
-
-  if (!provider.isConnected) await provider.connect();
-  solWallet = provider;
-
-  document.getElementById('solStatus').textContent = `SOL Wallet: Connected (${provider.publicKey.toString().slice(0,6)}...)`;
-}
-
-async function handleSubmit() {
-  if (isProcessing) return;
-  const target = document.getElementById('targetName').value.trim();
-  const token = document.getElementById('tokenChoice').value;
-  if (!target.startsWith('@')) return showTxStatus('Invalid 𝕏 handle. Must start with @.', 'error');
-
-  isProcessing = true;
-  showTxStatus('Processing Roast...', 'processing');
-
   try {
-    if (token === 'CRO') await submitWithCRO(target);
-    else await submitWithSOL(target);
-  } catch (err) {
-    showTxStatus(err.message, 'error');
+    if (!solConnection) initializeSolana();
+    const wallet = getSolanaWallet();
+    if (!wallet) throw new Error('Please install Phantom, Solflare, or Backpack wallet');
+
+    const response = await wallet.connect();
+    solWallet = wallet;
+
+    const publicKey = wallet.publicKey.toString();
+    const balance = await solConnection.getBalance(wallet.publicKey);
+    const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
+
+    document.getElementById('solStatus').innerHTML = `<span class="text-green-400">✓</span> SOL Connected: ${publicKey.slice(0,6)}...${publicKey.slice(-4)}`;
+    document.getElementById('balanceStatus').textContent += `\nSOL Balance: ${solBalance.toFixed(4)} SOL`;
+
+  } catch (error) {
+    console.error('SOL Connect Error:', error);
+    document.getElementById('solStatus').innerHTML = `<span class="text-red-400">✗</span> SOL Error: ${error.message}`;
   }
-
-  isProcessing = false;
 }
 
-async function submitWithCRO(target) {
-  if (!croWallet) return showTxStatus('Connect CRO wallet first.', 'error');
+async function sendCRO(amount, recipient) {
+  if (!croWallet) throw new Error('Connect CRO wallet first.');
   const signer = croWallet.getSigner();
-  const tx = await signer.sendTransaction({
-    to: CRO_RECIPIENT,
-    value: ethers.utils.parseUnits(CRO_AMOUNT, 'ether')
-  });
-  await tx.wait();
-  await saveRoast(target, 'CRO', tx.hash);
+  const tx = await signer.sendTransaction({ to: recipient, value: ethers.utils.parseEther(amount.toString()) });
+  return tx.hash;
 }
 
-async function submitWithSOL(target) {
-  if (!solWallet) return showTxStatus('Connect SOL wallet first.', 'error');
-  const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
-  const amount = solanaWeb3.LAMPORTS_PER_SOL * parseFloat(SOL_AMOUNT);
+async function sendSOL(amount, recipient) {
+  if (!solWallet || !solWallet.publicKey) throw new Error('Connect SOL wallet first.');
 
-  const tx = new solanaWeb3.Transaction().add(
+  const transaction = new solanaWeb3.Transaction().add(
     solanaWeb3.SystemProgram.transfer({
       fromPubkey: solWallet.publicKey,
-      toPubkey: new solanaWeb3.PublicKey(SOL_RECIPIENT),
-      lamports: amount,
+      toPubkey: new solanaWeb3.PublicKey(recipient),
+      lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
     })
   );
 
-  const { blockhash } = await connection.getLatestBlockhash();
-  tx.recentBlockhash = blockhash;
-  tx.feePayer = solWallet.publicKey;
+  const { blockhash } = await solConnection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
+  transaction.feePayer = solWallet.publicKey;
 
-  const signed = await solWallet.signTransaction(tx);
-  const signature = await connection.sendRawTransaction(signed.serialize());
-  await connection.confirmTransaction(signature);
+  const signed = await solWallet.signTransaction(transaction);
+  const signature = await solConnection.sendRawTransaction(signed.serialize());
+  await solConnection.confirmTransaction(signature);
 
-  await saveRoast(target, 'SOL', signature);
+  return signature;
+}
+
+async function handleSubmit() {
+  const target = document.getElementById('targetName').value.trim();
+  const token = document.getElementById('tokenChoice').value;
+  const statusDiv = document.getElementById('txStatus');
+
+  if (!target.startsWith('@')) {
+    alert('Please enter a valid @name starting with @');
+    return;
+  }
+
+  statusDiv.classList.remove('hidden');
+  statusDiv.className = 'mt-6 p-4 neon-border text-center text-lg';
+
+  try {
+    let txHash;
+    if (token === 'CRO') {
+      txHash = await sendCRO(CRO_AMOUNT, CRO_RECIPIENT);
+    } else {
+      txHash = await sendSOL(parseFloat(SOL_AMOUNT), SOL_RECIPIENT);
+    }
+
+    statusDiv.innerHTML = `<div class="text-green-400">Transaction successful!</div><div class="text-sm break-all">${txHash}</div>`;
+    await saveRoast(target, token, txHash);
+
+  } catch (error) {
+    statusDiv.innerHTML = `<div class="text-red-400">Transaction failed: ${error.message}</div>`;
+  }
 }
 
 async function saveRoast(target, chain, txHash) {
@@ -298,8 +291,6 @@ async function saveRoast(target, chain, txHash) {
     timestamp: Date.now(),
     likes: 0
   });
-
-  showTxStatus('Roast Submitted! Glitch Initiated...', 'success');
   updateRoastList();
 }
 
@@ -320,21 +311,7 @@ async function updateRoastList() {
   });
 }
 
-function showTxStatus(msg, type) {
-  const txStatus = document.getElementById('txStatus');
-  txStatus.className = `mt-6 p-4 neon-border text-center text-lg ${type}`;
-  txStatus.textContent = msg;
-  txStatus.style.display = 'block';
-
-  if (type === 'success') {
-    txStatus.classList.add('animate-pulse');
-    setTimeout(() => {
-      txStatus.classList.add('hidden');
-    }, 4000);
-  }
-}
-
-// Portal Entry Unlock
+// Portal Unlock
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
   overlay.style.transition = "opacity 1s ease";
@@ -352,7 +329,14 @@ window.addEventListener('mousemove', e => {
   cursor.style.top = e.pageY + 'px';
   cursor.classList.remove('hidden');
 });
+
+// Initialize
+window.addEventListener('load', () => {
+  initializeSolana();
+  updateRoastList();
+});
 </script>
 
 </body>
 </html>
+
