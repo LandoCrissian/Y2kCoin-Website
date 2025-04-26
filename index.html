@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-  <title>Y2K x ROAST | Dual Chain Portal</title>
-  <meta name="description" content="The Y2K x ROAST cyberpunk hub. NFTs, roasting, and dual chain dominance across Cronos and Solana.">
+  <title>Y2K x ROAST | Portal</title>
+  <meta name="description" content="The Y2K x ROAST cyberpunk hub. NFTs, roasting, and dual chain dominance.">
 
   <!-- Fonts and Tailwind CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,14 +15,11 @@
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
   <script src="https://bundle.run/buffer@6.0.3"></script>
 
-  <!-- Styles -->
   <style>
     body { background: #0a0a0a; color: #e2e8f0; font-family: 'Rubik', sans-serif; overflow-x: hidden; }
-    .grain-overlay {
-      pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    .grain-overlay { pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Noise_texture.png');
-      opacity: 0.08; z-index: 1; animation: grainmove 8s steps(10) infinite;
-    }
+      opacity: 0.08; z-index: 1; animation: grainmove 8s steps(10) infinite; }
     @keyframes grainmove {
       0% { background-position: 0 0; }
       25% { background-position: 50px 50px; }
@@ -34,57 +31,96 @@
     .neon-border { border: 2px solid #ff00ff; box-shadow: 0 0 10px #ff00ff; border-radius: 8px; transition: all 0.3s ease; }
     .neon-border:hover { box-shadow: 0 0 20px #ff00ff; }
     .cursor-glow { position: fixed; width: 15px; height: 15px; background: #ff00ff; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: overlay; opacity: 0.6; transform: translate(-50%, -50%); transition: transform 0.05s ease; }
+    header { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); }
+    header a { transition: color 0.3s ease; }
+    header a:hover { color: #ff00ff; }
+    .floating { animation: floaty 6s ease-in-out infinite; }
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
   </style>
 </head>
 
 <body class="relative">
 
-<!-- Grain Background -->
+<!-- Grain Overlay -->
 <div class="grain-overlay"></div>
 
 <!-- Cursor Glow -->
 <div id="cursorGlow" class="cursor-glow hidden"></div>
 
-<!-- ENTER PORTAL INTRO OVERLAY -->
+<!-- Floating Neon Header -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-4">
+  <div class="flex items-center gap-4">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K Logo" class="w-10 h-10 neon-border rounded-full">
+    <h1 class="text-xl neon-text font-bold">Y2K x ROAST</h1>
+  </div>
+  <nav class="flex gap-6 text-white text-sm">
+    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
+    <a href="#mint" class="hover:text-pink-400 transition">Mint</a>
+    <a href="#roasted" class="hover:text-pink-400 transition">Roasted</a>
+    <a href="#connect" class="hover:text-pink-400 transition">Connect</a>
+  </nav>
+</header>
+
+<!-- Spacer for Header -->
+<div class="h-20"></div>
+
+<!-- Enter Portal -->
 <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50">
   <h1 class="text-5xl md:text-7xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
   <button onclick="enterPortal()" class="px-10 py-5 neon-border text-white font-bold text-2xl hover:bg-pink-600 transition">Enter Portal</button>
 </div>
 
-<!-- Main Portal Content -->
+<!-- Portal Landing -->
 <div id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6">
+  <div class="flex justify-center mb-8">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K x ROAST Logo" class="w-32 h-32 neon-border rounded-full floating"/>
+  </div>
   <h1 class="text-5xl md:text-7xl neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
-  <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual-Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
+  <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
   <a href="#connect" class="px-8 py-4 neon-border text-white font-bold uppercase tracking-wide hover:bg-pink-600 transition">Connect Wallets</a>
 </div>
 
-<!-- NFT Drops Section -->
+  <!-- NFT Showcase Section -->
 <section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
-  <div class="overflow-x-auto whitespace-nowrap space-x-6 flex px-2 pb-4 snap-x snap-mandatory">
-    <!-- NFT Cards here like before... -->
+  <div class="overflow-x-auto whitespace-nowrap space-x-6 flex px-2 pb-4 snap-x snap-mandatory" style="animation: drift 60s linear infinite;">
+    
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">Eric Mode</div>
+      </a>
+    </div>
+
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://cronoshadow.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">Cards of Cronos</div>
+      </a>
+    </div>
+
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">DiamondHands</div>
+      </a>
+    </div>
+
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">Dojo Warriors</div>
+      </a>
+    </div>
+
   </div>
 </section>
 
-<!-- Wallet Connect Section -->
-<section id="connect" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
-  <h2 class="text-4xl md:text-6xl neon-text font-bold mb-4">Connect Your Wallet</h2>
-  <p class="text-lg text-gray-400 mb-8">Roast. Mint. Dominate.</p>
-
-  <div class="flex flex-wrap gap-6 justify-center mb-10">
-    <button onclick="connectCRO()" class="px-6 py-3 neon-border">Connect CRO Wallet</button>
-    <button onclick="connectSOL()" class="px-6 py-3 neon-border">Connect SOL Wallet</button>
-  </div>
-
-  <div id="walletStatus" class="text-gray-300 text-sm space-y-2">
-    <div id="croStatus">CRO Wallet: Not Connected</div>
-    <div id="solStatus">SOL Wallet: Not Connected</div>
-    <div id="balanceStatus"></div>
-  </div>
-</section>
-
-<!-- Mint/Submit Roast -->
-<section id="mint" class="relative z-10 py-24 px-6 flex flex-col items-center bg-[#111] text-center">
+<!-- Mint / Submit Roast Section -->
+<section id="mint" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-8">🔥 Mint, Submit, Burn 🔥</h2>
 
   <form id="roastForm" class="max-w-md w-full space-y-6">
@@ -100,16 +136,25 @@
   <div id="shareRoast" class="mt-6"></div>
 </section>
 
-<!-- Roasted Board -->
-<section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
+<!-- Roasted Board Section -->
+<section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-[#111] text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-6">ROASTED</h2>
+  <p class="text-gray-400 max-w-xl mb-6">The names that couldn't escape the fire...</p>
   <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"></div>
 </section>
 
 <!-- Footer -->
 <footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  Built by chaos. Fueled by CRO & SOL.
+  Built by chaos. Fueled by CRO and SOL supremacy.
 </footer>
+
+<!-- NFT Auto-Scroll Drift Animation -->
+<style>
+@keyframes drift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+</style>
 
   <!-- FIREBASE SDK + FIRESTORE -->
 <script type="module">
@@ -136,7 +181,7 @@
   window.orderBy = orderBy;
 </script>
 
-<!-- WALLET CONNECT + ROAST FUNCTIONS -->
+<!-- MAIN FUNCTIONALITY -->
 <script>
 const CRONOS_MAINNET = {
   chainId: '0x19',
@@ -156,10 +201,12 @@ let croWallet = null;
 let solWallet = null;
 let solConnection = null;
 
+// Initialize Solana
 function initializeSolana() {
   solConnection = new solanaWeb3.Connection(SOLANA_ENDPOINT);
 }
 
+// Solana Wallet Getter
 function getSolanaWallet() {
   if (window.phantom?.solana) return window.phantom.solana;
   if (window.solflare?.solana) return window.solflare.solana;
@@ -167,9 +214,10 @@ function getSolanaWallet() {
   return null;
 }
 
+// Connect CRO Wallet
 async function connectCRO() {
   try {
-    if (!window.ethereum) throw new Error('Please install a Web3 wallet like MetaMask');
+    if (!window.ethereum) throw new Error('Install MetaMask or DeFi Wallet.');
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
 
@@ -203,11 +251,12 @@ async function connectCRO() {
   }
 }
 
+// Connect SOL Wallet
 async function connectSOL() {
   try {
     if (!solConnection) initializeSolana();
     const wallet = getSolanaWallet();
-    if (!wallet) throw new Error('Please install Phantom, Solflare, or Backpack wallet');
+    if (!wallet) throw new Error('Install Phantom, Solflare, or Backpack wallet.');
 
     const response = await wallet.connect();
     solWallet = wallet;
@@ -225,6 +274,7 @@ async function connectSOL() {
   }
 }
 
+// Send CRO
 async function sendCRO(amount, recipient) {
   if (!croWallet) throw new Error('Connect CRO wallet first.');
   const signer = croWallet.getSigner();
@@ -232,6 +282,7 @@ async function sendCRO(amount, recipient) {
   return tx.hash;
 }
 
+// Send SOL
 async function sendSOL(amount, recipient) {
   if (!solWallet || !solWallet.publicKey) throw new Error('Connect SOL wallet first.');
 
@@ -254,13 +305,14 @@ async function sendSOL(amount, recipient) {
   return signature;
 }
 
+// Handle Roast Submit
 async function handleSubmit() {
   const target = document.getElementById('targetName').value.trim();
   const token = document.getElementById('tokenChoice').value;
   const statusDiv = document.getElementById('txStatus');
 
   if (!target.startsWith('@')) {
-    alert('Please enter a valid @name starting with @');
+    alert('Enter valid @target.');
     return;
   }
 
@@ -283,6 +335,7 @@ async function handleSubmit() {
   }
 }
 
+// Save Roast to Firebase
 async function saveRoast(target, chain, txHash) {
   await addDoc(collection(db, "roasts"), {
     target,
@@ -294,6 +347,7 @@ async function saveRoast(target, chain, txHash) {
   updateRoastList();
 }
 
+// Update Roasted List
 async function updateRoastList() {
   const q = query(collection(db, "roasts"), orderBy("timestamp", "desc"));
   const snapshot = await getDocs(q);
@@ -311,7 +365,7 @@ async function updateRoastList() {
   });
 }
 
-// Portal Unlock
+// Portal Entry
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
   overlay.style.transition = "opacity 1s ease";
@@ -339,4 +393,3 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
-
