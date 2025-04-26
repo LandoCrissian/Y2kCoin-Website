@@ -16,10 +16,20 @@
   <script src="https://bundle.run/buffer@6.0.3"></script>
 
   <style>
+    html { background: #0a0a0a; }
     body { background: #0a0a0a; color: #e2e8f0; font-family: 'Rubik', sans-serif; overflow-x: hidden; }
-    .grain-overlay { pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    .grain-overlay { 
+      pointer-events: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh;
       background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Noise_texture.png');
-      opacity: 0.08; z-index: 1; animation: grainmove 8s steps(10) infinite; }
+      opacity: 0.08; 
+      z-index: 1; 
+      animation: grainmove 8s steps(10) infinite; 
+    }
     @keyframes grainmove {
       0% { background-position: 0 0; }
       25% { background-position: 50px 50px; }
@@ -30,14 +40,91 @@
     .neon-text { text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff; font-family: 'Orbitron', sans-serif; }
     .neon-border { border: 2px solid #ff00ff; box-shadow: 0 0 10px #ff00ff; border-radius: 8px; transition: all 0.3s ease; }
     .neon-border:hover { box-shadow: 0 0 20px #ff00ff; }
-    .cursor-glow { position: fixed; width: 15px; height: 15px; background: #ff00ff; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: overlay; opacity: 0.6; transform: translate(-50%, -50%); transition: transform 0.05s ease; }
-    header { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); }
+    .cursor-glow { 
+      position: fixed; 
+      width: 15px; 
+      height: 15px; 
+      background: #ff00ff; 
+      border-radius: 50%; 
+      pointer-events: none; 
+      z-index: 9999; 
+      mix-blend-mode: overlay; 
+      opacity: 0.6; 
+      transform: translate(-50%, -50%); 
+      transition: transform 0.05s ease; 
+    }
+    header { 
+      background: rgba(0, 0, 0, 0.8); 
+      backdrop-filter: blur(8px); 
+      -webkit-backdrop-filter: blur(8px);
+    }
     header a { transition: color 0.3s ease; }
     header a:hover { color: #ff00ff; }
     .floating { animation: floaty 6s ease-in-out infinite; }
     @keyframes floaty {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
+    }
+    .nft-scroll {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .nft-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .nft-item {
+      scroll-snap-align: start;
+      flex: 0 0 auto;
+    }
+    .welcome-text {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.2;
+      text-align: center;
+      padding: 0 1rem;
+    }
+    @media (max-width: 640px) {
+      .welcome-text {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+      }
+      header nav {
+        font-size: 0.875rem;
+        gap: 1rem;
+      }
+    }
+    
+    /* Improved Auto-scroll Animation */
+    .scroll-container {
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+    }
+    .scroll-content {
+      display: flex;
+      animation: scroll 30s linear infinite;
+    }
+    .scroll-content:hover {
+      animation-play-state: paused;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-256px * 4)); } /* Adjust based on number of items */
+    }
+    
+    /* Touch-friendly improvements */
+    @media (hover: none) {
+      .neon-border:active {
+        box-shadow: 0 0 20px #ff00ff;
+        transform: scale(0.98);
+      }
+      input, select, button {
+        font-size: 16px !important;
+        padding: 1rem !important;
+      }
     }
   </style>
 </head>
@@ -56,7 +143,7 @@
     <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K Logo" class="w-10 h-10 neon-border rounded-full">
     <h1 class="text-xl neon-text font-bold">Y2K x ROAST</h1>
   </div>
-  <nav class="flex gap-6 text-white text-sm">
+  <nav class="flex gap-4 md:gap-6 text-white text-sm">
     <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
     <a href="#mint" class="hover:text-pink-400 transition">Mint</a>
     <a href="#roasted" class="hover:text-pink-400 transition">Roasted</a>
@@ -68,9 +155,9 @@
 <div class="h-20"></div>
 
 <!-- Enter Portal -->
-<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50">
-  <h1 class="text-5xl md:text-7xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
-  <button onclick="enterPortal()" class="px-10 py-5 neon-border text-white font-bold text-2xl hover:bg-pink-600 transition">Enter Portal</button>
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+  <h1 class="welcome-text neon-text font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
+  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl md:text-2xl hover:bg-pink-600 active:scale-98 transition">Enter Portal</button>
 </div>
 
 <!-- Portal Landing -->
@@ -78,44 +165,59 @@
   <div class="flex justify-center mb-8">
     <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K x ROAST Logo" class="w-32 h-32 neon-border rounded-full floating"/>
   </div>
-  <h1 class="text-5xl md:text-7xl neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
+  <h1 class="welcome-text neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
   <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
-  <a href="#connect" class="px-8 py-4 neon-border text-white font-bold uppercase tracking-wide hover:bg-pink-600 transition">Connect Wallets</a>
+  <a href="#connect" class="px-8 py-4 neon-border text-white font-bold uppercase tracking-wide hover:bg-pink-600 active:scale-98 transition">Connect Wallets</a>
 </div>
 
-  <!-- NFT Showcase Section -->
+<!-- NFT Showcase Section -->
 <section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
-  <div class="overflow-x-auto whitespace-nowrap space-x-6 flex px-2 pb-4 snap-x snap-mandatory" style="animation: drift 60s linear infinite;">
-    
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">Eric Mode</div>
-      </a>
-    </div>
+  <div class="scroll-container">
+    <div class="scroll-content">
+      <div class="nft-item w-64 mx-3">
+        <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+          <div class="mt-2 font-bold text-white">Eric Mode</div>
+        </a>
+      </div>
 
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://cronoshadow.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-      </a>
-    </div>
+      <div class="nft-item w-64 mx-3">
+        <a href="https://cronoshadow.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+          <div class="mt-2 font-bold text-white">Cards of Cronos</div>
+        </a>
+      </div>
 
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">DiamondHands</div>
-      </a>
-    </div>
+      <div class="nft-item w-64 mx-3">
+        <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+          <div class="mt-2 font-bold text-white">DiamondHands</div>
+        </a>
+      </div>
 
-    <div class="inline-block w-64 flex-shrink-0 snap-center">
-      <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-        <div class="mt-2 font-bold text-white">Dojo Warriors</div>
-      </a>
-    </div>
+      <div class="nft-item w-64 mx-3">
+        <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+          <div class="mt-2 font-bold text-white">Dojo Warriors</div>
+        </a>
+      </div>
+      
+      <!-- Duplicate items for seamless scrolling -->
+      <div class="nft-item w-64 mx-3">
+        <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+          <div class="mt-2 font-bold text-white">Eric Mode</div>
+        </a>
+      </div>
 
+      <div class="nft-item w-64 mx-3">
+        <a href="https://cronoshadow.nfts2.me/" target="_blank">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+          <div class="mt-2 font-bold text-white">Cards of Cronos</div>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -124,12 +226,16 @@
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-8">🔥 Mint, Submit, Burn 🔥</h2>
 
   <form id="roastForm" class="max-w-md w-full space-y-6">
-    <input type="text" id="targetName" placeholder="@TargetName" required class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
+    <input type="text" id="targetName" placeholder="@TargetName" required 
+           class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
     <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
       <option value="CRO">Submit with CRO (60)</option>
       <option value="SOL">Submit with SOL (0.032)</option>
     </select>
-    <button type="button" onclick="handleSubmit()" class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Submit Roast</button>
+    <button type="button" onclick="handleSubmit()" 
+            class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 active:scale-98 transition">
+      Submit Roast
+    </button>
   </form>
 
   <div id="txStatus" class="hidden mt-6 p-4 neon-border text-center text-lg"></div>
@@ -148,15 +254,7 @@
   Built by chaos. Fueled by CRO and SOL supremacy.
 </footer>
 
-<!-- NFT Auto-Scroll Drift Animation -->
-<style>
-@keyframes drift {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-</style>
-
-  <!-- FIREBASE SDK + FIRESTORE -->
+<!-- FIREBASE SDK + FIRESTORE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -365,29 +463,65 @@ async function updateRoastList() {
   });
 }
 
-// Portal Entry
+// Portal Entry with smooth animation
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
-  overlay.style.transition = "opacity 1s ease";
+  overlay.style.transition = "opacity 1s ease, transform 1s ease";
   overlay.style.opacity = 0;
+  overlay.style.transform = "scale(1.1)";
+  
   setTimeout(() => {
     overlay.style.display = "none";
-    document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('portal').scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
   }, 1000);
 }
 
-// Cursor Glow
+// Enhanced Cursor Glow with touch support
 const cursor = document.getElementById('cursorGlow');
-window.addEventListener('mousemove', e => {
-  cursor.style.left = e.pageX + 'px';
-  cursor.style.top = e.pageY + 'px';
-  cursor.classList.remove('hidden');
-});
+if (matchMedia('(pointer:fine)').matches) {
+  window.addEventListener('mousemove', e => {
+    cursor.style.left = e.pageX + 'px';
+    cursor.style.top = e.pageY + 'px';
+    cursor.classList.remove('hidden');
+  });
+  
+  window.addEventListener('mouseout', () => {
+    cursor.classList.add('hidden');
+  });
+}
+
+// Improved scroll handling
+let lastScrollPosition = 0;
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+  const header = document.querySelector('header');
+  
+  if (currentScroll > lastScrollPosition) {
+    header.style.transform = 'translateY(-100%)';
+  } else {
+    header.style.transform = 'translateY(0)';
+  }
+  lastScrollPosition = currentScroll;
+}, { passive: true });
 
 // Initialize
 window.addEventListener('load', () => {
   initializeSolana();
   updateRoastList();
+  
+  // Add smooth scroll for all anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+  });
 });
 </script>
 
