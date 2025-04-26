@@ -6,17 +6,16 @@
   <title>Y2K x ROAST | Portal to the Future</title>
   <meta name="description" content="Step into the luxury cyberpunk world of Y2K x ROAST. Dual-chain chaos. CRO + SOL dominance. Burn it all to the ground.">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
-  
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Ethers.js (CRO Wallet) -->
+  <!-- Ethers.js (CRO Wallets) -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
   <!-- Solana Web3.js -->
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
-  <!-- Grain Background Animation -->
   <style>
     body {
       margin: 0;
@@ -27,7 +26,6 @@
       color: #e2e8f0;
       position: relative;
     }
-
     .grain-overlay {
       pointer-events: none;
       background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Noise_texture.png');
@@ -39,7 +37,6 @@
       z-index: 1;
       animation: grainmove 8s steps(10) infinite;
     }
-
     @keyframes grainmove {
       0% { background-position: 0 0; }
       25% { background-position: 50px 50px; }
@@ -47,23 +44,19 @@
       75% { background-position: -50px 50px; }
       100% { background-position: 0 0; }
     }
-
     .neon-text {
       text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff;
       font-family: 'Orbitron', sans-serif;
     }
-
     .neon-border {
       border: 2px solid #ff00ff;
       box-shadow: 0 0 10px #ff00ff;
       border-radius: 8px;
       transition: all 0.3s ease;
     }
-
     .neon-border:hover {
-      box-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff;
+      box-shadow: 0 0 20px #ff00ff;
     }
-
     .cursor-glow {
       position: fixed;
       width: 15px;
@@ -77,26 +70,68 @@
       transform: translate(-50%, -50%);
       transition: transform 0.05s ease;
     }
-
   </style>
-
 </head>
+
 <body class="relative">
 
-<!-- Grain Overlay -->
+<!-- Grain Background -->
 <div class="grain-overlay"></div>
 
 <!-- Cursor Glow -->
 <div id="cursorGlow" class="cursor-glow hidden"></div>
 
-<!-- Main Portal Hero -->
+<!-- ENTER PORTAL INTRO OVERLAY -->
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50">
+  <h1 class="text-5xl md:text-7xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
+  <button onclick="enterPortal()" class="px-10 py-5 neon-border text-white font-bold text-2xl hover:bg-pink-600 transition">
+    Enter Portal
+  </button>
+</div>
+
+<!-- Main Portal -->
 <div id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6">
   <h1 class="text-5xl md:text-7xl neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
   <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual-Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
-  <a href="#connect" class="px-8 py-4 neon-border text-white font-bold uppercase tracking-wide hover:bg-pink-600 transition">Enter Portal</a>
+  <a href="#connect" class="px-8 py-4 neon-border text-white font-bold uppercase tracking-wide hover:bg-pink-600 transition">Connect Wallets</a>
 </div>
 
-  <!-- Portal Entry Target -->
+<!-- NFT Drops Section -->
+<section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
+  <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
+  <div class="overflow-x-auto whitespace-nowrap space-x-6 flex px-2 pb-4 snap-x snap-mandatory">
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg"
+             alt="Eric Mode" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">Eric Mode</div>
+      </a>
+    </div>
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://cronoshadow.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg"
+             alt="Cards of Cronos" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">Cards of Cronos</div>
+      </a>
+    </div>
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg"
+             alt="DiamondHands" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">DiamondHands</div>
+      </a>
+    </div>
+    <div class="inline-block w-64 flex-shrink-0 snap-center">
+      <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg"
+             alt="Dojo Warriors" class="w-64 h-64 rounded-xl neon-border object-cover hover:scale-105 transition" loading="lazy"/>
+        <div class="mt-2 font-bold text-white">Dojo Warriors</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+  <!-- Connect Wallets Section -->
 <section id="connect" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-4">Connect Your Wallet</h2>
   <p class="text-lg text-gray-400 mb-8">To roast. To mint. To dominate.</p>
@@ -132,13 +167,18 @@
   <div id="shareRoast" class="mt-6"></div>
 </section>
 
-<!-- Roasted Board -->
+<!-- Roasted Board Section -->
 <section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
   <h2 class="text-4xl md:text-6xl neon-text font-bold mb-6">ROASTED</h2>
   <p class="text-lg text-gray-400 mb-10">The brave. The burned. The remembered.</p>
 
   <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"></div>
 </section>
+
+<!-- Footer -->
+<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
+  Built with fire and neon by Y2K x ROAST.
+</footer>
 
   <!-- FIREBASE SDK + FIRESTORE -->
 <script type="module">
@@ -288,7 +328,21 @@ function showTxStatus(msg, type) {
 
   if (type === 'success') {
     txStatus.classList.add('animate-pulse');
+    setTimeout(() => {
+      txStatus.classList.add('hidden');
+    }, 4000);
   }
+}
+
+// Portal Entry Unlock
+function enterPortal() {
+  const overlay = document.getElementById('enterOverlay');
+  overlay.style.transition = "opacity 1s ease";
+  overlay.style.opacity = 0;
+  setTimeout(() => {
+    overlay.style.display = "none";
+    document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
+  }, 1000);
 }
 
 // Cursor Glow
@@ -299,3 +353,6 @@ window.addEventListener('mousemove', e => {
   cursor.classList.remove('hidden');
 });
 </script>
+
+</body>
+</html>
