@@ -71,10 +71,24 @@
       transition: transform 0.05s ease; 
     }
     header { 
-      background: rgba(0, 0, 0, 0.8); 
-      backdrop-filter: blur(8px); 
-      -webkit-backdrop-filter: blur(8px);
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8); 
+  backdrop-filter: blur(8px); 
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 50;
+  transition: background 0.3s ease;
+}
+
+header a { 
+  transition: color 0.3s ease;
+}
+
+header a:hover { 
+  color: #ff00ff;
+}
     header a { transition: color 0.3s ease; }
     header a:hover { color: #ff00ff; }
     .floating { animation: floaty 6s ease-in-out infinite; }
