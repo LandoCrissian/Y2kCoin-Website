@@ -681,6 +681,134 @@ if (matchMedia('(pointer:fine)').matches) {
   }
 }
 
+  <!-- VOTING SYSTEM START -->
+
+<script>
+let voterWallet = null;
+
+// Wallet Connect for Voting
+async function connectForVoting() {
+  if (window.ethereum) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    voterWallet = await signer.getAddress();
+  } else {
+    alert("Install MetaMask to vote!");
+  }
+}
+
+// Save Vote to Firebase
+async function saveVote(roastId) {
+  if (!voterWallet) {
+    await connectForVoting();
+  }
+
+  const votesRef = collection(db, "votes");
+  const roastRef = collection(db, "roasts");
+  const now = Date.now();
+
+  // Check if already voted
+  const votesSnapshot = await getDocs(query(votesRef, orderBy("timestamp", "desc")));
+  let alreadyVoted = false;
+
+  votesSnapshot.forEach(doc => {
+    const data = doc.data();
+    if (data.voter === voterWallet && data.roastId === roastId && now - data.timestamp < 86400000) {
+      alreadyVoted = true;
+    }
+  });
+
+  if (alreadyVoted) {
+    alert("You already voted for this roast in the last 24 hours.");
+    return;
+  }
+
+  // Save the vote
+  await addDoc(votesRef, {
+    voter: voterWallet,
+    roastId: roastId,
+    timestamp: now
+  });
+
+  // Increment likes
+  const allRoasts = await getDocs(roastRef);
+  allRoasts.forEach(async roastDoc => {
+    if (roastDoc.id === roastId) {
+      const data = roastDoc.data();
+      await addDoc(collection(db, "roasts"), {
+        target: data.target,
+        chain: data.chain,
+        txHash: data.txHash,
+        timestamp: data.timestamp,
+        likes: (data.likes || 0) + 1
+      });
+    }
+  });
+
+  updateRoastList();
+}
+
+// Update Roast List with Voting Buttons
+async function updateRoastList() {
+  const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
+  const snapshot = await getDocs(q);
+
+  const list = document.getElementById('roastList');
+  list.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const roastId = doc.id;
+    list.innerHTML += `
+      <div class="p-4 neon-border rounded space-y-2">
+        <div class="font-bold text-xl">${data.target}</div>
+        <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
+        <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
+          🔥 Fire Vote (${data.likes || 0})
+        </button>
+      </div>`;
+  });
+}
+
+// Floating Prize Pool Bar
+function floatingPrizePool() {
+  const bar = document.createElement('div');
+  bar.innerHTML = `
+    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 backdrop-blur-lg text-pink-400 font-bold px-6 py-2 rounded-full shadow-lg text-sm z-50">
+      Prize Pool: <span id="liveCroPool">Loading...</span> CRO + <span id="liveSolPool">Loading...</span> SOL
+    </div>
+  `;
+  document.body.appendChild(bar);
+}
+
+// Update Live Floating Pools
+async function updateFloatingPrizePool() {
+  try {
+    const croProvider = new ethers.providers.JsonRpcProvider('https://evm.cronos.org');
+    const croBalance = await croProvider.getBalance('0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100');
+    document.getElementById('liveCroPool').textContent = parseFloat(ethers.utils.formatEther(croBalance)).toFixed(2);
+
+    const solConnection = new solanaWeb3.Connection('https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0');
+    const solPublicKey = new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq');
+    const solBalance = await solConnection.getBalance(solPublicKey);
+    document.getElementById('liveSolPool').textContent = (solBalance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(3);
+  } catch (err) {
+    console.error('Floating pool update error:', err);
+  }
+}
+
+// Initialize after Load
+window.addEventListener('load', () => {
+  floatingPrizePool();
+  updateFloatingPrizePool();
+  setInterval(updateFloatingPrizePool, 30000);
+});
+
+</script>
+
+<!-- VOTING SYSTEM END -->
+  
 // Initialize
 window.addEventListener('load', () => {
   initializeSolana();
