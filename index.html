@@ -2,377 +2,141 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   <title>Y2K x ROAST | Portal</title>
   <meta name="description" content="The Y2K x ROAST cyberpunk hub. NFTs, roasting, and dual chain dominance.">
 
-  <!-- Fonts and Tailwind CSS -->
+  <!-- Tailwind + Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Web3 Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-  <script src="https://bundle.run/buffer@6.0.3"></script>
 
   <style>
-    :root {
-      color-scheme: dark;
-    }
-    
-    html, 
-    body {
-      background-color: #0a0a0a !important;
-      color: #e2e8f0;
-      min-height: 100vh;
-      font-family: 'Rubik', sans-serif;
-      overflow-x: hidden;
-    }
-
-    #app {
-      background-color: #0a0a0a;
-      min-height: 100vh;
-    }
-
-    /* Rest of your styles remain the same */
-    .grain-overlay { 
-      pointer-events: none; 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      width: 100vw; 
-      height: 100vh;
-      background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Noise_texture.png');
-      opacity: 0.08; 
-      z-index: 1; 
-      animation: grainmove 8s steps(10) infinite; 
-    }
-    @keyframes grainmove {
-      0% { background-position: 0 0; }
-      25% { background-position: 50px 50px; }
-      50% { background-position: 0px 100px; }
-      75% { background-position: -50px 50px; }
-      100% { background-position: 0 0; }
-    }
+    :root { color-scheme: dark; }
+    html, body { background: #0a0a0a; color: #e2e8f0; font-family: 'Rubik', sans-serif; overflow-x: hidden; min-height: 100vh; }
     .neon-text { text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff; font-family: 'Orbitron', sans-serif; }
-    .neon-border { border: 2px solid #ff00ff; box-shadow: 0 0 10px #ff00ff; border-radius: 8px; transition: all 0.3s ease; }
+    .neon-border { border: 2px solid #ff00ff; box-shadow: 0 0 10px #ff00ff; border-radius: 8px; transition: 0.3s ease; }
     .neon-border:hover { box-shadow: 0 0 20px #ff00ff; }
-    .cursor-glow { 
-      position: fixed; 
-      width: 15px; 
-      height: 15px; 
-      background: #ff00ff; 
-      border-radius: 50%; 
-      pointer-events: none; 
-      z-index: 9999; 
-      mix-blend-mode: overlay; 
-      opacity: 0.6; 
-      transform: translate(-50%, -50%); 
-      transition: transform 0.05s ease; 
-    }
-    header { 
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.8); 
-  backdrop-filter: blur(8px); 
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 50;
-  transition: background 0.3s ease;
-}
-
-header a:hover { 
-  color: #ff00ff;
-}
-    header a { transition: color 0.3s ease; }
+    header { position: fixed; width: 100%; top: 0; background: rgba(0,0,0,0.8); z-index: 50; backdrop-filter: blur(8px); }
+    header a { color: white; transition: color 0.3s ease; }
     header a:hover { color: #ff00ff; }
     .floating { animation: floaty 6s ease-in-out infinite; }
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    .nft-scroll {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .nft-scroll::-webkit-scrollbar {
-      display: none;
-    }
-    .nft-item {
-      scroll-snap-align: start;
-      flex: 0 0 auto;
-    }
-    .welcome-text {
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 1.2;
-      text-align: center;
-      padding: 0 1rem;
-    }
-    .scroll-container {
-      display: flex;
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-    }
-    .scroll-content {
-      display: flex;
-      animation: scroll 30s linear infinite;
-    }
-    .scroll-content:hover {
-      animation-play-state: paused;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-256px * 4)); }
-    }
-    
-    /* Wallet section styles */
-    .wallet-section {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .wallet-button {
-      background: rgba(255, 0, 255, 0.1);
-      border: 1px solid #ff00ff;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      color: white;
-      transition: all 0.3s ease;
-      width: 100%;
-      margin-bottom: 0.5rem;
-    }
-    
-    .wallet-button:hover {
-      background: rgba(255, 0, 255, 0.2);
-      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-    }
-    
-    .wallet-status {
-      color: #a0aec0;
-      font-size: 0.875rem;
-    }
-    
-    @media (max-width: 640px) {
-      .welcome-text {
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-      }
-      header nav {
-        font-size: 0.875rem;
-        gap: 1rem;
-      }
-      .section-title {
-        font-size: 1.75rem !important;
-        line-height: 1.2;
-        margin-bottom: 1rem;
-      }
-      .wallet-status {
-        font-size: 0.875rem;
-      }
-    }
-    
-    @media (hover: none) {
-      .neon-border:active {
-        box-shadow: 0 0 20px #ff00ff;
-        transform: scale(0.98);
-      }
-      input, select, button {
-        font-size: 16px !important;
-        padding: 1rem !important;
-      }
-    }
+    @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+    .grain-overlay { pointer-events:none; position:fixed; width:100%; height:100%; background:url('https://upload.wikimedia.org/wikipedia/commons/8/89/Noise_texture.png'); opacity:0.08; z-index:1; animation:grainmove 8s steps(10) infinite; }
+    @keyframes grainmove { 0%{background-position:0 0;}25%{background-position:50px 50px;}50%{background-position:0px 100px;}75%{background-position:-50px 50px;}100%{background-position:0 0;} }
+    .cursor-glow { position:fixed; width:15px; height:15px; background:#ff00ff; border-radius:50%; pointer-events:none; opacity:0.6; z-index:9999; mix-blend-mode:overlay; transition:transform 0.05s ease; transform:translate(-50%,-50%); }
   </style>
 </head>
 
 <body>
-<div id="app" class="relative">
+<div id="app">
 
-<!-- Grain Overlay -->
+<!-- Grain + Cursor -->
 <div class="grain-overlay"></div>
-
-<!-- Cursor Glow -->
 <div id="cursorGlow" class="cursor-glow hidden"></div>
 
-<!-- Floating Neon Header -->
-<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-4">
+<!-- Header -->
+<header class="flex justify-between items-center p-4">
   <div class="flex items-center gap-4">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K Logo" class="w-10 h-10 neon-border rounded-full">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" class="w-10 h-10 neon-border rounded-full">
     <h1 class="text-xl neon-text font-bold">Y2K x ROAST</h1>
   </div>
-  <nav class="flex gap-4 md:gap-6 text-white text-sm">
-    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
-    <a href="#mint" class="hover:text-pink-400 transition">Mint</a>
-    <a href="#roasted" class="hover:text-pink-400 transition">Roasted</a>
-    <a href="#connect" class="hover:text-pink-400 transition">Connect</a>
+  <nav class="flex gap-4 text-sm">
+    <a href="#nfts">NFTs</a>
+    <a href="#mint">Mint</a>
+    <a href="#roasted">Roasted</a>
+    <a href="#connect">Connect</a>
   </nav>
 </header>
 
-<!-- Spacer for Header -->
+<!-- Spacer -->
 <div class="h-20"></div>
 
-<!-- Enter Portal -->
-<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-  <h1 class="welcome-text neon-text font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
-  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl md:text-2xl hover:bg-pink-600 active:scale-98 transition">Enter Portal</button>
+<!-- Portal -->
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50">
+  <h1 class="neon-text text-4xl font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
+  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600">Enter Portal</button>
 </div>
 
-<!-- Main Content -->
-<main class="bg-[#0a0a0a]">
+<!-- Main -->
+<main id="portal" class="flex flex-col min-h-screen items-center bg-[#0a0a0a] text-center px-6">
 
-  <!-- Portal Landing -->
-<div id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6 bg-[#0a0a0a]">
-  <div class="flex justify-center mb-8">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K x ROAST Logo" class="w-32 h-32 neon-border rounded-full floating"/>
+  <!-- Hero -->
+  <div class="flex flex-col justify-center items-center mt-10">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" class="w-32 h-32 neon-border rounded-full floating mb-6">
+    <h2 class="neon-text text-4xl font-bold mb-4">Dual Chain Domination</h2>
+    <p class="text-gray-400 max-w-lg mb-6">CRO meets SOL. Roasting the old world to build a new one.</p>
   </div>
-  <h1 class="welcome-text neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
-  <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
 
-  <!-- ADD TRADE NOW SECTION HERE -->
-  <section id="trade" class="relative z-10 py-12 px-6 flex flex-col items-center bg-[#0a0a0a] text-center">
-    <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Trade Now</h2>
-    <div class="flex flex-col md:flex-row gap-8">
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
-        Swap $Y2K on Obsidian
+  <!-- Trade Now Section -->
+  <section class="py-12">
+    <h2 class="neon-text text-3xl font-bold mb-8">Trade Now</h2>
+    <div class="flex flex-col md:flex-row gap-6">
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="px-8 py-4 neon-border text-white font-bold hover:bg-pink-600 rounded-lg">Swap $Y2K</a>
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="px-8 py-4 neon-border text-white font-bold hover:bg-pink-600 rounded-lg">Trade $ROAST</a>
+    </div>
+  </section>
+
+  <!-- NFT Showcase -->
+  <section id="nfts" class="py-16 w-full">
+    <h2 class="neon-text text-4xl font-bold mb-10">Live NFT Drops</h2>
+    <div class="flex overflow-x-auto gap-6 px-4">
+      <!-- NFT cards -->
+      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="min-w-[256px] neon-border rounded-xl p-2 hover:scale-105 transition">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" class="rounded-xl mb-2">
+        <div class="text-white font-bold">Eric Mode</div>
       </a>
-      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
-        Trade $ROAST on Raydium
+      <a href="https://cronoshadow.nfts2.me/" target="_blank" class="min-w-[256px] neon-border rounded-xl p-2 hover:scale-105 transition">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" class="rounded-xl mb-2">
+        <div class="text-white font-bold">Cards of Cronos</div>
       </a>
     </div>
   </section>
-</div>
 
-  <!-- NFT Showcase Section -->
-  <section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
-    <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
-    <div class="scroll-container">
-      <div class="scroll-content">
-        <!-- NFT items remain the same -->
-        <div class="nft-item w-64 mx-3">
-          <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Eric Mode</div>
-          </a>
-        </div>
-
-        <div class="nft-item w-64 mx-3">
-          <a href="https://cronoshadow.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-          </a>
-        </div>
-
-        <div class="nft-item w-64 mx-3">
-          <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">DiamondHands</div>
-          </a>
-        </div>
-
-        <div class="nft-item w-64 mx-3">
-          <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Dojo Warriors</div>
-          </a>
-        </div>
-        
-        <!-- Duplicate items for seamless scrolling -->
-        <div class="nft-item w-64 mx-3">
-          <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Eric Mode</div>
-          </a>
-        </div>
-
-        <div class="nft-item w-64 mx-3">
-          <a href="https://cronoshadow.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-          </a>
-        </div>
-      </div>
+  <!-- Mint & Roast Submission (Connect Wallet + Form) -->
+  <section id="mint" class="py-16 flex flex-col items-center">
+    <h2 class="neon-text text-3xl font-bold mb-8">Submit a Roast</h2>
+    <div class="flex flex-col gap-6 max-w-md w-full">
+      <button onclick="connectCRO()" class="wallet-button">Connect CRO Wallet</button>
+      <button onclick="connectSOL()" class="wallet-button">Connect SOL Wallet</button>
+      <form id="roastForm" class="flex flex-col gap-4 mt-8">
+        <input id="targetName" placeholder="@TargetName" required class="neon-border p-3 text-white bg-black rounded text-center"/>
+        <select id="tokenChoice" class="neon-border p-3 text-white bg-black rounded text-center">
+          <option value="CRO">Submit with CRO (60)</option>
+          <option value="SOL">Submit with SOL (0.032)</option>
+        </select>
+        <button type="button" onclick="handleSubmit()" class="neon-border p-4 font-bold text-xl text-white hover:bg-pink-600">Submit Roast</button>
+      </form>
     </div>
   </section>
 
-  <!-- Mint Section with Wallet Connect -->
-  <section id="mint" class="relative z-10 py-16 px-6 flex flex-col items-center bg-[#0a0a0a] text-center">
-    <!-- Wallet Connection Section -->
-    <div class="wallet-section w-full max-w-md mb-8">
-      <h3 class="text-2xl font-bold mb-4 text-white">Connect Wallets</h3>
-      <div class="space-y-4">
-        <div>
-          <button onclick="connectCRO()" class="wallet-button">Connect CRO Wallet</button>
-          <div id="croStatus" class="wallet-status">Not connected</div>
-        </div>
-        <div>
-          <button onclick="connectSOL()" class="wallet-button">Connect SOL Wallet</button>
-          <div id="solStatus" class="wallet-status">Not connected</div>
-        </div>
-        <div id="balanceStatus" class="wallet-status mt-4"></div>
-      </div>
-    </div>
-
-    <!-- Roast Submission Section -->
-    <h2 class="section-title text-2xl md:text-3xl neon-text font-bold mb-6">Submit Your Roast</h2>
-    <div class="mb-8 text-center">
-  <h3 class="text-2xl font-bold neon-text mb-2">Current Prize Pool</h3>
-  <div class="flex justify-center gap-8 text-lg text-white">
-    <div><span id="croPool">Loading...</span> CRO</div>
-    <div><span id="solPool">Loading...</span> SOL</div>
-  </div>
-</div>
-    <form id="roastForm" class="max-w-md w-full space-y-4">
-      <input type="text" id="targetName" placeholder="@TargetName" required 
-             class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
-      <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
-        <option value="CRO">Submit with CRO (60)</option>
-        <option value="SOL">Submit with SOL (0.032)</option>
-      </select>
-      <button type="button" onclick="handleSubmit()" 
-              class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 active:scale-98 transition">
-        Submit Roast
-      </button>
-      
-    </form>
-
-    <div id="txStatus" class="hidden mt-6 p-4 neon-border text-center text-lg"></div>
-    <div id="shareRoast" class="mt-6"></div>
+  <!-- Roasted Leaderboard -->
+  <section id="roasted" class="py-16 bg-[#111] w-full flex flex-col items-center">
+    <h2 class="neon-text text-4xl font-bold mb-6">ROASTED</h2>
+    <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full px-4"></div>
   </section>
 
-  <!-- Roasted Board Section -->
-  <section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-[#111] text-center">
-    <h2 class="text-4xl md:text-6xl neon-text font-bold mb-6">ROASTED</h2>
-    <p class="text-gray-400 max-w-xl mb-6">The names that couldn't escape the fire...</p>
-    <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"></div>
-  </section>
-
- </main>
+</main>
 
 <!-- Footer -->
-<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  <div class="mb-4">Built by chaos. Fueled by CRO and SOL supremacy.</div>
-
-  <div class="flex justify-center gap-6 text-white mt-6">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏 (Twitter)</a>
+<footer class="py-10 text-center text-gray-500 text-sm">
+  Built by chaos. Fueled by CRO and SOL supremacy.
+  <div class="flex justify-center gap-6 mt-4">
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400">Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400">𝕏</a>
   </div>
 </footer>
 
 </div>
 
-<!-- FIREBASE SDK + FIRESTORE -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
   authDomain: "y2kroast-512ee.firebaseapp.com",
   projectId: "y2kroast-512ee",
@@ -381,19 +145,34 @@ header a:hover {
   appId: "1:602588659855:web:f01efa4b81e737d26270fa"
 };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  window.db = db;
-  window.collection = collection;
-  window.addDoc = addDoc;
-  window.getDocs = getDocs;
-  window.query = query;
-  window.orderBy = orderBy;
-</script>
+// --- Portal Enter Function ---
+window.enterPortal = function () {
+  const overlay = document.getElementById('enterOverlay');
+  overlay.style.transition = "opacity 1s ease, transform 1s ease";
+  overlay.style.opacity = 0;
+  overlay.style.transform = "scale(1.1)";
+  setTimeout(() => {
+    overlay.remove();
+  }, 1000);
+};
 
-<!-- MAIN FUNCTIONALITY -->
-<script>
+// --- Enhanced Cursor Glow ---
+const cursor = document.getElementById('cursorGlow');
+if (matchMedia('(pointer:fine)').matches) {
+  window.addEventListener('mousemove', e => {
+    cursor.style.left = e.pageX + 'px';
+    cursor.style.top = e.pageY + 'px';
+    cursor.classList.remove('hidden');
+  });
+  window.addEventListener('mouseout', () => {
+    cursor.classList.add('hidden');
+  });
+}
+
+// --- Wallet Connect Settings ---
 const CRONOS_MAINNET = {
   chainId: '0x19',
   chainName: 'Cronos Mainnet',
@@ -401,8 +180,8 @@ const CRONOS_MAINNET = {
   rpcUrls: ['https://evm.cronos.org'],
   blockExplorerUrls: ['https://cronoscan.com/']
 };
-
 const SOLANA_ENDPOINT = "https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0";
+
 const CRO_RECIPIENT = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
 const SOL_RECIPIENT = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
 const CRO_AMOUNT = "60";
@@ -412,12 +191,10 @@ let croWallet = null;
 let solWallet = null;
 let solConnection = null;
 
-// Initialize Solana
 function initializeSolana() {
   solConnection = new solanaWeb3.Connection(SOLANA_ENDPOINT);
 }
 
-// Solana Wallet Getter
 function getSolanaWallet() {
   if (window.phantom?.solana) return window.phantom.solana;
   if (window.solflare?.solana) return window.solflare.solana;
@@ -425,184 +202,92 @@ function getSolanaWallet() {
   return null;
 }
 
-// Connect CRO Wallet
-async function connectCRO() {
+// --- Connect CRO ---
+window.connectCRO = async function() {
   try {
     if (!window.ethereum) throw new Error('Install MetaMask or DeFi Wallet.');
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
 
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: CRONOS_MAINNET.chainId }],
-      });
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [CRONOS_MAINNET],
-        });
-      } else {
-        throw switchError;
-      }
-    }
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: CRONOS_MAINNET.chainId }],
+    });
 
     croWallet = provider;
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     const balance = await provider.getBalance(address);
 
-    document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO Connected: ${address.slice(0,6)}...${address.slice(-4)}`;
-    document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,7)} CRO`;
-
+    alert(`Connected CRO Wallet: ${address}\nBalance: ${ethers.utils.formatEther(balance).slice(0,6)} CRO`);
   } catch (error) {
     console.error('CRO Connect Error:', error);
-    document.getElementById('croStatus').innerHTML = `<span class="text-red-400">✗</span> CRO Error: ${error.message}`;
+    alert('CRO Connection Error: ' + error.message);
   }
-}
+};
 
-// Connect SOL Wallet
-async function connectSOL() {
+// --- Connect SOL ---
+window.connectSOL = async function() {
   try {
     if (!solConnection) initializeSolana();
     const wallet = getSolanaWallet();
     if (!wallet) throw new Error('Install Phantom, Solflare, or Backpack wallet.');
 
-    const response = await wallet.connect();
+    await wallet.connect();
     solWallet = wallet;
-
-    const publicKey = wallet.publicKey.toString();
     const balance = await solConnection.getBalance(wallet.publicKey);
-    const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
-
-    document.getElementById('solStatus').innerHTML = `<span class="text-green-400">✓</span> SOL Connected: ${publicKey.slice(0,6)}...${publicKey.slice(-4)}`;
-    document.getElementById('balanceStatus').textContent += `\nSOL Balance: ${solBalance.toFixed(4)} SOL`;
-
+    alert(`Connected SOL Wallet: ${wallet.publicKey.toString()}\nBalance: ${(balance/solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`);
   } catch (error) {
     console.error('SOL Connect Error:', error);
-    document.getElementById('solStatus').innerHTML = `<span class="text-red-400">✗</span> SOL Error: ${error.message}`;
+    alert('SOL Connection Error: ' + error.message);
   }
-}
+};
 
-// Send CRO
-async function sendCRO(amount, recipient) {
-  if (!croWallet) throw new Error('Connect CRO wallet first.');
-  const signer = croWallet.getSigner();
-  const tx = await signer.sendTransaction({ to: recipient, value: ethers.utils.parseEther(amount.toString()) });
-  return tx.hash;
-}
-
-// Send SOL
-async function sendSOL(amount, recipient) {
-  if (!solWallet || !solWallet.publicKey) throw new Error('Connect SOL wallet first.');
-
-  const transaction = new solanaWeb3.Transaction().add(
-    solanaWeb3.SystemProgram.transfer({
-      fromPubkey: solWallet.publicKey,
-      toPubkey: new solanaWeb3.PublicKey(recipient),
-      lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
-    })
-  );
-
-  const { blockhash } = await solConnection.getLatestBlockhash();
-  transaction.recentBlockhash = blockhash;
-  transaction.feePayer = solWallet.publicKey;
-
-  const signed = await solWallet.signTransaction(transaction);
-  const signature = await solConnection.sendRawTransaction(signed.serialize());
-  await solConnection.confirmTransaction(signature);
-
-  return signature;
-}
-
-// Handle Roast Submit
-async function handleSubmit() {
+// --- Submit Roast ---
+window.handleSubmit = async function() {
   const target = document.getElementById('targetName').value.trim();
   const token = document.getElementById('tokenChoice').value;
-  const statusDiv = document.getElementById('txStatus');
-
   if (!target.startsWith('@')) {
-    alert('Enter valid @target.');
+    alert('Enter a valid @target.');
     return;
   }
-
-  statusDiv.classList.remove('hidden');
-  statusDiv.className = 'mt-6 p-4 neon-border text-center text-lg';
 
   try {
     let txHash;
     if (token === 'CRO') {
-      txHash = await sendCRO(CRO_AMOUNT, CRO_RECIPIENT);
+      const signer = croWallet.getSigner();
+      const tx = await signer.sendTransaction({ to: CRO_RECIPIENT, value: ethers.utils.parseEther(CRO_AMOUNT) });
+      txHash = tx.hash;
     } else {
-      txHash = await sendSOL(parseFloat(SOL_AMOUNT), SOL_RECIPIENT);
+      const transaction = new solanaWeb3.Transaction().add(
+        solanaWeb3.SystemProgram.transfer({
+          fromPubkey: solWallet.publicKey,
+          toPubkey: new solanaWeb3.PublicKey(SOL_RECIPIENT),
+          lamports: parseFloat(SOL_AMOUNT) * solanaWeb3.LAMPORTS_PER_SOL
+        })
+      );
+      const { blockhash } = await solConnection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = solWallet.publicKey;
+      const signed = await solWallet.signTransaction(transaction);
+      txHash = await solConnection.sendRawTransaction(signed.serialize());
+      await solConnection.confirmTransaction(txHash);
     }
 
-    statusDiv.innerHTML = `<div class="text-green-400">Transaction successful!</div><div class="text-sm break-all">${txHash}</div>`;
-    await saveRoast(target, token, txHash);
+    await addDoc(collection(db, "roasts"), { target, chain: token, txHash, timestamp: Date.now(), likes: 0 });
+    alert('Roast Submitted Successfully!');
+    updateRoastList();
 
   } catch (error) {
-    statusDiv.innerHTML = `<div class="text-red-400">Transaction failed: ${error.message}</div>`;
+    console.error('Submit Error:', error);
+    alert('Roast Submit Error: ' + error.message);
   }
-}
+};
 
-// Save Roast to Firebase
-async function saveRoast(target, chain, txHash) {
-  await addDoc(collection(db, "roasts"), {
-    target,
-    chain,
-    txHash,
-    timestamp: Date.now(),
-    likes: 0
-  });
-  updateRoastList();
-}
-
-function showSharePopup(target) {
-  const cro = document.getElementById('croPool').textContent.trim();
-  const sol = document.getElementById('solPool').textContent.trim();
-
-  // Create the popup
-  const popup = document.createElement('div');
-  popup.id = 'sharePopup';
-  popup.className = 'fixed inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center z-50 px-6 text-center';
-
-  popup.innerHTML = `
-    <div class="bg-[#111] p-8 rounded-lg neon-border max-w-sm w-full">
-      <h2 class="text-2xl neon-text font-bold mb-4">Roast Submitted!</h2>
-      <p class="text-white mb-4">You just roasted <span class="text-pink-400">${target}</span>!</p>
-      <p class="text-gray-400 mb-6">Current Prize Pool: <br><span class="text-pink-400">${cro} CRO</span> + <span class="text-pink-400">${sol} SOL</span></p>
-      <button onclick="shareRoast('${target}', '${cro}', '${sol}')" class="wallet-button mb-4">Share on 𝕏</button>
-      <button onclick="closeSharePopup()" class="wallet-button">Close</button>
-    </div>
-  `;
-
-  document.body.appendChild(popup);
-}
-
-function closeSharePopup() {
-  const popup = document.getElementById('sharePopup');
-  if (popup) popup.remove();
-}
-
-function shareRoast(target, cro, sol) {
-  const text = `I just submitted ${target} to get ROASTED.  
-Prize pot is already ${cro} CRO + ${sol} SOL.  
-Vote now — or be bold and submit your own roast.  
-Biggest savage wins the whole pot.  
-Think you're fireproof?  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`;
-
-  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-  window.open(url, '_blank');
-}
-
-// Update Roasted List
+// --- Update Roast Board ---
 async function updateRoastList() {
   const q = query(collection(db, "roasts"), orderBy("timestamp", "desc"));
   const snapshot = await getDocs(q);
-
   const list = document.getElementById('roastList');
   list.innerHTML = "";
 
@@ -612,27 +297,73 @@ async function updateRoastList() {
       <div class="p-4 neon-border rounded space-y-2">
         <div class="font-bold text-xl">${data.target}</div>
         <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
-      </div>`;
+      </div>
+    `;
   });
 }
 
-// Portal Entry with smooth animation
-function enterPortal() {
+// --- Floating Prize Pool ---
+function floatingPrizePool() {
+  const bar = document.createElement('div');
+  bar.innerHTML = `
+    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 text-pink-400 font-bold px-6 py-2 rounded-full shadow-lg z-50 text-sm">
+      Prize Pool: <span id="liveCroPool">Loading...</span> CRO + <span id="liveSolPool">Loading...</span> SOL
+    </div>`;
+  document.body.appendChild(bar);
+}
+
+// --- Update Prize Pool ---
+async function updateFloatingPrizePool() {
+  try {
+    const croProvider = new ethers.providers.JsonRpcProvider('https://evm.cronos.org');
+    const croBalance = await croProvider.getBalance(CRO_RECIPIENT);
+    document.getElementById('liveCroPool').textContent = parseFloat(ethers.utils.formatEther(croBalance)).toFixed(2);
+
+    const solConn = new solanaWeb3.Connection(SOLANA_ENDPOINT);
+    const solBalance = await solConn.getBalance(new solanaWeb3.PublicKey(SOL_RECIPIENT));
+    document.getElementById('liveSolPool').textContent = (solBalance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(3);
+  } catch (err) {
+    console.error('Prize Pool Fetch Error:', err);
+  }
+}
+
+// --- Auto Init ---
+window.addEventListener('load', () => {
+  floatingPrizePool();
+  updateFloatingPrizePool();
+  updateRoastList();
+  setInterval(updateFloatingPrizePool, 30000);
+});
+</script>
+
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+  authDomain: "y2kroast-512ee.firebaseapp.com",
+  projectId: "y2kroast-512ee",
+  storageBucket: "y2kroast-512ee.appspot.com",
+  messagingSenderId: "602588659855",
+  appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// --- Portal Enter Function ---
+window.enterPortal = function () {
   const overlay = document.getElementById('enterOverlay');
   overlay.style.transition = "opacity 1s ease, transform 1s ease";
   overlay.style.opacity = 0;
   overlay.style.transform = "scale(1.1)";
-  
   setTimeout(() => {
-    overlay.style.display = "none";
-    document.getElementById('portal').scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
-    });
+    overlay.remove();
   }, 1000);
-}
+};
 
-// Enhanced Cursor Glow with touch support
+// --- Enhanced Cursor Glow ---
 const cursor = document.getElementById('cursorGlow');
 if (matchMedia('(pointer:fine)').matches) {
   window.addEventListener('mousemove', e => {
@@ -640,163 +371,173 @@ if (matchMedia('(pointer:fine)').matches) {
     cursor.style.top = e.pageY + 'px';
     cursor.classList.remove('hidden');
   });
-  
   window.addEventListener('mouseout', () => {
     cursor.classList.add('hidden');
   });
 }
 
-  
-  async function updatePrizePool() {
-  try {
-    // Connect to Cronos
-    const croProvider = new ethers.providers.JsonRpcProvider('https://evm.cronos.org');
-    const croBalance = await croProvider.getBalance('0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100');
-    const croAmount = ethers.utils.formatEther(croBalance);
-    document.getElementById('croPool').textContent = parseFloat(croAmount).toFixed(2);
+// --- Wallet Connect Settings ---
+const CRONOS_MAINNET = {
+  chainId: '0x19',
+  chainName: 'Cronos Mainnet',
+  nativeCurrency: { name: 'CRO', symbol: 'CRO', decimals: 18 },
+  rpcUrls: ['https://evm.cronos.org'],
+  blockExplorerUrls: ['https://cronoscan.com/']
+};
+const SOLANA_ENDPOINT = "https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0";
 
-    // Connect to Solana
-    const solConnection = new solanaWeb3.Connection('https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0');
-    const solPublicKey = new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq');
-    const solBalance = await solConnection.getBalance(solPublicKey);
-    const solAmount = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
-    document.getElementById('solPool').textContent = solAmount.toFixed(3);
-    
-  } catch (error) {
-    console.error('Prize Pool Error:', error);
-    document.getElementById('croPool').textContent = "Error";
-    document.getElementById('solPool').textContent = "Error";
-  }
+const CRO_RECIPIENT = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+const SOL_RECIPIENT = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
+const CRO_AMOUNT = "60";
+const SOL_AMOUNT = "0.032";
+
+let croWallet = null;
+let solWallet = null;
+let solConnection = null;
+
+function initializeSolana() {
+  solConnection = new solanaWeb3.Connection(SOLANA_ENDPOINT);
 }
 
-  <!-- VOTING SYSTEM START -->
+function getSolanaWallet() {
+  if (window.phantom?.solana) return window.phantom.solana;
+  if (window.solflare?.solana) return window.solflare.solana;
+  if (window.backpack?.solana) return window.backpack.solana;
+  return null;
+}
 
-<script>
-let voterWallet = null;
-
-// Wallet Connect for Voting
-async function connectForVoting() {
-  if (window.ethereum) {
+// --- Connect CRO ---
+window.connectCRO = async function() {
+  try {
+    if (!window.ethereum) throw new Error('Install MetaMask or DeFi Wallet.');
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
+
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: CRONOS_MAINNET.chainId }],
+    });
+
+    croWallet = provider;
     const signer = provider.getSigner();
-    voterWallet = await signer.getAddress();
-  } else {
-    alert("Install MetaMask to vote!");
+    const address = await signer.getAddress();
+    const balance = await provider.getBalance(address);
+
+    alert(`Connected CRO Wallet: ${address}\nBalance: ${ethers.utils.formatEther(balance).slice(0,6)} CRO`);
+  } catch (error) {
+    console.error('CRO Connect Error:', error);
+    alert('CRO Connection Error: ' + error.message);
   }
-}
+};
 
-// Save Vote to Firebase
-async function saveVote(roastId) {
-  if (!voterWallet) {
-    await connectForVoting();
+// --- Connect SOL ---
+window.connectSOL = async function() {
+  try {
+    if (!solConnection) initializeSolana();
+    const wallet = getSolanaWallet();
+    if (!wallet) throw new Error('Install Phantom, Solflare, or Backpack wallet.');
+
+    await wallet.connect();
+    solWallet = wallet;
+    const balance = await solConnection.getBalance(wallet.publicKey);
+    alert(`Connected SOL Wallet: ${wallet.publicKey.toString()}\nBalance: ${(balance/solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`);
+  } catch (error) {
+    console.error('SOL Connect Error:', error);
+    alert('SOL Connection Error: ' + error.message);
   }
+};
 
-  const votesRef = collection(db, "votes");
-  const roastRef = collection(db, "roasts");
-  const now = Date.now();
-
-  // Check if already voted
-  const votesSnapshot = await getDocs(query(votesRef, orderBy("timestamp", "desc")));
-  let alreadyVoted = false;
-
-  votesSnapshot.forEach(doc => {
-    const data = doc.data();
-    if (data.voter === voterWallet && data.roastId === roastId && now - data.timestamp < 86400000) {
-      alreadyVoted = true;
-    }
-  });
-
-  if (alreadyVoted) {
-    alert("You already voted for this roast in the last 24 hours.");
+// --- Submit Roast ---
+window.handleSubmit = async function() {
+  const target = document.getElementById('targetName').value.trim();
+  const token = document.getElementById('tokenChoice').value;
+  if (!target.startsWith('@')) {
+    alert('Enter a valid @target.');
     return;
   }
 
-  // Save the vote
-  await addDoc(votesRef, {
-    voter: voterWallet,
-    roastId: roastId,
-    timestamp: now
-  });
-
-  // Increment likes
-  const allRoasts = await getDocs(roastRef);
-  allRoasts.forEach(async roastDoc => {
-    if (roastDoc.id === roastId) {
-      const data = roastDoc.data();
-      await addDoc(collection(db, "roasts"), {
-        target: data.target,
-        chain: data.chain,
-        txHash: data.txHash,
-        timestamp: data.timestamp,
-        likes: (data.likes || 0) + 1
-      });
+  try {
+    let txHash;
+    if (token === 'CRO') {
+      const signer = croWallet.getSigner();
+      const tx = await signer.sendTransaction({ to: CRO_RECIPIENT, value: ethers.utils.parseEther(CRO_AMOUNT) });
+      txHash = tx.hash;
+    } else {
+      const transaction = new solanaWeb3.Transaction().add(
+        solanaWeb3.SystemProgram.transfer({
+          fromPubkey: solWallet.publicKey,
+          toPubkey: new solanaWeb3.PublicKey(SOL_RECIPIENT),
+          lamports: parseFloat(SOL_AMOUNT) * solanaWeb3.LAMPORTS_PER_SOL
+        })
+      );
+      const { blockhash } = await solConnection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = solWallet.publicKey;
+      const signed = await solWallet.signTransaction(transaction);
+      txHash = await solConnection.sendRawTransaction(signed.serialize());
+      await solConnection.confirmTransaction(txHash);
     }
-  });
 
-  updateRoastList();
-}
+    await addDoc(collection(db, "roasts"), { target, chain: token, txHash, timestamp: Date.now(), likes: 0 });
+    alert('Roast Submitted Successfully!');
+    updateRoastList();
 
-// Update Roast List with Voting Buttons
+  } catch (error) {
+    console.error('Submit Error:', error);
+    alert('Roast Submit Error: ' + error.message);
+  }
+};
+
+// --- Update Roast Board ---
 async function updateRoastList() {
-  const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
+  const q = query(collection(db, "roasts"), orderBy("timestamp", "desc"));
   const snapshot = await getDocs(q);
-
   const list = document.getElementById('roastList');
   list.innerHTML = "";
 
   snapshot.forEach(doc => {
     const data = doc.data();
-    const roastId = doc.id;
     list.innerHTML += `
       <div class="p-4 neon-border rounded space-y-2">
         <div class="font-bold text-xl">${data.target}</div>
         <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
-        <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
-          🔥 Fire Vote (${data.likes || 0})
-        </button>
-      </div>`;
+      </div>
+    `;
   });
 }
 
-// Floating Prize Pool Bar
+// --- Floating Prize Pool ---
 function floatingPrizePool() {
   const bar = document.createElement('div');
   bar.innerHTML = `
-    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 backdrop-blur-lg text-pink-400 font-bold px-6 py-2 rounded-full shadow-lg text-sm z-50">
+    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 text-pink-400 font-bold px-6 py-2 rounded-full shadow-lg z-50 text-sm">
       Prize Pool: <span id="liveCroPool">Loading...</span> CRO + <span id="liveSolPool">Loading...</span> SOL
-    </div>
-  `;
+    </div>`;
   document.body.appendChild(bar);
 }
 
-// Update Live Floating Pools
+// --- Update Prize Pool ---
 async function updateFloatingPrizePool() {
   try {
     const croProvider = new ethers.providers.JsonRpcProvider('https://evm.cronos.org');
-    const croBalance = await croProvider.getBalance('0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100');
+    const croBalance = await croProvider.getBalance(CRO_RECIPIENT);
     document.getElementById('liveCroPool').textContent = parseFloat(ethers.utils.formatEther(croBalance)).toFixed(2);
 
-    const solConnection = new solanaWeb3.Connection('https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0');
-    const solPublicKey = new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq');
-    const solBalance = await solConnection.getBalance(solPublicKey);
+    const solConn = new solanaWeb3.Connection(SOLANA_ENDPOINT);
+    const solBalance = await solConn.getBalance(new solanaWeb3.PublicKey(SOL_RECIPIENT));
     document.getElementById('liveSolPool').textContent = (solBalance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(3);
   } catch (err) {
-    console.error('Floating pool update error:', err);
+    console.error('Prize Pool Fetch Error:', err);
   }
 }
 
-// Initialize after Load
+// --- Auto Init ---
 window.addEventListener('load', () => {
   floatingPrizePool();
   updateFloatingPrizePool();
+  updateRoastList();
   setInterval(updateFloatingPrizePool, 30000);
 });
-
 </script>
-
-<!-- VOTING SYSTEM END -->
-  
 </body>
 </html>
-
