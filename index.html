@@ -16,8 +16,25 @@
   <script src="https://bundle.run/buffer@6.0.3"></script>
 
   <style>
-    html { background: #0a0a0a; }
-    body { background: #0a0a0a; color: #e2e8f0; font-family: 'Rubik', sans-serif; overflow-x: hidden; }
+    :root {
+      color-scheme: dark;
+    }
+    
+    html, 
+    body {
+      background-color: #0a0a0a !important;
+      color: #e2e8f0;
+      min-height: 100vh;
+      font-family: 'Rubik', sans-serif;
+      overflow-x: hidden;
+    }
+
+    #app {
+      background-color: #0a0a0a;
+      min-height: 100vh;
+    }
+
+    /* Rest of your styles remain the same */
     .grain-overlay { 
       pointer-events: none; 
       position: fixed; 
@@ -86,17 +103,6 @@
       text-align: center;
       padding: 0 1rem;
     }
-    @media (max-width: 640px) {
-      .welcome-text {
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-      }
-      header nav {
-        font-size: 0.875rem;
-        gap: 1rem;
-      }
-    }
-    
-    /* Improved Auto-scroll Animation */
     .scroll-container {
       display: flex;
       overflow: hidden;
@@ -112,10 +118,57 @@
     }
     @keyframes scroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-256px * 4)); } /* Adjust based on number of items */
+      100% { transform: translateX(calc(-256px * 4)); }
     }
     
-    /* Touch-friendly improvements */
+    /* Wallet section styles */
+    .wallet-section {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .wallet-button {
+      background: rgba(255, 0, 255, 0.1);
+      border: 1px solid #ff00ff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wallet-button:hover {
+      background: rgba(255, 0, 255, 0.2);
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    }
+    
+    .wallet-status {
+      color: #a0aec0;
+      font-size: 0.875rem;
+    }
+    
+    @media (max-width: 640px) {
+      .welcome-text {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+      }
+      header nav {
+        font-size: 0.875rem;
+        gap: 1rem;
+      }
+      .section-title {
+        font-size: 1.75rem !important;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      .wallet-status {
+        font-size: 0.875rem;
+      }
+    }
+    
     @media (hover: none) {
       .neon-border:active {
         box-shadow: 0 0 20px #ff00ff;
@@ -129,7 +182,8 @@
   </style>
 </head>
 
-<body class="relative">
+<body>
+<div id="app" class="relative">
 
 <!-- Grain Overlay -->
 <div class="grain-overlay"></div>
@@ -160,99 +214,123 @@
   <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl md:text-2xl hover:bg-pink-600 active:scale-98 transition">Enter Portal</button>
 </div>
 
-<!-- Portal Landing -->
-<div id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6">
-  <div class="flex justify-center mb-8">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K x ROAST Logo" class="w-32 h-32 neon-border rounded-full floating"/>
+<!-- Main Content -->
+<main class="bg-[#0a0a0a]">
+
+  <!-- Portal Landing -->
+  <div id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6 bg-[#0a0a0a]">
+    <div class="flex justify-center mb-8">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K x ROAST Logo" class="w-32 h-32 neon-border rounded-full floating"/>
+    </div>
+    <h1 class="welcome-text neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
+    <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
+    <a href="#connect" class="px-8 py-4 neon-border text-white font-bold uppercase tracking-wide hover:bg-pink-600 active:scale-98 transition">Connect Wallets</a>
   </div>
-  <h1 class="welcome-text neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
-  <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
-  <a href="#connect" class="px-8 py-4 neon-border text-white font-bold uppercase tracking-wide hover:bg-pink-600 active:scale-98 transition">Connect Wallets</a>
-</div>
 
-<!-- NFT Showcase Section -->
-<section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
-  <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
-  <div class="scroll-container">
-    <div class="scroll-content">
-      <div class="nft-item w-64 mx-3">
-        <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-          <div class="mt-2 font-bold text-white">Eric Mode</div>
-        </a>
-      </div>
+  <!-- NFT Showcase Section -->
+  <section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
+    <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
+    <div class="scroll-container">
+      <div class="scroll-content">
+        <!-- NFT items remain the same -->
+        <div class="nft-item w-64 mx-3">
+          <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+            <div class="mt-2 font-bold text-white">Eric Mode</div>
+          </a>
+        </div>
 
-      <div class="nft-item w-64 mx-3">
-        <a href="https://cronoshadow.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-          <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-        </a>
-      </div>
+        <div class="nft-item w-64 mx-3">
+          <a href="https://cronoshadow.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+            <div class="mt-2 font-bold text-white">Cards of Cronos</div>
+          </a>
+        </div>
 
-      <div class="nft-item w-64 mx-3">
-        <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-          <div class="mt-2 font-bold text-white">DiamondHands</div>
-        </a>
-      </div>
+        <div class="nft-item w-64 mx-3">
+          <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+            <div class="mt-2 font-bold text-white">DiamondHands</div>
+          </a>
+        </div>
 
-      <div class="nft-item w-64 mx-3">
-        <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-          <div class="mt-2 font-bold text-white">Dojo Warriors</div>
-        </a>
-      </div>
-      
-      <!-- Duplicate items for seamless scrolling -->
-      <div class="nft-item w-64 mx-3">
-        <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-          <div class="mt-2 font-bold text-white">Eric Mode</div>
-        </a>
-      </div>
+        <div class="nft-item w-64 mx-3">
+          <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+            <div class="mt-2 font-bold text-white">Dojo Warriors</div>
+          </a>
+        </div>
+        
+        <!-- Duplicate items for seamless scrolling -->
+        <div class="nft-item w-64 mx-3">
+          <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+            <div class="mt-2 font-bold text-white">Eric Mode</div>
+          </a>
+        </div>
 
-      <div class="nft-item w-64 mx-3">
-        <a href="https://cronoshadow.nfts2.me/" target="_blank">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-          <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-        </a>
+        <div class="nft-item w-64 mx-3">
+          <a href="https://cronoshadow.nfts2.me/" target="_blank">
+            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
+            <div class="mt-2 font-bold text-white">Cards of Cronos</div>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Mint / Submit Roast Section -->
-<section id="mint" class="relative z-10 py-24 px-6 flex flex-col items-center bg-black text-center">
-  <h2 class="text-4xl md:text-6xl neon-text font-bold mb-8">🔥 Mint, Submit, Burn 🔥</h2>
+  <!-- Mint Section with Wallet Connect -->
+  <section id="mint" class="relative z-10 py-16 px-6 flex flex-col items-center bg-[#0a0a0a] text-center">
+    <!-- Wallet Connection Section -->
+    <div class="wallet-section w-full max-w-md mb-8">
+      <h3 class="text-2xl font-bold mb-4 text-white">Connect Wallets</h3>
+      <div class="space-y-4">
+        <div>
+          <button onclick="connectCRO()" class="wallet-button">Connect CRO Wallet</button>
+          <div id="croStatus" class="wallet-status">Not connected</div>
+        </div>
+        <div>
+          <button onclick="connectSOL()" class="wallet-button">Connect SOL Wallet</button>
+          <div id="solStatus" class="wallet-status">Not connected</div>
+        </div>
+        <div id="balanceStatus" class="wallet-status mt-4"></div>
+      </div>
+    </div>
 
-  <form id="roastForm" class="max-w-md w-full space-y-6">
-    <input type="text" id="targetName" placeholder="@TargetName" required 
-           class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
-    <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
-      <option value="CRO">Submit with CRO (60)</option>
-      <option value="SOL">Submit with SOL (0.032)</option>
-    </select>
-    <button type="button" onclick="handleSubmit()" 
-            class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 active:scale-98 transition">
-      Submit Roast
-    </button>
-  </form>
+    <!-- Roast Submission Section -->
+    <h2 class="section-title text-2xl md:text-3xl neon-text font-bold mb-6">Submit Your Roast</h2>
+    <form id="roastForm" class="max-w-md w-full space-y-4">
+      <input type="text" id="targetName" placeholder="@TargetName" required 
+             class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
+      <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
+        <option value="CRO">Submit with CRO (60)</option>
+        <option value="SOL">Submit with SOL (0.032)</option>
+      </select>
+      <button type="button" onclick="handleSubmit()" 
+              class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 active:scale-98 transition">
+        Submit Roast
+      </button>
+    </form>
 
-  <div id="txStatus" class="hidden mt-6 p-4 neon-border text-center text-lg"></div>
-  <div id="shareRoast" class="mt-6"></div>
-</section>
+    <div id="txStatus" class="hidden mt-6 p-4 neon-border text-center text-lg"></div>
+    <div id="shareRoast" class="mt-6"></div>
+  </section>
 
-<!-- Roasted Board Section -->
-<section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-[#111] text-center">
-  <h2 class="text-4xl md:text-6xl neon-text font-bold mb-6">ROASTED</h2>
-  <p class="text-gray-400 max-w-xl mb-6">The names that couldn't escape the fire...</p>
-  <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"></div>
-</section>
+  <!-- Roasted Board Section -->
+  <section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-[#111] text-center">
+    <h2 class="text-4xl md:text-6xl neon-text font-bold mb-6">ROASTED</h2>
+    <p class="text-gray-400 max-w-xl mb-6">The names that couldn't escape the fire...</p>
+    <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"></div>
+  </section>
+
+</main>
 
 <!-- Footer -->
-<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
+<footer class="relative z-10 py-10 bg-[#0a0a0a] text-center text-gray-500 text-sm">
   Built by chaos. Fueled by CRO and SOL supremacy.
 </footer>
+
+</div>
 
 <!-- FIREBASE SDK + FIRESTORE -->
 <script type="module">
