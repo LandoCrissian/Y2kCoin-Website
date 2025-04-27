@@ -598,17 +598,17 @@ function closeSharePopup() {
 }
 
 function shareRoast(target, cro, sol) {
-  const text = `I just roasted ${target}!  
-Prize pool: ${cro} CRO + ${sol} SOL.  
-Cast your vote — or get bold and submit your own.  
-Winner takes the pot.  
-Are you fireproof?  
+  const text = `I just submitted ${target} to get ROASTED.  
+Prize pot is already ${cro} CRO + ${sol} SOL.  
+Vote now — or be bold and submit your own roast.  
+Biggest savage wins the whole pot.  
+Think you're fireproof?  
 #Y2KxROAST #CryptoRoast  
-[y2kcoin.org]`;
+https://y2kcoin.org`;
 
   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
   window.open(url, '_blank');
-}  
+}
 
 // Update Roasted List
 async function updateRoastList() {
