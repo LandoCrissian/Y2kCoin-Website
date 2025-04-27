@@ -558,18 +558,6 @@ async function saveRoast(target, chain, txHash) {
   updateRoastList();
 }
 
-async function saveRoast(target, chain, txHash) {
-  await addDoc(collection(db, "roasts"), {
-    target,
-    chain,
-    txHash,
-    timestamp: Date.now(),
-    likes: 0
-  });
-  updateRoastList();
-  showSharePopup(target);
-}
-
 function showSharePopup(target) {
   const cro = document.getElementById('croPool').textContent.trim();
   const sol = document.getElementById('solPool').textContent.trim();
@@ -809,26 +797,6 @@ window.addEventListener('load', () => {
 
 <!-- VOTING SYSTEM END -->
   
-// Initialize
-window.addEventListener('load', () => {
-  initializeSolana();
-  updateRoastList();
-  updatePrizePool();
-  setInterval(updatePrizePool, 30000); // Refresh every 30 seconds
-  
-  // Add smooth scroll for all anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    });
-  });
-});
-</script>
-
 </body>
 </html>
 
