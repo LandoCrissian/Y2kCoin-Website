@@ -558,6 +558,58 @@ async function saveRoast(target, chain, txHash) {
   updateRoastList();
 }
 
+async function saveRoast(target, chain, txHash) {
+  await addDoc(collection(db, "roasts"), {
+    target,
+    chain,
+    txHash,
+    timestamp: Date.now(),
+    likes: 0
+  });
+  updateRoastList();
+  showSharePopup(target);
+}
+
+function showSharePopup(target) {
+  const cro = document.getElementById('croPool').textContent.trim();
+  const sol = document.getElementById('solPool').textContent.trim();
+
+  // Create the popup
+  const popup = document.createElement('div');
+  popup.id = 'sharePopup';
+  popup.className = 'fixed inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center z-50 px-6 text-center';
+
+  popup.innerHTML = `
+    <div class="bg-[#111] p-8 rounded-lg neon-border max-w-sm w-full">
+      <h2 class="text-2xl neon-text font-bold mb-4">Roast Submitted!</h2>
+      <p class="text-white mb-4">You just roasted <span class="text-pink-400">${target}</span>!</p>
+      <p class="text-gray-400 mb-6">Current Prize Pool: <br><span class="text-pink-400">${cro} CRO</span> + <span class="text-pink-400">${sol} SOL</span></p>
+      <button onclick="shareRoast('${target}', '${cro}', '${sol}')" class="wallet-button mb-4">Share on 𝕏</button>
+      <button onclick="closeSharePopup()" class="wallet-button">Close</button>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+}
+
+function closeSharePopup() {
+  const popup = document.getElementById('sharePopup');
+  if (popup) popup.remove();
+}
+
+function shareRoast(target, cro, sol) {
+  const text = `I just roasted ${target}!  
+Prize pool: ${cro} CRO + ${sol} SOL.  
+Cast your vote — or get bold and submit your own.  
+Winner takes the pot.  
+Are you fireproof?  
+#Y2KxROAST #CryptoRoast  
+[y2kcoin.org]`;
+
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+}  
+
 // Update Roasted List
 async function updateRoastList() {
   const q = query(collection(db, "roasts"), orderBy("timestamp", "desc"));
