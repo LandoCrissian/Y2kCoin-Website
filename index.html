@@ -588,20 +588,6 @@ if (matchMedia('(pointer:fine)').matches) {
   });
 }
 
-// Improved scroll handling
-let lastScrollPosition = 0;
-window.addEventListener('scroll', () => {
-  const currentScroll = window.pageYOffset;
-  const header = document.querySelector('header');
-  
-  if (currentScroll > lastScrollPosition) {
-    header.style.transform = 'translateY(-100%)';
-  } else {
-    header.style.transform = 'translateY(0)';
-  }
-  lastScrollPosition = currentScroll;
-}, { passive: true });
-
 // Initialize
 window.addEventListener('load', () => {
   initializeSolana();
