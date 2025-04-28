@@ -701,6 +701,19 @@ window.addEventListener('load', () => {
 <script>
 let voterWallet = null;
 
+// Detect if wallet already connected
+async function detectWallet() {
+  if (window.ethereum) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const accounts = await provider.listAccounts();
+    if (accounts.length > 0) {
+      const signer = provider.getSigner();
+      voterWallet = await signer.getAddress();
+      console.log("Detected connected wallet:", voterWallet);
+    }
+  }
+}
+
 // Wallet Connect for Voting
 async function connectForVoting() {
   if (window.ethereum) {
@@ -708,14 +721,23 @@ async function connectForVoting() {
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     voterWallet = await signer.getAddress();
+    console.log("Connected wallet for voting:", voterWallet);
+    return voterWallet;
   } else {
-    alert("Install MetaMask to vote!");
+    alert("Please install MetaMask or a Web3 wallet browser to vote!");
+    throw new Error("No Ethereum wallet detected.");
   }
 }
 
+// Save Vote
 async function saveVote(roastId) {
   if (!voterWallet) {
-    await connectForVoting();
+    try {
+      await connectForVoting();
+    } catch (error) {
+      console.error("Voting connection error:", error);
+      return;
+    }
   }
 
   const votesRef = window.collection(window.db, "votes");
@@ -755,6 +777,11 @@ async function saveVote(roastId) {
     setTimeout(updateRoastList, 500);
   }
 }
+
+// Detect wallet immediately when site loads
+window.addEventListener('load', () => {
+  detectWallet();
+});
 </script>
 
 <!-- VOTING SYSTEM END -->
