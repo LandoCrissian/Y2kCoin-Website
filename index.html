@@ -718,8 +718,8 @@ async function saveVote(roastId) {
     await connectForVoting();
   }
 
-  const votesRef = collection(db, "votes");
-  const roastDocRef = doc(db, "roasts", roastId);
+  const votesRef = window.collection(window.db, "votes");
+const roastDocRef = window.doc(window.db, "roasts", roastId);
   const now = Date.now();
 
   // Check if already voted
