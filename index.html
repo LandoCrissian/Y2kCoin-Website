@@ -755,24 +755,6 @@ async function saveVote(roastId) {
     const roastDocRef = window.doc(window.db, "roasts", roastId);
     const now = Date.now();
 
-    // Delete Roast (Admin Only)
-async function deleteRoast(roastId) {
-  if (!voterWallet || !ADMIN_WALLETS.includes(voterWallet.toLowerCase())) {
-    alert("Not authorized to delete.");
-    return;
-  }
-
-  try {
-    const roastDocRef = window.doc(window.db, "roasts", roastId);
-    await window.deleteDoc(roastDocRef);
-    alert("Roast deleted successfully.");
-    updateRoastList();
-  } catch (error) {
-    console.error("Delete error:", error);
-    alert(`Error deleting roast: ${error.message}`);
-  }
-}
-
     // Check if already voted
     const votesSnapshot = await window.getDocs(window.query(votesRef, window.orderBy("timestamp", "desc")));
     let alreadyVoted = false;
@@ -811,6 +793,24 @@ async function deleteRoast(roastId) {
   } catch (error) {
     console.error("Vote error:", error);
     alert(`Error: ${error.message}`);
+  }
+}
+
+  // Delete Roast (Admin Only)
+async function deleteRoast(roastId) {
+  if (!voterWallet || !ADMIN_WALLETS.includes(voterWallet.toLowerCase())) {
+    alert("Not authorized to delete.");
+    return;
+  }
+
+  try {
+    const roastDocRef = window.doc(window.db, "roasts", roastId);
+    await window.deleteDoc(roastDocRef);
+    alert("Roast deleted successfully.");
+    updateRoastList();
+  } catch (error) {
+    console.error("Delete error:", error);
+    alert(`Error deleting roast: ${error.message}`);
   }
 }
 </script>
