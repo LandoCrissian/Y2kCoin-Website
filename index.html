@@ -753,11 +753,9 @@ async function saveVote(roastId) {
     await updateDoc(roastDocRef, {
   likes: currentLikes + 1
 });
-
-// Add this line:
 setTimeout(updateRoastList, 500);
   }
-  }
+}
 
 // Floating Prize Pool Bar
 function floatingPrizePool() {
