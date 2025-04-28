@@ -370,7 +370,7 @@ header a:hover {
 <!-- FIREBASE SDK + FIRESTORE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, orderBy, updateDoc, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
   apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
@@ -751,34 +751,28 @@ async function saveVote(roastId) {
       return;
     }
 
-    const votesRef = window.collection(window.db, "votes");
-    const roastDocRef = window.doc(window.db, "roasts", roastId);
-    const now = Date.now();
-
-    // Check if already voted
-    const votesSnapshot = await window.getDocs(window.query(votesRef, window.orderBy("timestamp", "desc")));
-    let alreadyVoted = false;
-
-    votesSnapshot.forEach(docSnap => {
-      const data = docSnap.data();
-      if (data.voter === voterWallet && data.roastId === roastId && now - data.timestamp < 86400000) {
-        alreadyVoted = true;
-      }
-    });
-
-    if (alreadyVoted) {
+    // ✅ Check if already voted using localStorage
+    const lastVotedTime = localStorage.getItem(`voted-${roastId}`);
+    if (lastVotedTime && (Date.now() - parseInt(lastVotedTime)) < 86400000) {
       alert("You already voted for this roast in the last 24 hours.");
       return;
     }
 
-    // Save the vote
+    const votesRef = window.collection(window.db, "votes");
+    const roastDocRef = window.doc(window.db, "roasts", roastId);
+    const now = Date.now();
+
+    // ✅ Save the vote to Firebase
     await window.addDoc(votesRef, {
       voter: voterWallet,
       roastId: roastId,
       timestamp: now
     });
 
-    // Increment likes
+    // ✅ Save local timestamp to prevent re-voting for 24 hours
+    localStorage.setItem(`voted-${roastId}`, Date.now());
+
+    // ✅ Increment likes
     const roastSnap = await window.getDoc(roastDocRef);
     if (roastSnap.exists()) {
       const currentLikes = roastSnap.data().likes || 0;
