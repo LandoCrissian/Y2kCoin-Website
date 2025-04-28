@@ -608,13 +608,15 @@ https://y2kcoin.org`;
   window.open(url, '_blank');
 }
 
-// Update Roasted List
+// Update Roasted List with Top Roast Highlight
 async function updateRoastList() {
   const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
   const snapshot = await getDocs(q);
 
   const list = document.getElementById('roastList');
   list.innerHTML = "";
+
+  let isFirst = true;
 
   snapshot.forEach(doc => {
     const data = doc.data();
@@ -628,8 +630,9 @@ async function updateRoastList() {
         </button>`;
     }
 
-    list.innerHTML += `
-      <div class="p-4 neon-border rounded space-y-2">
+    const roastHTML = `
+      <div class="p-4 neon-border rounded space-y-2 ${isFirst ? 'border-yellow-400 border-4' : ''}">
+        ${isFirst ? `<div class="text-yellow-400 text-lg font-bold">🔥 Current Leader 🔥</div>` : ''}
         <div class="font-bold text-xl">${data.target}</div>
         <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
         <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
@@ -637,6 +640,10 @@ async function updateRoastList() {
         </button>
         ${adminDeleteButton}
       </div>`;
+
+    list.innerHTML += roastHTML;
+
+    isFirst = false; // Only the first roast (highest likes) gets the "leader" style
   });
 }
 // Portal Entry with smooth animation
