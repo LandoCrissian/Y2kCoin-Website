@@ -373,13 +373,13 @@ header a:hover {
   import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
-    authDomain: "y2kroast-512ee.firebaseapp.com",
-    projectId: "y2kroast-512ee",
-    storageBucket: "y2kroast-512ee.appspot.com",
-    messagingSenderId: "602588659855",
-    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
-  };
+  apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+  authDomain: "y2kroast-512ee.firebaseapp.com",
+  projectId: "y2kroast-512ee",
+  storageBucket: "y2kroast-512ee.appspot.com",
+  messagingSenderId: "602588659855",
+  appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+};
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -558,6 +558,18 @@ async function saveRoast(target, chain, txHash) {
   updateRoastList();
 }
 
+async function saveRoast(target, chain, txHash) {
+  await addDoc(collection(db, "roasts"), {
+    target,
+    chain,
+    txHash,
+    timestamp: Date.now(),
+    likes: 0
+  });
+  updateRoastList();
+  showSharePopup(target);
+}
+
 function showSharePopup(target) {
   const cro = document.getElementById('croPool').textContent.trim();
   const sol = document.getElementById('solPool').textContent.trim();
@@ -669,7 +681,9 @@ if (matchMedia('(pointer:fine)').matches) {
   }
 }
 
-  <script>
+  <!-- VOTING SYSTEM START -->
+
+<script>
 let voterWallet = null;
 
 // Wallet Connect for Voting
@@ -792,5 +806,28 @@ window.addEventListener('load', () => {
 });
 
 </script>
+
+<!-- VOTING SYSTEM END -->
+  
+// Initialize
+window.addEventListener('load', () => {
+  initializeSolana();
+  updateRoastList();
+  updatePrizePool();
+  setInterval(updatePrizePool, 30000); // Refresh every 30 seconds
+  
+  // Add smooth scroll for all anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+  });
+});
+</script>
+
 </body>
 </html>
