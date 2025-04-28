@@ -604,7 +604,7 @@ https://y2kcoin.org`;
 
 // Update Roasted List
 async function updateRoastList() {
-  const q = query(collection(db, "roasts"), orderBy("timestamp", "desc"));
+  const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
   const snapshot = await getDocs(q);
 
   const list = document.getElementById('roastList');
@@ -612,14 +612,17 @@ async function updateRoastList() {
 
   snapshot.forEach(doc => {
     const data = doc.data();
+    const roastId = doc.id;
     list.innerHTML += `
       <div class="p-4 neon-border rounded space-y-2">
         <div class="font-bold text-xl">${data.target}</div>
         <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
+        <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
+          🔥 Fire Vote (${data.likes || 0})
+        </button>
       </div>`;
   });
 }
-
 // Portal Entry with smooth animation
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
@@ -748,34 +751,13 @@ async function saveVote(roastId) {
   if (roastSnap.exists()) {
     const currentLikes = roastSnap.data().likes || 0;
     await updateDoc(roastDocRef, {
-      likes: currentLikes + 1
-    });
+  likes: currentLikes + 1
+});
+
+// Add this line:
+setTimeout(updateRoastList, 500);
+
   }
-
-  updateRoastList();
-}
-
-  // Update Roast List with Voting Buttons
-async function updateRoastList() {
-  const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
-  const snapshot = await getDocs(q);
-
-  const list = document.getElementById('roastList');
-  list.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    const roastId = doc.id;
-    list.innerHTML += `
-      <div class="p-4 neon-border rounded space-y-2">
-        <div class="font-bold text-xl">${data.target}</div>
-        <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
-        <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
-          🔥 Fire Vote (${data.likes || 0})
-        </button>
-      </div>`;
-  });
-}
 
 // Floating Prize Pool Bar
 function floatingPrizePool() {
