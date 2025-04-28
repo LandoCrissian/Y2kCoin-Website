@@ -715,8 +715,6 @@ async function connectForVoting() {
   }
 }
 
-import { collection, doc, addDoc, getDocs, query, orderBy, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
 async function saveVote(roastId) {
   if (!voterWallet) {
     await connectForVoting();
@@ -748,17 +746,6 @@ async function saveVote(roastId) {
     roastId: roastId,
     timestamp: now
   });
-
-  // Update the roast's likes
-  const roastSnap = await getDoc(roastDocRef);
-  if (roastSnap.exists()) {
-    const currentLikes = roastSnap.data().likes || 0;
-    await updateDoc(roastDocRef, {
-      likes: currentLikes + 1
-    });
-    setTimeout(updateRoastList, 500);
-  }
-}
 
   // Increment likes on the roast
   const roastSnap = await getDoc(roastDocRef);
