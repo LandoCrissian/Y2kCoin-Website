@@ -189,6 +189,19 @@ header a:hover {
         padding: 1rem !important;
       }
     }
+   /* Gold pulse for Current Leader */
+  .pulse-leader {
+  animation: pulseGold 2s infinite;
+  border: 2px solid gold;
+  box-shadow: 0 0 10px gold, 0 0 20px gold;
+  border-radius: 8px;
+}
+
+@keyframes pulseGold {
+  0% { box-shadow: 0 0 5px gold, 0 0 10px gold; }
+  50% { box-shadow: 0 0 20px gold, 0 0 40px gold; }
+  100% { box-shadow: 0 0 5px gold, 0 0 10px gold; }
+} 
   </style>
 </head>
 
