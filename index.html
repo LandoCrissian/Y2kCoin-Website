@@ -719,11 +719,11 @@ async function saveVote(roastId) {
   }
 
   const votesRef = window.collection(window.db, "votes");
-const roastDocRef = window.doc(window.db, "roasts", roastId);
+  const roastDocRef = window.doc(window.db, "roasts", roastId);
   const now = Date.now();
 
   // Check if already voted
-  const votesSnapshot = await getDocs(query(votesRef, orderBy("timestamp", "desc")));
+  const votesSnapshot = await window.getDocs(window.query(votesRef, window.orderBy("timestamp", "desc")));
   let alreadyVoted = false;
 
   votesSnapshot.forEach(docSnap => {
@@ -739,17 +739,17 @@ const roastDocRef = window.doc(window.db, "roasts", roastId);
   }
 
   // Save the vote
-  await addDoc(votesRef, {
+  await window.addDoc(votesRef, {
     voter: voterWallet,
     roastId: roastId,
     timestamp: now
   });
 
   // Increment likes on the roast
-  const roastSnap = await getDoc(roastDocRef);
+  const roastSnap = await window.getDoc(roastDocRef);
   if (roastSnap.exists()) {
     const currentLikes = roastSnap.data().likes || 0;
-    await updateDoc(roastDocRef, {
+    await window.updateDoc(roastDocRef, {
       likes: currentLikes + 1
     });
     setTimeout(updateRoastList, 500);
