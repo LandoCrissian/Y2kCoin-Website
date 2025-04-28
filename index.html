@@ -698,6 +698,8 @@ window.addEventListener('load', () => {
 
   <!-- VOTING SYSTEM START -->
 
+<!-- VOTING SYSTEM START -->
+
 <script>
 let voterWallet = null;
 
@@ -719,12 +721,12 @@ async function saveVote(roastId) {
     await connectForVoting();
   }
 
-  const votesRef = collection(db, "votes");
-  const roastDocRef = doc(db, "roasts", roastId);
+  const votesRef = db.collection("votes");
+  const roastDocRef = db.collection("roasts").doc(roastId);
   const now = Date.now();
 
   // Check if already voted
-  const votesSnapshot = await getDocs(query(votesRef, orderBy("timestamp", "desc")));
+  const votesSnapshot = await votesRef.orderBy("timestamp", "desc").get();
   let alreadyVoted = false;
 
   votesSnapshot.forEach(doc => {
@@ -740,20 +742,20 @@ async function saveVote(roastId) {
   }
 
   // Save the vote
-  await addDoc(votesRef, {
+  await votesRef.add({
     voter: voterWallet,
     roastId: roastId,
     timestamp: now
   });
 
-  // Correct way: directly get roast, increment likes
-  const roastSnap = await getDoc(roastDocRef);
-  if (roastSnap.exists()) {
+  // Update the roast's likes
+  const roastSnap = await roastDocRef.get();
+  if (roastSnap.exists) {
     const currentLikes = roastSnap.data().likes || 0;
-    await updateDoc(roastDocRef, {
-  likes: currentLikes + 1
-});
-setTimeout(updateRoastList, 500);
+    await roastDocRef.update({
+      likes: currentLikes + 1
+    });
+    setTimeout(updateRoastList, 500);
   }
 }
 
@@ -793,6 +795,5 @@ window.addEventListener('load', () => {
 </script>
 
 <!-- VOTING SYSTEM END -->
-
 </body>
 </html>
