@@ -631,7 +631,7 @@ async function updateRoastList() {
     }
 
     const roastHTML = `
-      <div class="p-4 neon-border rounded space-y-2 ${isFirst ? 'border-yellow-400 border-4' : ''}">
+      <div class="p-4 neon-border rounded space-y-2 ${isFirst ? 'pulse-leader' : ''}">
         ${isFirst ? `<div class="text-yellow-400 text-lg font-bold">🔥 Current Leader 🔥</div>` : ''}
         <div class="font-bold text-xl">${data.target}</div>
         <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
