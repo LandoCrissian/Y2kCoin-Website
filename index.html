@@ -370,7 +370,7 @@ header a:hover {
 <!-- FIREBASE SDK + FIRESTORE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, orderBy, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
   apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
@@ -752,21 +752,7 @@ async function saveVote(roastId) {
   updateRoastList();
 }
 
-  // Increment likes on the correct roast
-  const roastSnapshot = await getDocs(query(collection(db, "roasts")));
-  roastSnapshot.forEach(async r => {
-    if (r.id === roastId) {
-      const data = r.data();
-      await updateDoc(roastDocRef, {
-        likes: (data.likes || 0) + 1
-      });
-    }
-  });
-
-  updateRoastList();
-}
-
-// Update Roast List with Voting Buttons
+  // Update Roast List with Voting Buttons
 async function updateRoastList() {
   const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
   const snapshot = await getDocs(q);
