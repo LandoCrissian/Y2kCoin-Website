@@ -556,17 +556,6 @@ async function saveRoast(target, chain, txHash) {
     likes: 0
   });
   updateRoastList();
-}
-
-async function saveRoast(target, chain, txHash) {
-  await addDoc(collection(db, "roasts"), {
-    target,
-    chain,
-    txHash,
-    timestamp: Date.now(),
-    likes: 0
-  });
-  updateRoastList();
   showSharePopup(target);
 }
 
@@ -750,6 +739,18 @@ async function saveVote(roastId) {
     roastId: roastId,
     timestamp: now
   });
+
+  // Correct way: directly get roast, increment likes
+  const roastSnap = await getDoc(roastDocRef);
+  if (roastSnap.exists()) {
+    const currentLikes = roastSnap.data().likes || 0;
+    await updateDoc(roastDocRef, {
+      likes: currentLikes + 1
+    });
+  }
+
+  updateRoastList();
+}
 
   // Increment likes on the correct roast
   const roastSnapshot = await getDocs(query(collection(db, "roasts")));
