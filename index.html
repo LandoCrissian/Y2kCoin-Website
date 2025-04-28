@@ -698,8 +698,6 @@ window.addEventListener('load', () => {
 
   <!-- VOTING SYSTEM START -->
 
-<!-- VOTING SYSTEM START -->
-
 <script>
 let voterWallet = null;
 
@@ -728,8 +726,8 @@ async function saveVote(roastId) {
   const votesSnapshot = await getDocs(query(votesRef, orderBy("timestamp", "desc")));
   let alreadyVoted = false;
 
-  votesSnapshot.forEach(doc => {
-    const data = doc.data();
+  votesSnapshot.forEach(docSnap => {
+    const data = docSnap.data();
     if (data.voter === voterWallet && data.roastId === roastId && now - data.timestamp < 86400000) {
       alreadyVoted = true;
     }
@@ -757,40 +755,6 @@ async function saveVote(roastId) {
     setTimeout(updateRoastList, 500);
   }
 }
-
-// Floating Prize Pool Bar
-function floatingPrizePool() {
-  const bar = document.createElement('div');
-  bar.innerHTML = `
-    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 backdrop-blur-lg text-pink-400 font-bold px-6 py-2 rounded-full shadow-lg text-sm z-50">
-      Prize Pool: <span id="liveCroPool">Loading...</span> CRO + <span id="liveSolPool">Loading...</span> SOL
-    </div>
-  `;
-  document.body.appendChild(bar);
-}
-
-// Update Live Floating Pools
-async function updateFloatingPrizePool() {
-  try {
-    const croProvider = new ethers.providers.JsonRpcProvider('https://evm.cronos.org');
-    const croBalance = await croProvider.getBalance('0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100');
-    document.getElementById('liveCroPool').textContent = parseFloat(ethers.utils.formatEther(croBalance)).toFixed(2);
-
-    const solConnection = new solanaWeb3.Connection('https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0');
-    const solPublicKey = new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq');
-    const solBalance = await solConnection.getBalance(solPublicKey);
-    document.getElementById('liveSolPool').textContent = (solBalance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(3);
-  } catch (err) {
-    console.error('Floating pool update error:', err);
-  }
-}
-
-// Initialize after Load
-window.addEventListener('load', () => {
-  floatingPrizePool();
-  updateFloatingPrizePool();
-  setInterval(updateFloatingPrizePool, 30000);
-});
 </script>
 
 <!-- VOTING SYSTEM END -->
