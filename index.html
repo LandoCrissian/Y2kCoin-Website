@@ -393,6 +393,7 @@ header a:hover {
   window.updateDoc = updateDoc;
   window.doc = doc;
   window.getDoc = getDoc;
+  window.deleteDoc = deleteDoc;
 </script>
 
 <!-- MAIN FUNCTIONALITY -->
@@ -414,6 +415,10 @@ const SOL_AMOUNT = "0.032";
 let croWallet = null;
 let solWallet = null;
 let solConnection = null;
+
+const ADMIN_WALLETS = [
+  "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase()
+];
 
 // Initialize Solana
 function initializeSolana() {
@@ -613,6 +618,15 @@ async function updateRoastList() {
   snapshot.forEach(doc => {
     const data = doc.data();
     const roastId = doc.id;
+
+    let adminDeleteButton = "";
+    if (voterWallet && ADMIN_WALLETS.includes(voterWallet.toLowerCase())) {
+      adminDeleteButton = `
+        <button onclick="deleteRoast('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-red-600 text-white font-bold">
+          ❌ Delete
+        </button>`;
+    }
+
     list.innerHTML += `
       <div class="p-4 neon-border rounded space-y-2">
         <div class="font-bold text-xl">${data.target}</div>
@@ -620,6 +634,7 @@ async function updateRoastList() {
         <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
           🔥 Fire Vote (${data.likes || 0})
         </button>
+        ${adminDeleteButton}
       </div>`;
   });
 }
@@ -784,3 +799,4 @@ async function saveVote(roastId) {
 <!-- VOTING SYSTEM END -->
 </body>
 </html>
+
