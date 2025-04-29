@@ -738,6 +738,33 @@ https://y2kcoin.org`
   window.open(url, '_blank');
 }
 
+  // New Share Again Function for Leaderboard Reposting
+function generateShareAgainMessage(target, cro, sol) {
+  const messages = [
+    `🔥 Just roasted ${target} on Y2K x ROAST!\nCome vote for me — and roast someone yourself!\n${cro} CRO + ${sol} SOL up for grabs!\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `I flamed ${target} so hard they’re still smoldering.\nVote now to crown the top savage!\nPot: ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `BURN NOTICE: ${target} got roasted.\nVote to keep the fire burning!\nWinner bags the CRO + SOL prize pool.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `Cooked ${target} medium rare.\nVote if you agree — or roast someone even harder.\nPrize pot: ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `Vote for my roast of ${target} and help me win the CRO + SOL prize pot!\n🔥 Submit your own roast while you’re at it!\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `Can't stand the heat? ${target} couldn’t either.\nVote for my roast and get yours submitted!\nPrize pool is now ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `🔥 Hotter than a SOL summer, spicier than CRO gas fees — roasted ${target} good.\nVote for me to win!\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `Tagged ${target} and threw ‘em in the flames.\nVote to make it official!\nRoast entries still open. Bigger pot, bigger flex.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `Dropped 🔥 on ${target} at Y2K x ROAST.\nVote and join the savage games!\nMassive prize pot waiting.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
+    `Lit ${target} up like a holiday roast.\nVote for the fire, join the chaos.\nPot: ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`
+  ];
+
+  const randomIndex = Math.floor(Math.random() * messages.length);
+  return messages[randomIndex];
+}
+
+function shareRoastAgain(target) {
+  const cro = document.getElementById('croPool').textContent.trim();
+  const sol = document.getElementById('solPool').textContent.trim();
+  const message = generateShareAgainMessage(target, cro, sol);
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
 // Update Roasted List with Top Roast Highlight
 async function updateRoastList() {
   const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
@@ -761,15 +788,18 @@ async function updateRoastList() {
     }
 
     const roastHTML = `
-      <div class="p-4 ${isFirst ? 'pulse-leader neon-border' : 'neon-border'} rounded space-y-2">
-        ${isFirst ? `<div class="text-yellow-400 text-lg font-bold">🔥 Current Leader 🔥</div>` : ''}
-        <div class="font-bold text-xl">${data.target}</div>
-        <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
-        <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
-          🔥 Fire Vote (${data.likes || 0})
-        </button>
-        ${adminDeleteButton}
-      </div>`;
+  <div class="p-4 ${isFirst ? 'pulse-leader neon-border' : 'neon-border'} rounded space-y-2">
+    ${isFirst ? `<div class="text-yellow-400 text-lg font-bold">🔥 Current Leader 🔥</div>` : ''}
+    <div class="font-bold text-xl">${data.target}</div>
+    <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
+    <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
+      🔥 Fire Vote (${data.likes || 0})
+    </button>
+    <button onclick="shareRoastAgain('${data.target}')" class="mt-2 w-full py-2 neon-border hover:bg-blue-600 text-white font-bold">
+      🔄 Share My Roast
+    </button>
+    ${adminDeleteButton}
+  </div>`;
 
     list.innerHTML += roastHTML;
 
