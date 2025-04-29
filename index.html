@@ -399,18 +399,19 @@ header a:hover {
   </div>
 </div>
     <form id="roastForm" class="max-w-md w-full space-y-4">
-      <input type="text" id="targetName" placeholder="@TargetName" required 
-             class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
-      <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
-        <option value="CRO">Submit with CRO (60)</option>
-        <option value="SOL">Submit with SOL (0.032)</option>
-      </select>
-      <button type="button" onclick="handleSubmit()" 
-              class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 active:scale-98 transition">
-        Submit Roast
-      </button>
-      
-    </form>
+  <input type="text" id="targetName" placeholder="@TargetName" required 
+         class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
+  <input type="text" id="submitterName" placeholder="@YourNameOrHandle (optional)" 
+         class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
+  <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
+    <option value="CRO">Submit with CRO (60)</option>
+    <option value="SOL">Submit with SOL (0.032)</option>
+  </select>
+  <button type="button" onclick="handleSubmit()" 
+          class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 active:scale-98 transition">
+    Submit Roast
+  </button>
+</form>
 
     <div id="txStatus" class="hidden mt-6 p-4 neon-border text-center text-lg"></div>
     <div id="shareRoast" class="mt-6"></div>
@@ -598,6 +599,7 @@ async function sendSOL(amount, recipient) {
 // Handle Roast Submit
 async function handleSubmit() {
   const target = document.getElementById('targetName').value.trim();
+  const submitter = document.getElementById('submitterName').value.trim();
   const token = document.getElementById('tokenChoice').value;
   const statusDiv = document.getElementById('txStatus');
 
@@ -618,7 +620,7 @@ async function handleSubmit() {
     }
 
     statusDiv.innerHTML = `<div class="text-green-400">Transaction successful!</div><div class="text-sm break-all">${txHash}</div>`;
-    await saveRoast(target, token, txHash);
+    await saveRoast(target, submitter, token, txHash);
 
   } catch (error) {
     statusDiv.innerHTML = `<div class="text-red-400">Transaction failed: ${error.message}</div>`;
@@ -626,9 +628,10 @@ async function handleSubmit() {
 }
 
 // Save Roast to Firebase
-async function saveRoast(target, chain, txHash) {
+async function saveRoast(target, submitter, chain, txHash) {
   await addDoc(collection(db, "roasts"), {
     target,
+    submitter,
     chain,
     txHash,
     timestamp: Date.now(),
@@ -796,6 +799,7 @@ async function updateRoastList() {
   <div class="p-4 ${isFirst ? 'pulse-leader neon-border' : 'neon-border'} rounded space-y-2">
     ${isFirst ? `<div class="text-yellow-400 text-lg font-bold">🔥 Current Leader 🔥</div>` : ''}
     <div class="font-bold text-xl">${data.target}</div>
+    ${data.submitter ? `<div class="text-pink-400 text-sm italic">Submitted by: ${data.submitter}</div>` : ''}
     <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
     <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
       🔥 Fire Vote (${data.likes || 0})
