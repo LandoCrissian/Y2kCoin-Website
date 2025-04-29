@@ -661,15 +661,80 @@ function closeSharePopup() {
 }
 
 function shareRoast(target, cro, sol) {
-  const text = `I just submitted ${target} to get ROASTED.  
-Prize pot is already ${cro} CRO + ${sol} SOL.  
-Vote now — or be bold and submit your own roast.  
-Biggest savage wins the whole pot.  
-Think you're fireproof?  
+  const messages = [
+    `Just roasted ${target} into oblivion.  
+Prize pot is ${cro} CRO + ${sol} SOL.  
+Vote for fire. Submit your own target.  
+Every savage grows the pot.  
 #Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`;
+https://y2kcoin.org`,
 
-  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    `Tossed ${target} into the fire pit.  
+Pot is ${cro} CRO + ${sol} SOL and counting.  
+Vote now or drop your own target.  
+Each roast fattens the pot.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `${target} couldn't survive the heat.  
+Prize pool at ${cro} CRO + ${sol} SOL.  
+Vote for your favorite roast.  
+Or submit your own and stack the pot.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `Dropped the mic on ${target}.  
+Current pot: ${cro} CRO + ${sol} SOL.  
+Vote. Roast. Repeat.  
+The pot explodes with every savage.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `Cooked ${target} until well done.  
+Prize pot: ${cro} CRO + ${sol} SOL.  
+Vote to fuel the fire.  
+Submit your own roast to make it even bigger.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `${target} is officially roasted.  
+Prize growing: ${cro} CRO + ${sol} SOL.  
+Vote. Submit. Light it up.  
+Your shot could make the pot explode.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `Fired shots at ${target}.  
+🔥 Pot now at ${cro} CRO + ${sol} SOL 🔥  
+Vote for fire or submit your own burn.  
+Every savage stacks more to the pot.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `Submitted ${target} for full public roasting.  
+Prize pot ${cro} CRO + ${sol} SOL and growing.  
+Vote now or aim your own target.  
+Every entry blows up the prize.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `No mercy for ${target}.  
+Pot growing at ${cro} CRO + ${sol} SOL.  
+Vote for the heat.  
+Submit your own and turn up the fire.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`,
+
+    `Roasted ${target} into next week.  
+Pot: ${cro} CRO + ${sol} SOL.  
+Vote. Submit your own target.  
+Each roast fattens the fire.  
+#Y2KxROAST #CryptoRoast  
+https://y2kcoin.org`
+  ];
+
+  const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomMessage)}`;
   window.open(url, '_blank');
 }
 
