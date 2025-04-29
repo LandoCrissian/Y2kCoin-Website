@@ -529,9 +529,10 @@ async function connectCRO() {
 
     croWallet = provider;
     const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const balance = await provider.getBalance(address);
-    voterWallet = address.toLowerCase();
+const address = await signer.getAddress();
+const balance = await provider.getBalance(address);
+voterWallet = address.toLowerCase();
+updateRoastList(); // ✅ Trigger admin button check
 
     document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO Connected: ${address.slice(0,6)}...${address.slice(-4)}`;
     document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,7)} CRO`;
