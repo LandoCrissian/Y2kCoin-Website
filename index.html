@@ -218,6 +218,37 @@ header a:hover {
   text-align: center;
   margin-top: 1rem;
 }
+
+    /* Add to your existing styles */
+.pulse-gold {
+    animation: pulseGold 2s infinite;
+    border: 2px solid gold;
+    box-shadow: 0 0 10px gold;
+    background: rgba(255, 215, 0, 0.1);
+}
+
+@keyframes pulseGold {
+    0% {
+        box-shadow: 0 0 5px gold, 0 0 10px gold;
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 20px gold, 0 0 40px gold;
+        transform: scale(1.02);
+    }
+    100% {
+        box-shadow: 0 0 5px gold, 0 0 10px gold;
+        transform: scale(1);
+    }
+}
+
+/* Hover effect */
+.pulse-gold:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+    
   </style>
 </head>
 
