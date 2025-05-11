@@ -6,16 +6,11 @@
   <title>Welcome to Y2K | ROAST RECORDS Studio</title>
   <meta name="description" content="The CROFAM music studio. Submit a request, fund the ecosystem, own the moment.">
   <meta name="theme-color" content="#0a0a0a" />
-
-  <!-- Fonts & Tailwind -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Web3 Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
   <script src="https://bundle.run/buffer@6.0.3"></script>
-
   <style>
     :root { color-scheme: dark; --accent: #ff00ff; }
     html, body {
@@ -33,9 +28,7 @@
       box-shadow: 0 0 10px var(--accent);
       border-radius: 10px;
     }
-    .neon-border:hover {
-      box-shadow: 0 0 20px var(--accent);
-    }
+    .neon-border:hover { box-shadow: 0 0 20px var(--accent); }
     .glow-button {
       padding: 0.75rem 1.5rem;
       border: 1px solid var(--accent);
@@ -67,27 +60,24 @@
 </head>
 <body>
 <div id="app" class="relative">
-<!-- Entry Overlay -->
 <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
   <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
   <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
 </div>
 
-<!-- Header -->
-<header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
+<header class="fixed top-0 left-0 w-full p-4 z-40 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
   <div class="flex items-center gap-4">
     <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
     <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
   </div>
   <nav class="flex gap-4 text-white text-sm">
-    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
     <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
     <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
+    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
   </nav>
 </header>
 <div class="h-20"></div>
 
-<!-- Hero + Wallet Section -->
 <section class="text-center py-20 px-6" id="portal">
   <div class="flex justify-center mb-6">
     <div class="w-64 h-64 rounded-full neon-border floating"
@@ -95,64 +85,24 @@
   </div>
   <h1 class="text-4xl md:text-5xl neon-text font-bold mb-4">ROAST RECORDS</h1>
   <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
-    The CROFAM Studio — create your anthem, soundtrack, or roast.  
-    Submissions support the ecosystem. All heat, no chill.
+    The CROFAM Studio — create your anthem, soundtrack, or roast. Submissions support the ecosystem. All heat, no chill.
   </p>
-  <div class="glass-card max-w-md mx-auto space-y-6">
-    <div>
-      <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
-      <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
-    </div>
-    <div>
-      <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
-      <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+
+    <!-- Wallet Connect + Submission Block -->
+  <div class="glass-card max-w-2xl mx-auto space-y-8">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
+        <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+      </div>
+      <div>
+        <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
+        <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+      </div>
     </div>
     <div id="balanceStatus" class="text-xs text-gray-400 text-center"></div>
-  </div>
-</section>
 
-  <!-- Vault + Token Access -->
-<section id="vault" class="py-12 px-6 text-center bg-[#111]">
-  <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
-  <div class="flex flex-col md:flex-row justify-center gap-6">
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank"
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">🔐 Enter The Vault</a>
-    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Buy $Y2K</a>
-    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Trade $ROAST</a>
-  </div>
-</section>
-
-<!-- NFT Showcase -->
-<section id="nfts" class="py-20 px-6 bg-[#111] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Featured NFTs</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-    <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5510.jpeg" alt="Eric Mode" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Eric Mode</div>
-    </a>
-    <a href="https://cronoshadow.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Cards of Cronos</div>
-    </a>
-    <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5299.jpeg" alt="DiamondHands" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">DiamondHands</div>
-    </a>
-    <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Dojo Warriors</div>
-    </a>
-  </div>
-</section>
-
-<!-- Studio Form -->
-<section id="submit" class="py-20 px-6 bg-[#0a0a0a] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Submit Your Studio Request</h2>
-
-  <div class="glass-card max-w-xl mx-auto">
-    <form id="submissionForm" class="space-y-4">
+    <form id="submissionForm" class="space-y-4 mt-6">
       <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
         <option value="">Select Type</option>
         <option value="Anthem">Anthem / Theme Song</option>
@@ -178,10 +128,22 @@
         </span>
       </label>
 
-      <button type="button" onclick="submitStudioRequest()"
-        class="w-full glow-button text-lg">Submit (20 CRO)</button>
+      <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-lg">Submit (20 CRO)</button>
     </form>
     <div id="studioStatus" class="mt-6 text-sm text-white"></div>
+  </div>
+</section>
+
+<!-- Vault + Token Access -->
+<section id="vault" class="py-12 px-6 text-center bg-[#111]">
+  <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
+  <div class="flex flex-col md:flex-row justify-center gap-6">
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">🔐 Enter The Vault</a>
+    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Buy $Y2K</a>
+    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Trade $ROAST</a>
   </div>
 </section>
 
@@ -206,7 +168,7 @@
   window.addDoc = addDoc;
 </script>
 
-<!-- Wallet Connect -->
+<!-- Wallet Connect Logic -->
 <script>
 let croWallet = null;
 
@@ -254,7 +216,7 @@ async function connectCRO() {
   }
 }
 
-async function sendCRO(amount, toAddress) {
+  async function sendCRO(amount, toAddress) {
   if (!croWallet) throw new Error("Connect your CRO wallet first.");
   const signer = croWallet.getSigner();
   const tx = await signer.sendTransaction({
@@ -265,7 +227,7 @@ async function sendCRO(amount, toAddress) {
 }
 </script>
 
-<!-- Submission Logic -->
+<!-- Studio Submission Logic -->
 <script>
 async function submitStudioRequest() {
   const type = document.getElementById('requestType').value;
@@ -310,13 +272,7 @@ async function submitStudioRequest() {
   </div>
 </footer>
 
-<!-- Entry Overlay -->
-<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
-  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
-</div>
-
-<!-- Portal Entry & Smooth Scroll -->
+<!-- Entry Logic -->
 <script>
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
@@ -325,11 +281,11 @@ function enterPortal() {
   overlay.style.transform = "scale(1.05)";
   setTimeout(() => {
     overlay.remove();
-    document.getElementById('vault').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
   }, 1000);
 }
 
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
@@ -343,4 +299,6 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
+  
 
