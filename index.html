@@ -154,7 +154,6 @@
 
   <!-- Firebase Setup -->
 <script type="module">
-  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
@@ -169,9 +168,11 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
   window.db = db;
   window.collection = collection;
   window.addDoc = addDoc;
+  window.getDocs = getDocs;
 </script>
 
 <!-- Wallet Connect Logic -->
