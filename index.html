@@ -156,7 +156,8 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
     authDomain: "y2kroast-512ee.firebaseapp.com",
@@ -316,11 +317,12 @@ window.addEventListener('DOMContentLoaded', () => {
   // Load Live Submissions from Firestore
 
 
-async function loadLiveSubmissions() {
-  const liveContainer = document.getElementById('liveRequests');
-  liveContainer.innerHTML = '';
+import { onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  const querySnapshot = await getDocs(collection(db, "studio_requests"));
+const liveContainer = document.getElementById('liveRequests');
+
+onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
+  liveContainer.innerHTML = '';
   querySnapshot.forEach((doc) => {
     const data = doc.data();
     const item = document.createElement('div');
@@ -333,9 +335,7 @@ async function loadLiveSubmissions() {
     `;
     liveContainer.appendChild(item);
   });
-}
-
-window.addEventListener('DOMContentLoaded', loadLiveSubmissions);
+});
   
 </script>
 
