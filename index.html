@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
   <title>ROAST RECORDS | Powered by Y2K</title>
-  <meta name="description" content="Submit songs, anthems, or roasts in the crypto studio built for CRO + SOL degen culture.">
-  <meta name="theme-color" content="#0a0a0a"/>
+  <meta name="description" content="Submit crypto anthems, project songs, or savage roasts. Dual-chain music studio.">
+  <meta name="theme-color" content="#0a0a0a" />
 
   <!-- Fonts & Tailwind -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
@@ -16,16 +16,16 @@
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
   <script src="https://bundle.run/buffer@6.0.3"></script>
 
+  <!-- GLOBAL STYLES -->
   <style>
     :root {
       color-scheme: dark;
       --accent: #ff00ff;
-      --bg: #0a0a0a;
-      --glass: rgba(255, 255, 255, 0.05);
+      --glass: rgba(255, 255, 255, 0.06);
     }
 
     html, body {
-      background-color: var(--bg);
+      background-color: #0a0a0a;
       color: #e2e8f0;
       font-family: 'Rubik', sans-serif;
       min-height: 100vh;
@@ -34,14 +34,14 @@
 
     .neon-text {
       font-family: 'Orbitron', sans-serif;
-      text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent);
+      text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent);
     }
 
     .neon-border {
       border: 2px solid var(--accent);
       box-shadow: 0 0 10px var(--accent);
       border-radius: 10px;
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     .neon-border:hover {
@@ -55,38 +55,6 @@
       border-radius: 14px;
       padding: 1.5rem;
       box-shadow: 0 0 15px rgba(255, 0, 255, 0.1);
-    }
-
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 1rem 1.5rem;
-      z-index: 50;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header a {
-      color: white;
-      font-size: 0.875rem;
-      transition: color 0.3s ease;
-    }
-
-    header a:hover {
-      color: var(--accent);
-    }
-
-    .logo-img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent);
     }
 
     .glow-button {
@@ -113,6 +81,27 @@
       50% { transform: translateY(-10px); }
     }
 
+    .scroll-container {
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+    }
+
+    .scroll-content {
+      display: flex;
+      animation: scroll 30s linear infinite;
+    }
+
+    .scroll-content:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-256px * 4)); }
+    }
+
     @media (max-width: 640px) {
       header {
         flex-direction: column;
@@ -124,41 +113,79 @@
 </head>
 
 <body>
-  <header>
+  <!-- FLOATING HEADER -->
+  <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
     <div class="flex items-center gap-4">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Logo" class="logo-img" />
-      <h1 class="text-lg neon-text font-bold">ROAST RECORDS</h1>
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" alt="Logo" class="w-10 h-10 rounded-full neon-border"/>
+      <h1 class="text-xl neon-text font-bold">ROAST RECORDS</h1>
     </div>
-    <nav class="flex gap-4">
-      <a href="#nfts">NFTs</a>
-      <a href="#submit">Submit</a>
-      <a href="#vault">Vault</a>
-      <a href="#connect">Connect</a>
+    <nav class="flex gap-4 text-white text-sm">
+      <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
+      <a href="#submit" class="hover:text-pink-400 transition">Submit</a>
+      <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
+      <a href="#connect" class="hover:text-pink-400 transition">Connect</a>
     </nav>
   </header>
 
   <!-- Spacer for header -->
   <div class="h-20"></div>
 
-  <!-- Featured NFT Display -->
-<section id="nfts" class="relative z-10 py-20 px-6 bg-[#111] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-6">Featured Studio Drop</h2>
-  <div class="flex justify-center items-center mb-6">
-    <div class="w-64 h-64 rounded-full border-[6px] border-pink-500 neon-border floating"
-         style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 12s linear infinite;"></div>
+    <!-- ENTRY ANIMATION (optional) -->
+  <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+    <h1 class="text-4xl md:text-6xl neon-text font-bold mb-8 animate-pulse text-center">Welcome to ROAST RECORDS</h1>
+    <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl md:text-2xl hover:bg-pink-600 transition">Enter Portal</button>
   </div>
-  <p class="text-gray-400 text-lg max-w-md mx-auto">Each submission is minted as a 1-of-1 NFT with a scannable QR. You roast it, we record it.</p>
-</section>
 
-<style>
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-</style>
+  <!-- LANDING SECTION -->
+  <section id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6 bg-[#0a0a0a]">
+    <div class="flex justify-center mb-6">
+      <div class="w-64 h-64 rounded-full neon-border floating"
+           style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 12s linear infinite;"></div>
+    </div>
+    <h1 class="text-4xl md:text-5xl neon-text font-bold mb-4">Studio for Degens</h1>
+    <p class="text-lg text-gray-400 max-w-xl mb-6">Submit a song, anthem, or roast. Earn NFTs, burn CRO, fuel the vault.</p>
+  </section>
 
-<!-- Submission Form -->
-<section id="submit" class="relative z-10 py-20 px-6 bg-[#0a0a0a] text-center">
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+
+  <!-- TOKEN TRADE LINKS -->
+  <section id="vault" class="relative z-10 py-12 px-6 text-center bg-[#111]">
+    <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Trade Tokens</h2>
+    <div class="flex flex-col md:flex-row justify-center gap-6">
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
+         class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
+        Swap $Y2K on Obsidian
+      </a>
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
+         class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
+        Trade $ROAST on Raydium
+      </a>
+    </div>
+  </section>
+
+  <!-- WALLET CONNECT SECTION -->
+  <section id="connect" class="relative z-10 py-20 px-6 bg-[#0a0a0a] text-center">
+    <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Connect Your Wallet</h2>
+    <div class="glass-card max-w-md mx-auto space-y-6">
+      <div>
+        <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
+        <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+      </div>
+      <div>
+        <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
+        <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+      </div>
+      <div id="balanceStatus" class="text-xs text-gray-400 text-center"></div>
+    </div>
+  </section>
+
+  <!-- SUBMIT A TRACK -->
+<section id="submit" class="relative z-10 py-20 px-6 bg-[#111] text-center">
   <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Submit Your Request</h2>
 
   <div class="glass-card max-w-xl mx-auto">
@@ -174,8 +201,18 @@
       <input type="text" id="handle" placeholder="@YourHandle" required
         class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
 
-      <textarea id="notes" placeholder="What do you want this track to say? Vibe? Any links?"
+      <textarea id="notes" placeholder="What do you want this to say? Any links? Project name?"
         class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
+
+      <!-- Limited Mint Option -->
+      <label class="flex items-center gap-3 text-white text-left text-sm">
+        <input type="checkbox" id="limitedMint" class="accent-pink-500 w-5 h-5"/>
+        <span>
+          Request Limited Mint (10 editions at 50 CRO each).  
+          <br/>
+          <span class="text-gray-400 text-xs italic">500 CRO will be used to buy back project tokens — or Y2K if personal.</span>
+        </span>
+      </label>
 
       <button type="button" onclick="submitStudioRequest()"
         class="w-full glow-button text-lg">Submit (20 CRO)</button>
@@ -184,11 +221,13 @@
   </div>
 </section>
 
+<!-- FIREBASE SUBMISSION SCRIPT -->
 <script>
 async function submitStudioRequest() {
   const type = document.getElementById('requestType').value;
   const handle = document.getElementById('handle').value.trim();
   const notes = document.getElementById('notes').value.trim();
+  const limitedMint = document.getElementById('limitedMint').checked;
   const status = document.getElementById('studioStatus');
 
   if (!type || !handle.startsWith('@')) {
@@ -204,6 +243,7 @@ async function submitStudioRequest() {
       type,
       handle,
       notes,
+      limitedMint,
       chain: "CRO",
       txHash,
       timestamp: Date.now()
@@ -219,25 +259,11 @@ async function submitStudioRequest() {
 }
 </script>
 
-  <!-- Wallet Connect Section -->
-<section id="connect" class="relative z-10 py-20 px-6 bg-[#111] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Connect Your Wallet</h2>
-  <div class="glass-card max-w-md mx-auto space-y-6">
-    <div>
-      <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
-      <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
-    </div>
-    <div>
-      <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
-      <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
-    </div>
-  </div>
-</section>
-
-<!-- Optional Studio Request Feed -->
+  <!-- OPTIONAL STUDIO FEED -->
+<!-- Uncomment if you want public visibility of recent requests -->
 <!--
 <section class="relative z-10 py-16 px-6 bg-[#0a0a0a] text-center">
-  <h2 class="text-3xl neon-text font-bold mb-6">Latest Studio Requests</h2>
+  <h2 class="text-3xl neon-text font-bold mb-6">Recent Studio Requests</h2>
   <div id="requestFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto"></div>
 </section>
 
@@ -255,6 +281,9 @@ async function updateRequestFeed() {
         <div class="text-pink-400 font-bold">@${d.handle}</div>
         <div class="text-sm text-white">Type: ${d.type}</div>
         <div class="text-xs text-gray-400 break-all">${d.notes}</div>
+        <div class="text-xs ${d.limitedMint ? 'text-yellow-400' : 'text-green-400'}">
+          ${d.limitedMint ? 'Limited Mint Requested' : 'Standard Submission'}
+        </div>
         <div class="text-xs text-green-400 mt-2">${d.txHash.slice(0,10)}...</div>
       </div>`;
   });
@@ -263,15 +292,41 @@ window.addEventListener('load', updateRequestFeed);
 </script>
 -->
 
-<!-- Footer -->
+<!-- FOOTER -->
 <footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  <div>Studio powered by CRO and SOL. Submit your sound. Burn the silence.</div>
+  <div class="mb-4">Built for the degen airwaves. Minted by CRO and SOL believers.</div>
   <div class="flex justify-center gap-6 text-white mt-6">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400">Join Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400">Follow 𝕏</a>
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400">Enter The Vault</a>
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter The Vault</a>
   </div>
 </footer>
+
+<!-- ENTER PORTAL LOGIC -->
+<script>
+function enterPortal() {
+  const overlay = document.getElementById('enterOverlay');
+  overlay.style.transition = "opacity 1s ease, transform 1s ease";
+  overlay.style.opacity = 0;
+  overlay.style.transform = "scale(1.05)";
+  setTimeout(() => {
+    overlay.style.display = "none";
+    document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
+  }, 1000);
+}
+</script>
+
+<!-- SMOOTH SCROLL INIT -->
+<script>
+window.addEventListener('load', () => {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+});
+</script>
 </body>
 </html>
 
