@@ -154,8 +154,9 @@
 
   <!-- Firebase Setup -->
 <script type="module">
+  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
@@ -293,7 +294,9 @@ function enterPortal() {
   overlay.style.opacity = 0;
   overlay.style.transform = "scale(1.05)";
   setTimeout(() => {
-    overlay.remove();
+    if (overlay && overlay.parentNode) {
+  overlay.parentNode.removeChild(overlay);
+}
     document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
   }, 1000);
 }
@@ -310,7 +313,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
   // Load Live Submissions from Firestore
-import { getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
 
 async function loadLiveSubmissions() {
   const liveContainer = document.getElementById('liveRequests');
