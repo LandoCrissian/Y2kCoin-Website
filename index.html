@@ -346,10 +346,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
   // Load Live Submissions from Firestore
-
-
-import { onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
 const liveContainer = document.getElementById('liveRequests');
 
 onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
@@ -368,26 +364,17 @@ onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
   });
 });
 
-  function showConfirmationOverlay(handle) {
-  const overlay = document.getElementById('confirmationOverlay');
-  const shareButton = document.getElementById('shareOnX');
-  const messages = [
-    `Just dropped a 🔥 request at ROAST RECORDS! #CROFAM #DOJO #Y2KxROAST #ROASTRECORDS y2kcoin.org`,
-    `My latest submission is live on ROAST RECORDS! Check it out! #Y2KxROAST #CROFAM y2kcoin.org`,
-    `Feeling the vibes at ROAST RECORDS. Submitted my request! #ROASTRECORDS #DOJO y2kcoin.org`,
-    `Joined the movement with my latest submission on ROAST RECORDS! #CROFAM #Y2KxROAST y2kcoin.org`,
-    `Just made my mark on ROAST RECORDS. Let's go! #ROASTRECORDS #DOJO #CROFAM y2kcoin.org`
-  ];
-  const message = messages[Math.floor(Math.random() * messages.length)];
-  const tweet = encodeURIComponent(`${message} @${handle}`);
-  shareButton.href = `https://twitter.com/intent/tweet?text=${tweet}`;
-  overlay.classList.remove('hidden');
-}
-
-function closeConfirmation() {
-  document.getElementById('confirmationOverlay').classList.add('hidden');
-}
-  
+// Smooth scroll nav
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+});
 </script>
 
 </body>
