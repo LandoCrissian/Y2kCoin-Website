@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-  <title>Y2K x ROAST | Portal</title>
-  <meta name="description" content="The Y2K x ROAST cyberpunk hub. NFTs, roasting, and dual chain dominance.">
+  <title>ROAST RECORDS | Powered by Y2K</title>
+  <meta name="description" content="Submit songs, anthems, or roasts in the crypto studio built for CRO + SOL degen culture.">
+  <meta name="theme-color" content="#0a0a0a"/>
 
-  <!-- Fonts and Tailwind CSS -->
+  <!-- Fonts & Tailwind -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -18,1076 +19,259 @@
   <style>
     :root {
       color-scheme: dark;
+      --accent: #ff00ff;
+      --bg: #0a0a0a;
+      --glass: rgba(255, 255, 255, 0.05);
     }
-    
-    html, 
-    body {
-      background-color: #0a0a0a !important;
+
+    html, body {
+      background-color: var(--bg);
       color: #e2e8f0;
-      min-height: 100vh;
       font-family: 'Rubik', sans-serif;
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    #app {
-      background-color: #0a0a0a;
-      min-height: 100vh;
+    .neon-text {
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent);
     }
 
-    /* Rest of your styles remain the same */
-    .grain-overlay { 
-      pointer-events: none; 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      width: 100vw; 
-      height: 100vh;
-      background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Noise_texture.png');
-      opacity: 0.08; 
-      z-index: 1; 
-      animation: grainmove 8s steps(10) infinite; 
+    .neon-border {
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      border-radius: 10px;
+      transition: 0.3s ease;
     }
-    @keyframes grainmove {
-      0% { background-position: 0 0; }
-      25% { background-position: 50px 50px; }
-      50% { background-position: 0px 100px; }
-      75% { background-position: -50px 50px; }
-      100% { background-position: 0 0; }
-    }
-    .neon-text { text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff; font-family: 'Orbitron', sans-serif; }
-    .neon-border { border: 2px solid #ff00ff; box-shadow: 0 0 10px #ff00ff; border-radius: 8px; transition: all 0.3s ease; }
-    .neon-border:hover { box-shadow: 0 0 20px #ff00ff; }
-    .cursor-glow { 
-      position: fixed; 
-      width: 15px; 
-      height: 15px; 
-      background: #ff00ff; 
-      border-radius: 50%; 
-      pointer-events: none; 
-      z-index: 9999; 
-      mix-blend-mode: overlay; 
-      opacity: 0.6; 
-      transform: translate(-50%, -50%); 
-      transition: transform 0.05s ease; 
-    }
-    header { 
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.8); 
-  backdrop-filter: blur(8px); 
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 50;
-  transition: background 0.3s ease;
-}
 
-header a:hover { 
-  color: #ff00ff;
-}
-    header a { transition: color 0.3s ease; }
-    header a:hover { color: #ff00ff; }
-    .floating { animation: floaty 6s ease-in-out infinite; }
+    .neon-border:hover {
+      box-shadow: 0 0 20px var(--accent);
+    }
+
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.1);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header a {
+      color: white;
+      font-size: 0.875rem;
+      transition: color 0.3s ease;
+    }
+
+    header a:hover {
+      color: var(--accent);
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .glow-button {
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--accent);
+      background: rgba(255, 0, 255, 0.1);
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .glow-button:hover {
+      background: rgba(255, 0, 255, 0.2);
+      box-shadow: 0 0 20px var(--accent);
+    }
+
+    .floating {
+      animation: floaty 6s ease-in-out infinite;
+    }
+
     @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
+      0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
-    .nft-scroll {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .nft-scroll::-webkit-scrollbar {
-      display: none;
-    }
-    .nft-item {
-      scroll-snap-align: start;
-      flex: 0 0 auto;
-    }
-    .welcome-text {
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 1.2;
-      text-align: center;
-      padding: 0 1rem;
-    }
-    .scroll-container {
-      display: flex;
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-    }
-    .scroll-content {
-      display: flex;
-      animation: scroll 30s linear infinite;
-    }
-    .scroll-content:hover {
-      animation-play-state: paused;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-256px * 4)); }
-    }
-    
-    /* Wallet section styles */
-    .wallet-section {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .wallet-button {
-      background: rgba(255, 0, 255, 0.1);
-      border: 1px solid #ff00ff;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      color: white;
-      transition: all 0.3s ease;
-      width: 100%;
-      margin-bottom: 0.5rem;
-    }
-    
-    .wallet-button:hover {
-      background: rgba(255, 0, 255, 0.2);
-      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-    }
-    
-    .wallet-status {
-      color: #a0aec0;
-      font-size: 0.875rem;
-    }
-    
+
     @media (max-width: 640px) {
-      .welcome-text {
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-      }
-      header nav {
-        font-size: 0.875rem;
-        gap: 1rem;
-      }
-      .section-title {
-        font-size: 1.75rem !important;
-        line-height: 1.2;
-        margin-bottom: 1rem;
-      }
-      .wallet-status {
-        font-size: 0.875rem;
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
       }
     }
-    
-    @media (hover: none) {
-      .neon-border:active {
-        box-shadow: 0 0 20px #ff00ff;
-        transform: scale(0.98);
-      }
-      input, select, button {
-        font-size: 16px !important;
-        padding: 1rem !important;
-      }
-    }
-   /* Gold pulse for Current Leader */
-  .pulse-leader {
-  animation: pulseGold 2s infinite;
-  border: 2px solid gold;
-  box-shadow: 0 0 10px gold, 0 0 20px gold;
-  border-radius: 8px;
-}
-
-@keyframes pulseGold {
-  0% { box-shadow: 0 0 5px gold, 0 0 10px gold; }
-  50% { box-shadow: 0 0 20px gold, 0 0 40px gold; }
-  100% { box-shadow: 0 0 5px gold, 0 0 10px gold; }
-} 
-    #countdown {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #FFD700;
-  text-align: center;
-  margin-bottom: 1rem;
-  text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700;
-}
-
-.locked-message {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #f87171;
-  text-align: center;
-  margin-top: 1rem;
-}
-
-    /* Add to your existing styles */
-.pulse-gold {
-    animation: pulseGold 2s infinite;
-    border: 2px solid gold;
-    box-shadow: 0 0 10px gold;
-    background: rgba(255, 215, 0, 0.1);
-}
-
-@keyframes pulseGold {
-    0% {
-        box-shadow: 0 0 5px gold, 0 0 10px gold;
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 0 20px gold, 0 0 40px gold;
-        transform: scale(1.02);
-    }
-    100% {
-        box-shadow: 0 0 5px gold, 0 0 10px gold;
-        transform: scale(1);
-    }
-}
-
-/* Hover effect */
-.pulse-gold:hover {
-    background: rgba(255, 215, 0, 0.2);
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
-    
   </style>
 </head>
 
 <body>
-<div id="app" class="relative">
-
-<!-- Grain Overlay -->
-<div class="grain-overlay"></div>
-
-<!-- Cursor Glow -->
-<div id="cursorGlow" class="cursor-glow hidden"></div>
-
-<!-- Floating Neon Header -->
-<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-4">
-  <div class="flex items-center gap-4">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K Logo" class="w-10 h-10 neon-border rounded-full">
-    <h1 class="text-xl neon-text font-bold">Y2K x ROAST</h1>
-  </div>
-  <nav class="flex gap-4 md:gap-6 text-white text-sm">
-    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
-    <a href="#mint" class="hover:text-pink-400 transition">Mint</a>
-    <a href="#roasted" class="hover:text-pink-400 transition">Roasted</a>
-    <a href="#connect" class="hover:text-pink-400 transition">Connect</a>
-  </nav>
-</header>
-
-<!-- Spacer for Header -->
-<div class="h-20"></div>
-
-<!-- Enter Portal -->
-<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-  <h1 class="welcome-text neon-text font-bold mb-8 animate-pulse">Welcome to Y2K x ROAST</h1>
-  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl md:text-2xl hover:bg-pink-600 active:scale-98 transition">Enter Portal</button>
-</div>
-
-  <!-- COUNTDOWN TIMER -->
-<div id="countdown" class="py-4"></div>
-<div id="lockedMessage" class="locked-message hidden"></div>
-
-<!-- Main Content -->
-<main class="bg-[#0a0a0a]">
-
-  <!-- Portal Landing -->
-<div id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6 bg-[#0a0a0a]">
-  <div class="flex justify-center mb-8">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Y2K x ROAST Logo" class="w-32 h-32 neon-border rounded-full floating"/>
-  </div>
-  <h1 class="welcome-text neon-text font-bold mb-6 animate-pulse">Y2K x ROAST</h1>
-  <p class="text-lg md:text-2xl text-gray-400 mb-8 max-w-2xl">Dual Chain Domination. CRO meets SOL. Roasting the old world to build a new one.</p>
-
-  <!-- Trade Now Section -->
-<section id="trade" class="relative z-10 py-12 px-6 flex flex-col items-center bg-[#0a0a0a] text-center">
-    <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Trade Now</h2>
-    <div class="flex flex-col md:flex-row gap-8">
-        <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" 
-           class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
-            Swap $Y2K on Obsidian
-        </a>
-        <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" 
-           class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
-            Trade $ROAST on Raydium
-        </a>
+  <header>
+    <div class="flex items-center gap-4">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5445.jpeg" alt="Logo" class="logo-img" />
+      <h1 class="text-lg neon-text font-bold">ROAST RECORDS</h1>
     </div>
-    
-    <!-- Vault Access Button -->
-    <div class="mt-12 w-full max-w-md">
-        <a href="https://y2k-the-vault.netlify.app/" 
-           class="block w-full px-8 py-6 neon-border text-white font-bold text-2xl hover:bg-pink-600 transition rounded-lg pulse-gold">
-            🔐 Enter The Vault 🔐
-        </a>
-        <p class="text-gray-400 mt-4 text-sm">
-            Requires 4,000,000 Y2K tokens to access
-        </p>
-    </div>
+    <nav class="flex gap-4">
+      <a href="#nfts">NFTs</a>
+      <a href="#submit">Submit</a>
+      <a href="#vault">Vault</a>
+      <a href="#connect">Connect</a>
+    </nav>
+  </header>
+
+  <!-- Spacer for header -->
+  <div class="h-20"></div>
+
+  <!-- Featured NFT Display -->
+<section id="nfts" class="relative z-10 py-20 px-6 bg-[#111] text-center">
+  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-6">Featured Studio Drop</h2>
+  <div class="flex justify-center items-center mb-6">
+    <div class="w-64 h-64 rounded-full border-[6px] border-pink-500 neon-border floating"
+         style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 12s linear infinite;"></div>
+  </div>
+  <p class="text-gray-400 text-lg max-w-md mx-auto">Each submission is minted as a 1-of-1 NFT with a scannable QR. You roast it, we record it.</p>
 </section>
 
-  <!-- NFT Showcase Section -->
-  <section id="nfts" class="relative z-10 py-24 px-6 bg-[#111] text-center">
-    <h2 class="text-4xl md:text-6xl neon-text font-bold mb-10">Live NFT Drops</h2>
-    <div class="scroll-container">
-      <div class="scroll-content">
-        <!-- NFT items remain the same -->
-        <div class="nft-item w-64 mx-3">
-          <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Eric Mode</div>
-          </a>
-        </div>
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
 
-        <div class="nft-item w-64 mx-3">
-          <a href="https://cronoshadow.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-          </a>
-        </div>
+<!-- Submission Form -->
+<section id="submit" class="relative z-10 py-20 px-6 bg-[#0a0a0a] text-center">
+  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Submit Your Request</h2>
 
-        <div class="nft-item w-64 mx-3">
-          <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">DiamondHands</div>
-          </a>
-        </div>
+  <div class="glass-card max-w-xl mx-auto">
+    <form id="submissionForm" class="space-y-4">
+      <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
+        <option value="">Choose Request Type</option>
+        <option value="Anthem">Anthem / Theme Song</option>
+        <option value="Custom Song">Custom Song</option>
+        <option value="Roast">Roast</option>
+        <option value="Other">Other (Intro, Skit, Project Soundtrack)</option>
+      </select>
 
-        <div class="nft-item w-64 mx-3">
-          <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Dojo Warriors</div>
-          </a>
-        </div>
-        
-        <!-- Duplicate items for seamless scrolling -->
-        <div class="nft-item w-64 mx-3">
-          <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mode" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Eric Mode</div>
-          </a>
-        </div>
+      <input type="text" id="handle" placeholder="@YourHandle" required
+        class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
 
-        <div class="nft-item w-64 mx-3">
-          <a href="https://cronoshadow.nfts2.me/" target="_blank">
-            <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-64 h-64 neon-border rounded-xl object-cover hover:scale-105 transition" loading="lazy"/>
-            <div class="mt-2 font-bold text-white">Cards of Cronos</div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+      <textarea id="notes" placeholder="What do you want this track to say? Vibe? Any links?"
+        class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
 
-  <!-- Mint Section with Wallet Connect -->
-  <section id="mint" class="relative z-10 py-16 px-6 flex flex-col items-center bg-[#0a0a0a] text-center">
-
-    <!-- Savage Welcome -->
-<div class="text-center mb-8">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold animate-pulse">Welcome to the Bloodsport of Crypto</h2>
-  <p class="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
-    Savage roasts. Brutal votes. One champion crowned every two weeks.
-  </p>
-</div>
-
-    <!-- How It Works Section -->
-<div class="wallet-section w-full max-w-2xl mb-8 text-center">
-  <h2 class="text-3xl md:text-4xl neon-text font-bold mb-4">How It Works</h2>
-  <p class="text-gray-400 mb-4">
-    1. <span class="text-pink-400 font-bold">Connect your wallet</span> to enter the arena.<br>
-    2. <span class="text-pink-400 font-bold">Submit your savage roast</span> — pick a user's 𝕏 @handle or a project name.<br>
-    3. <span class="text-pink-400 font-bold">Vote for the biggest savage</span> on the board.<br>
-    4. <span class="text-pink-400 font-bold">Every submission grows the prize pot</span> with more CRO and SOL.
-  </p>
-  <p class="text-gray-400 mb-4">
-    Voting ends every two weeks on <span class="text-pink-400 font-bold">Friday at 10PM MST</span>.  
-    Submissions pause over the weekend while the winner is finalized.
-  </p>
-  <p class="text-gray-400 mb-4">
-    <span class="text-pink-400 font-bold">70%</span> of the prize pool goes straight to the champion.<br>
-    <span class="text-pink-400 font-bold">30%</span> fuels bigger prizes and savage upgrades for the next round.
-  </p>
-  <p class="text-gray-400 mb-4">
-    The winner also receives a <span class="text-pink-400 font-bold">custom 1-of-1 NFT</span>  
-    with a QR code linking to their legendary roast —  
-    and a permanent spot on the <span class="text-pink-400 font-bold">Roast of Fame Wall</span>.
-  </p>
-  <p class="text-pink-400 font-bold">
-    New submissions open again every Monday.<br>
-    Get roasted. Stay reckless.
-  </p>
-</div>
-    
-    <!-- Wallet Connection Section -->
-    <div class="wallet-section w-full max-w-md mb-8">
-      <h3 class="text-2xl font-bold mb-4 text-white">Connect Wallets</h3>
-      <div class="space-y-4">
-        <div>
-          <button onclick="connectCRO()" class="wallet-button">Connect CRO Wallet</button>
-          <div id="croStatus" class="wallet-status">Not connected</div>
-        </div>
-        <div>
-          <button onclick="connectSOL()" class="wallet-button">Connect SOL Wallet</button>
-          <div id="solStatus" class="wallet-status">Not connected</div>
-        </div>
-        <div id="balanceStatus" class="wallet-status mt-4"></div>
-      </div>
-    </div>
-
-    <!-- Roast Submission Section -->
-    <h2 class="section-title text-2xl md:text-3xl neon-text font-bold mb-6">Submit Your Roast</h2>
-    <div class="mb-8 text-center">
-  <h3 class="text-2xl font-bold neon-text mb-2">Current Prize Pool</h3>
-  <div class="flex justify-center gap-8 text-lg text-white">
-    <div><span id="croPool">Loading...</span> CRO</div>
-    <div><span id="solPool">Loading...</span> SOL</div>
+      <button type="button" onclick="submitStudioRequest()"
+        class="w-full glow-button text-lg">Submit (20 CRO)</button>
+    </form>
+    <div id="studioStatus" class="mt-6 text-sm text-white"></div>
   </div>
-</div>
-    <form id="roastForm" class="max-w-md w-full space-y-4">
-  <input type="text" id="targetName" placeholder="@TargetName" required 
-         class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
-  <input type="text" id="submitterName" placeholder="@YourNameOrHandle (optional)" 
-         class="w-full p-4 bg-black neon-border rounded placeholder-gray-500 text-white text-center text-lg"/>
-  <select id="tokenChoice" class="w-full p-4 bg-black neon-border rounded text-white text-center text-lg">
-    <option value="CRO">Submit with CRO (60)</option>
-    <option value="SOL">Submit with SOL (0.032)</option>
-  </select>
-  <button type="button" onclick="handleSubmit()" 
-          class="w-full py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 active:scale-98 transition">
-    Submit Roast
-  </button>
-</form>
+</section>
 
-    <div id="txStatus" class="hidden mt-6 p-4 neon-border text-center text-lg"></div>
-    <div id="shareRoast" class="mt-6"></div>
-  </section>
+<script>
+async function submitStudioRequest() {
+  const type = document.getElementById('requestType').value;
+  const handle = document.getElementById('handle').value.trim();
+  const notes = document.getElementById('notes').value.trim();
+  const status = document.getElementById('studioStatus');
 
-  <!-- Roasted Board Section -->
-  <section id="roasted" class="relative z-10 py-24 px-6 flex flex-col items-center bg-[#111] text-center">
-    <h2 class="text-4xl md:text-6xl neon-text font-bold mb-6">ROASTED</h2>
-    <p class="text-gray-400 max-w-xl mb-6">The names that couldn't escape the fire...</p>
-    <div id="roastList" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"></div>
-  </section>
+  if (!type || !handle.startsWith('@')) {
+    status.innerHTML = `<span class="text-red-400">Please select a request type and enter a valid 𝕏 handle.</span>`;
+    return;
+  }
 
- </main>
+  try {
+    status.innerHTML = `<span class="text-yellow-400">Processing transaction...</span>`;
+    const txHash = await sendCRO("20", "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100");
+
+    await addDoc(collection(db, "studio_requests"), {
+      type,
+      handle,
+      notes,
+      chain: "CRO",
+      txHash,
+      timestamp: Date.now()
+    });
+
+    status.innerHTML = `
+      <div class="text-green-400">Submitted successfully!</div>
+      <div class="text-sm break-all mt-2">${txHash}</div>`;
+  } catch (err) {
+    console.error(err);
+    status.innerHTML = `<span class="text-red-400">Error: ${err.message}</span>`;
+  }
+}
+</script>
+
+  <!-- Wallet Connect Section -->
+<section id="connect" class="relative z-10 py-20 px-6 bg-[#111] text-center">
+  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Connect Your Wallet</h2>
+  <div class="glass-card max-w-md mx-auto space-y-6">
+    <div>
+      <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
+      <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+    </div>
+    <div>
+      <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
+      <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+    </div>
+  </div>
+</section>
+
+<!-- Optional Studio Request Feed -->
+<!--
+<section class="relative z-10 py-16 px-6 bg-[#0a0a0a] text-center">
+  <h2 class="text-3xl neon-text font-bold mb-6">Latest Studio Requests</h2>
+  <div id="requestFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto"></div>
+</section>
+
+<script>
+async function updateRequestFeed() {
+  const q = query(collection(db, "studio_requests"), orderBy("timestamp", "desc"));
+  const snapshot = await getDocs(q);
+  const feed = document.getElementById("requestFeed");
+  feed.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const d = doc.data();
+    feed.innerHTML += `
+      <div class="glass-card text-left space-y-2 neon-border">
+        <div class="text-pink-400 font-bold">@${d.handle}</div>
+        <div class="text-sm text-white">Type: ${d.type}</div>
+        <div class="text-xs text-gray-400 break-all">${d.notes}</div>
+        <div class="text-xs text-green-400 mt-2">${d.txHash.slice(0,10)}...</div>
+      </div>`;
+  });
+}
+window.addEventListener('load', updateRequestFeed);
+</script>
+-->
 
 <!-- Footer -->
 <footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  <div class="mb-4">Built by chaos. Fueled by CRO and SOL supremacy.</div>
-
+  <div>Studio powered by CRO and SOL. Submit your sound. Burn the silence.</div>
   <div class="flex justify-center gap-6 text-white mt-6">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏 (Twitter)</a>
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400">Join Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400">Follow 𝕏</a>
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400">Enter The Vault</a>
   </div>
 </footer>
-
-</div>
-
-<!-- FIREBASE SDK + FIRESTORE -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy, updateDoc, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-  const firebaseConfig = {
-  apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
-  authDomain: "y2kroast-512ee.firebaseapp.com",
-  projectId: "y2kroast-512ee",
-  storageBucket: "y2kroast-512ee.appspot.com",
-  messagingSenderId: "602588659855",
-  appId: "1:602588659855:web:f01efa4b81e737d26270fa"
-};
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  window.db = db;
-  window.collection = collection;
-  window.addDoc = addDoc;
-  window.getDocs = getDocs;
-  window.query = query;
-  window.orderBy = orderBy;
-  window.updateDoc = updateDoc;
-  window.doc = doc;
-  window.getDoc = getDoc;
-  window.deleteDoc = deleteDoc;
-</script>
-
-<!-- MAIN FUNCTIONALITY -->
-<script>
-const CRONOS_MAINNET = {
-  chainId: '0x19',
-  chainName: 'Cronos Mainnet',
-  nativeCurrency: { name: 'CRO', symbol: 'CRO', decimals: 18 },
-  rpcUrls: ['https://evm.cronos.org'],
-  blockExplorerUrls: ['https://cronoscan.com/']
-};
-
-const SOLANA_ENDPOINT = "https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0";
-const CRO_RECIPIENT = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-const SOL_RECIPIENT = "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq";
-const CRO_AMOUNT = "60";
-const SOL_AMOUNT = "0.032";
-
-let croWallet = null;
-let solWallet = null;
-let solConnection = null;
-
-const ADMIN_WALLETS = [
-  "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase()
-];
-
-// Initialize Solana
-function initializeSolana() {
-  solConnection = new solanaWeb3.Connection(SOLANA_ENDPOINT);
-}
-
-// Solana Wallet Getter
-function getSolanaWallet() {
-  if (window.phantom?.solana) return window.phantom.solana;
-  if (window.solflare?.solana) return window.solflare.solana;
-  if (window.backpack?.solana) return window.backpack.solana;
-  return null;
-}
-
-// Connect CRO Wallet
-async function connectCRO() {
-  try {
-    if (!window.ethereum) throw new Error('Install MetaMask or DeFi Wallet.');
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: CRONOS_MAINNET.chainId }],
-      });
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [CRONOS_MAINNET],
-        });
-      } else {
-        throw switchError;
-      }
-    }
-
-    croWallet = provider;
-    const signer = provider.getSigner();
-const address = await signer.getAddress();
-const balance = await provider.getBalance(address);
-voterWallet = address.toLowerCase();
-updateRoastList(); // ✅ Trigger admin button check
-
-    document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO Connected: ${address.slice(0,6)}...${address.slice(-4)}`;
-    document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,7)} CRO`;
-
-  } catch (error) {
-    console.error('CRO Connect Error:', error);
-    document.getElementById('croStatus').innerHTML = `<span class="text-red-400">✗</span> CRO Error: ${error.message}`;
-  }
-}
-
-// Connect SOL Wallet
-async function connectSOL() {
-  try {
-    if (!solConnection) initializeSolana();
-    const wallet = getSolanaWallet();
-    if (!wallet) throw new Error('Install Phantom, Solflare, or Backpack wallet.');
-
-    const response = await wallet.connect();
-    solWallet = wallet;
-
-    const publicKey = wallet.publicKey.toString();
-    const balance = await solConnection.getBalance(wallet.publicKey);
-    const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
-
-    document.getElementById('solStatus').innerHTML = `<span class="text-green-400">✓</span> SOL Connected: ${publicKey.slice(0,6)}...${publicKey.slice(-4)}`;
-    document.getElementById('balanceStatus').textContent += `\nSOL Balance: ${solBalance.toFixed(4)} SOL`;
-
-  } catch (error) {
-    console.error('SOL Connect Error:', error);
-    document.getElementById('solStatus').innerHTML = `<span class="text-red-400">✗</span> SOL Error: ${error.message}`;
-  }
-}
-
-// Send CRO
-async function sendCRO(amount, recipient) {
-  if (!croWallet) throw new Error('Connect CRO wallet first.');
-  const signer = croWallet.getSigner();
-  const tx = await signer.sendTransaction({ to: recipient, value: ethers.utils.parseEther(amount.toString()) });
-  return tx.hash;
-}
-
-// Send SOL
-async function sendSOL(amount, recipient) {
-  if (!solWallet || !solWallet.publicKey) throw new Error('Connect SOL wallet first.');
-
-  const transaction = new solanaWeb3.Transaction().add(
-    solanaWeb3.SystemProgram.transfer({
-      fromPubkey: solWallet.publicKey,
-      toPubkey: new solanaWeb3.PublicKey(recipient),
-      lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
-    })
-  );
-
-  const { blockhash } = await solConnection.getLatestBlockhash();
-  transaction.recentBlockhash = blockhash;
-  transaction.feePayer = solWallet.publicKey;
-
-  const signed = await solWallet.signTransaction(transaction);
-  const signature = await solConnection.sendRawTransaction(signed.serialize());
-  await solConnection.confirmTransaction(signature);
-
-  return signature;
-}
-
-// Handle Roast Submit
-async function handleSubmit() {
-  const target = document.getElementById('targetName').value.trim();
-  const submitter = document.getElementById('submitterName').value.trim();
-  const token = document.getElementById('tokenChoice').value;
-  const statusDiv = document.getElementById('txStatus');
-
-  if (!target.startsWith('@')) {
-    alert('Enter valid @target.');
-    return;
-  }
-
-  statusDiv.classList.remove('hidden');
-  statusDiv.className = 'mt-6 p-4 neon-border text-center text-lg';
-
-  try {
-    let txHash;
-    if (token === 'CRO') {
-      txHash = await sendCRO(CRO_AMOUNT, CRO_RECIPIENT);
-    } else {
-      txHash = await sendSOL(parseFloat(SOL_AMOUNT), SOL_RECIPIENT);
-    }
-
-    statusDiv.innerHTML = `<div class="text-green-400">Transaction successful!</div><div class="text-sm break-all">${txHash}</div>`;
-    await saveRoast(target, submitter, token, txHash);
-
-  } catch (error) {
-    statusDiv.innerHTML = `<div class="text-red-400">Transaction failed: ${error.message}</div>`;
-  }
-}
-
-// Save Roast to Firebase
-async function saveRoast(target, submitter, chain, txHash) {
-  await addDoc(collection(db, "roasts"), {
-    target,
-    submitter,
-    chain,
-    txHash,
-    timestamp: Date.now(),
-    likes: 0
-  });
-  updateRoastList();
-  showSharePopup(target);
-}
-
-function showSharePopup(target) {
-  const cro = document.getElementById('croPool').textContent.trim();
-  const sol = document.getElementById('solPool').textContent.trim();
-
-  // Create the popup
-  const popup = document.createElement('div');
-  popup.id = 'sharePopup';
-  popup.className = 'fixed inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center z-50 px-6 text-center';
-
-  popup.innerHTML = `
-    <div class="bg-[#111] p-8 rounded-lg neon-border max-w-sm w-full">
-      <h2 class="text-2xl neon-text font-bold mb-4">Roast Submitted!</h2>
-      <p class="text-white mb-4">You just roasted <span class="text-pink-400">${target}</span>!</p>
-      <p class="text-gray-400 mb-6">Current Prize Pool: <br><span class="text-pink-400">${cro} CRO</span> + <span class="text-pink-400">${sol} SOL</span></p>
-      <button onclick="shareRoast('${target}', '${cro}', '${sol}')" class="wallet-button mb-4">Share on 𝕏</button>
-      <button onclick="closeSharePopup()" class="wallet-button">Close</button>
-    </div>
-  `;
-
-  document.body.appendChild(popup);
-}
-
-function closeSharePopup() {
-  const popup = document.getElementById('sharePopup');
-  if (popup) popup.remove();
-}
-
-function shareRoast(target, cro, sol) {
-  const messages = [
-    `Just roasted ${target} into oblivion.  
-Prize pot is ${cro} CRO + ${sol} SOL.  
-Vote for fire. Submit your own target.  
-Every savage grows the pot.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `Tossed ${target} into the fire pit.  
-Pot is ${cro} CRO + ${sol} SOL and counting.  
-Vote now or drop your own target.  
-Each roast fattens the pot.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `${target} couldn't survive the heat.  
-Prize pool at ${cro} CRO + ${sol} SOL.  
-Vote for your favorite roast.  
-Or submit your own and stack the pot.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `Dropped the mic on ${target}.  
-Current pot: ${cro} CRO + ${sol} SOL.  
-Vote. Roast. Repeat.  
-The pot explodes with every savage.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `Cooked ${target} until well done.  
-Prize pot: ${cro} CRO + ${sol} SOL.  
-Vote to fuel the fire.  
-Submit your own roast to make it even bigger.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `${target} is officially roasted.  
-Prize growing: ${cro} CRO + ${sol} SOL.  
-Vote. Submit. Light it up.  
-Your shot could make the pot explode.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `Fired shots at ${target}.  
-🔥 Pot now at ${cro} CRO + ${sol} SOL 🔥  
-Vote for fire or submit your own burn.  
-Every savage stacks more to the pot.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `Submitted ${target} for full public roasting.  
-Prize pot ${cro} CRO + ${sol} SOL and growing.  
-Vote now or aim your own target.  
-Every entry blows up the prize.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `No mercy for ${target}.  
-Pot growing at ${cro} CRO + ${sol} SOL.  
-Vote for the heat.  
-Submit your own and turn up the fire.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`,
-
-    `Roasted ${target} into next week.  
-Pot: ${cro} CRO + ${sol} SOL.  
-Vote. Submit your own target.  
-Each roast fattens the fire.  
-#Y2KxROAST #CryptoRoast  
-https://y2kcoin.org`
-  ];
-
-  const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomMessage)}`;
-  window.open(url, '_blank');
-}
-
-  // New Share Again Function for Leaderboard Reposting
-function generateShareAgainMessage(target, cro, sol) {
-  const messages = [
-    `🔥 Just roasted ${target} on Y2K x ROAST!\nCome vote for me — and roast someone yourself!\n${cro} CRO + ${sol} SOL up for grabs!\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `I flamed ${target} so hard they’re still smoldering.\nVote now to crown the top savage!\nPot: ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `BURN NOTICE: ${target} got roasted.\nVote to keep the fire burning!\nWinner bags the CRO + SOL prize pool.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `Cooked ${target} medium rare.\nVote if you agree — or roast someone even harder.\nPrize pot: ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `Vote for my roast of ${target} and help me win the CRO + SOL prize pot!\n🔥 Submit your own roast while you’re at it!\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `Can't stand the heat? ${target} couldn’t either.\nVote for my roast and get yours submitted!\nPrize pool is now ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `🔥 Hotter than a SOL summer, spicier than CRO gas fees — roasted ${target} good.\nVote for me to win!\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `Tagged ${target} and threw ‘em in the flames.\nVote to make it official!\nRoast entries still open. Bigger pot, bigger flex.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `Dropped 🔥 on ${target} at Y2K x ROAST.\nVote and join the savage games!\nMassive prize pot waiting.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`,
-    `Lit ${target} up like a holiday roast.\nVote for the fire, join the chaos.\nPot: ${cro} CRO + ${sol} SOL.\n\n#Y2KxROAST #CryptoRoast\nhttps://y2kcoin.org`
-  ];
-
-  const randomIndex = Math.floor(Math.random() * messages.length);
-  return messages[randomIndex];
-}
-
-function shareRoastAgain(target) {
-  const cro = document.getElementById('croPool').textContent.trim();
-  const sol = document.getElementById('solPool').textContent.trim();
-  const message = generateShareAgainMessage(target, cro, sol);
-  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
-  window.open(url, '_blank');
-}
-
-// Update Roasted List with Top Roast Highlight
-async function updateRoastList() {
-  const q = query(collection(db, "roasts"), orderBy("likes", "desc"));
-  const snapshot = await getDocs(q);
-
-  const list = document.getElementById('roastList');
-  list.innerHTML = "";
-
-  let isFirst = true;
-
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    const roastId = doc.id;
-
-    let adminDeleteButton = "";
-    if (voterWallet && ADMIN_WALLETS.includes(voterWallet.toLowerCase())) {
-      adminDeleteButton = `
-        <button onclick="deleteRoast('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-red-600 text-white font-bold">
-          ❌ Delete
-        </button>`;
-    }
-
-    const roastHTML = `
-  <div class="p-4 ${isFirst ? 'pulse-leader neon-border' : 'neon-border'} rounded space-y-2">
-    ${isFirst ? `<div class="text-yellow-400 text-lg font-bold">🔥 Current Leader 🔥</div>` : ''}
-    <div class="font-bold text-xl">${data.target}</div>
-    ${data.submitter ? `<div class="text-pink-400 text-sm italic">Submitted by: ${data.submitter}</div>` : ''}
-    <div class="text-gray-400 text-sm">${data.chain} TX: ${data.txHash.slice(0,8)}...</div>
-    <button onclick="saveVote('${roastId}')" class="mt-2 w-full py-2 neon-border hover:bg-pink-600 text-white font-bold">
-      🔥 Fire Vote (${data.likes || 0})
-    </button>
-    <button onclick="shareRoastAgain('${data.target}')" class="mt-2 w-full py-2 neon-border hover:bg-blue-600 text-white font-bold">
-      🔄 Share My Roast
-    </button>
-    ${adminDeleteButton}
-  </div>`;
-
-    list.innerHTML += roastHTML;
-
-    isFirst = false; // Only the first roast (highest likes) gets the "leader" style
-  });
-}
-// Portal Entry with smooth animation
-function enterPortal() {
-  const overlay = document.getElementById('enterOverlay');
-  overlay.style.transition = "opacity 1s ease, transform 1s ease";
-  overlay.style.opacity = 0;
-  overlay.style.transform = "scale(1.1)";
-  
-  setTimeout(() => {
-    overlay.style.display = "none";
-    document.getElementById('portal').scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
-    });
-  }, 1000);
-}
-
-// Enhanced Cursor Glow with touch support
-const cursor = document.getElementById('cursorGlow');
-if (matchMedia('(pointer:fine)').matches) {
-  window.addEventListener('mousemove', e => {
-    cursor.style.left = e.pageX + 'px';
-    cursor.style.top = e.pageY + 'px';
-    cursor.classList.remove('hidden');
-  });
-  
-  window.addEventListener('mouseout', () => {
-    cursor.classList.add('hidden');
-  });
-}
-
-  
-  async function updatePrizePool() {
-  try {
-    // Connect to Cronos
-    const croProvider = new ethers.providers.JsonRpcProvider('https://evm.cronos.org');
-    const croBalance = await croProvider.getBalance('0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100');
-    const croAmount = ethers.utils.formatEther(croBalance);
-    document.getElementById('croPool').textContent = parseFloat(croAmount).toFixed(2);
-
-    // Connect to Solana
-    const solConnection = new solanaWeb3.Connection('https://thrilling-old-sailboat.solana-mainnet.quiknode.pro/7eeaf93b8ff0a17a6172d1a57f8bf43c81d164a0');
-    const solPublicKey = new solanaWeb3.PublicKey('HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq');
-    const solBalance = await solConnection.getBalance(solPublicKey);
-    const solAmount = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
-    document.getElementById('solPool').textContent = solAmount.toFixed(3);
-    
-  } catch (error) {
-    console.error('Prize Pool Error:', error);
-    document.getElementById('croPool').textContent = "Error";
-    document.getElementById('solPool').textContent = "Error";
-  }
-}
-
-// Initialize
-window.addEventListener('load', () => {
-  initializeSolana();
-  updateRoastList();
-  updatePrizePool();
-  setInterval(updatePrizePool, 30000); // Refresh every 30 seconds
-  
-  // Add smooth scroll for all anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    });
-  });
-});
-</script>
-
-  <!-- VOTING SYSTEM START -->
-
-<script>
-let provider;
-let signer;
-let voterWallet = null;
-
-// Connect Wallet for Voting
-async function connectForVoting() {
-  if (typeof window.ethereum === 'undefined') {
-    alert("Please install MetaMask or a Web3 wallet!");
-    throw new Error("No Ethereum provider found");
-  }
-
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-
-  try {
-    await provider.send("eth_requestAccounts", []);
-    signer = provider.getSigner();
-    voterWallet = await signer.getAddress();
-    console.log("Connected wallet:", voterWallet);
-  } catch (error) {
-    console.error("Wallet connection error:", error);
-    throw new Error("User rejected wallet connection.");
-  }
-}
-
-// Save Vote
-async function saveVote(roastId) {
-  try {
-    if (!voterWallet) {
-      await connectForVoting();
-    }
-
-    if (!voterWallet) {
-      alert("Wallet not connected. Please try again.");
-      return;
-    }
-
-    // ✅ Check if already voted using localStorage
-    const lastVotedTime = localStorage.getItem(`voted-${roastId}`);
-    if (lastVotedTime && (Date.now() - parseInt(lastVotedTime)) < 86400000) {
-      alert("You already voted for this roast in the last 24 hours.");
-      return;
-    }
-
-    const votesRef = window.collection(window.db, "votes");
-    const roastDocRef = window.doc(window.db, "roasts", roastId);
-    const now = Date.now();
-
-    // ✅ Save the vote to Firebase
-    await window.addDoc(votesRef, {
-      voter: voterWallet,
-      roastId: roastId,
-      timestamp: now
-    });
-
-    // ✅ Save local timestamp to prevent re-voting for 24 hours
-    localStorage.setItem(`voted-${roastId}`, Date.now());
-
-    // ✅ Increment likes
-    const roastSnap = await window.getDoc(roastDocRef);
-    if (roastSnap.exists()) {
-      const currentLikes = roastSnap.data().likes || 0;
-      await window.updateDoc(roastDocRef, {
-        likes: currentLikes + 1
-      });
-    }
-
-    alert("Vote submitted successfully!");
-    setTimeout(updateRoastList, 500);
-
-  } catch (error) {
-    console.error("Vote error:", error);
-    alert(`Error: ${error.message}`);
-  }
-}
-
-  // Delete Roast (Admin Only)
-async function deleteRoast(roastId) {
-  if (!voterWallet || !ADMIN_WALLETS.includes(voterWallet.toLowerCase())) {
-    alert("Not authorized to delete.");
-    return;
-  }
-
-  try {
-    const roastDocRef = window.doc(window.db, "roasts", roastId);
-    await window.deleteDoc(roastDocRef);
-    alert("Roast deleted successfully.");
-    updateRoastList();
-  } catch (error) {
-    console.error("Delete error:", error);
-    alert(`Error deleting roast: ${error.message}`);
-  }
-}
-
-// Countdown Logic
-const endDate = new Date("May 9, 2025 22:00:00 GMT-0600").getTime(); // MST is GMT-6
-
-function updateCountdown() {
-  const now = new Date().getTime();
-  const distance = endDate - now;
-
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  const countdownEl = document.getElementById("countdown");
-  const lockedMsgEl = document.getElementById("lockedMessage");
-
-  if (distance > 0) {
-    countdownEl.innerHTML = `Voting Ends In: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-  } else {
-    countdownEl.innerHTML = "Voting Closed!";
-    lockedMsgEl.classList.remove("hidden");
-    lockedMsgEl.innerHTML = "🔥 Winner selected! Roasted beyond repair. 🔥";
-
-    disableVotingAndSubmissions();
-  }
-}
-
-function disableVotingAndSubmissions() {
-  const voteButtons = document.querySelectorAll('button[onclick^="saveVote"]');
-  voteButtons.forEach(btn => {
-    btn.disabled = true;
-    btn.classList.add("opacity-50", "cursor-not-allowed");
-  });
-
-  const roastForm = document.getElementById('roastForm');
-  if (roastForm) {
-    roastForm.querySelectorAll('input, select, button').forEach(elem => {
-      elem.disabled = true;
-      elem.classList.add("opacity-50", "cursor-not-allowed");
-    });
-  }
-}
-
-// Auto-disable submissions on weekends AFTER voting
-function checkWeekendFreeze() {
-  const now = new Date();
-  const day = now.getDay(); // 0 = Sunday, 6 = Saturday
-
-  if (now.getTime() > endDate && (day === 0 || day === 6)) {
-    disableVotingAndSubmissions();
-  }
-}
-
-// Update every second
-setInterval(() => {
-  updateCountdown();
-  checkWeekendFreeze();
-}, 1000);
-</script>
-
-<!-- VOTING SYSTEM END -->
 </body>
 </html>
 
