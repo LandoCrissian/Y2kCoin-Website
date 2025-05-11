@@ -299,18 +299,23 @@ await addDoc(collection(db, "studio_requests"), {
 
 <!-- Entry Logic -->
 <script>
-function enterPortal() {
-  const overlay = document.getElementById('enterOverlay');
-  overlay.style.transition = "opacity 1s ease, transform 1s ease";
-  overlay.style.opacity = 0;
-  overlay.style.transform = "scale(1.05)";
-  setTimeout(() => {
-    if (overlay && overlay.parentNode) {
-  overlay.parentNode.removeChild(overlay);
-}
-    document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
-  }, 1000);
-}
+  function enterPortal() {
+    const overlay = document.getElementById('enterOverlay');
+    if (!overlay) return;
+
+    overlay.style.transition = "opacity 1s ease, transform 1s ease";
+    overlay.style.opacity = 0;
+    overlay.style.transform = "scale(1.05)";
+    
+    setTimeout(() => {
+      overlay.remove();
+      const portal = document.getElementById('portal');
+      if (portal) {
+        portal.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 1000);
+  }
+</script>
 
 window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
