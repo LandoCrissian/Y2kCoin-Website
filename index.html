@@ -323,7 +323,7 @@ await addDoc(collection(db, "studio_requests"), {
     overlay.style.transition = "opacity 1s ease, transform 1s ease";
     overlay.style.opacity = 0;
     overlay.style.transform = "scale(1.05)";
-    
+
     setTimeout(() => {
       overlay.remove();
       const portal = document.getElementById('portal');
@@ -332,39 +332,8 @@ await addDoc(collection(db, "studio_requests"), {
       }
     }, 1000);
   }
-</script>
 
-
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
-        behavior: 'smooth'
-      });
-    });
-  });
-});
-
-  // Load Live Submissions from Firestore
-const liveContainer = document.getElementById('liveRequests');
-
-onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
-  liveContainer.innerHTML = '';
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    const item = document.createElement('div');
-    item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
-    item.innerHTML = `
-      <div class="text-pink-400 text-sm font-bold mb-2">${data.type}</div>
-      <div class="text-white text-lg mb-1">${data.handle}</div>
-      <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
-      <div class="text-xs text-green-400 break-all">Tx: ${data.txHash.slice(0,8)}...${data.txHash.slice(-8)}</div>
-    `;
-    liveContainer.appendChild(item);
-  });
-});
-
-<script>
+  // Smooth scroll nav (FIXED: now inside a proper script tag)
   window.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -376,7 +345,6 @@ onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
     });
   });
 </script>
-
 </body>
 </html>
 
