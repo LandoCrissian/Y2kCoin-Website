@@ -164,7 +164,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-  
+
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
     authDomain: "y2kroast-512ee.firebaseapp.com",
@@ -181,6 +181,7 @@
   window.collection = collection;
   window.addDoc = addDoc;
   window.getDocs = getDocs;
+  window.onSnapshot = onSnapshot;
 </script>
 
 <!-- Wallet Connect Logic -->
