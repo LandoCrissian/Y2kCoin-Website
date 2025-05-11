@@ -64,6 +64,12 @@
 <body>
 <div id="app" class="relative">
 
+<!-- Entry Overlay -->
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
+  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
+</div>
+
 <!-- Header -->
 <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
   <div class="flex items-center gap-4">
@@ -71,15 +77,15 @@
     <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
   </div>
   <nav class="flex gap-4 text-white text-sm">
-    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
-    <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
     <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
     <a href="#connect" class="hover:text-pink-400 transition">Connect</a>
+    <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
+    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
   </nav>
 </header>
 <div class="h-20"></div>
 
-<!-- Hero -->
+  <!-- Hero -->
 <section class="text-center py-20 px-6">
   <div class="flex justify-center mb-6">
     <div class="w-64 h-64 rounded-full neon-border floating"
@@ -105,7 +111,7 @@
   </div>
 </section>
 
-<!-- Connect Wallet -->
+<!-- Wallet Connect -->
 <section id="connect" class="py-20 px-6 bg-[#0a0a0a] text-center">
   <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Connect Wallet</h2>
   <div class="glass-card max-w-md mx-auto space-y-6">
@@ -121,33 +127,9 @@
   </div>
 </section>
 
-  <!-- NFT Showcase -->
-<section id="nfts" class="py-20 px-6 bg-[#111] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Featured NFTs</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-    <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5510.jpeg" alt="Eric Mode" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Eric Mode</div>
-    </a>
-    <a href="https://cronoshadow.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Cards of Cronos</div>
-    </a>
-    <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5299.jpeg" alt="DiamondHands" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">DiamondHands</div>
-    </a>
-    <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Dojo Warriors</div>
-    </a>
-  </div>
-</section>
-
 <!-- Studio Form -->
 <section id="submit" class="py-20 px-6 bg-[#0a0a0a] text-center">
   <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Submit Your Studio Request</h2>
-
   <div class="glass-card max-w-xl mx-auto">
     <form id="submissionForm" class="space-y-4">
       <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
@@ -157,13 +139,10 @@
         <option value="Roast">Roast</option>
         <option value="Other">Intro / Skit / Audio Request</option>
       </select>
-
       <input type="text" id="handle" placeholder="@YourHandle" required
         class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
-
       <textarea id="notes" placeholder="Describe the request: tone, project, name, etc."
         class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
-
       <label class="flex items-center gap-3 text-white text-left text-sm">
         <input type="checkbox" id="limitedMint" class="accent-pink-500 w-5 h-5"/>
         <span>
@@ -174,7 +153,6 @@
           </span>
         </span>
       </label>
-
       <button type="button" onclick="submitStudioRequest()"
         class="w-full glow-button text-lg">Submit (20 CRO)</button>
     </form>
