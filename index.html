@@ -77,11 +77,17 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
+
+    @keyframes spin {
+      0% { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 
 <body>
-  <!-- HEADER -->
+
+    <!-- HEADER -->
   <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
     <div class="flex items-center gap-4">
       <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" alt="Y2K Logo" class="w-10 h-10 rounded-full neon-border" />
@@ -107,16 +113,9 @@
     <h1 class="text-4xl md:text-5xl neon-text font-bold mb-4">ROAST RECORDS</h1>
     <p class="text-lg text-gray-400 max-w-2xl mx-auto">
       The CROFAM Studio — create your anthem, soundtrack, or roast.  
-      Submissions burn CRO to buy back tokens. All heat, no chill.
+      Submissions fund buybacks and fuel the ecosystem. All heat, no chill.
     </p>
   </section>
-
-  <style>
-    @keyframes spin {
-      0% { transform: rotate(0); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
 
   <!-- VAULT + TOKENS -->
   <section id="vault" class="relative z-10 py-12 px-6 text-center bg-[#111]">
@@ -154,32 +153,29 @@
   </section>
 
   <!-- NFT SHOWCASE -->
-<section id="nfts" class="relative z-10 py-20 px-6 bg-[#111] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Featured NFTs</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-    <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5510.jpeg" alt="Eric Mode" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Eric Mode</div>
-    </a>
+  <section id="nfts" class="relative z-10 py-20 px-6 bg-[#111] text-center">
+    <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Featured NFTs</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5510.jpeg" alt="Eric Mode" class="w-full h-64 object-cover rounded-xl mb-2"/>
+        <div class="font-bold text-white text-lg">Eric Mode</div>
+      </a>
+      <a href="https://cronoshadow.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full h-64 object-cover rounded-xl mb-2"/>
+        <div class="font-bold text-white text-lg">Cards of Cronos</div>
+      </a>
+      <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5299.jpeg" alt="DiamondHands" class="w-full h-64 object-cover rounded-xl mb-2"/>
+        <div class="font-bold text-white text-lg">DiamondHands</div>
+      </a>
+      <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-full h-64 object-cover rounded-xl mb-2"/>
+        <div class="font-bold text-white text-lg">Dojo Warriors</div>
+      </a>
+    </div>
+  </section>
 
-    <a href="https://cronoshadow.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Cards of Cronos</div>
-    </a>
-
-    <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5299.jpeg" alt="DiamondHands" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">DiamondHands</div>
-    </a>
-
-    <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-full h-64 object-cover rounded-xl mb-2"/>
-      <div class="font-bold text-white text-lg">Dojo Warriors</div>
-    </a>
-  </div>
-</section>
-
-<!-- STUDIO FORM -->
+  <!-- STUDIO FORM -->
 <section id="submit" class="relative z-10 py-20 px-6 bg-[#0a0a0a] text-center">
   <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Submit Your Studio Request</h2>
 
@@ -217,7 +213,39 @@
   </div>
 </section>
 
-<!-- FIREBASE SUBMISSION HANDLER -->
+<!-- FOOTER -->
+<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
+  <div class="mb-4">Built by CROFAM. Fueled by degen creativity and pure flame.</div>
+  <div class="flex justify-center gap-6 text-white mt-6">
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter The Vault</a>
+  </div>
+</footer>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+    authDomain: "y2kroast-512ee.firebaseapp.com",
+    projectId: "y2kroast-512ee",
+    storageBucket: "y2kroast-512ee.appspot.com",
+    messagingSenderId: "602588659855",
+    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.db = db;
+  window.collection = collection;
+  window.addDoc = addDoc;
+</script>
+
+<!-- SUBMISSION HANDLER -->
 <script>
 async function submitStudioRequest() {
   const type = document.getElementById('requestType').value;
@@ -255,50 +283,7 @@ async function submitStudioRequest() {
 }
 </script>
 
-  <!-- OPTIONAL: RECENT REQUESTS FEED -->
-<!-- Toggle on when ready to show public requests -->
-<!--
-<section class="relative z-10 py-16 px-6 bg-[#111] text-center">
-  <h2 class="text-3xl neon-text font-bold mb-6">Recent Submissions</h2>
-  <div id="requestFeed" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"></div>
-</section>
-
-<script>
-async function updateRequestFeed() {
-  const q = query(collection(db, "studio_requests"), orderBy("timestamp", "desc"));
-  const snapshot = await getDocs(q);
-  const feed = document.getElementById("requestFeed");
-  feed.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    const d = doc.data();
-    feed.innerHTML += `
-      <div class="glass-card neon-border text-left text-white">
-        <div class="font-bold text-pink-400">@${d.handle}</div>
-        <div class="text-sm">Type: ${d.type}</div>
-        <div class="text-xs text-gray-300">${d.notes || '(No notes provided)'}</div>
-        <div class="text-xs ${d.limitedMint ? 'text-yellow-400' : 'text-green-400'} mt-1">
-          ${d.limitedMint ? 'Limited Mint Requested' : 'Standard Submission'}
-        </div>
-        <div class="text-xs text-gray-400 mt-2">${d.txHash.slice(0,12)}...</div>
-      </div>`;
-  });
-}
-window.addEventListener('load', updateRequestFeed);
-</script>
--->
-
-<!-- FOOTER -->
-<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  <div class="mb-4">Built by CROFAM. Powered by degen creativity and pure flame.</div>
-  <div class="flex justify-center gap-6 text-white mt-6">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter The Vault</a>
-  </div>
-</footer>
-
-<!-- PORTAL ENTRY OVERLAY -->
+<!-- PORTAL ENTRY ANIMATION -->
 <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
   <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
   <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
@@ -312,7 +297,7 @@ function enterPortal() {
   overlay.style.transform = "scale(1.05)";
   setTimeout(() => {
     overlay.style.display = "none";
-    document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('portal')?.scrollIntoView({ behavior: 'smooth' });
   }, 1000);
 }
 
@@ -327,8 +312,6 @@ window.addEventListener('load', () => {
   });
 });
 </script>
-
-<!-- CLOSE -->
-</body>
+  </body>
 </html>
 
