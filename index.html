@@ -56,6 +56,27 @@
       0% { transform: rotate(0); }
       100% { transform: rotate(360deg); }
     }
+    .toast {
+  background: rgba(255, 0, 255, 0.15);
+  border: 1px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 20px var(--accent);
+  animation: fadein 0.4s, floatup 0.4s, fadeout 0.4s 4.6s;
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatup {
+  0% { transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+@keyframes fadeout {
+  to { opacity: 0; transform: translateY(-10px); }
+}
   </style>
 </head>
 <body>
@@ -157,6 +178,9 @@
   <a id="shareOnX" href="#" target="_blank" class="glow-button mb-4">Share on 𝕏</a>
   <button onclick="closeConfirmation()" class="glow-button">Close</button>
 </div>
+
+  <!-- Live Toast Notifications -->
+<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
   
 </section>
 
