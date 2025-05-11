@@ -134,6 +134,11 @@
   </div>
 </section>
 
+  <section id="live" class="py-16 px-6 bg-[#111] text-center">
+  <h2 class="text-3xl neon-text font-bold mb-8">Live Submissions</h2>
+  <div id="liveRequests" class="flex overflow-x-auto gap-6 snap-x snap-mandatory"></div>
+</section>
+
 <!-- Vault + Token Access -->
 <section id="vault" class="py-12 px-6 text-center bg-[#111]">
   <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
@@ -243,16 +248,24 @@ async function submitStudioRequest() {
 
   try {
     status.innerHTML = `<span class="text-yellow-400">Sending 20 CRO...</span>`;
-    const txHash = await sendCRO("20", "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100");
+    const signer = croWallet.getSigner();
+const userAddress = await signer.getAddress();
+const message = `I authorize this ROAST RECORDS request from ${userAddress} at ${new Date().toISOString()}`;
+const signature = await signer.signMessage(message);
 
-    await addDoc(collection(db, "studio_requests"), {
-      type,
-      handle,
-      notes,
-      limitedMint,
-      txHash,
-      timestamp: Date.now()
-    });
+const txHash = await sendCRO("20", "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100");
+
+await addDoc(collection(db, "studio_requests"), {
+  type,
+  handle,
+  notes,
+  limitedMint,
+  txHash,
+  croAddress: userAddress,
+  message,
+  signature,
+  timestamp: Date.now()
+});
 
     status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
   } catch (err) {
@@ -295,6 +308,31 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+  // Load Live Submissions from Firestore
+import { getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+async function loadLiveSubmissions() {
+  const liveContainer = document.getElementById('liveRequests');
+  liveContainer.innerHTML = '';
+
+  const querySnapshot = await getDocs(collection(db, "studio_requests"));
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const item = document.createElement('div');
+    item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
+    item.innerHTML = `
+      <div class="text-pink-400 text-sm font-bold mb-2">${data.type}</div>
+      <div class="text-white text-lg mb-1">${data.handle}</div>
+      <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
+      <div class="text-xs text-green-400 break-all">Tx: ${data.txHash.slice(0,8)}...${data.txHash.slice(-8)}</div>
+    `;
+    liveContainer.appendChild(item);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', loadLiveSubmissions);
+  
 </script>
 
 </body>
