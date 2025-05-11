@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-  <title>ROAST RECORDS | Powered by Y2K</title>
-  <meta name="description" content="Submit crypto anthems, project songs, or savage roasts. Dual-chain music studio.">
+  <title>Welcome to Y2K | ROAST RECORDS Studio</title>
+  <meta name="description" content="The CROFAM music studio. Submit a request, fund the ecosystem, own the moment.">
   <meta name="theme-color" content="#0a0a0a" />
 
   <!-- Fonts & Tailwind -->
@@ -16,19 +16,16 @@
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
   <script src="https://bundle.run/buffer@6.0.3"></script>
 
-  <!-- GLOBAL STYLES -->
   <style>
     :root {
       color-scheme: dark;
       --accent: #ff00ff;
-      --glass: rgba(255, 255, 255, 0.06);
     }
 
     html, body {
       background-color: #0a0a0a;
       color: #e2e8f0;
       font-family: 'Rubik', sans-serif;
-      min-height: 100vh;
       overflow-x: hidden;
     }
 
@@ -48,15 +45,6 @@
       box-shadow: 0 0 20px var(--accent);
     }
 
-    .glass-card {
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 14px;
-      padding: 1.5rem;
-      box-shadow: 0 0 15px rgba(255, 0, 255, 0.1);
-    }
-
     .glow-button {
       padding: 0.75rem 1.5rem;
       border: 1px solid var(--accent);
@@ -72,6 +60,15 @@
       box-shadow: 0 0 20px var(--accent);
     }
 
+    .glass-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.1);
+    }
+
     .floating {
       animation: floaty 6s ease-in-out infinite;
     }
@@ -80,95 +77,67 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
-
-    .scroll-container {
-      display: flex;
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-    }
-
-    .scroll-content {
-      display: flex;
-      animation: scroll 30s linear infinite;
-    }
-
-    .scroll-content:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-256px * 4)); }
-    }
-
-    @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-      }
-    }
   </style>
 </head>
 
 <body>
-  <!-- FLOATING HEADER -->
+  <!-- HEADER -->
   <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
     <div class="flex items-center gap-4">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" alt="Logo" class="w-10 h-10 rounded-full neon-border"/>
-      <h1 class="text-xl neon-text font-bold">ROAST RECORDS</h1>
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" alt="Y2K Logo" class="w-10 h-10 rounded-full neon-border" />
+      <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
     </div>
     <nav class="flex gap-4 text-white text-sm">
       <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
-      <a href="#submit" class="hover:text-pink-400 transition">Submit</a>
+      <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
       <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
       <a href="#connect" class="hover:text-pink-400 transition">Connect</a>
     </nav>
   </header>
 
-  <!-- Spacer for header -->
+  <!-- SPACER -->
   <div class="h-20"></div>
 
-    <!-- ENTRY ANIMATION (optional) -->
-  <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-    <h1 class="text-4xl md:text-6xl neon-text font-bold mb-8 animate-pulse text-center">Welcome to ROAST RECORDS</h1>
-    <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl md:text-2xl hover:bg-pink-600 transition">Enter Portal</button>
-  </div>
-
-  <!-- LANDING SECTION -->
-  <section id="portal" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6 bg-[#0a0a0a]">
+  <!-- HERO SECTION -->
+  <section class="relative z-10 text-center py-20 px-6">
     <div class="flex justify-center mb-6">
       <div class="w-64 h-64 rounded-full neon-border floating"
-           style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 12s linear infinite;"></div>
+           style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;"></div>
     </div>
-    <h1 class="text-4xl md:text-5xl neon-text font-bold mb-4">Studio for Degens</h1>
-    <p class="text-lg text-gray-400 max-w-xl mb-6">Submit a song, anthem, or roast. Earn NFTs, burn CRO, fuel the vault.</p>
+    <h1 class="text-4xl md:text-5xl neon-text font-bold mb-4">ROAST RECORDS</h1>
+    <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+      The CROFAM Studio — create your anthem, soundtrack, or roast.  
+      Submissions burn CRO to buy back tokens. All heat, no chill.
+    </p>
   </section>
 
   <style>
     @keyframes spin {
-      0% { transform: rotate(0deg); }
+      0% { transform: rotate(0); }
       100% { transform: rotate(360deg); }
     }
   </style>
 
-  <!-- TOKEN TRADE LINKS -->
+  <!-- VAULT + TOKENS -->
   <section id="vault" class="relative z-10 py-12 px-6 text-center bg-[#111]">
-    <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Trade Tokens</h2>
+    <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
     <div class="flex flex-col md:flex-row justify-center gap-6">
+      <a href="https://y2k-the-vault.netlify.app/" target="_blank"
+         class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
+         🔐 Enter The Vault
+      </a>
       <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
          class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
-        Swap $Y2K on Obsidian
+         Buy $Y2K on Obsidian
       </a>
       <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
          class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
-        Trade $ROAST on Raydium
+         Trade $ROAST on Raydium
       </a>
     </div>
   </section>
 
-  <!-- WALLET CONNECT SECTION -->
+  <!-- CONNECT SECTION -->
   <section id="connect" class="relative z-10 py-20 px-6 bg-[#0a0a0a] text-center">
     <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Connect Your Wallet</h2>
     <div class="glass-card max-w-md mx-auto space-y-6">
@@ -184,33 +153,60 @@
     </div>
   </section>
 
-  <!-- SUBMIT A TRACK -->
-<section id="submit" class="relative z-10 py-20 px-6 bg-[#111] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Submit Your Request</h2>
+  <!-- NFT SHOWCASE -->
+<section id="nfts" class="relative z-10 py-20 px-6 bg-[#111] text-center">
+  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Featured NFTs</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5510.jpeg" alt="Eric Mode" class="w-full h-64 object-cover rounded-xl mb-2"/>
+      <div class="font-bold text-white text-lg">Eric Mode</div>
+    </a>
+
+    <a href="https://cronoshadow.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full h-64 object-cover rounded-xl mb-2"/>
+      <div class="font-bold text-white text-lg">Cards of Cronos</div>
+    </a>
+
+    <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5299.jpeg" alt="DiamondHands" class="w-full h-64 object-cover rounded-xl mb-2"/>
+      <div class="font-bold text-white text-lg">DiamondHands</div>
+    </a>
+
+    <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="neon-border p-4 rounded-xl hover:scale-105 transition">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5285.jpeg" alt="Dojo Warriors" class="w-full h-64 object-cover rounded-xl mb-2"/>
+      <div class="font-bold text-white text-lg">Dojo Warriors</div>
+    </a>
+  </div>
+</section>
+
+<!-- STUDIO FORM -->
+<section id="submit" class="relative z-10 py-20 px-6 bg-[#0a0a0a] text-center">
+  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-10">Submit Your Studio Request</h2>
 
   <div class="glass-card max-w-xl mx-auto">
     <form id="submissionForm" class="space-y-4">
       <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
-        <option value="">Choose Request Type</option>
+        <option value="">Select Type</option>
         <option value="Anthem">Anthem / Theme Song</option>
         <option value="Custom Song">Custom Song</option>
         <option value="Roast">Roast</option>
-        <option value="Other">Other (Intro, Skit, Project Soundtrack)</option>
+        <option value="Other">Intro / Skit / Audio Request</option>
       </select>
 
       <input type="text" id="handle" placeholder="@YourHandle" required
         class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
 
-      <textarea id="notes" placeholder="What do you want this to say? Any links? Project name?"
+      <textarea id="notes" placeholder="Describe the request: tone, project, name, etc."
         class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
 
-      <!-- Limited Mint Option -->
       <label class="flex items-center gap-3 text-white text-left text-sm">
         <input type="checkbox" id="limitedMint" class="accent-pink-500 w-5 h-5"/>
         <span>
-          Request Limited Mint (10 editions at 50 CRO each).  
+          Request Limited Mint (10 editions at 50 CRO each).
           <br/>
-          <span class="text-gray-400 text-xs italic">500 CRO will be used to buy back project tokens — or Y2K if personal.</span>
+          <span class="text-gray-400 text-xs italic">
+            500 CRO will be used to buy back project tokens — or Y2K if personal.
+          </span>
         </span>
       </label>
 
@@ -221,7 +217,7 @@
   </div>
 </section>
 
-<!-- FIREBASE SUBMISSION SCRIPT -->
+<!-- FIREBASE SUBMISSION HANDLER -->
 <script>
 async function submitStudioRequest() {
   const type = document.getElementById('requestType').value;
@@ -259,12 +255,12 @@ async function submitStudioRequest() {
 }
 </script>
 
-  <!-- OPTIONAL STUDIO FEED -->
-<!-- Uncomment if you want public visibility of recent requests -->
+  <!-- OPTIONAL: RECENT REQUESTS FEED -->
+<!-- Toggle on when ready to show public requests -->
 <!--
-<section class="relative z-10 py-16 px-6 bg-[#0a0a0a] text-center">
-  <h2 class="text-3xl neon-text font-bold mb-6">Recent Studio Requests</h2>
-  <div id="requestFeed" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto"></div>
+<section class="relative z-10 py-16 px-6 bg-[#111] text-center">
+  <h2 class="text-3xl neon-text font-bold mb-6">Recent Submissions</h2>
+  <div id="requestFeed" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"></div>
 </section>
 
 <script>
@@ -277,14 +273,14 @@ async function updateRequestFeed() {
   snapshot.forEach(doc => {
     const d = doc.data();
     feed.innerHTML += `
-      <div class="glass-card text-left space-y-2 neon-border">
-        <div class="text-pink-400 font-bold">@${d.handle}</div>
-        <div class="text-sm text-white">Type: ${d.type}</div>
-        <div class="text-xs text-gray-400 break-all">${d.notes}</div>
-        <div class="text-xs ${d.limitedMint ? 'text-yellow-400' : 'text-green-400'}">
+      <div class="glass-card neon-border text-left text-white">
+        <div class="font-bold text-pink-400">@${d.handle}</div>
+        <div class="text-sm">Type: ${d.type}</div>
+        <div class="text-xs text-gray-300">${d.notes || '(No notes provided)'}</div>
+        <div class="text-xs ${d.limitedMint ? 'text-yellow-400' : 'text-green-400'} mt-1">
           ${d.limitedMint ? 'Limited Mint Requested' : 'Standard Submission'}
         </div>
-        <div class="text-xs text-green-400 mt-2">${d.txHash.slice(0,10)}...</div>
+        <div class="text-xs text-gray-400 mt-2">${d.txHash.slice(0,12)}...</div>
       </div>`;
   });
 }
@@ -294,7 +290,7 @@ window.addEventListener('load', updateRequestFeed);
 
 <!-- FOOTER -->
 <footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  <div class="mb-4">Built for the degen airwaves. Minted by CRO and SOL believers.</div>
+  <div class="mb-4">Built by CROFAM. Powered by degen creativity and pure flame.</div>
   <div class="flex justify-center gap-6 text-white mt-6">
     <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
     <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
@@ -302,7 +298,12 @@ window.addEventListener('load', updateRequestFeed);
   </div>
 </footer>
 
-<!-- ENTER PORTAL LOGIC -->
+<!-- PORTAL ENTRY OVERLAY -->
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
+  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
+</div>
+
 <script>
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
@@ -314,19 +315,20 @@ function enterPortal() {
     document.getElementById('portal').scrollIntoView({ behavior: 'smooth' });
   }, 1000);
 }
-</script>
 
-<!-- SMOOTH SCROLL INIT -->
-<script>
 window.addEventListener('load', () => {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
     });
   });
 });
 </script>
+
+<!-- CLOSE -->
 </body>
 </html>
 
