@@ -406,6 +406,20 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 5000);
 }
 </script>
+
+  <script>
+function showConfirmationOverlay(handle) {
+  const overlay = document.getElementById('confirmationOverlay');
+  const shareBtn = document.getElementById('shareOnX');
+  if (overlay) overlay.classList.remove('hidden');
+  if (shareBtn) {
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(`${handle} just submitted to ROAST RECORDS! Check it out at y2kcoin.org #CROFAM #Y2K`)}`;
+  }
+}
+function closeConfirmation() {
+  document.getElementById('confirmationOverlay').classList.add('hidden');
+}
+</script>
   
 </body>
 </html>
