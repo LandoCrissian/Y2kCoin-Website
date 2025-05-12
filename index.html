@@ -345,23 +345,28 @@ await addDoc(collection(db, "studio_requests"), {
 </footer>
 
 <!-- Entry Logic -->
-<script>
-  function enterPortal() {
-    const overlay = document.getElementById('enterOverlay');
-    if (!overlay) return;
+function enterPortal() {
+  const overlay = document.getElementById('enterOverlay');
+  if (!overlay) return;
 
-    overlay.style.transition = "opacity 1s ease, transform 1s ease";
-    overlay.style.opacity = 0;
-    overlay.style.transform = "scale(1.05)";
+  overlay.style.transition = "opacity 1s ease, transform 1s ease";
+  overlay.style.opacity = 0;
+  overlay.style.transform = "scale(1.05)";
 
-    setTimeout(() => {
-      overlay.remove();
-      const portal = document.getElementById('portal');
-      if (portal) {
-        portal.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 1000);
-  }
+  setTimeout(() => {
+    overlay.remove();
+    const portal = document.getElementById('portal');
+    if (portal) {
+      portal.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Now that overlay is gone, play queued toasts
+    if (window.toastQueue?.length) {
+      toastQueue.forEach(msg => showToast(msg));
+      toastQueue = [];
+    }
+  }, 1000);
+}
 
   // Smooth scroll nav (FIXED: now inside a proper script tag)
   window.addEventListener('DOMContentLoaded', () => {
@@ -380,16 +385,21 @@ await addDoc(collection(db, "studio_requests"), {
 <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
 
 <script>
+let toastQueue = [];
+
 function showToast(message) {
   const toastContainer = document.getElementById('toastContainer');
+  if (!toastContainer || document.getElementById('enterOverlay')) {
+    toastQueue.push(message);
+    return;
+  }
+
   const toast = document.createElement('div');
   toast.className = 'toast';
   toast.textContent = message;
   toastContainer.appendChild(toast);
 
-  setTimeout(() => {
-    toast.remove();
-  }, 5000);
+  setTimeout(() => toast.remove(), 5000);
 }
 </script>
   
