@@ -325,7 +325,6 @@ async function submitStudioRequest() {
     });
 
     status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
-    showToast(`${handle} just submitted a ${type}`);
     showConfirmationOverlay(handle);
     document.getElementById('submissionForm').reset();
   } catch (err) {
