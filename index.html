@@ -238,8 +238,8 @@
   const db = getFirestore(app);
   const liveContainer = document.getElementById('liveRequests');
 
-  const ADMIN_WALLET = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
-  window.connectedWallet = null;
+  const ADMIN_WALLET = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+  window.connectedWallet = ""; // Make sure it's defined
 
   window.loadSubmissions = () => {
     onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
@@ -266,7 +266,6 @@
 
         const item = document.createElement('div');
         item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
-
         const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
 
         item.innerHTML = `
@@ -280,7 +279,6 @@
           <div class="text-xs text-gray-500">${formattedDate}</div>
           ${isAdmin ? `<button onclick="deleteRequest('${data.id}')" class="mt-2 px-3 py-1 bg-red-600 text-xs text-white rounded">Delete</button>` : ''}
         `;
-
         liveContainer.appendChild(item);
       });
     });
@@ -302,6 +300,9 @@
   window.db = db;
   window.collection = collection;
   window.addDoc = addDoc;
+
+  // ** FIX: Call immediately on page load **
+  window.addEventListener("DOMContentLoaded", loadSubmissions);
 </script>
 
 <!-- Wallet Connect Logic -->
