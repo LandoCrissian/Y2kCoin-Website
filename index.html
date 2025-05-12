@@ -178,10 +178,6 @@
   <a id="shareOnX" href="#" target="_blank" class="glow-button mb-4">Share on 𝕏</a>
   <button onclick="closeConfirmation()" class="glow-button">Close</button>
 </div>
-
-  <!-- Live Toast Notifications -->
-<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
-  
 </section>
 
   <!-- Firebase Setup -->
@@ -206,6 +202,13 @@
   onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
     liveContainer.innerHTML = '';
     querySnapshot.forEach((doc) => {
+      if (!window.__loadedIds) window.__loadedIds = new Set();
+const data = doc.data();
+
+if (!window.__loadedIds.has(doc.id)) {
+  showToast(`${data.handle} just submitted a ${data.type}`);
+  window.__loadedIds.add(doc.id);
+}
       const data = doc.data();
       const item = document.createElement('div');
       item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
@@ -369,6 +372,24 @@ await addDoc(collection(db, "studio_requests"), {
     });
   });
 </script>
+
+  <!-- Live Toast Container -->
+<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+<script>
+function showToast(message) {
+  const toastContainer = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 5000);
+}
+</script>
+  
 </body>
 </html>
 
