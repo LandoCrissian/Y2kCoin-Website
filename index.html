@@ -238,7 +238,7 @@
   const db = getFirestore(app);
   const liveContainer = document.getElementById('liveRequests');
 
-  const ADMIN_WALLET = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+  const ADMIN_WALLET = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
   window.connectedWallet = null;
 
   window.loadSubmissions = () => {
@@ -266,6 +266,7 @@
 
         const item = document.createElement('div');
         item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
+
         const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
 
         item.innerHTML = `
