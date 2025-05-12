@@ -52,146 +52,51 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
-    @keyframes spin-slow {
-      0% { transform: rotate(0deg); }
+    @keyframes spin {
+      0% { transform: rotate(0); }
       100% { transform: rotate(360deg); }
     }
-    .animate-spin-slow {
-      animation: spin-slow 18s linear infinite;
-    }
     .toast {
-      background: rgba(255, 0, 255, 0.15);
-      border: 1px solid var(--accent);
-      padding: 1rem 1.25rem;
-      border-radius: 10px;
-      color: white;
-      font-weight: bold;
-      box-shadow: 0 0 20px var(--accent);
-      animation: fadein 0.4s, floatup 0.4s, fadeout 0.4s 4.6s;
-    }
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes floatup {
-      0% { transform: translateY(10px); }
-      100% { transform: translateY(0); }
-    }
-    @keyframes fadeout {
-      to { opacity: 0; transform: translateY(-10px); }
-    }
-    #nftCarousel {
-      scroll-snap-type: x mandatory;
-      padding-top: 4rem;
-      padding-bottom: 2rem;
-    }
+  background: rgba(255, 0, 255, 0.15);
+  border: 1px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 20px var(--accent);
+  animation: fadein 0.4s, floatup 0.4s, fadeout 0.4s 4.6s;
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatup {
+  0% { transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+@keyframes fadeout {
+  to { opacity: 0; transform: translateY(-10px); }
+}
   </style>
 </head>
 <body>
-  <div id="app" class="relative">
-    <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-      <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
-      <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
-    </div>
+<div id="app" class="relative">
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
+  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
+</div>
 
-    <header class="fixed top-0 left-0 w-full p-4 z-40 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
-        <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
-      </div>
-      <nav class="flex gap-4 text-white text-sm">
-        <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
-        <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
-        <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
-      </nav>
-    </header>
-
-    <div class="h-20"></div>
-    <!-- NFT CAROUSEL begins below -->
-    <section id="nftCarousel" class="w-full overflow-x-auto snap-x snap-mandatory px-4 py-8 bg-black flex gap-6 items-center justify-start">
-
-  <!-- NFT 1 -->
-  <div class="snap-center min-w-[260px] glass-card neon-border p-4 text-center">
-    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden animate-spin-slow mb-4">
-      <img src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeiecacg3fdsidg2j2jopjr5sypqy43xvgvt4fenom5otygaeuc7roa" alt="NFT 1" class="w-full h-full object-cover"/>
-    </div>
-    <audio controls class="w-full">
-      <source src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeiecacg3fdsidg2j2jopjr5sypqy43xvgvt4fenom5otygaeuc7roa" type="audio/mpeg" />
-    </audio>
+<header class="fixed top-0 left-0 w-full p-4 z-40 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
+  <div class="flex items-center gap-4">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
+    <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
   </div>
-
-  <!-- NFT 2 -->
-  <div class="snap-center min-w-[260px] glass-card neon-border p-4 text-center">
-    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden animate-spin-slow mb-4">
-      <img src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeifnlaib735tl2qmondyxetq72gmqcqlxqfmw5f5zcmpnejwze2jg4" alt="NFT 2" class="w-full h-full object-cover"/>
-    </div>
-    <audio controls class="w-full">
-      <source src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeifnlaib735tl2qmondyxetq72gmqcqlxqfmw5f5zcmpnejwze2jg4" type="audio/mpeg" />
-    </audio>
-  </div>
-
-  <!-- NFT 3 -->
-  <div class="snap-center min-w-[260px] glass-card neon-border p-4 text-center">
-    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden animate-spin-slow mb-4">
-      <img src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeiadfqziqmsq6hsl2choxakk5i5o52ezwemq5gkjwmvpbs2yiltkpu" alt="NFT 3" class="w-full h-full object-cover"/>
-    </div>
-    <audio controls class="w-full">
-      <source src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeiadfqziqmsq6hsl2choxakk5i5o52ezwemq5gkjwmvpbs2yiltkpu" type="audio/mpeg" />
-    </audio>
-  </div>
-
-  <!-- NFT 4 -->
-  <div class="snap-center min-w-[260px] glass-card neon-border p-4 text-center">
-    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden animate-spin-slow mb-4">
-      <img src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeibzt3a6r5zoga6t4p4l2x5qhalgs3hznjzglwkyemc3amckh7k6qu" alt="NFT 4" class="w-full h-full object-cover"/>
-    </div>
-    <audio controls class="w-full">
-      <source src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeibzt3a6r5zoga6t4p4l2x5qhalgs3hznjzglwkyemc3amckh7k6qu" type="audio/mpeg" />
-    </audio>
-  </div>
-
-  <!-- NFT 5 -->
-  <div class="snap-center min-w-[260px] glass-card neon-border p-4 text-center">
-    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden animate-spin-slow mb-4">
-      <img src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeigbfnybxwuzktasb76wt72n2nyssobncemstw4tjw5guif5gpnecu" alt="NFT 5" class="w-full h-full object-cover"/>
-    </div>
-    <audio controls class="w-full">
-      <source src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeigbfnybxwuzktasb76wt72n2nyssobncemstw4tjw5guif5gpnecu" type="audio/mpeg" />
-    </audio>
-  </div>
-
-  <!-- NFT 6 -->
-  <div class="snap-center min-w-[260px] glass-card neon-border p-4 text-center">
-    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden animate-spin-slow mb-4">
-      <img src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeidrfyzueyftdpiostgwo7wxwjwaoehi23fpm3qfuw7ex6piaybruu" alt="NFT 6" class="w-full h-full object-cover"/>
-    </div>
-    <audio controls class="w-full">
-      <source src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeidrfyzueyftdpiostgwo7wxwjwaoehi23fpm3qfuw7ex6piaybruu" type="audio/mpeg" />
-    </audio>
-  </div>
-
-  <!-- NFT 7 -->
-  <div class="snap-center min-w-[260px] glass-card neon-border p-4 text-center">
-    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden animate-spin-slow mb-4">
-      <img src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeibb366sifugjunsbhqalkykwgdc4324fhsia6chuzcwopgrcns2bi" alt="NFT 7" class="w-full h-full object-cover"/>
-    </div>
-    <audio controls class="w-full">
-      <source src="https://blue-faithful-eagle-499.mypinata.cloud/ipfs/bafybeibb366sifugjunsbhqalkykwgdc4324fhsia6chuzcwopgrcns2bi" type="audio/mpeg" />
-    </audio>
-  </div>
-
-</section>
-
-    <style>
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.animate-spin-slow {
-  animation: spin-slow 18s linear infinite;
-}
-</style>
-
+  <nav class="flex gap-4 text-white text-sm">
+    <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
+    <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
+    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
+  </nav>
+</header>
 <div class="h-20"></div>
 
 <section class="text-center py-20 px-6" id="portal">
@@ -204,6 +109,7 @@
     The CROFAM Studio — create your anthem, soundtrack, or roast. Submissions support the ecosystem. All heat, no chill.
   </p>
 
+    <!-- Wallet Connect + Submission Block -->
   <div class="glass-card max-w-2xl mx-auto space-y-8">
     <div class="grid md:grid-cols-2 gap-4">
       <div>
@@ -249,126 +155,86 @@
   </div>
 </section>
 
-<section id="live" class="py-16 px-6 bg-[#111] text-center">
+  <section id="live" class="py-16 px-6 bg-[#111] text-center">
   <h2 class="text-3xl neon-text font-bold mb-8">Live Submissions</h2>
   <div id="liveRequests" class="flex overflow-x-auto gap-6 snap-x snap-mandatory"></div>
 </section>
 
-<!-- Confirmation Modal -->
-<div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4 hidden">
+<!-- Vault + Token Access -->
+<section id="vault" class="py-12 px-6 text-center bg-[#111]">
+  <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
+  <div class="flex flex-col md:flex-row justify-center gap-6">
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">🔐 Enter The Vault</a>
+    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Buy $Y2K</a>
+    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Trade $ROAST</a>
+  </div>
+
+  <div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4 hidden">
   <h2 class="text-3xl neon-text font-bold mb-4">Submission Confirmed!</h2>
   <p class="text-lg text-white mb-6">Your request has been received and is now live.</p>
   <a id="shareOnX" href="#" target="_blank" class="glow-button mb-4">Share on 𝕏</a>
   <button onclick="closeConfirmation()" class="glow-button">Close</button>
 </div>
+</section>
 
-<!-- Footer -->
-<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  <div class="mb-4">Built for CROFAM. Fueled by music, memes, and Y2K energy.</div>
-  <div class="flex justify-center gap-6 text-white mt-6">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter Vault</a>
-  </div>
-</footer>
-
-<!-- Scripts -->
-<script>
-function enterPortal() {
-  const overlay = document.getElementById('enterOverlay');
-  overlay.style.transition = "opacity 1s ease, transform 1s ease";
-  overlay.style.opacity = 0;
-  overlay.style.transform = "scale(1.05)";
-  setTimeout(() => overlay.remove(), 1000);
-}
-
-function showConfirmationOverlay(handle) {
-  const overlay = document.getElementById('confirmationOverlay');
-  const shareBtn = document.getElementById('shareOnX');
-  overlay.classList.remove('hidden');
-  shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(`${handle} just submitted to ROAST RECORDS! Check it out at y2kcoin.org #CROFAM #Y2K`)}`;
-}
-function closeConfirmation() {
-  document.getElementById('confirmationOverlay').classList.add('hidden');
-}
-</script>
-
-<script>
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
-    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-  });
-});
-</script>
-
-<!-- Toasts -->
-<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
-<script>
-let toastQueue = [];
-function showToast(message) {
-  const container = document.getElementById('toastContainer');
-  if (!container || document.getElementById('enterOverlay')) return toastQueue.push(message);
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = message;
-  container.appendChild(toast);
-  setTimeout(() => toast.remove(), 5000);
-}
-</script>
-
-<!-- Firebase + Wallet Logic -->
+  <!-- Firebase Setup -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
-  authDomain: "y2kroast-512ee.firebaseapp.com",
-  projectId: "y2kroast-512ee",
-  storageBucket: "y2kroast-512ee.appspot.com",
-  messagingSenderId: "602588659855",
-  appId: "1:602588659855:web:f01efa4b81e737d26270fa"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const liveContainer = document.getElementById('liveRequests');
+  const firebaseConfig = {
+    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+    authDomain: "y2kroast-512ee.firebaseapp.com",
+    projectId: "y2kroast-512ee",
+    storageBucket: "y2kroast-512ee.appspot.com",
+    messagingSenderId: "602588659855",
+    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+  };
 
-onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
-  const docs = [];
-  querySnapshot.forEach((doc) => docs.push({ id: doc.id, ...doc.data() }));
-  docs.sort((a, b) => a.timestamp - b.timestamp);
-  liveContainer.innerHTML = '';
-  if (!window.__loadedIds) window.__loadedIds = new Set();
-  docs.forEach((data) => {
-    if (!window.__loadedIds.has(data.id)) showToast(`${data.handle} just submitted a ${data.type}`);
-    window.__loadedIds.add(data.id);
-    const date = new Date(data.timestamp);
-    const formatted = date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
-    const el = document.createElement('div');
-    el.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
-    el.innerHTML = `
-      <div class="flex justify-between items-center mb-2">
-        <div class="text-pink-400 text-sm font-bold">${data.type}</div>
-        ${data.limitedMint ? '<div class="text-xs text-white bg-pink-600 px-2 py-1 rounded-full">LIMITED MINT</div>' : ''}
-      </div>
-      <div class="text-white text-lg mb-1">${data.handle}</div>
-      <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
-      <div class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</div>
-      <div class="text-xs text-gray-500">${formatted}</div>
-    `;
-    liveContainer.appendChild(el);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const liveContainer = document.getElementById('liveRequests');
+
+  // Display live submissions and toast new ones
+  onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
+    liveContainer.innerHTML = '';
+    if (!window.__loadedIds) window.__loadedIds = new Set();
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      // Show toast if new
+      if (!window.__loadedIds.has(doc.id)) {
+        showToast(`${data.handle} just submitted a ${data.type}`);
+      }
+
+      window.__loadedIds.add(doc.id); // Prevent repeat toasts
+
+      const item = document.createElement('div');
+      item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
+      item.innerHTML = `
+        <div class="text-pink-400 text-sm font-bold mb-2">${data.type}</div>
+        <div class="text-white text-lg mb-1">${data.handle}</div>
+        <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
+        <div class="text-xs text-green-400 break-all">Tx: ${data.txHash.slice(0,8)}...${data.txHash.slice(-8)}</div>
+      `;
+      liveContainer.appendChild(item);
+    });
   });
-});
 
-window.db = db;
-window.collection = collection;
-window.addDoc = addDoc;
+  // Expose Firebase globally if needed elsewhere
+  window.db = db;
+  window.collection = collection;
+  window.addDoc = addDoc;
 </script>
 
+<!-- Wallet Connect Logic -->
 <script>
 let croWallet = null;
+
 const CRONOS_MAINNET = {
   chainId: '0x19',
   chainName: 'Cronos Mainnet',
@@ -382,44 +248,62 @@ async function connectCRO() {
     if (!window.ethereum) throw new Error("Install MetaMask or DeFi Wallet.");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
+
     try {
-      await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: CRONOS_MAINNET.chainId }] });
-    } catch (e) {
-      if (e.code === 4902) {
-        await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [CRONOS_MAINNET] });
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: CRONOS_MAINNET.chainId }],
+      });
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [CRONOS_MAINNET],
+        });
       } else {
-        throw e;
+        throw switchError;
       }
     }
+
     croWallet = provider;
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     const balance = await provider.getBalance(address);
+
     document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO: ${address.slice(0,6)}...${address.slice(-4)}`;
     document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,6)} CRO`;
+
   } catch (err) {
     console.error("CRO Connect Error", err);
     document.getElementById('croStatus').innerHTML = `<span class="text-red-400">✗</span> ${err.message}`;
   }
 }
 
-async function sendCRO(amount, toAddress) {
+  async function sendCRO(amount, toAddress) {
   if (!croWallet) throw new Error("Connect your CRO wallet first.");
   const signer = croWallet.getSigner();
-  const tx = await signer.sendTransaction({ to: toAddress, value: ethers.utils.parseEther(amount) });
+  const tx = await signer.sendTransaction({
+    to: toAddress,
+    value: ethers.utils.parseEther(amount)
+  });
   return tx.hash;
 }
+</script>
 
+<!-- Studio Submission Logic -->
+<script>
 async function submitStudioRequest() {
   const type = document.getElementById('requestType').value;
   const handle = document.getElementById('handle').value.trim();
   const notes = document.getElementById('notes').value.trim();
   const limitedMint = document.getElementById('limitedMint').checked;
   const status = document.getElementById('studioStatus');
+
   if (!type || !handle.startsWith('@')) {
     status.innerHTML = `<span class="text-red-400">Please enter a valid type and handle (@handle).</span>`;
     return;
   }
+
   try {
     status.innerHTML = `<span class="text-yellow-400">Sending 20 CRO...</span>`;
     const signer = croWallet.getSigner();
@@ -429,12 +313,19 @@ async function submitStudioRequest() {
     const txHash = await sendCRO("20", "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100");
 
     await addDoc(collection(db, "studio_requests"), {
-      type, handle, notes, limitedMint, txHash,
-      croAddress: userAddress, message, signature,
+      type,
+      handle,
+      notes,
+      limitedMint,
+      txHash,
+      croAddress: userAddress,
+      message,
+      signature,
       timestamp: Date.now()
     });
 
     status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
+    showToast(`${handle} just submitted a ${type}`);
     showConfirmationOverlay(handle);
     document.getElementById('submissionForm').reset();
   } catch (err) {
@@ -444,8 +335,83 @@ async function submitStudioRequest() {
 }
 </script>
 
+<!-- Footer -->
+<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
+  <div class="mb-4">Built for CROFAM. Fueled by music, memes, and Y2K energy.</div>
+  <div class="flex justify-center gap-6 text-white mt-6">
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter Vault</a>
+  </div>
+</footer>
+
+<!-- Entry Logic -->
+<script>
+function enterPortal() {
+  const overlay = document.getElementById('enterOverlay');
+  if (!overlay) return;
+
+  overlay.style.transition = "opacity 1s ease, transform 1s ease";
+  overlay.style.opacity = 0;
+  overlay.style.transform = "scale(1.05)";
+
+  setTimeout(() => {
+    overlay.remove();
+    const portal = document.getElementById('portal');
+    if (portal) {
+      portal.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Now that overlay is gone, play queued toasts
+    if (window.toastQueue?.length) {
+      toastQueue.forEach(msg => showToast(msg));
+      toastQueue = [];
+    }
+  }, 1000);
+}
+</script>
+
+  <script>
+// Smooth scroll nav (FIXED: now inside a proper script tag)
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+});
+</script>
+
+  <!-- Live Toast Container -->
+<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+<script>
+let toastQueue = [];
+
+function showToast(message) {
+  const toastContainer = document.getElementById('toastContainer');
+  if (!toastContainer || document.getElementById('enterOverlay')) {
+    toastQueue.push(message);
+    return;
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 5000);
+}
+</script>
+  
 </body>
 </html>
+
+  
+
 
   
 
