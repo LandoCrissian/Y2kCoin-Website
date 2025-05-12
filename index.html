@@ -197,7 +197,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Attach to window so your normal script can access it
+  // Make Firestore functions globally available
   window.db = db;
   window.collection = collection;
   window.addDoc = addDoc;
