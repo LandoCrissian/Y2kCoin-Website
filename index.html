@@ -300,33 +300,34 @@ async function submitStudioRequest() {
   const status = document.getElementById('studioStatus');
 
   if (!type || !handle.startsWith('@')) {
-    status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
-showConfirmationOverlay(handle);
+    status.innerHTML = `<span class="text-red-400">Please enter a valid type and handle (@handle).</span>`;
     return;
   }
 
   try {
     status.innerHTML = `<span class="text-yellow-400">Sending 20 CRO...</span>`;
     const signer = croWallet.getSigner();
-const userAddress = await signer.getAddress();
-const message = `I authorize this ROAST RECORDS request from ${userAddress} at ${new Date().toISOString()}`;
-const signature = await signer.signMessage(message);
+    const userAddress = await signer.getAddress();
+    const message = `I authorize this ROAST RECORDS request from ${userAddress} at ${new Date().toISOString()}`;
+    const signature = await signer.signMessage(message);
+    const txHash = await sendCRO("20", "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100");
 
-const txHash = await sendCRO("20", "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100");
-
-await addDoc(collection(db, "studio_requests"), {
-  type,
-  handle,
-  notes,
-  limitedMint,
-  txHash,
-  croAddress: userAddress,
-  message,
-  signature,
-  timestamp: Date.now()
-});
+    await addDoc(collection(db, "studio_requests"), {
+      type,
+      handle,
+      notes,
+      limitedMint,
+      txHash,
+      croAddress: userAddress,
+      message,
+      signature,
+      timestamp: Date.now()
+    });
 
     status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
+    showToast(`${handle} just submitted a ${type}`);
+    showConfirmationOverlay(handle);
+    document.getElementById('submissionForm').reset();
   } catch (err) {
     console.error("Submission Error", err);
     status.innerHTML = `<span class="text-red-400">Error: ${err.message}</span>`;
