@@ -155,51 +155,43 @@
   </div>
 </section>
 
-  <section id="live" class="py-16 px-6 bg-[#111] text-center">
-  <h2 class="text-3xl neon-text font-bold mb-8">Live Submissions</h2>
-  <div id="liveRequests" class="flex overflow-x-auto gap-6 snap-x snap-mandatory"></div>
-</section>
-
-  <!-- Live Mints Section -->
-<section id="mints" class="py-16 px-6 bg-black text-center">
+  <section id="mints" class="py-16 px-6 bg-[#111] text-center">
   <h2 class="text-3xl neon-text font-bold mb-8">Live Mints</h2>
-  <div class="flex flex-wrap justify-center gap-6">
-
-    <!-- ERIC Mode -->
-    <div class="glass-card neon-border max-w-xs p-4 text-left">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" class="w-full rounded mb-4" alt="Eric Mode">
-      <h3 class="text-xl text-white font-bold mb-1">$ERIC Mode — Business Boomin’</h3>
-      <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="glow-button w-full mt-3">Mint Now</a>
+  <div id="mintCarousel" class="flex overflow-x-auto gap-6 snap-x snap-mandatory px-2 pb-4 scroll-smooth">
+    <!-- MINT CARD: Eric -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mint" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">ERIC</h3>
+      <p class="text-gray-400 text-sm">The original anthem. Genesis-level energy.</p>
     </div>
 
-    <!-- Cards of Cronos -->
-    <div class="glass-card neon-border max-w-xs p-4 text-left">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" class="w-full rounded mb-4" alt="Cards of Cronos">
+    <!-- MINT CARD: Cards of Cronos -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full rounded mb-4"/>
       <h3 class="text-xl text-white font-bold mb-1">Cards of Cronos</h3>
-      <a href="https://cronoshadow.nfts2.me/" target="_blank" class="glow-button w-full mt-3">Mint Now</a>
+      <p class="text-gray-400 text-sm">Your on-chain fate sealed in sound.</p>
     </div>
 
-    <!-- Diamond Hands -->
-    <div class="glass-card neon-border max-w-xs p-4 text-left">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" class="w-full rounded mb-4" alt="DiamondHands">
-      <h3 class="text-xl text-white font-bold mb-1">DiamondHands — Final Strike Mode</h3>
-      <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank" class="glow-button w-full mt-3">Mint Now</a>
+    <!-- MINT CARD: Diamond Hands -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="Diamond Hands" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">Diamond Hands</h3>
+      <p class="text-gray-400 text-sm">Hold through the static. This one's forever.</p>
     </div>
 
-    <!-- DOJO Warriors -->
-    <div class="glass-card neon-border max-w-xs p-4 text-left">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" class="w-full rounded mb-4" alt="Dojo Warriors">
-      <h3 class="text-xl text-white font-bold mb-1">DOJO WARRIORS — Anthem</h3>
-      <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="glow-button w-full mt-3">Mint Now</a>
+    <!-- MINT CARD: DoJO -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="DOJO" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">DOJO</h3>
+      <p class="text-gray-400 text-sm">Discipline, chaos, and rhythm. Mint approved.</p>
     </div>
 
-    <!-- Dead Chain Syndicate -->
-    <div class="glass-card neon-border max-w-xs p-4 text-left">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5743.jpeg" class="w-full rounded mb-4" alt="Dead Chain Syndicate">
-      <h3 class="text-xl text-white font-bold mb-1">Dead Chain Syndicate</h3>
-      <a href="https://dead-chain-syndicate.nfts2.me/" target="_blank" class="glow-button w-full mt-3">Mint Now</a>
+    <!-- MINT CARD: The Syndicate -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5743.jpeg" alt="The Syndicate" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">The Syndicate</h3>
+      <p class="text-gray-400 text-sm">Degens unite. The chain has no mercy.</p>
     </div>
-
   </div>
 </section>
 
@@ -479,7 +471,23 @@ function closeConfirmation() {
   document.getElementById('confirmationOverlay').classList.add('hidden');
 }
 </script>
-  
+
+  <script>
+  const mintCarousel = document.getElementById('mintCarousel');
+  let scrollIndex = 0;
+
+  function autoScrollMints() {
+    if (!mintCarousel) return;
+    const cards = mintCarousel.children;
+    if (!cards.length) return;
+
+    scrollIndex = (scrollIndex + 1) % cards.length;
+    const cardWidth = cards[0].offsetWidth + 24; // width + gap
+    mintCarousel.scrollTo({ left: scrollIndex * cardWidth, behavior: 'smooth' });
+  }
+
+  setInterval(autoScrollMints, 4000); // scroll every 4 seconds
+</script>
 </body>
 </html>
 
