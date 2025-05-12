@@ -223,7 +223,7 @@
   <!-- Firebase Setup -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
@@ -238,100 +238,66 @@
   const db = getFirestore(app);
   const liveContainer = document.getElementById('liveRequests');
 
-  function loadSubmissions() {
-  onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
-    const docs = [];
-    querySnapshot.forEach((doc) => {
-      docs.push({ id: doc.id, ...doc.data() });
-    });
+  const ADMIN_WALLET = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+  window.connectedWallet = null;
 
-    docs.sort((a, b) => a.timestamp - b.timestamp);
-
-    liveContainer.innerHTML = '';
-    if (!window.__loadedIds) window.__loadedIds = new Set();
-
-    docs.forEach((data) => {
-      if (!window.__loadedIds.has(data.id)) {
-        showToast(`${data.handle} just submitted a ${data.type}`);
-      }
-
-      window.__loadedIds.add(data.id);
-
-      const date = new Date(data.timestamp);
-      const formattedDate = date.toLocaleString('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
+  window.loadSubmissions = () => {
+    onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ id: doc.id, ...doc.data() });
       });
 
-      const item = document.createElement('div');
-      item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
+      docs.sort((a, b) => a.timestamp - b.timestamp);
+      liveContainer.innerHTML = '';
+      if (!window.__loadedIds) window.__loadedIds = new Set();
 
-      const isAdmin = connectedWallet === ADMIN_WALLET;
-      item.innerHTML = `
-        <div class="flex justify-between items-center mb-2">
-          <div class="text-pink-400 text-sm font-bold">${data.type}</div>
-          ${data.limitedMint ? '<div class="text-xs text-white bg-pink-600 px-2 py-1 rounded-full">LIMITED MINT</div>' : ''}
-        </div>
-        <div class="text-white text-lg mb-1">${data.handle}</div>
-        <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
-        <div class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</div>
-        <div class="text-xs text-gray-500">${formattedDate}</div>
-        ${isAdmin ? `<button onclick="deleteRequest('${data.id}')" class="mt-2 px-3 py-1 bg-red-600 text-xs text-white rounded">Delete</button>` : ''}
-      `;
-      liveContainer.appendChild(item);
+      docs.forEach((data) => {
+        if (!window.__loadedIds.has(data.id)) {
+          showToast(`${data.handle} just submitted a ${data.type}`);
+        }
+
+        window.__loadedIds.add(data.id);
+        const date = new Date(data.timestamp);
+        const formattedDate = date.toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        });
+
+        const item = document.createElement('div');
+        item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
+        const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
+
+        item.innerHTML = `
+          <div class="flex justify-between items-center mb-2">
+            <div class="text-pink-400 text-sm font-bold">${data.type}</div>
+            ${data.limitedMint ? '<div class="text-xs text-white bg-pink-600 px-2 py-1 rounded-full">LIMITED MINT</div>' : ''}
+          </div>
+          <div class="text-white text-lg mb-1">${data.handle}</div>
+          <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
+          <div class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</div>
+          <div class="text-xs text-gray-500">${formattedDate}</div>
+          ${isAdmin ? `<button onclick="deleteRequest('${data.id}')" class="mt-2 px-3 py-1 bg-red-600 text-xs text-white rounded">Delete</button>` : ''}
+        `;
+
+        liveContainer.appendChild(item);
+      });
     });
-  });
-}
+  };
 
-  // Display live submissions and toast new ones
-onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
-  const docs = [];
-  querySnapshot.forEach((doc) => {
-    docs.push({ id: doc.id, ...doc.data() });
-  });
+  window.deleteRequest = async function (id) {
+    const confirmDelete = confirm("Are you sure you want to delete this submission?");
+    if (!confirmDelete) return;
 
-  // Sort by timestamp ascending (oldest first)
-  docs.sort((a, b) => a.timestamp - b.timestamp);
-
-  liveContainer.innerHTML = '';
-  if (!window.__loadedIds) window.__loadedIds = new Set();
-
-  docs.forEach((data) => {
-    // Show toast only once per session
-    if (!window.__loadedIds.has(data.id)) {
-      showToast(`${data.handle} just submitted a ${data.type}`);
+    try {
+      await deleteDoc(doc(db, "studio_requests", id));
+      showToast("Submission deleted.");
+    } catch (err) {
+      console.error("Delete Error", err);
+      showToast("Failed to delete.");
     }
+  };
 
-    window.__loadedIds.add(data.id);
-
-    const date = new Date(data.timestamp);
-    const formattedDate = date.toLocaleString('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
-
-    const item = document.createElement('div');
-    item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
-
-    const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
-
-    item.innerHTML = `
-      <div class="flex justify-between items-center mb-2">
-        <div class="text-pink-400 text-sm font-bold">${data.type}</div>
-        ${data.limitedMint ? '<div class="text-xs text-white bg-pink-600 px-2 py-1 rounded-full">LIMITED MINT</div>' : ''}
-      </div>
-      <div class="text-white text-lg mb-1">${data.handle}</div>
-      <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
-      <div class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</div>
-      <div class="text-xs text-gray-500">${formattedDate}</div>
-      ${isAdmin ? `<button onclick="deleteRequest('${data.id}')" class="mt-2 px-3 py-1 bg-red-600 text-xs text-white rounded">Delete</button>` : ''}
-    `;
-
-    liveContainer.appendChild(item);
-  });
-});
-
-  // Expose Firebase globally if needed elsewhere
   window.db = db;
   window.collection = collection;
   window.addDoc = addDoc;
