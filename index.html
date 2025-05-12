@@ -290,7 +290,8 @@
 
 <!-- Wallet Connect Logic -->
 <script>
-let croWallet = null;
+const ADMIN_WALLET = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+let connectedWallet = null;
 
 const CRONOS_MAINNET = {
   chainId: '0x19',
@@ -325,6 +326,7 @@ async function connectCRO() {
     croWallet = provider;
     const signer = provider.getSigner();
     const address = await signer.getAddress();
+    connectedWallet = address.toLowerCase();
     const balance = await provider.getBalance(address);
 
     document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO: ${address.slice(0,6)}...${address.slice(-4)}`;
