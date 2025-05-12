@@ -345,6 +345,7 @@ await addDoc(collection(db, "studio_requests"), {
 </footer>
 
 <!-- Entry Logic -->
+<script>
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
   if (!overlay) return;
@@ -367,6 +368,7 @@ function enterPortal() {
     }
   }, 1000);
 }
+</script>
 
   // Smooth scroll nav (FIXED: now inside a proper script tag)
   window.addEventListener('DOMContentLoaded', () => {
