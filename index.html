@@ -568,6 +568,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const shareBtn = document.getElementById('shareOnX');
+  const closeBtn = document.querySelector('#confirmationOverlay button');
+
+  if (shareBtn) {
+    shareBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = shareBtn.getAttribute('href');
+      if (url) window.open(url, '_blank');
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      document.getElementById('confirmationOverlay').classList.add('hidden');
+    });
+  }
+});
+</script>
   
 </body>
 </html>
