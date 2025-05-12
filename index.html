@@ -196,12 +196,39 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const liveContainer = document.getElementById('liveRequests');
 
-  // Make Firestore functions globally available
+  // Display live submissions and toast new ones
+  onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
+    liveContainer.innerHTML = '';
+    if (!window.__loadedIds) window.__loadedIds = new Set();
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      // Show toast if new
+      if (!window.__loadedIds.has(doc.id)) {
+        showToast(`${data.handle} just submitted a ${data.type}`);
+      }
+
+      window.__loadedIds.add(doc.id); // Prevent repeat toasts
+
+      const item = document.createElement('div');
+      item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
+      item.innerHTML = `
+        <div class="text-pink-400 text-sm font-bold mb-2">${data.type}</div>
+        <div class="text-white text-lg mb-1">${data.handle}</div>
+        <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
+        <div class="text-xs text-green-400 break-all">Tx: ${data.txHash.slice(0,8)}...${data.txHash.slice(-8)}</div>
+      `;
+      liveContainer.appendChild(item);
+    });
+  });
+
+  // Expose Firebase globally if needed elsewhere
   window.db = db;
   window.collection = collection;
   window.addDoc = addDoc;
-  window.onSnapshot = onSnapshot;
 </script>
 
 <!-- Wallet Connect Logic -->
