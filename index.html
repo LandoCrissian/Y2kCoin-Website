@@ -343,12 +343,14 @@ async function connectCRO() {
     croWallet = provider;
     const signer = provider.getSigner();
     const address = await signer.getAddress();
-    connectedWallet = address.toLowerCase();
-    const balance = await provider.getBalance(address);
+    connectedWallet = address.toLowerCase();              // keeps local use
+    window.connectedWallet = address.toLowerCase();       // fix: expose globally
 
+    const balance = await provider.getBalance(address);
     document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO: ${address.slice(0,6)}...${address.slice(-4)}`;
     document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,6)} CRO`;
-    loadSubmissions();
+
+    loadSubmissions(); // make sure it reloads *after* setting connectedWallet
 
   } catch (err) {
     console.error("CRO Connect Error", err);
