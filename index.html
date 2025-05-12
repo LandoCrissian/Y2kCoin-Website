@@ -489,13 +489,26 @@ function showToast(message) {
 function showConfirmationOverlay(handle) {
   const overlay = document.getElementById('confirmationOverlay');
   const shareBtn = document.getElementById('shareOnX');
+
   if (overlay) overlay.classList.remove('hidden');
+
   if (shareBtn) {
-    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(`${handle} just submitted to ROAST RECORDS! Check it out at y2kcoin.org #CROFAM #Y2K`)}`;
+    const templates = [
+      `${handle} just dropped fire at ROAST RECORDS! #CROFAM #Y2K`,
+      `${handle} just requested a banger on-chain. #Y2K #CryptoMusic`,
+      `${handle} joined the ROAST WAVE. Studio energy unmatched. #CROFAM`,
+      `${handle} submitted a 🔥 track request. Let the vault echo.`,
+      `Fresh ROAST coming from ${handle}. Who's next? #Y2KCoin`,
+      `${handle} is making CROFAM history at ROAST RECORDS.`,
+      `Another on-chain masterpiece requested by ${handle}.`,
+      `${handle} is cooking something loud... real loud. #VaultUnlocked`,
+      `${handle} lit the match. ROAST incoming. #CROFAM #ROASTRECORDS`,
+      `Vault request from ${handle} confirmed. Y2K never sleeps.`
+    ];
+    const message = templates[Math.floor(Math.random() * templates.length)];
+    const url = `https://y2kcoin.org`;
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(message + ' ' + url)}`;
   }
-}
-function closeConfirmation() {
-  document.getElementById('confirmationOverlay').classList.add('hidden');
 }
 </script>
 
