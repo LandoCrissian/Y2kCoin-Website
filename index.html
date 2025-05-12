@@ -325,7 +325,6 @@ async function submitStudioRequest() {
     });
 
     status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
-    showToast(`${handle} just submitted a ${type}`);
     showConfirmationOverlay(handle);
     document.getElementById('submissionForm').reset();
   } catch (err) {
@@ -406,9 +405,26 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 5000);
 }
 </script>
+
+  <script>
+function showConfirmationOverlay(handle) {
+  const overlay = document.getElementById('confirmationOverlay');
+  const shareBtn = document.getElementById('shareOnX');
+  if (overlay) overlay.classList.remove('hidden');
+  if (shareBtn) {
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(`${handle} just submitted to ROAST RECORDS! Check it out at y2kcoin.org #CROFAM #Y2K`)}`;
+  }
+}
+function closeConfirmation() {
+  document.getElementById('confirmationOverlay').classList.add('hidden');
+}
+</script>
   
 </body>
 </html>
+
+  
+
 
   
 
