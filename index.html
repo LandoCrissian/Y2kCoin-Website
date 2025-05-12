@@ -545,5 +545,29 @@ function showConfirmationOverlay(handle) {
     }
   };
 </script>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const shareBtn = document.getElementById('shareOnX');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', (e) => {
+      const url = shareBtn.href;
+      if (url && url.startsWith('https://x.com')) {
+        window.open(url, '_blank');
+      } else {
+        e.preventDefault();
+      }
+    });
+  }
+
+  const closeBtn = document.querySelector('#confirmationOverlay button');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      document.getElementById('confirmationOverlay').classList.add('hidden');
+    });
+  }
+});
+</script>
+  
 </body>
 </html>
