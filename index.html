@@ -404,7 +404,7 @@ async function submitStudioRequest() {
     });
 
     status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
-    showConfirmationOverlay(handle);
+    showConfirmationOverlay(handle, type);
     document.getElementById('submissionForm').reset();
   } catch (err) {
     console.error("Submission Error", err);
@@ -486,27 +486,40 @@ function showToast(message) {
 </script>
 
   <script>
-function showConfirmationOverlay(handle) {
+function showConfirmationOverlay(handle, type) {
   const overlay = document.getElementById('confirmationOverlay');
   const shareBtn = document.getElementById('shareOnX');
-
   if (overlay) overlay.classList.remove('hidden');
 
+  let templates = [];
+
+  switch (type) {
+    case "Roast":
+      templates = [
+        `I just dropped a roast request inside the Vault. Let the flames begin. #ROASTRECORDS #CROFAM`,
+        `Vault roast request submitted. You better hope it ain't about you. #CryptoMusic #Y2K`,
+        `I pulled up to ROAST RECORDS with smoke in mind. Submission locked. #CROFAM #Y2KCoin`,
+      ];
+      break;
+    case "Anthem":
+    case "Custom Song":
+      templates = [
+        `Just locked in an anthem request at ROAST RECORDS. Energy incoming. #Y2K #CryptoMusic`,
+        `My sound. My story. Vault anthem request submitted. #CROFAM #Y2KCoin`,
+        `I just cooked up a custom track submission. This one’s for the chain. #ROASTRECORDS`,
+      ];
+      break;
+    default:
+      templates = [
+        `Dropped a creative request at ROAST RECORDS. Skit, intro, or something in-between. #Y2K #CryptoMusic`,
+        `Submitted a custom request to the Vault studio. Let’s see what comes back. #CROFAM #ROASTRECORDS`,
+      ];
+      break;
+  }
+
+  const message = templates[Math.floor(Math.random() * templates.length)];
+  const url = `https://y2kcoin.org`;
   if (shareBtn) {
-    const templates = [
-      `${handle} just dropped fire at ROAST RECORDS! #CROFAM #Y2K`,
-      `${handle} just requested a banger on-chain. #Y2K #CryptoMusic`,
-      `${handle} joined the ROAST WAVE. Studio energy unmatched. #CROFAM`,
-      `${handle} submitted a 🔥 track request. Let the vault echo.`,
-      `Fresh ROAST coming from ${handle}. Who's next? #Y2KCoin`,
-      `${handle} is making CROFAM history at ROAST RECORDS.`,
-      `Another on-chain masterpiece requested by ${handle}.`,
-      `${handle} is cooking something loud... real loud. #VaultUnlocked`,
-      `${handle} lit the match. ROAST incoming. #CROFAM #ROASTRECORDS`,
-      `Vault request from ${handle} confirmed. Y2K never sleeps.`
-    ];
-    const message = templates[Math.floor(Math.random() * templates.length)];
-    const url = `https://y2kcoin.org`;
     shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(message + ' ' + url)}`;
   }
 }
