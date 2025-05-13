@@ -546,46 +546,26 @@ function showConfirmationOverlay(handle) {
   };
 </script>
 
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
+<script>
+window.addEventListener('load', () => {
+  const overlay = document.getElementById('confirmationOverlay');
   const shareBtn = document.getElementById('shareOnX');
+  const closeBtn = overlay?.querySelector('button');
+
   if (shareBtn) {
-    shareBtn.addEventListener('click', (e) => {
+    shareBtn.onclick = (e) => {
+      e.preventDefault();
       const url = shareBtn.href;
       if (url && url.startsWith('https://x.com')) {
         window.open(url, '_blank');
-      } else {
-        e.preventDefault();
       }
-    });
-  }
-
-  const closeBtn = document.querySelector('#confirmationOverlay button');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      document.getElementById('confirmationOverlay').classList.add('hidden');
-    });
-  }
-});
-</script>
-
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const shareBtn = document.getElementById('shareOnX');
-  const closeBtn = document.querySelector('#confirmationOverlay button');
-
-  if (shareBtn) {
-    shareBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const url = shareBtn.getAttribute('href');
-      if (url) window.open(url, '_blank');
-    });
+    };
   }
 
   if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      document.getElementById('confirmationOverlay').classList.add('hidden');
-    });
+    closeBtn.onclick = () => {
+      overlay.classList.add('hidden');
+    };
   }
 });
 </script>
