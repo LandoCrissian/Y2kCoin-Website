@@ -120,5 +120,87 @@
       document.getElementById("solInputSection").classList.add("hidden");
     };
   </script>
+
+    <div class="glass max-w-4xl mx-auto mt-10">
+    <h2 class="text-xl mb-4 text-center">Verified Y2K Holders</h2>
+    <div id="leaderboard" class="space-y-2 text-sm"></div>
+  </div>
+
+  <div id="adminPanel" class="glass max-w-4xl mx-auto mt-10 hidden">
+    <h2 class="text-xl mb-4 text-center text-yellow-300">Admin Airdrop Panel</h2>
+    <button onclick="airdropAll('Y2K')" class="btn mb-4 mr-2">Airdrop Y2K to All</button>
+    <button onclick="airdropAll('ROAST')" class="btn mb-4">Airdrop ROAST to All</button>
+  </div>
+
+  <script>
+    const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+
+    async function loadLeaderboard() {
+      const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
+      const list = document.getElementById("leaderboard");
+      list.innerHTML = "";
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
+        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
+        const time = data.joinedAt?.toDate().toLocaleString() || "Unknown";
+
+        const row = document.createElement("div");
+        row.className = "p-3 rounded border border-gray-700 bg-black/30 flex flex-col sm:flex-row justify-between items-start sm:items-center";
+
+        row.innerHTML = `
+          <div>
+            <div><strong>CRO:</strong> ${croShort}</div>
+            <div><strong>SOL:</strong> ${solShort}</div>
+            <div><strong>Joined:</strong> ${time}</div>
+          </div>
+          <div class="mt-3 sm:mt-0 sm:ml-4">
+            <button class="btn mr-2" onclick="airdrop('${data.croAddress}', 'Y2K')">Airdrop Y2K</button>
+            <button class="btn" onclick="airdrop('${data.solAddress}', 'ROAST')">Airdrop ROAST</button>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    async function detectAdmin() {
+      if (typeof window.ethereum === "undefined") return;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const address = (await signer.getAddress()).toLowerCase();
+      if (address === adminWallet) {
+        document.getElementById("adminPanel").classList.remove("hidden");
+      }
+    }
+
+    function airdrop(wallet, type) {
+      const confirmed = confirm(`Manually send ${type} to:\n${wallet}\n\nMark as complete in Firebase?`);
+      if (!confirmed) return;
+      const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
+      db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
+      alert(`Marked ${type} airdrop for ${wallet}`);
+    }
+
+    function airdropAll(type) {
+      const confirmed = confirm(`Mark ${type} airdrop for ALL users?`);
+      if (!confirmed) return;
+
+      db.collection("airdrops").get().then(snapshot => {
+        snapshot.forEach(doc => {
+          const wallet = doc.id;
+          const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
+          db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
+        });
+        alert(`Marked ${type} airdrop for all.`);
+      });
+    }
+
+    // Run on load
+    detectAdmin();
+    loadLeaderboard();
+  </script>
+  
 </body>
 </html>
