@@ -220,31 +220,34 @@
   }
 
   async function loadLeaderboard() {
-    const snapshot = await db.collection("airdrops")
-      .where("status", "==", "approved")
-      .orderBy("joinedAt", "desc").get();
+  const snapshot = await db.collection("airdrops")
+    .where("status", "==", "approved")
+    .orderBy("joinedAt", "desc").get();
 
-    const list = document.getElementById("leaderboard");
-    list.innerHTML = "";
+  const list = document.getElementById("leaderboard");
+  list.innerHTML = "";
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if (!data.xHandle || !data.solAddress) return;
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const cro = doc.id;
+    const sol = data.solAddress;
+    const x = data.xHandle;
 
-      const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
-      const solShort = data.solAddress.slice(0, 4) + "..." + data.solAddress.slice(-4);
-      const x = data.xHandle;
+    if (!sol || !x || !cro) return;
 
-      list.innerHTML += `
-        <div class="p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3">
-          <div>
-            <div><strong>𝕏:</strong> ${x}</div>
-            <div><strong>CRO:</strong> ${croShort}</div>
-            <div><strong>SOL:</strong> ${solShort}</div>
-          </div>
-        </div>`;
-    });
-  }
+    const croShort = cro.slice(0, 6) + "..." + cro.slice(-4);
+    const solShort = sol.slice(0, 4) + "..." + sol.slice(-4);
+
+    list.innerHTML += `
+      <div class="p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3">
+        <div>
+          <div><strong>𝕏:</strong> ${x}</div>
+          <div><strong>CRO:</strong> ${croShort}</div>
+          <div><strong>SOL:</strong> ${solShort}</div>
+        </div>
+      </div>`;
+  });
+}
 
   async function loadAdminList() {
     const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
@@ -282,12 +285,12 @@
   }
 
   function updateStatus(wallet, status) {
-    db.collection("airdrops").doc(wallet).update({ status }).then(() => {
-      alert(`✅ ${wallet} marked as ${status}`);
-      loadAdminList();
-      loadLeaderboard();
-    });
-  }
+  db.collection("airdrops").doc(wallet).update({ status }).then(() => {
+    alert(`✅ ${wallet} marked as ${status}`);
+    loadAdminList();
+    loadLeaderboard(); // Ensure leaderboard refreshes
+  });
+}
 
   function deleteUser(wallet) {
     const confirmDelete = confirm(`Delete ${wallet} from the system? This cannot be undone.`);
