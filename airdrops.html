@@ -5,26 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Y2K x ROAST Airdrop Portal</title>
   <meta name="theme-color" content="#00ffe1" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
   <style>
     body {
-      font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(145deg, #000000, #0f0f0f);
+      font-family: 'Rubik', sans-serif;
+      background: radial-gradient(circle at top, #111, #000);
       color: white;
       padding: 20px;
     }
     .glass {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 16px;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(10px);
       padding: 24px;
-      box-shadow: 0 0 18px #00ffe1;
+      box-shadow: 0 0 20px rgba(0, 255, 225, 0.4);
     }
     .btn {
       background: linear-gradient(to right, #00ffe1, #ff00f7);
@@ -32,9 +31,10 @@
       font-weight: bold;
       padding: 10px 24px;
       border-radius: 8px;
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
     }
     .btn:hover {
+      transform: scale(1.05);
       filter: brightness(1.15);
     }
     .badge {
@@ -48,25 +48,33 @@
     .pending { background: #facc15; color: black; }
     .denied  { background: #f43f5e; color: white; }
     .updated { background: #38bdf8; color: black; }
+    input {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid #666;
+      padding: 10px;
+      color: white;
+      width: 100%;
+      border-radius: 6px;
+    }
   </style>
 </head>
 
 <body>
   <div class="glass max-w-xl mx-auto mt-10 text-center">
-    <h1 class="text-3xl mb-4">Y2K x ROAST Airdrop Access</h1>
-    <p class="mb-4">Holding 4M+ Y2K? You’re already staking.<br>Claim your ROAST by verifying below.</p>
+    <h1 class="text-4xl font-bold mb-4 tracking-wide" style="font-family: 'Orbitron', sans-serif;">Y2K x ROAST Airdrop Access</h1>
+    <p class="mb-4 text-lg text-gray-300">Holding 4M+ Y2K? You’re already staking.<br>Claim your ROAST by verifying below.</p>
     <button id="connectBtn" class="btn mb-4">Verify Holdings</button>
     <div id="walletInfo" class="text-sm opacity-80 mb-2"></div>
     <div id="statusMessage" class="text-lg font-bold mb-4"></div>
 
     <div id="formSection" class="hidden">
-      <input type="text" id="xHandle" placeholder="Enter 𝕏 handle (e.g. @vaultuser)" class="w-full p-2 mb-3 rounded bg-black border border-gray-600 text-white" />
-      <input type="text" id="solAddress" placeholder="Enter Solana Wallet Address" class="w-full p-2 mb-3 rounded bg-black border border-gray-600 text-white" />
+      <input type="text" id="xHandle" placeholder="Enter 𝕏 handle (e.g. @vaultuser)" class="mb-3" />
+      <input type="text" id="solAddress" placeholder="Enter Solana Wallet Address" class="mb-3" />
       <button id="submitBtn" class="btn w-full">Submit Info</button>
     </div>
 
     <div id="editSection" class="hidden">
-      <p class="text-sm text-gray-300 mb-2">Want to update your info?</p>
+      <p class="text-sm text-gray-400 mb-2">Want to update your info?</p>
       <button id="editBtn" class="btn w-full">Edit My Entry</button>
     </div>
   </div>
@@ -100,7 +108,7 @@
 
   document.getElementById("connectBtn").onclick = async () => {
     if (typeof window.ethereum === "undefined") {
-      alert("Please install MetaMask or WalletConnect.");
+      alert("Please install MetaMask.");
       return;
     }
 
@@ -160,7 +168,7 @@
     };
 
     if (existing.exists) {
-      delete updates.joinedAt; // don’t override joinedAt if editing
+      delete updates.joinedAt;
     }
 
     await ref.set(updates, { merge: true });
@@ -177,29 +185,29 @@
   };
 </script>
 
-    <div class="glass max-w-4xl mx-auto mt-12">
-    <h2 class="text-xl mb-4 text-center">Verified Y2K Holders</h2>
-    <div id="leaderboard" class="space-y-4 text-sm"></div>
+  <div class="glass max-w-4xl mx-auto mt-12">
+  <h2 class="text-2xl mb-4 text-center font-semibold tracking-wide" style="font-family: 'Orbitron', sans-serif;">Verified Y2K Holders</h2>
+  <div id="leaderboard" class="space-y-4 text-sm"></div>
+</div>
+
+<div id="adminPanel" class="glass max-w-4xl mx-auto mt-12 hidden">
+  <h2 class="text-2xl mb-4 text-center text-yellow-300 font-semibold" style="font-family: 'Orbitron', sans-serif;">Admin Panel</h2>
+  <div class="text-sm text-center text-gray-300 break-all mb-4">
+    ROAST Airdrop Wallet:  
+    <span id="roastWallet" class="text-white font-mono cursor-pointer hover:underline">
+      HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq
+    </span>
   </div>
 
-  <div id="adminPanel" class="glass max-w-4xl mx-auto mt-12 hidden">
-    <h2 class="text-xl mb-4 text-center text-yellow-300">Admin Panel</h2>
-    <div class="text-sm text-center text-gray-300 break-all mb-4">
-      ROAST Airdrop Wallet:  
-      <span id="roastWallet" class="text-white font-mono cursor-pointer hover:underline">
-        HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq
-      </span>
-    </div>
-
-    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
-      <button onclick="airdropAll('Y2K')" class="btn w-full sm:w-auto">Airdrop Y2K to All</button>
-      <button onclick="airdropAll('ROAST')" class="btn w-full sm:w-auto">Airdrop ROAST to All</button>
-    </div>
-
-    <div id="adminList" class="space-y-6"></div>
+  <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+    <button onclick="airdropAll('Y2K')" class="btn w-full sm:w-auto">Airdrop Y2K to All</button>
+    <button onclick="airdropAll('ROAST')" class="btn w-full sm:w-auto">Airdrop ROAST to All</button>
   </div>
 
-  <script>
+  <div id="adminList" class="space-y-6"></div>
+</div>
+
+<script>
   document.getElementById("roastWallet").onclick = () => {
     navigator.clipboard.writeText("HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq");
     alert("ROAST airdrop wallet copied!");
@@ -220,49 +228,48 @@
   }
 
   async function loadLeaderboard() {
-  const list = document.getElementById("leaderboard");
-  list.innerHTML = "";
+    const list = document.getElementById("leaderboard");
+    list.innerHTML = "";
 
-  const baseQuery = db.collection("airdrops").where("status", "==", "approved");
+    const baseQuery = db.collection("airdrops").where("status", "==", "approved");
 
-  try {
-    // Try ordered query first
-    const ordered = await baseQuery.orderBy("joinedAt", "desc").get();
-    if (ordered.empty) throw new Error("No ordered docs found.");
-    renderLeaderboard(ordered);
-  } catch (err) {
-    console.warn("Fallback: some documents may be missing 'joinedAt'.", err);
-    const fallback = await baseQuery.get();
-    renderLeaderboard(fallback);
+    try {
+      const ordered = await baseQuery.orderBy("joinedAt", "desc").get();
+      if (ordered.empty) throw new Error("No ordered docs found.");
+      renderLeaderboard(ordered);
+    } catch (err) {
+      console.warn("Fallback: some documents may be missing 'joinedAt'.", err);
+      const fallback = await baseQuery.get();
+      renderLeaderboard(fallback);
+    }
   }
-}
 
-function renderLeaderboard(snapshot) {
-  const list = document.getElementById("leaderboard");
-  list.innerHTML = "";
+  function renderLeaderboard(snapshot) {
+    const list = document.getElementById("leaderboard");
+    list.innerHTML = "";
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    if (!data.solAddress || !data.xHandle) return;
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (!data.solAddress || !data.xHandle) return;
 
-    const cro = doc.id;
-    const x = data.xHandle;
-    const sol = data.solAddress;
-    const croShort = cro.slice(0, 6) + "..." + cro.slice(-4);
-    const solShort = sol.slice(0, 4) + "..." + sol.slice(-4);
+      const cro = doc.id;
+      const x = data.xHandle;
+      const sol = data.solAddress;
+      const croShort = cro.slice(0, 6) + "..." + cro.slice(-4);
+      const solShort = sol.slice(0, 4) + "..." + sol.slice(-4);
 
-    const div = document.createElement("div");
-    div.className = "p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3";
-    div.innerHTML = `
-      <div>
-        <div><strong>𝕏:</strong> ${x}</div>
-        <div><strong>CRO:</strong> ${croShort}</div>
-        <div><strong>SOL:</strong> ${solShort}</div>
-      </div>
-    `;
-    list.appendChild(div);
-  });
-}
+      const div = document.createElement("div");
+      div.className = "p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3";
+      div.innerHTML = `
+        <div>
+          <div><strong>𝕏:</strong> ${x}</div>
+          <div><strong>CRO:</strong> ${croShort}</div>
+          <div><strong>SOL:</strong> ${solShort}</div>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
 
   async function loadAdminList() {
     const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
@@ -300,14 +307,14 @@ function renderLeaderboard(snapshot) {
   }
 
   function updateStatus(wallet, status) {
-  db.collection("airdrops").doc(wallet).update({ status }).then(() => {
-    alert(`✅ ${wallet} marked as ${status.toUpperCase()}`);
-    loadAdminList();
-    loadLeaderboard();
-  }).catch((err) => {
-    alert("Error updating status: " + err.message);
-  });
-}
+    db.collection("airdrops").doc(wallet).update({ status }).then(() => {
+      alert(`✅ ${wallet} marked as ${status.toUpperCase()}`);
+      loadAdminList();
+      loadLeaderboard();
+    }).catch((err) => {
+      alert("Error updating status: " + err.message);
+    });
+  }
 
   function deleteUser(wallet) {
     const confirmDelete = confirm(`Delete ${wallet} from the system? This cannot be undone.`);
