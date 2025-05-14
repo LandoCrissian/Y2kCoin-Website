@@ -56,12 +56,37 @@
       width: 100%;
       border-radius: 6px;
     }
+
+@keyframes neonFlicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow:
+      0 0 4px #00ffe1,
+      0 0 10px #00ffe1,
+      0 0 20px #00ffe1,
+      0 0 30px #ff00f7,
+      0 0 40px #ff00f7;
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+    opacity: 0.8;
+  }
+}
+
+.heading-flicker {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 2.5rem;
+  background: linear-gradient(90deg, #00ffe1, #ff00f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: neonFlicker 2s infinite alternate;
+}
   </style>
 </head>
 
 <body>
   <div class="glass max-w-xl mx-auto mt-10 text-center">
-    <h1 class="text-4xl font-bold mb-4 tracking-wide" style="font-family: 'Orbitron', sans-serif;">Y2K x ROAST Airdrop Access</h1>
+    <h1 class="text-4xl font-bold mb-4 tracking-wide heading-flicker">Y2K x ROAST Airdrop Access</h1>
     <p class="mb-4 text-lg text-gray-300">Holding 4M+ Y2K? You’re already staking.<br>Claim your ROAST by verifying below.</p>
     <button id="connectBtn" class="btn mb-4">Verify Holdings</button>
     <div id="walletInfo" class="text-sm opacity-80 mb-2"></div>
