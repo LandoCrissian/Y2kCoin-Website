@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Y2K x ROAST Airdrop Portal</title>
+  <meta name="theme-color" content="#00ffe1">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(ellipse at center, #0f0f0f, #000000);
+      color: #ffffff;
+      padding: 20px;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(12px);
+    }
+    .btn {
+      background: #00ffe1;
+      color: black;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn:hover {
+      background: #00e0c0;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glass max-w-xl mx-auto mt-10 text-center">
+    <h1 class="text-2xl mb-4">Y2K x ROAST Airdrop Access</h1>
+    <p class="mb-4">Connect your CRO wallet to check eligibility.<br/>Holding 4M+ Y2K qualifies you to receive $ROAST on Solana.</p>
+    <button id="connectBtn" class="btn">Connect Wallet</button>
+    <div id="walletInfo" class="mt-4 text-sm opacity-80"></div>
+    <div id="statusMessage" class="mt-4 font-bold"></div>
+    <div id="solInputSection" class="mt-6 hidden">
+      <input type="text" id="solAddress" placeholder="Enter Solana Wallet" class="w-full p-2 rounded bg-black border border-gray-600 text-white mb-3" />
+      <button id="submitSol" class="btn">Link Sol Wallet</button>
+    </div>
+  </div>
+
+    <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3v0j-XP7PZ07-U-6TpWYQge5dljb9VMs",
+      authDomain: "y2k-airdrop-portal.firebaseapp.com",
+      projectId: "y2k-airdrop-portal",
+      storageBucket: "y2k-airdrop-portal.firebasestorage.app",
+      messagingSenderId: "1004795236115",
+      appId: "1:1004795236115:web:1fe86ece1f3cf0304dd4e6"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
+    const minHold = 4000000;
+    let userAddress = "";
+
+    async function checkY2KBalance(provider) {
+      const signer = provider.getSigner();
+      const walletAddress = await signer.getAddress();
+      const y2kAbi = ["function balanceOf(address owner) view returns (uint256)"];
+      const y2kContract = new ethers.Contract(y2kAddress, y2kAbi, provider);
+      const balance = await y2kContract.balanceOf(walletAddress);
+      const y2kBalance = parseFloat(ethers.utils.formatUnits(balance, 18));
+      return { y2kBalance, walletAddress };
+    }
+
+    document.getElementById("connectBtn").onclick = async () => {
+      if (typeof window.ethereum === "undefined") {
+        alert("MetaMask or WalletConnect required.");
+        return;
+      }
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
+
+      document.getElementById("walletInfo").innerText = `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
+      if (y2kBalance >= minHold) {
+        userAddress = walletAddress;
+        document.getElementById("statusMessage").innerText = "✅ Eligible! Please enter your Solana wallet.";
+        document.getElementById("solInputSection").classList.remove("hidden");
+      } else {
+        document.getElementById("statusMessage").innerText = "❌ You must hold 4M+ Y2K to qualify.";
+      }
+    };
+
+    document.getElementById("submitSol").onclick = async () => {
+      const solAddress = document.getElementById("solAddress").value.trim();
+      if (!solAddress || !/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(solAddress)) {
+        alert("Please enter a valid Solana address.");
+        return;
+      }
+
+      await db.collection("airdrops").doc(userAddress).set({
+        croAddress: userAddress,
+        solAddress: solAddress,
+        joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      document.getElementById("statusMessage").innerText = "✅ Solana wallet linked. You're ready for ROAST.";
+      document.getElementById("solInputSection").classList.add("hidden");
+    };
+  </script>
+</body>
+</html>
