@@ -72,102 +72,110 @@
   </div>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyC3v0j-XP7PZ07-U-6TpWYQge5dljb9VMs",
-      authDomain: "y2k-airdrop-portal.firebaseapp.com",
-      projectId: "y2k-airdrop-portal",
-      storageBucket: "y2k-airdrop-portal.firebasestorage.app",
-      messagingSenderId: "1004795236115",
-      appId: "1:1004795236115:web:1fe86ece1f3cf0304dd4e6"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyC3v0j-XP7PZ07-U-6TpWYQge5dljb9VMs",
+    authDomain: "y2k-airdrop-portal.firebaseapp.com",
+    projectId: "y2k-airdrop-portal",
+    storageBucket: "y2k-airdrop-portal.firebasestorage.app",
+    messagingSenderId: "1004795236115",
+    appId: "1:1004795236115:web:1fe86ece1f3cf0304dd4e6"
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
-    const minHold = 4000000;
-    let userAddress = "";
+  const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
+  const minHold = 4000000;
+  let userAddress = "";
 
-    async function checkY2KBalance(provider) {
-      const signer = provider.getSigner();
-      const walletAddress = await signer.getAddress();
-      const y2kAbi = ["function balanceOf(address owner) view returns (uint256)"];
-      const y2kContract = new ethers.Contract(y2kAddress, y2kAbi, provider);
-      const balance = await y2kContract.balanceOf(walletAddress);
-      const y2kBalance = parseFloat(ethers.utils.formatUnits(balance, 18));
-      return { y2kBalance, walletAddress };
+  async function checkY2KBalance(provider) {
+    const signer = provider.getSigner();
+    const walletAddress = await signer.getAddress();
+    const y2kAbi = ["function balanceOf(address owner) view returns (uint256)"];
+    const y2kContract = new ethers.Contract(y2kAddress, y2kAbi, provider);
+    const balance = await y2kContract.balanceOf(walletAddress);
+    const y2kBalance = parseFloat(ethers.utils.formatUnits(balance, 18));
+    return { y2kBalance, walletAddress };
+  }
+
+  document.getElementById("connectBtn").onclick = async () => {
+    if (typeof window.ethereum === "undefined") {
+      alert("Please install MetaMask or WalletConnect.");
+      return;
     }
 
-    document.getElementById("connectBtn").onclick = async () => {
-      if (typeof window.ethereum === "undefined") {
-        alert("Please install MetaMask or WalletConnect.");
-        return;
-      }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
+    userAddress = walletAddress;
+    document.getElementById("walletInfo").innerText = `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
 
-      userAddress = walletAddress;
-      document.getElementById("walletInfo").innerText = `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
+    const docRef = db.collection("airdrops").doc(userAddress);
+    const docSnap = await docRef.get();
 
-      const docRef = db.collection("airdrops").doc(userAddress);
-      const docSnap = await docRef.get();
+    if (docSnap.exists) {
+      const data = docSnap.data();
+      const status = data.status || "pending";
+      const x = data.xHandle || "@unknown";
+      const badge = `<span class="badge ${status}">${status}</span>`;
+      const updateBadge = data.updated ? `<span class="badge updated ml-2">updated</span>` : "";
 
-      if (docSnap.exists) {
-        const data = docSnap.data();
-        const status = data.status || "pending";
-        const x = data.xHandle || "@unknown";
-        const badge = `<span class="badge ${status}">${status}</span>`;
-        const updateBadge = data.updated ? `<span class="badge updated ml-2">updated</span>` : "";
-
-        document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: ${badge} ${updateBadge}`;
-        document.getElementById("editSection").classList.remove("hidden");
-        return;
-      }
-
-      if (y2kBalance >= minHold) {
-        document.getElementById("statusMessage").innerText = "✅ Eligible! Submit your 𝕏 + Sol address.";
-        document.getElementById("formSection").classList.remove("hidden");
-      } else {
-        document.getElementById("statusMessage").innerText = "❌ Must hold 4M+ Y2K to qualify.";
-      }
-    };
-
-    document.getElementById("submitBtn").onclick = async () => {
-      const x = document.getElementById("xHandle").value.trim();
-      const sol = document.getElementById("solAddress").value.trim();
-
-      if (!x || !x.startsWith("@")) {
-        alert("Please enter a valid 𝕏 handle (starts with @).");
-        return;
-      }
-
-      if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(sol)) {
-        alert("Invalid Solana address.");
-        return;
-      }
-
-      await db.collection("airdrops").doc(userAddress).set({
-        croAddress: userAddress,
-        solAddress: sol,
-        xHandle: x,
-        status: "pending",
-        updated: true,
-        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      document.getElementById("statusMessage").innerHTML = `✅ Info submitted.<br>Status: <span class="badge pending">pending</span>`;
-      document.getElementById("formSection").classList.add("hidden");
+      document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: ${badge} ${updateBadge}`;
       document.getElementById("editSection").classList.remove("hidden");
+      return;
+    }
+
+    if (y2kBalance >= minHold) {
+      document.getElementById("statusMessage").innerText = "✅ Eligible! Submit your 𝕏 + Sol address.";
+      document.getElementById("formSection").classList.remove("hidden");
+    } else {
+      document.getElementById("statusMessage").innerText = "❌ Must hold 4M+ Y2K to qualify.";
+    }
+  };
+
+  document.getElementById("submitBtn").onclick = async () => {
+    const x = document.getElementById("xHandle").value.trim();
+    const sol = document.getElementById("solAddress").value.trim();
+
+    if (!x || !x.startsWith("@")) {
+      alert("Please enter a valid 𝕏 handle (starts with @).");
+      return;
+    }
+
+    if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(sol)) {
+      alert("Invalid Solana address.");
+      return;
+    }
+
+    const ref = db.collection("airdrops").doc(userAddress);
+    const existing = await ref.get();
+    const updates = {
+      croAddress: userAddress,
+      solAddress: sol,
+      xHandle: x,
+      status: "pending",
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
+      joinedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    document.getElementById("editBtn").onclick = () => {
-      document.getElementById("formSection").classList.remove("hidden");
-      document.getElementById("editSection").classList.add("hidden");
-      document.getElementById("statusMessage").innerText = "Edit your info and resubmit. Status will reset to pending.";
-    };
-  </script>
+    if (existing.exists) {
+      delete updates.joinedAt; // don’t override joinedAt if editing
+    }
+
+    await ref.set(updates, { merge: true });
+
+    document.getElementById("statusMessage").innerHTML = `✅ Info submitted.<br>Status: <span class="badge pending">pending</span>`;
+    document.getElementById("formSection").classList.add("hidden");
+    document.getElementById("editSection").classList.remove("hidden");
+  };
+
+  document.getElementById("editBtn").onclick = () => {
+    document.getElementById("formSection").classList.remove("hidden");
+    document.getElementById("editSection").classList.add("hidden");
+    document.getElementById("statusMessage").innerText = "Edit your info and resubmit. Status will reset to pending.";
+  };
+</script>
 
     <div class="glass max-w-4xl mx-auto mt-12">
     <h2 class="text-xl mb-4 text-center">Verified Y2K Holders</h2>
