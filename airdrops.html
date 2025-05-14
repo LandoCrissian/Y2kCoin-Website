@@ -200,124 +200,125 @@
   </div>
 
   <script>
-    document.getElementById("roastWallet").onclick = () => {
-      navigator.clipboard.writeText("HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq");
-      alert("ROAST airdrop wallet copied!");
-    };
+  document.getElementById("roastWallet").onclick = () => {
+    navigator.clipboard.writeText("HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq");
+    alert("ROAST airdrop wallet copied!");
+  };
 
-    const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+  const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
-    async function detectAdmin() {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = (await signer.getAddress()).toLowerCase();
+  async function detectAdmin() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const address = (await signer.getAddress()).toLowerCase();
 
-      if (address === adminWallet) {
-        document.getElementById("adminPanel").classList.remove("hidden");
-        loadAdminList();
-      }
+    if (address === adminWallet) {
+      document.getElementById("adminPanel").classList.remove("hidden");
+      loadAdminList();
     }
+  }
 
-    async function loadLeaderboard() {
-      const snapshot = await db.collection("airdrops").where("status", "==", "approved").orderBy("joinedAt", "desc").get();
-      const list = document.getElementById("leaderboard");
-      list.innerHTML = "";
+  async function loadLeaderboard() {
+    const snapshot = await db.collection("airdrops")
+      .where("status", "==", "approved")
+      .orderBy("joinedAt", "desc").get();
 
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
-        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
-        const x = data.xHandle || "@unknown";
+    const list = document.getElementById("leaderboard");
+    list.innerHTML = "";
 
-        list.innerHTML += `
-          <div class="p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3">
-            <div>
-              <div><strong>𝕏:</strong> ${x}</div>
-              <div><strong>CRO:</strong> ${croShort}</div>
-              <div><strong>SOL:</strong> ${solShort}</div>
-            </div>
-          </div>`;
-      });
-    }
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (!data.xHandle || !data.solAddress) return;
 
-    async function loadAdminList() {
-      const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
-      const list = document.getElementById("adminList");
-      list.innerHTML = "";
+      const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
+      const solShort = data.solAddress.slice(0, 4) + "..." + data.solAddress.slice(-4);
+      const x = data.xHandle;
 
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const wallet = doc.id;
-        const x = data.xHandle || "@unknown";
-        const sol = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
-        const status = data.status || "pending";
-        const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
-
-        const row = document.createElement("div");
-        row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
-
-        row.innerHTML = `
-          <div class="flex justify-between items-start flex-wrap gap-2">
-            <div>
-              <div><strong>𝕏:</strong> ${x}</div>
-              <div><strong>SOL:</strong> ${sol}</div>
-              <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
-            </div>
-            <div class="space-y-2">
-              <div class="space-x-2">
-                <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
-                <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
-                <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
-              </div>
-              <div class="space-x-2">
-                <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
-                <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
-              </div>
-            </div>
+      list.innerHTML += `
+        <div class="p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3">
+          <div>
+            <div><strong>𝕏:</strong> ${x}</div>
+            <div><strong>CRO:</strong> ${croShort}</div>
+            <div><strong>SOL:</strong> ${solShort}</div>
           </div>
-        `;
-        list.appendChild(row);
-      });
-    }
+        </div>`;
+    });
+  }
 
-    function updateStatus(wallet, status) {
-      db.collection("airdrops").doc(wallet).update({ status });
+  async function loadAdminList() {
+    const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
+    const list = document.getElementById("adminList");
+    list.innerHTML = "";
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const wallet = doc.id;
+      const x = data.xHandle || "@unknown";
+      const sol = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
+      const status = data.status || "pending";
+      const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
+
+      const row = document.createElement("div");
+      row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
+
+      row.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+          <div class="space-y-1">
+            <div><strong>𝕏:</strong> ${x}</div>
+            <div><strong>SOL:</strong> ${sol}</div>
+            <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
+            <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
+            <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
+            <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
+            <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
+            <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
+          </div>
+        </div>`;
+      list.appendChild(row);
+    });
+  }
+
+  function updateStatus(wallet, status) {
+    db.collection("airdrops").doc(wallet).update({ status }).then(() => {
       alert(`✅ ${wallet} marked as ${status}`);
       loadAdminList();
       loadLeaderboard();
-    }
+    });
+  }
 
-    function deleteUser(wallet) {
-      const confirmDelete = confirm(`Delete ${wallet} from the system? This cannot be undone.`);
-      if (!confirmDelete) return;
-      db.collection("airdrops").doc(wallet).delete().then(() => {
-        alert(`✅ ${wallet} removed.`);
-        loadAdminList();
-        loadLeaderboard();
+  function deleteUser(wallet) {
+    const confirmDelete = confirm(`Delete ${wallet} from the system? This cannot be undone.`);
+    if (!confirmDelete) return;
+    db.collection("airdrops").doc(wallet).delete().then(() => {
+      alert(`✅ ${wallet} removed.`);
+      loadAdminList();
+      loadLeaderboard();
+    });
+  }
+
+  function airdrop(wallet, type) {
+    const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
+    db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
+    alert(`${type} airdrop logged for ${wallet}`);
+  }
+
+  function airdropAll(type) {
+    if (!confirm(`This will log ${type} airdrops for all APPROVED users only. Confirm?`)) return;
+    db.collection("airdrops").where("status", "==", "approved").get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const wallet = doc.id;
+        const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
+        db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
       });
-    }
+      alert(`✅ ${type} airdrop logged for all approved.`);
+    });
+  }
 
-    function airdrop(wallet, type) {
-      const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
-      db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-      alert(`${type} airdrop logged for ${wallet}`);
-    }
-
-    function airdropAll(type) {
-      if (!confirm(`This will log ${type} airdrops for all APPROVED users only. Confirm?`)) return;
-      db.collection("airdrops").where("status", "==", "approved").get().then(snapshot => {
-        snapshot.forEach(doc => {
-          const wallet = doc.id;
-          const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
-          db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-        });
-        alert(`✅ ${type} airdrop logged for all approved.`);
-      });
-    }
-
-    detectAdmin();
-    loadLeaderboard();
-  </script>
+  detectAdmin();
+  loadLeaderboard();
+</script>
 </body>
 </html>
