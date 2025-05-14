@@ -71,7 +71,7 @@
     </div>
   </div>
 
-    <script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyC3v0j-XP7PZ07-U-6TpWYQge5dljb9VMs",
       authDomain: "y2k-airdrop-portal.firebaseapp.com",
@@ -118,8 +118,10 @@
         const data = docSnap.data();
         const status = data.status || "pending";
         const x = data.xHandle || "@unknown";
+        const badge = `<span class="badge ${status}">${status}</span>`;
+        const updateBadge = data.updated ? `<span class="badge updated ml-2">updated</span>` : "";
 
-        document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: <span class="badge ${status}">${status}</span>`;
+        document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: ${badge} ${updateBadge}`;
         document.getElementById("editSection").classList.remove("hidden");
         return;
       }
@@ -169,20 +171,32 @@
 
     <div class="glass max-w-4xl mx-auto mt-12">
     <h2 class="text-xl mb-4 text-center">Verified Y2K Holders</h2>
-    <div id="leaderboard" class="space-y-2 text-sm"></div>
+    <div id="leaderboard" class="space-y-4 text-sm"></div>
   </div>
 
   <div id="adminPanel" class="glass max-w-4xl mx-auto mt-12 hidden">
     <h2 class="text-xl mb-4 text-center text-yellow-300">Admin Panel</h2>
-    <div class="mb-2 text-sm text-center text-gray-300">ROAST Airdrop Wallet:  
-      <span class="text-white font-mono">HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq</span>
+    <div class="text-sm text-center text-gray-300 break-all mb-4">
+      ROAST Airdrop Wallet:  
+      <span id="roastWallet" class="text-white font-mono cursor-pointer hover:underline">
+        HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq
+      </span>
     </div>
-    <button onclick="airdropAll('Y2K')" class="btn mb-4 mr-2">Airdrop Y2K to All</button>
-    <button onclick="airdropAll('ROAST')" class="btn mb-4">Airdrop ROAST to All</button>
-    <div id="adminList" class="space-y-4"></div>
+
+    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+      <button onclick="airdropAll('Y2K')" class="btn w-full sm:w-auto">Airdrop Y2K to All</button>
+      <button onclick="airdropAll('ROAST')" class="btn w-full sm:w-auto">Airdrop ROAST to All</button>
+    </div>
+
+    <div id="adminList" class="space-y-6"></div>
   </div>
 
   <script>
+    document.getElementById("roastWallet").onclick = () => {
+      navigator.clipboard.writeText("HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq");
+      alert("ROAST airdrop wallet copied!");
+    };
+
     const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
     async function detectAdmin() {
@@ -204,16 +218,16 @@
 
       snapshot.forEach(doc => {
         const data = doc.data();
-        const shortCRO = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
-        const shortSOL = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
-        const handle = data.xHandle || "@unknown";
+        const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
+        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
+        const x = data.xHandle || "@unknown";
 
         list.innerHTML += `
-          <div class="p-3 rounded border border-gray-700 bg-black/30 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+          <div class="p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3">
             <div>
-              <div><strong>𝕏:</strong> ${handle}</div>
-              <div><strong>CRO:</strong> ${shortCRO}</div>
-              <div><strong>SOL:</strong> ${shortSOL}</div>
+              <div><strong>𝕏:</strong> ${x}</div>
+              <div><strong>CRO:</strong> ${croShort}</div>
+              <div><strong>SOL:</strong> ${solShort}</div>
             </div>
           </div>`;
       });
@@ -221,63 +235,76 @@
 
     async function loadAdminList() {
       const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
-      const container = document.getElementById("adminList");
-      container.innerHTML = "";
+      const list = document.getElementById("adminList");
+      list.innerHTML = "";
 
       snapshot.forEach(doc => {
         const data = doc.data();
         const wallet = doc.id;
-        const status = data.status || "pending";
-        const updated = data.updated ? `<span class="badge updated">updated</span>` : "";
         const x = data.xHandle || "@unknown";
-        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
+        const sol = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
+        const status = data.status || "pending";
+        const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
 
         const row = document.createElement("div");
-        row.className = "p-3 rounded border border-gray-600 bg-black/20";
+        row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
 
         row.innerHTML = `
-          <div class="flex justify-between items-start flex-wrap">
+          <div class="flex justify-between items-start flex-wrap gap-2">
             <div>
               <div><strong>𝕏:</strong> ${x}</div>
-              <div><strong>SOL:</strong> ${solShort}</div>
-              <div><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
+              <div><strong>SOL:</strong> ${sol}</div>
+              <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
             </div>
-            <div class="mt-2 sm:mt-0 sm:ml-4 space-x-2">
-              <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
-              <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
-              <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
-              <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
+            <div class="space-y-2">
+              <div class="space-x-2">
+                <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
+                <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
+                <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
+              </div>
+              <div class="space-x-2">
+                <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
+                <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
+              </div>
             </div>
           </div>
         `;
-        container.appendChild(row);
+        list.appendChild(row);
       });
     }
 
     function updateStatus(wallet, status) {
       db.collection("airdrops").doc(wallet).update({ status });
-      alert(`${status.toUpperCase()} ✅`);
+      alert(`✅ ${wallet} marked as ${status}`);
       loadAdminList();
       loadLeaderboard();
+    }
+
+    function deleteUser(wallet) {
+      const confirmDelete = confirm(`Delete ${wallet} from the system? This cannot be undone.`);
+      if (!confirmDelete) return;
+      db.collection("airdrops").doc(wallet).delete().then(() => {
+        alert(`✅ ${wallet} removed.`);
+        loadAdminList();
+        loadLeaderboard();
+      });
     }
 
     function airdrop(wallet, type) {
       const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
       db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-      alert(`${type} Airdrop logged for ${wallet}`);
+      alert(`${type} airdrop logged for ${wallet}`);
     }
 
     function airdropAll(type) {
-      const confirmed = confirm(`This will mark ${type} airdrops for ALL approved users only. Continue?`);
-      if (!confirmed) return;
-
+      if (!confirm(`This will log ${type} airdrops for all APPROVED users only. Confirm?`)) return;
       db.collection("airdrops").where("status", "==", "approved").get().then(snapshot => {
         snapshot.forEach(doc => {
           const wallet = doc.id;
           const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
           db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
         });
-        alert(`${type} airdrops logged for all approved users.`);
+        alert(`✅ ${type} airdrop logged for all approved.`);
       });
     }
 
