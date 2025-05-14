@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Y2K x ROAST Airdrop Portal</title>
-  <meta name="theme-color" content="#00ffe1">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#00ffe1" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -37,9 +37,17 @@
     .btn:hover {
       background: #00e0c0;
     }
-    .hidden {
-      display: none;
+    .hidden { display: none; }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
     }
+    .approved { background: #00ff8c; color: black; }
+    .pending { background: #facc15; color: black; }
+    .denied  { background: #f43f5e; color: white; }
   </style>
 </head>
 
@@ -50,9 +58,11 @@
     <button id="connectBtn" class="btn">Connect Wallet</button>
     <div id="walletInfo" class="mt-4 text-sm opacity-80"></div>
     <div id="statusMessage" class="mt-4 font-bold"></div>
-    <div id="solInputSection" class="mt-6 hidden">
+
+    <div id="inputSection" class="mt-6 hidden">
+      <input type="text" id="xHandle" placeholder="Enter 𝕏 handle (e.g. @vaultuser)" class="w-full p-2 rounded bg-black border border-gray-600 text-white mb-3" />
       <input type="text" id="solAddress" placeholder="Enter Solana Wallet" class="w-full p-2 rounded bg-black border border-gray-600 text-white mb-3" />
-      <button id="submitSol" class="btn">Link Sol Wallet</button>
+      <button id="submitBtn" class="btn">Submit Info</button>
     </div>
   </div>
 
@@ -72,6 +82,7 @@
     const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
     const minHold = 4000000;
     let userAddress = "";
+    let userDoc = null;
 
     async function checkY2KBalance(provider) {
       const signer = provider.getSigner();
@@ -85,7 +96,7 @@
 
     document.getElementById("connectBtn").onclick = async () => {
       if (typeof window.ethereum === "undefined") {
-        alert("MetaMask or WalletConnect required.");
+        alert("MetaMask required.");
         return;
       }
 
@@ -93,31 +104,51 @@
       await provider.send("eth_requestAccounts", []);
       const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
 
+      userAddress = walletAddress;
       document.getElementById("walletInfo").innerText = `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
+
+      const docRef = db.collection("airdrops").doc(userAddress);
+      const docSnap = await docRef.get();
+
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        const status = data.status || "pending";
+        document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: <span class="badge ${status}">${status}</span>`;
+        return;
+      }
+
       if (y2kBalance >= minHold) {
-        userAddress = walletAddress;
-        document.getElementById("statusMessage").innerText = "✅ Eligible! Please enter your Solana wallet.";
-        document.getElementById("solInputSection").classList.remove("hidden");
+        document.getElementById("statusMessage").innerText = "✅ Eligible! Please complete the form below.";
+        document.getElementById("inputSection").classList.remove("hidden");
       } else {
         document.getElementById("statusMessage").innerText = "❌ You must hold 4M+ Y2K to qualify.";
       }
     };
 
-    document.getElementById("submitSol").onclick = async () => {
+    document.getElementById("submitBtn").onclick = async () => {
       const solAddress = document.getElementById("solAddress").value.trim();
-      if (!solAddress || !/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(solAddress)) {
-        alert("Please enter a valid Solana address.");
+      const xHandle = document.getElementById("xHandle").value.trim();
+
+      if (!xHandle || !xHandle.startsWith("@")) {
+        alert("Please enter a valid 𝕏 handle (must start with @).");
+        return;
+      }
+
+      if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(solAddress)) {
+        alert("Please enter a valid Solana wallet address.");
         return;
       }
 
       await db.collection("airdrops").doc(userAddress).set({
         croAddress: userAddress,
         solAddress: solAddress,
-        joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        xHandle: xHandle,
+        status: "pending",
+        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      document.getElementById("statusMessage").innerText = "✅ Solana wallet linked. You're ready for ROAST.";
-      document.getElementById("solInputSection").classList.add("hidden");
+      document.getElementById("statusMessage").innerHTML = `✅ Submission received.<br>Status: <span class="badge pending">pending</span>`;
+      document.getElementById("inputSection").classList.add("hidden");
     };
   </script>
 
@@ -127,80 +158,96 @@
   </div>
 
   <div id="adminPanel" class="glass max-w-4xl mx-auto mt-10 hidden">
-    <h2 class="text-xl mb-4 text-center text-yellow-300">Admin Airdrop Panel</h2>
-    <button onclick="airdropAll('Y2K')" class="btn mb-4 mr-2">Airdrop Y2K to All</button>
-    <button onclick="airdropAll('ROAST')" class="btn mb-4">Airdrop ROAST to All</button>
+    <h2 class="text-xl mb-4 text-center text-yellow-300">Admin Control Panel</h2>
+    <div id="adminList" class="space-y-4 text-sm"></div>
   </div>
 
   <script>
     const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
-    async function loadLeaderboard() {
-      const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
-      const list = document.getElementById("leaderboard");
-      list.innerHTML = "";
-
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
-        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
-        const time = data.joinedAt?.toDate().toLocaleString() || "Unknown";
-
-        const row = document.createElement("div");
-        row.className = "p-3 rounded border border-gray-700 bg-black/30 flex flex-col sm:flex-row justify-between items-start sm:items-center";
-
-        row.innerHTML = `
-          <div>
-            <div><strong>CRO:</strong> ${croShort}</div>
-            <div><strong>SOL:</strong> ${solShort}</div>
-            <div><strong>Joined:</strong> ${time}</div>
-          </div>
-          <div class="mt-3 sm:mt-0 sm:ml-4">
-            <button class="btn mr-2" onclick="airdrop('${data.croAddress}', 'Y2K')">Airdrop Y2K</button>
-            <button class="btn" onclick="airdrop('${data.solAddress}', 'ROAST')">Airdrop ROAST</button>
-          </div>
-        `;
-        list.appendChild(row);
-      });
-    }
-
     async function detectAdmin() {
-      if (typeof window.ethereum === "undefined") return;
+      if (!window.ethereum) return;
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       const address = (await signer.getAddress()).toLowerCase();
       if (address === adminWallet) {
         document.getElementById("adminPanel").classList.remove("hidden");
+        loadAdminList();
       }
     }
 
-    function airdrop(wallet, type) {
-      const confirmed = confirm(`Manually send ${type} to:\n${wallet}\n\nMark as complete in Firebase?`);
-      if (!confirmed) return;
-      const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
-      db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-      alert(`Marked ${type} airdrop for ${wallet}`);
-    }
+    async function loadLeaderboard() {
+      const snapshot = await db.collection("airdrops").where("status", "==", "approved").orderBy("joinedAt", "desc").get();
+      const list = document.getElementById("leaderboard");
+      list.innerHTML = "";
 
-    function airdropAll(type) {
-      const confirmed = confirm(`Mark ${type} airdrop for ALL users?`);
-      if (!confirmed) return;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
+        const xHandle = data.xHandle || "@unknown";
 
-      db.collection("airdrops").get().then(snapshot => {
-        snapshot.forEach(doc => {
-          const wallet = doc.id;
-          const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
-          db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-        });
-        alert(`Marked ${type} airdrop for all.`);
+        const row = document.createElement("div");
+        row.className = "p-3 rounded border border-gray-700 bg-black/30 flex justify-between items-center";
+        row.innerHTML = `
+          <div>
+            <div><strong>𝕏:</strong> ${xHandle}</div>
+            <div><strong>CRO:</strong> ${croShort}</div>
+          </div>
+        `;
+        list.appendChild(row);
       });
     }
 
-    // Run on load
+    async function loadAdminList() {
+      const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
+      const list = document.getElementById("adminList");
+      list.innerHTML = "";
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const wallet = doc.id;
+        const xHandle = data.xHandle || "@unknown";
+        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
+        const status = data.status || "pending";
+
+        const row = document.createElement("div");
+        row.className = "p-3 rounded border border-gray-600 bg-black/20";
+
+        row.innerHTML = `
+          <div class="flex justify-between items-start flex-wrap">
+            <div>
+              <div><strong>𝕏:</strong> ${xHandle}</div>
+              <div><strong>SOL:</strong> ${solShort}</div>
+              <div><strong>Status:</strong> <span class="badge ${status}">${status}</span></div>
+            </div>
+            <div class="mt-2 sm:mt-0 sm:ml-4 space-x-2">
+              <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
+              <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
+              <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
+              <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
+            </div>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function updateStatus(wallet, status) {
+      db.collection("airdrops").doc(wallet).update({ status });
+      alert(`${status.toUpperCase()} ✅`);
+      loadAdminList();
+      loadLeaderboard();
+    }
+
+    function airdrop(wallet, type) {
+      const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
+      db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
+      alert(`${type} Airdrop marked for ${wallet}`);
+    }
+
     detectAdmin();
     loadLeaderboard();
   </script>
-  
 </body>
 </html>
