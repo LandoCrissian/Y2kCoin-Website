@@ -57,18 +57,33 @@
       border-radius: 6px;
     }
 
-@keyframes neonFlicker {
-  0%, 18%, 22%, 25%, 50%, 100% {
+@keyframes subtleNeonFlicker {
+  0%, 100% {
+    text-shadow:
+      0 0 4px #00ffe1,
+      0 0 8px #00ffe1,
+      0 0 16px #ff00f7;
+    opacity: 1;
+  }
+  45% {
     text-shadow:
       0 0 2px #00ffe1,
       0 0 4px #00ffe1,
-      0 0 8px #00ffe1,
-      0 0 12px #ff00f7;
-    opacity: 1;
+      0 0 6px #ff00f7;
+    opacity: 0.92;
   }
-  20%, 24%, 55% {
-    text-shadow: none;
-    opacity: 0.8;
+  60% {
+    text-shadow:
+      0 0 3px #00ffe1,
+      0 0 6px #00ffe1,
+      0 0 10px #ff00f7;
+    opacity: 0.96;
+  }
+  80% {
+    text-shadow:
+      0 0 2px #00ffe1,
+      0 0 3px #ff00f7;
+    opacity: 0.9;
   }
 }
 
@@ -78,7 +93,7 @@
   background: linear-gradient(90deg, #00ffe1, #ff00f7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: neonFlicker 2s infinite alternate;
+  animation: subtleNeonFlicker 4.5s ease-in-out infinite;
 }
   </style>
 </head>
