@@ -14,30 +14,29 @@
   <style>
     body {
       font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(ellipse at center, #0f0f0f, #000000);
-      color: #ffffff;
+      background: linear-gradient(145deg, #000000, #0f0f0f);
+      color: white;
       padding: 20px;
     }
     .glass {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
       backdrop-filter: blur(12px);
+      padding: 24px;
+      box-shadow: 0 0 18px #00ffe1;
     }
     .btn {
-      background: #00ffe1;
+      background: linear-gradient(to right, #00ffe1, #ff00f7);
       color: black;
-      padding: 10px 20px;
-      border-radius: 8px;
       font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 10px 24px;
+      border-radius: 8px;
+      transition: 0.3s ease;
     }
     .btn:hover {
-      background: #00e0c0;
+      filter: brightness(1.15);
     }
-    .hidden { display: none; }
     .badge {
       padding: 4px 10px;
       border-radius: 999px;
@@ -48,21 +47,27 @@
     .approved { background: #00ff8c; color: black; }
     .pending { background: #facc15; color: black; }
     .denied  { background: #f43f5e; color: white; }
+    .updated { background: #38bdf8; color: black; }
   </style>
 </head>
 
 <body>
   <div class="glass max-w-xl mx-auto mt-10 text-center">
-    <h1 class="text-2xl mb-4">Y2K x ROAST Airdrop Access</h1>
-    <p class="mb-4">Connect your CRO wallet to check eligibility.<br/>Holding 4M+ Y2K qualifies you to receive $ROAST on Solana.</p>
-    <button id="connectBtn" class="btn">Connect Wallet</button>
-    <div id="walletInfo" class="mt-4 text-sm opacity-80"></div>
-    <div id="statusMessage" class="mt-4 font-bold"></div>
+    <h1 class="text-3xl mb-4">Y2K x ROAST Airdrop Access</h1>
+    <p class="mb-4">Holding 4M+ Y2K? You’re already staking.<br>Claim your ROAST by verifying below.</p>
+    <button id="connectBtn" class="btn mb-4">Verify Holdings</button>
+    <div id="walletInfo" class="text-sm opacity-80 mb-2"></div>
+    <div id="statusMessage" class="text-lg font-bold mb-4"></div>
 
-    <div id="inputSection" class="mt-6 hidden">
-      <input type="text" id="xHandle" placeholder="Enter 𝕏 handle (e.g. @vaultuser)" class="w-full p-2 rounded bg-black border border-gray-600 text-white mb-3" />
-      <input type="text" id="solAddress" placeholder="Enter Solana Wallet" class="w-full p-2 rounded bg-black border border-gray-600 text-white mb-3" />
-      <button id="submitBtn" class="btn">Submit Info</button>
+    <div id="formSection" class="hidden">
+      <input type="text" id="xHandle" placeholder="Enter 𝕏 handle (e.g. @vaultuser)" class="w-full p-2 mb-3 rounded bg-black border border-gray-600 text-white" />
+      <input type="text" id="solAddress" placeholder="Enter Solana Wallet Address" class="w-full p-2 mb-3 rounded bg-black border border-gray-600 text-white" />
+      <button id="submitBtn" class="btn w-full">Submit Info</button>
+    </div>
+
+    <div id="editSection" class="hidden">
+      <p class="text-sm text-gray-300 mb-2">Want to update your info?</p>
+      <button id="editBtn" class="btn w-full">Edit My Entry</button>
     </div>
   </div>
 
@@ -82,7 +87,6 @@
     const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
     const minHold = 4000000;
     let userAddress = "";
-    let userDoc = null;
 
     async function checkY2KBalance(provider) {
       const signer = provider.getSigner();
@@ -96,7 +100,7 @@
 
     document.getElementById("connectBtn").onclick = async () => {
       if (typeof window.ethereum === "undefined") {
-        alert("MetaMask required.");
+        alert("Please install MetaMask or WalletConnect.");
         return;
       }
 
@@ -113,64 +117,80 @@
       if (docSnap.exists) {
         const data = docSnap.data();
         const status = data.status || "pending";
+        const x = data.xHandle || "@unknown";
+
         document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: <span class="badge ${status}">${status}</span>`;
+        document.getElementById("editSection").classList.remove("hidden");
         return;
       }
 
       if (y2kBalance >= minHold) {
-        document.getElementById("statusMessage").innerText = "✅ Eligible! Please complete the form below.";
-        document.getElementById("inputSection").classList.remove("hidden");
+        document.getElementById("statusMessage").innerText = "✅ Eligible! Submit your 𝕏 + Sol address.";
+        document.getElementById("formSection").classList.remove("hidden");
       } else {
-        document.getElementById("statusMessage").innerText = "❌ You must hold 4M+ Y2K to qualify.";
+        document.getElementById("statusMessage").innerText = "❌ Must hold 4M+ Y2K to qualify.";
       }
     };
 
     document.getElementById("submitBtn").onclick = async () => {
-      const solAddress = document.getElementById("solAddress").value.trim();
-      const xHandle = document.getElementById("xHandle").value.trim();
+      const x = document.getElementById("xHandle").value.trim();
+      const sol = document.getElementById("solAddress").value.trim();
 
-      if (!xHandle || !xHandle.startsWith("@")) {
-        alert("Please enter a valid 𝕏 handle (must start with @).");
+      if (!x || !x.startsWith("@")) {
+        alert("Please enter a valid 𝕏 handle (starts with @).");
         return;
       }
 
-      if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(solAddress)) {
-        alert("Please enter a valid Solana wallet address.");
+      if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(sol)) {
+        alert("Invalid Solana address.");
         return;
       }
 
       await db.collection("airdrops").doc(userAddress).set({
         croAddress: userAddress,
-        solAddress: solAddress,
-        xHandle: xHandle,
+        solAddress: sol,
+        xHandle: x,
         status: "pending",
+        updated: true,
         joinedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      document.getElementById("statusMessage").innerHTML = `✅ Submission received.<br>Status: <span class="badge pending">pending</span>`;
-      document.getElementById("inputSection").classList.add("hidden");
+      document.getElementById("statusMessage").innerHTML = `✅ Info submitted.<br>Status: <span class="badge pending">pending</span>`;
+      document.getElementById("formSection").classList.add("hidden");
+      document.getElementById("editSection").classList.remove("hidden");
+    };
+
+    document.getElementById("editBtn").onclick = () => {
+      document.getElementById("formSection").classList.remove("hidden");
+      document.getElementById("editSection").classList.add("hidden");
+      document.getElementById("statusMessage").innerText = "Edit your info and resubmit. Status will reset to pending.";
     };
   </script>
 
-    <div class="glass max-w-4xl mx-auto mt-10">
+    <div class="glass max-w-4xl mx-auto mt-12">
     <h2 class="text-xl mb-4 text-center">Verified Y2K Holders</h2>
     <div id="leaderboard" class="space-y-2 text-sm"></div>
   </div>
 
-  <div id="adminPanel" class="glass max-w-4xl mx-auto mt-10 hidden">
-    <h2 class="text-xl mb-4 text-center text-yellow-300">Admin Control Panel</h2>
-    <div id="adminList" class="space-y-4 text-sm"></div>
+  <div id="adminPanel" class="glass max-w-4xl mx-auto mt-12 hidden">
+    <h2 class="text-xl mb-4 text-center text-yellow-300">Admin Panel</h2>
+    <div class="mb-2 text-sm text-center text-gray-300">ROAST Airdrop Wallet:  
+      <span class="text-white font-mono">HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq</span>
+    </div>
+    <button onclick="airdropAll('Y2K')" class="btn mb-4 mr-2">Airdrop Y2K to All</button>
+    <button onclick="airdropAll('ROAST')" class="btn mb-4">Airdrop ROAST to All</button>
+    <div id="adminList" class="space-y-4"></div>
   </div>
 
   <script>
     const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
     async function detectAdmin() {
-      if (!window.ethereum) return;
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       const address = (await signer.getAddress()).toLowerCase();
+
       if (address === adminWallet) {
         document.getElementById("adminPanel").classList.remove("hidden");
         loadAdminList();
@@ -184,32 +204,33 @@
 
       snapshot.forEach(doc => {
         const data = doc.data();
-        const croShort = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
-        const xHandle = data.xHandle || "@unknown";
+        const shortCRO = data.croAddress.slice(0, 6) + "..." + data.croAddress.slice(-4);
+        const shortSOL = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
+        const handle = data.xHandle || "@unknown";
 
-        const row = document.createElement("div");
-        row.className = "p-3 rounded border border-gray-700 bg-black/30 flex justify-between items-center";
-        row.innerHTML = `
-          <div>
-            <div><strong>𝕏:</strong> ${xHandle}</div>
-            <div><strong>CRO:</strong> ${croShort}</div>
-          </div>
-        `;
-        list.appendChild(row);
+        list.innerHTML += `
+          <div class="p-3 rounded border border-gray-700 bg-black/30 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <div>
+              <div><strong>𝕏:</strong> ${handle}</div>
+              <div><strong>CRO:</strong> ${shortCRO}</div>
+              <div><strong>SOL:</strong> ${shortSOL}</div>
+            </div>
+          </div>`;
       });
     }
 
     async function loadAdminList() {
       const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
-      const list = document.getElementById("adminList");
-      list.innerHTML = "";
+      const container = document.getElementById("adminList");
+      container.innerHTML = "";
 
       snapshot.forEach(doc => {
         const data = doc.data();
         const wallet = doc.id;
-        const xHandle = data.xHandle || "@unknown";
-        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
         const status = data.status || "pending";
+        const updated = data.updated ? `<span class="badge updated">updated</span>` : "";
+        const x = data.xHandle || "@unknown";
+        const solShort = data.solAddress?.slice(0, 4) + "..." + data.solAddress?.slice(-4);
 
         const row = document.createElement("div");
         row.className = "p-3 rounded border border-gray-600 bg-black/20";
@@ -217,9 +238,9 @@
         row.innerHTML = `
           <div class="flex justify-between items-start flex-wrap">
             <div>
-              <div><strong>𝕏:</strong> ${xHandle}</div>
+              <div><strong>𝕏:</strong> ${x}</div>
               <div><strong>SOL:</strong> ${solShort}</div>
-              <div><strong>Status:</strong> <span class="badge ${status}">${status}</span></div>
+              <div><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
             </div>
             <div class="mt-2 sm:mt-0 sm:ml-4 space-x-2">
               <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
@@ -229,7 +250,7 @@
             </div>
           </div>
         `;
-        list.appendChild(row);
+        container.appendChild(row);
       });
     }
 
@@ -243,7 +264,21 @@
     function airdrop(wallet, type) {
       const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
       db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-      alert(`${type} Airdrop marked for ${wallet}`);
+      alert(`${type} Airdrop logged for ${wallet}`);
+    }
+
+    function airdropAll(type) {
+      const confirmed = confirm(`This will mark ${type} airdrops for ALL approved users only. Continue?`);
+      if (!confirmed) return;
+
+      db.collection("airdrops").where("status", "==", "approved").get().then(snapshot => {
+        snapshot.forEach(doc => {
+          const wallet = doc.id;
+          const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
+          db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
+        });
+        alert(`${type} airdrops logged for all approved users.`);
+      });
     }
 
     detectAdmin();
