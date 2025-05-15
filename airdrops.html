@@ -272,20 +272,6 @@
     alert("ROAST airdrop wallet copied!");
   };
 
-  const y2kToken = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
-const y2kABI = ["function balanceOf(address) view returns (uint256)"];
-
-async function getY2KBalance(address) {
-  try {
-    const provider = new ethers.providers.JsonRpcProvider("https://cronos.blockpi.network/v1/rpc/public");
-    const contract = new ethers.Contract(y2kToken, y2kABI, provider);
-    const balance = await contract.balanceOf(address);
-    return parseFloat(ethers.utils.formatUnits(balance, 18)).toLocaleString();
-  } catch {
-    return "N/A";
-  }
-}
-
   const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
   async function detectAdmin() {
@@ -372,28 +358,25 @@ async function getY2KBalance(address) {
       const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
 
       const row = document.createElement("div");
-row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
+      row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
 
-getY2KBalance(wallet).then(balance => {
-  row.innerHTML = `
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
-      <div class="space-y-1 text-sm">
-        <div><strong>𝕏:</strong> ${x}</div>
-        <div><strong>SOL:</strong> <span style="font-family:monospace; word-break:break-all;">${solFull}</span></div>
-        <div><strong>Live Y2K:</strong> ${balance}</div>
-        <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
-      </div>
-      <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
-        <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
-        <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
-        <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
-        <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
-        <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
-      </div>
-    </div>`;
-});
-
-list.appendChild(row);
+      row.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+          <div class="space-y-1 text-sm">
+            <div><strong>𝕏:</strong> ${x}</div>
+            <div><strong>SOL:</strong> <span style="font-family:monospace; word-break:break-all; display:inline-block; max-width:100%;">${solFull}</span></div>
+            <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
+            <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
+            <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
+            <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
+            <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
+            <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
+          </div>
+        </div>`;
+      list.appendChild(row);
+    });
   }
 
   function updateStatus(wallet, status) {
