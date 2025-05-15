@@ -2,452 +2,608 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Y2K x ROAST Airdrop Portal</title>
-  <meta name="theme-color" content="#00ffe1" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+  <title>Welcome to Y2K | ROAST RECORDS Studio</title>
+  <meta name="description" content="The CROFAM music studio. Submit a request, fund the ecosystem, own the moment.">
+  <meta name="theme-color" content="#0a0a0a" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+  <script src="https://bundle.run/buffer@6.0.3"></script>
   <style>
-    body {
+    :root { color-scheme: dark; --accent: #ff00ff; }
+    html, body {
+      background-color: #0a0a0a;
+      color: #e2e8f0;
       font-family: 'Rubik', sans-serif;
-      background: radial-gradient(circle at top, #111, #000);
+      overflow-x: hidden;
+    }
+    .neon-text {
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent);
+    }
+    .neon-border {
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      border-radius: 10px;
+    }
+    .neon-border:hover { box-shadow: 0 0 20px var(--accent); }
+    .glow-button {
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--accent);
+      background: rgba(255, 0, 255, 0.1);
       color: white;
-      padding: 20px;
-    }
-    .glass {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      padding: 24px;
-      box-shadow: 0 0 20px rgba(0, 255, 225, 0.4);
-    }
-    .btn {
-      background: linear-gradient(to right, #00ffe1, #ff00f7);
-      color: black;
-      font-weight: bold;
-      padding: 10px 24px;
       border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-    .btn:hover {
-      transform: scale(1.05);
-      filter: brightness(1.15);
-    }
-    .badge {
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 12px;
       font-weight: bold;
-      text-transform: uppercase;
     }
-    .approved { background: #00ff8c; color: black; }
-    .pending { background: #facc15; color: black; }
-    .denied  { background: #f43f5e; color: white; }
-    .updated { background: #38bdf8; color: black; }
-    input {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid #666;
-      padding: 10px;
-      color: white;
-      width: 100%;
-      border-radius: 6px;
+    .glow-button:hover {
+      background: rgba(255, 0, 255, 0.2);
+      box-shadow: 0 0 20px var(--accent);
     }
-
-@keyframes subtleNeonFlicker {
-  0%, 100% {
-    text-shadow:
-      0 0 4px #00ffe1,
-      0 0 8px #00ffe1,
-      0 0 16px #ff00f7;
-    opacity: 1;
-  }
-  45% {
-    text-shadow:
-      0 0 2px #00ffe1,
-      0 0 4px #00ffe1,
-      0 0 6px #ff00f7;
-    opacity: 0.92;
-  }
-  60% {
-    text-shadow:
-      0 0 3px #00ffe1,
-      0 0 6px #00ffe1,
-      0 0 10px #ff00f7;
-    opacity: 0.96;
-  }
-  80% {
-    text-shadow:
-      0 0 2px #00ffe1,
-      0 0 3px #ff00f7;
-    opacity: 0.9;
-  }
-}
-
-.heading-flicker {
-  font-family: 'Orbitron', sans-serif !important;
-  font-size: 2.5rem;
-  background: linear-gradient(90deg, #00ffe1, #ff00f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: subtleNeonFlicker 4.5s ease-in-out infinite;
-}
-    #homeBtn {
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 50;
-  background: rgba(0, 255, 225, 0.1);
-  border: 1px solid rgba(0, 255, 225, 0.4);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.8rem;
+    .glass-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+    .floating { animation: floaty 6s ease-in-out infinite; }
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    .toast {
+  background: rgba(255, 0, 255, 0.15);
+  border: 1px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  color: white;
   font-weight: bold;
-  color: #00ffe1;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  box-shadow: 0 0 20px var(--accent);
+  animation: fadein 0.4s, floatup 0.4s, fadeout 0.4s 4.6s;
 }
-#homeBtn:hover {
-  background: rgba(255, 0, 247, 0.15);
-  color: #ff00f7;
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatup {
+  0% { transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+@keyframes fadeout {
+  to { opacity: 0; transform: translateY(-10px); }
 }
   </style>
 </head>
-
 <body>
-  <a id="homeBtn" href="https://y2kcoin.org">← Home</a>
-  <div class="glass max-w-xl mx-auto mt-10 text-center">
-    <h1 class="text-4xl font-bold mb-4 tracking-wide heading-flicker">Y2K x ROAST Airdrop Access</h1>
-    <p class="mb-4 text-lg text-gray-300">Holding 4M+ Y2K? You’re already staking.<br>Claim your ROAST by verifying below.</p>
-    <button id="connectBtn" class="btn mb-4">Verify Holdings</button>
-    <div id="walletInfo" class="text-sm opacity-80 mb-2"></div>
-    <div id="statusMessage" class="text-lg font-bold mb-4"></div>
+<div id="app" class="relative">
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
+  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
+</div>
 
-    <div id="formSection" class="hidden">
-      <input type="text" id="xHandle" placeholder="Enter 𝕏 handle (e.g. @vaultuser)" class="mb-3" />
-      <input type="text" id="solAddress" placeholder="Enter Solana Wallet Address" class="mb-3" />
-      <button id="submitBtn" class="btn w-full">Submit Info</button>
+<header class="fixed top-0 left-0 w-full p-4 z-40 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
+  <div class="flex items-center gap-4">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
+    <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
+  </div>
+  <nav class="flex gap-4 text-white text-sm">
+    <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
+    <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
+    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
+  </nav>
+</header>
+<div class="h-20"></div>
+
+<section class="text-center py-20 px-6" id="portal">
+  <div class="flex justify-center mb-6">
+    <div class="w-64 h-64 rounded-full neon-border floating"
+         style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;"></div>
+  </div>
+  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-4">ROAST RECORDS</h1>
+  <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
+    The CROFAM Studio — create your anthem, soundtrack, or roast. Submissions support the ecosystem. All heat, no chill.
+  </p>
+
+    <!-- Wallet Connect + Submission Block -->
+  <div class="glass-card max-w-2xl mx-auto space-y-8">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
+        <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+      </div>
+      <div>
+        <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
+        <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+      </div>
+    </div>
+    <div id="balanceStatus" class="text-xs text-gray-400 text-center"></div>
+
+    <form id="submissionForm" class="space-y-4 mt-6">
+      <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
+        <option value="">Select Type</option>
+        <option value="Anthem">Anthem / Theme Song</option>
+        <option value="Custom Song">Custom Song</option>
+        <option value="Roast">Roast</option>
+        <option value="Other">Intro / Skit / Audio Request</option>
+      </select>
+
+      <input type="text" id="handle" placeholder="@YourHandle" required
+        class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
+
+      <textarea id="notes" placeholder="Describe the request: tone, project, name, etc."
+        class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
+
+      <label class="flex items-center gap-3 text-white text-left text-sm">
+        <input type="checkbox" id="limitedMint" class="accent-pink-500 w-5 h-5"/>
+        <span>
+          Request Limited Mint (10 editions at 50 CRO each).
+          <br/>
+          <span class="text-gray-400 text-xs italic">
+            500 CRO will be used to buy back project tokens — or Y2K if personal.
+          </span>
+        </span>
+      </label>
+
+      <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-lg">Submit (20 CRO)</button>
+    </form>
+    <div id="studioStatus" class="mt-6 text-sm text-white"></div>
+  </div>
+</section>
+
+  <section id="live" class="py-16 px-6 bg-[#111] text-center">
+  <h2 class="text-3xl neon-text font-bold mb-8">Live Submissions</h2>
+  <div id="liveRequests" class="flex overflow-x-auto gap-6 snap-x snap-mandatory"></div>
+</section>
+
+  <section id="mints" class="py-16 px-6 bg-[#111] text-center">
+  <h2 class="text-3xl neon-text font-bold mb-8">Live Mints</h2>
+  <div id="mintCarousel" class="flex overflow-x-auto gap-6 snap-x snap-mandatory px-2 pb-4 scroll-smooth">
+    <!-- MINT CARD: Eric -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mint" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">ERIC</h3>
+      <p class="text-gray-400 text-sm">The original anthem. Genesis-level energy.</p>
     </div>
 
-    <div id="editSection" class="hidden">
-      <p class="text-sm text-gray-400 mb-2">Want to update your info?</p>
-      <button id="editBtn" class="btn w-full">Edit My Entry</button>
+    <!-- MINT CARD: Cards of Cronos -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">Cards of Cronos</h3>
+      <p class="text-gray-400 text-sm">Your on-chain fate sealed in sound.</p>
+    </div>
+
+    <!-- MINT CARD: Diamond Hands -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="Diamond Hands" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">Diamond Hands</h3>
+      <p class="text-gray-400 text-sm">Hold through the static. This one's forever.</p>
+    </div>
+
+    <!-- MINT CARD: DoJO -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="DOJO" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">DOJO</h3>
+      <p class="text-gray-400 text-sm">Discipline, chaos, and rhythm. Mint approved.</p>
+    </div>
+
+    <!-- MINT CARD: The Syndicate -->
+    <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5743.jpeg" alt="The Syndicate" class="w-full rounded mb-4"/>
+      <h3 class="text-xl text-white font-bold mb-1">The Syndicate</h3>
+      <p class="text-gray-400 text-sm">Degens unite. The chain has no mercy.</p>
     </div>
   </div>
+</section>
 
-  <script>
+<!-- Vault + Token Access -->
+<section id="vault" class="py-12 px-6 text-center bg-[#111]">
+  <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
+  <div class="flex flex-col md:flex-row justify-center gap-6">
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">🔐 Enter The Vault</a>
+    <a href="/airdrops.html" 
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">🚀 Airdrop Portal</a>
+    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Buy $Y2K</a>
+    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Trade $ROAST</a>
+  </div>
+
+  <div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4 hidden">
+  <h2 class="text-3xl neon-text font-bold mb-4">Submission Confirmed!</h2>
+<p class="text-lg text-white mb-2">Your request has been received and is now live.</p>
+<p class="text-sm text-pink-400 mb-2">Request Type: <span id="confirmType"></span></p>
+<p id="sharePreview" class="text-xs text-gray-400 italic text-center max-w-sm mb-2"></p>
+<button onclick="copyShareText()" class="text-xs text-gray-300 underline mb-4">Copy share text</button>
+<p class="text-xs text-gray-500 italic text-center mb-4">Click “Share on 𝕏” to post this automatically.</p>
+<a id="shareOnX" href="#" target="_blank" class="glow-button mb-4">Share on 𝕏</a>
+<button onclick="closeConfirmation()" class="glow-button">Close</button>
+</div>
+</section>
+
+  <!-- Firebase Setup -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
   const firebaseConfig = {
-    apiKey: "AIzaSyC3v0j-XP7PZ07-U-6TpWYQge5dljb9VMs",
-    authDomain: "y2k-airdrop-portal.firebaseapp.com",
-    projectId: "y2k-airdrop-portal",
-    storageBucket: "y2k-airdrop-portal.firebasestorage.app",
-    messagingSenderId: "1004795236115",
-    appId: "1:1004795236115:web:1fe86ece1f3cf0304dd4e6"
+    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+    authDomain: "y2kroast-512ee.firebaseapp.com",
+    projectId: "y2kroast-512ee",
+    storageBucket: "y2kroast-512ee.appspot.com",
+    messagingSenderId: "602588659855",
+    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const liveContainer = document.getElementById('liveRequests');
 
-  const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
-  const minHold = 4000000;
-  let userAddress = "";
+  const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
+  window.connectedWallet = ""; // Make sure it's defined
 
-  async function checkY2KBalance(provider) {
-    const signer = provider.getSigner();
-    const walletAddress = await signer.getAddress();
-    const y2kAbi = ["function balanceOf(address owner) view returns (uint256)"];
-    const y2kContract = new ethers.Contract(y2kAddress, y2kAbi, provider);
-    const balance = await y2kContract.balanceOf(walletAddress);
-    const y2kBalance = parseFloat(ethers.utils.formatUnits(balance, 18));
-    return { y2kBalance, walletAddress };
-  }
+  window.loadSubmissions = () => {
+    onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ id: doc.id, ...doc.data() });
+      });
 
-  document.getElementById("connectBtn").onclick = async () => {
-    if (typeof window.ethereum === "undefined") {
-      alert("Please install MetaMask.");
-      return;
-    }
+      docs.sort((a, b) => a.timestamp - b.timestamp);
+      liveContainer.innerHTML = '';
+      if (!window.__loadedIds) window.__loadedIds = new Set();
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
+      docs.forEach((data) => {
+        if (!window.__loadedIds.has(data.id)) {
+          showToast(`${data.handle} just submitted a ${data.type}`);
+        }
 
-    userAddress = walletAddress;
-    document.getElementById("walletInfo").innerText = `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
+        window.__loadedIds.add(data.id);
+        const date = new Date(data.timestamp);
+        const formattedDate = date.toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        });
 
-    const docRef = db.collection("airdrops").doc(userAddress);
-    const docSnap = await docRef.get();
+        const item = document.createElement('div');
+        item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
+        const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
 
-    if (docSnap.exists) {
-      const data = docSnap.data();
-      const status = data.status || "pending";
-      const x = data.xHandle || "@unknown";
-      const badge = `<span class="badge ${status}">${status}</span>`;
-      const updateBadge = data.updated ? `<span class="badge updated ml-2">updated</span>` : "";
+        item.innerHTML = `
+          <div class="flex justify-between items-center mb-2">
+            <div class="text-pink-400 text-sm font-bold">${data.type}</div>
+            ${data.limitedMint ? '<div class="text-xs text-white bg-pink-600 px-2 py-1 rounded-full">LIMITED MINT</div>' : ''}
+          </div>
+          <div class="text-white text-lg mb-1">${data.handle}</div>
+          <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
+          <div class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</div>
+          <div class="text-xs text-gray-500">${formattedDate}</div>
+          ${isAdmin ? `<button onclick="deleteRequest('${data.id}')" class="mt-2 px-3 py-1 bg-red-600 text-xs text-white rounded">Delete</button>` : ''}
+        `;
+        liveContainer.appendChild(item);
+      });
+    });
+  };
 
-      document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: ${badge} ${updateBadge}`;
-      document.getElementById("editSection").classList.remove("hidden");
-      return;
-    }
+  window.deleteRequest = async function (id) {
+    const confirmDelete = confirm("Are you sure you want to delete this submission?");
+    if (!confirmDelete) return;
 
-    if (y2kBalance >= minHold) {
-      document.getElementById("statusMessage").innerText = "✅ Eligible! Submit your 𝕏 + Sol address.";
-      document.getElementById("formSection").classList.remove("hidden");
-    } else {
-      document.getElementById("statusMessage").innerText = "❌ Must hold 4M+ Y2K to qualify.";
+    try {
+      await deleteDoc(doc(db, "studio_requests", id));
+      showToast("Submission deleted.");
+    } catch (err) {
+      console.error("Delete Error", err);
+      showToast("Failed to delete.");
     }
   };
 
-  document.getElementById("submitBtn").onclick = async () => {
-    const x = document.getElementById("xHandle").value.trim();
-    const sol = document.getElementById("solAddress").value.trim();
+  window.db = db;
+  window.collection = collection;
+  window.addDoc = addDoc;
 
-    if (!x || !x.startsWith("@")) {
-      alert("Please enter a valid 𝕏 handle (starts with @).");
-      return;
-    }
-
-    if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(sol)) {
-      alert("Invalid Solana address.");
-      return;
-    }
-
-    const ref = db.collection("airdrops").doc(userAddress);
-    const existing = await ref.get();
-    const updates = {
-      croAddress: userAddress,
-      solAddress: sol,
-      xHandle: x,
-      status: "pending",
-      updated: firebase.firestore.FieldValue.serverTimestamp(),
-      joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    if (existing.exists) {
-      delete updates.joinedAt;
-    }
-
-    await ref.set(updates, { merge: true });
-
-    document.getElementById("statusMessage").innerHTML = `✅ Info submitted.<br>Status: <span class="badge pending">pending</span>`;
-    document.getElementById("formSection").classList.add("hidden");
-    document.getElementById("editSection").classList.remove("hidden");
-  };
-
-  document.getElementById("editBtn").onclick = () => {
-    document.getElementById("formSection").classList.remove("hidden");
-    document.getElementById("editSection").classList.add("hidden");
-    document.getElementById("statusMessage").innerText = "Edit your info and resubmit. Status will reset to pending.";
-  };
+  // ** FIX: Call immediately on page load **
+  window.addEventListener("DOMContentLoaded", loadSubmissions);
 </script>
 
-  <div class="glass max-w-4xl mx-auto mt-12">
-  <h2 class="text-2xl mb-4 text-center font-semibold tracking-wide" style="font-family: 'Orbitron', sans-serif;">Verified Y2K Holders</h2>
-  <div id="leaderboard" class="space-y-4 text-sm"></div>
-</div>
-
-<div id="adminPanel" class="glass max-w-4xl mx-auto mt-12 hidden">
-  <h2 class="text-2xl mb-4 text-center text-yellow-300 font-semibold" style="font-family: 'Orbitron', sans-serif;">Admin Panel</h2>
-  <div class="text-sm text-center text-gray-300 break-all mb-4">
-    ROAST Airdrop Wallet:  
-    <span id="roastWallet" class="text-white font-mono cursor-pointer hover:underline">
-      HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq
-    </span>
-  </div>
-
-  <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
-    <button onclick="airdropAll('Y2K')" class="btn w-full sm:w-auto">Airdrop Y2K to All</button>
-    <button onclick="airdropAll('ROAST')" class="btn w-full sm:w-auto">Airdrop ROAST to All</button>
-  </div>
-
-  <div id="adminList" class="space-y-6"></div>
-</div>
-
+<!-- Wallet Connect Logic -->
 <script>
-  document.getElementById("roastWallet").onclick = () => {
-    navigator.clipboard.writeText("HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq");
-    alert("ROAST airdrop wallet copied!");
-  };
+const ADMIN_WALLET = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+let connectedWallet = null;
 
-  const y2kToken = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
-const y2kABI = ["function balanceOf(address) view returns (uint256)"];
+const CRONOS_MAINNET = {
+  chainId: '0x19',
+  chainName: 'Cronos Mainnet',
+  nativeCurrency: { name: 'CRO', symbol: 'CRO', decimals: 18 },
+  rpcUrls: ['https://evm.cronos.org'],
+  blockExplorerUrls: ['https://cronoscan.com/']
+};
 
-async function getY2KBalance(address) {
+async function connectCRO() {
   try {
-    const provider = new ethers.providers.JsonRpcProvider("https://cronos.blockpi.network/v1/rpc/public");
-    const contract = new ethers.Contract(y2kToken, y2kABI, provider);
-    const balance = await contract.balanceOf(address);
-    return parseFloat(ethers.utils.formatUnits(balance, 18)).toLocaleString();
-  } catch {
-    return "N/A";
+    if (!window.ethereum) throw new Error("Install MetaMask or DeFi Wallet.");
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: CRONOS_MAINNET.chainId }],
+      });
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [CRONOS_MAINNET],
+        });
+      } else {
+        throw switchError;
+      }
+    }
+
+    croWallet = provider;
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    connectedWallet = address.toLowerCase();              // keeps local use
+    window.connectedWallet = address.toLowerCase();       // fix: expose globally
+
+    const balance = await provider.getBalance(address);
+    document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO: ${address.slice(0,6)}...${address.slice(-4)}`;
+    document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,6)} CRO`;
+
+    loadSubmissions(); // make sure it reloads *after* setting connectedWallet
+
+  } catch (err) {
+    console.error("CRO Connect Error", err);
+    document.getElementById('croStatus').innerHTML = `<span class="text-red-400">✗</span> ${err.message}`;
   }
 }
 
-  const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
-
-  async function detectAdmin() {
-    let isAdmin = false;
-
-    // EVM check
-    if (typeof window.ethereum !== "undefined") {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const address = (await signer.getAddress()).toLowerCase();
-        if (address === adminWallet) isAdmin = true;
-      } catch {}
-    }
-
-    // Solana check
-    if (!isAdmin && window.solana?.isPhantom) {
-      try {
-        const resp = await window.solana.connect();
-        const solAddress = resp.publicKey.toString();
-        if (solAddress === "HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq") isAdmin = true;
-      } catch {}
-    }
-
-    if (isAdmin) {
-      document.getElementById("adminPanel").classList.remove("hidden");
-      loadAdminList();
-    }
-  }
-
-  async function loadLeaderboard() {
-    const list = document.getElementById("leaderboard");
-    list.innerHTML = "";
-
-    const baseQuery = db.collection("airdrops").where("status", "==", "approved");
-    try {
-      const ordered = await baseQuery.orderBy("joinedAt", "desc").get();
-      if (ordered.empty) throw new Error();
-      renderLeaderboard(ordered);
-    } catch {
-      const fallback = await baseQuery.get();
-      renderLeaderboard(fallback);
-    }
-  }
-
-  function renderLeaderboard(snapshot) {
-    const list = document.getElementById("leaderboard");
-    list.innerHTML = "";
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if (!data.solAddress || !data.xHandle) return;
-
-      const cro = doc.id;
-      const x = data.xHandle;
-      const sol = data.solAddress;
-      const croShort = cro.slice(0, 6) + "..." + cro.slice(-4);
-      const solShort = sol.slice(0, 4) + "..." + sol.slice(-4);
-
-      const div = document.createElement("div");
-      div.className = "p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3";
-      div.innerHTML = `
-        <div>
-          <div><strong>𝕏:</strong> ${x}</div>
-          <div><strong>CRO:</strong> ${croShort}</div>
-          <div><strong>SOL:</strong> ${solShort}</div>
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  async function loadAdminList() {
-    const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
-    const list = document.getElementById("adminList");
-    list.innerHTML = "";
-
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const wallet = doc.id;
-      const x = data.xHandle || "@unknown";
-      const solFull = data.solAddress || "—";
-      const status = data.status || "pending";
-      const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
-
-      const row = document.createElement("div");
-row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
-
-getY2KBalance(wallet).then(balance => {
-  row.innerHTML = `
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
-      <div class="space-y-1 text-sm">
-        <div><strong>𝕏:</strong> ${x}</div>
-        <div><strong>SOL:</strong> <span style="font-family:monospace; word-break:break-all;">${solFull}</span></div>
-        <div><strong>Live Y2K:</strong> ${balance}</div>
-        <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
-      </div>
-      <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
-        <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
-        <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
-        <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
-        <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
-        <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
-      </div>
-    </div>`;
-});
-
-list.appendChild(row);
-  }
-
-  function updateStatus(wallet, status) {
-    db.collection("airdrops").doc(wallet).update({ status }).then(() => {
-      alert(`✅ ${wallet} marked as ${status.toUpperCase()}`);
-      loadAdminList();
-      loadLeaderboard();
-    }).catch((err) => {
-      alert("Error updating status: " + err.message);
-    });
-  }
-
-  function deleteUser(wallet) {
-    if (!confirm(`Delete ${wallet} from the system? This cannot be undone.`)) return;
-    db.collection("airdrops").doc(wallet).delete().then(() => {
-      alert(`✅ ${wallet} removed.`);
-      loadAdminList();
-      loadLeaderboard();
-    });
-  }
-
-  function airdrop(wallet, type) {
-    db.collection("airdrops").doc(wallet).get().then(doc => {
-      const data = doc.data();
-      const targetWallet = (type === "Y2K") ? wallet : data.solAddress;
-      if (!targetWallet) {
-        alert("❌ Missing Solana address for ROAST airdrop.");
-        return;
-      }
-      const field = (type === "Y2K") ? "lastAirdropY2K" : "lastAirdropROAST";
-      db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-      alert(`✅ ${type} airdrop logged for:\n${targetWallet}`);
-    });
-  }
-
-  function airdropAll(type) {
-    if (!confirm(`This will log ${type} airdrops for all APPROVED users only. Confirm?`)) return;
-    db.collection("airdrops").where("status", "==", "approved").get().then(snapshot => {
-      snapshot.forEach(doc => {
-        const wallet = doc.id;
-        const field = type === "Y2K" ? "lastAirdropY2K" : "lastAirdropROAST";
-        db.collection("airdrops").doc(wallet).update({ [field]: firebase.firestore.FieldValue.serverTimestamp() });
-      });
-      alert(`✅ ${type} airdrop logged for all approved.`);
-    });
-  }
-
-  function toggleAdminList() {
-    const panel = document.getElementById("adminList");
-    panel.classList.toggle("hidden");
-  }
-
-  detectAdmin();
-  loadLeaderboard();
+  async function sendCRO(amount, toAddress) {
+  if (!croWallet) throw new Error("Connect your CRO wallet first.");
+  const signer = croWallet.getSigner();
+  const tx = await signer.sendTransaction({
+    to: toAddress,
+    value: ethers.utils.parseEther(amount)
+  });
+  return tx.hash;
+}
 </script>
+
+<!-- Studio Submission Logic -->
+<script>
+async function submitStudioRequest() {
+  const type = document.getElementById('requestType').value;
+  const handle = document.getElementById('handle').value.trim();
+  const notes = document.getElementById('notes').value.trim();
+  const limitedMint = document.getElementById('limitedMint').checked;
+  const status = document.getElementById('studioStatus');
+
+  if (!type || !handle.startsWith('@')) {
+    status.innerHTML = `<span class="text-red-400">Please enter a valid type and handle (@handle).</span>`;
+    return;
+  }
+
+  try {
+    status.innerHTML = `<span class="text-yellow-400">Sending 20 CRO...</span>`;
+    const signer = croWallet.getSigner();
+    const userAddress = await signer.getAddress();
+    const message = `I authorize this ROAST RECORDS request from ${userAddress} at ${new Date().toISOString()}`;
+    const signature = await signer.signMessage(message);
+    const txHash = await sendCRO("20", "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100");
+
+    await addDoc(collection(db, "studio_requests"), {
+      type,
+      handle,
+      notes,
+      limitedMint,
+      txHash,
+      croAddress: userAddress,
+      message,
+      signature,
+      timestamp: Date.now()
+    });
+
+    status.innerHTML = `<div class="text-green-400">Submitted! Tx: ${txHash}</div>`;
+    showConfirmationOverlay(handle, type);
+    document.getElementById('submissionForm').reset();
+  } catch (err) {
+    console.error("Submission Error", err);
+    status.innerHTML = `<span class="text-red-400">Error: ${err.message}</span>`;
+  }
+}
+</script>
+
+<!-- Footer -->
+<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
+  <div class="mb-4">Built for CROFAM. Fueled by music, memes, and Y2K energy.</div>
+  <div class="flex justify-center gap-6 text-white mt-6">
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter Vault</a>
+  </div>
+</footer>
+
+<!-- Entry Logic -->
+<script>
+function enterPortal() {
+  const overlay = document.getElementById('enterOverlay');
+  if (!overlay) return;
+
+  overlay.style.transition = "opacity 1s ease, transform 1s ease";
+  overlay.style.opacity = 0;
+  overlay.style.transform = "scale(1.05)";
+
+  setTimeout(() => {
+    overlay.remove();
+    const portal = document.getElementById('portal');
+    if (portal) {
+      portal.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Now that overlay is gone, play queued toasts
+    if (window.toastQueue?.length) {
+      toastQueue.forEach(msg => showToast(msg));
+      toastQueue = [];
+    }
+  }, 1000);
+}
+</script>
+
+  <script>
+// Smooth scroll nav (FIXED: now inside a proper script tag)
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+});
+</script>
+
+  <!-- Live Toast Container -->
+<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+<script>
+let toastQueue = [];
+
+function showToast(message) {
+  const toastContainer = document.getElementById('toastContainer');
+  if (!toastContainer || document.getElementById('enterOverlay')) {
+    toastQueue.push(message);
+    return;
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 5000);
+}
+</script>
+
+<script>
+function showConfirmationOverlay(handle, type) {
+  const overlay = document.getElementById('confirmationOverlay');
+  const shareBtn = document.getElementById('shareOnX');
+  const preview = document.getElementById('sharePreview');
+  const confirmType = document.getElementById('confirmType');
+
+  if (overlay) overlay.classList.remove('hidden');
+  if (confirmType) confirmType.textContent = type;
+
+  let templates = [];
+
+  switch (type) {
+    case "Roast":
+      templates = [
+        `I just dropped a roast request inside the Vault. Let the flames begin. #ROASTRECORDS #CROFAM`,
+        `Vault roast request submitted. You better hope it ain't about you. #CryptoMusic #Y2K`,
+        `I pulled up to ROAST RECORDS with smoke in mind. Submission locked. #CROFAM #Y2KCoin`,
+      ];
+      break;
+    case "Anthem":
+    case "Custom Song":
+      templates = [
+        `Just locked in an anthem request at ROAST RECORDS. Energy incoming. #Y2K #CryptoMusic`,
+        `My sound. My story. Vault anthem request submitted. #CROFAM #Y2KCoin`,
+        `I just cooked up a custom track submission. This one’s for the chain. #ROASTRECORDS`,
+      ];
+      break;
+    default:
+      templates = [
+        `Dropped a creative request at ROAST RECORDS. Skit, intro, or something in-between. #Y2K #CryptoMusic`,
+        `Submitted a custom request to the Vault studio. Let’s see what comes back. #CROFAM #ROASTRECORDS`,
+      ];
+      break;
+  }
+
+  const message = templates[Math.floor(Math.random() * templates.length)];
+  const url = `https://y2kcoin.org`;
+
+  if (shareBtn) {
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(message + ' ' + url)}`;
+  }
+  if (preview) preview.textContent = message;
+}
+</script>
+
+  <script>
+  const mintCarousel = document.getElementById('mintCarousel');
+  let scrollIndex = 0;
+
+  function autoScrollMints() {
+    if (!mintCarousel) return;
+    const cards = mintCarousel.children;
+    if (!cards.length) return;
+
+    scrollIndex = (scrollIndex + 1) % cards.length;
+    const cardWidth = cards[0].offsetWidth + 24; // width + gap
+    mintCarousel.scrollTo({ left: scrollIndex * cardWidth, behavior: 'smooth' });
+  }
+
+  setInterval(autoScrollMints, 4000); // scroll every 4 seconds
+</script>
+
+  <script type="module">
+  import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+  window.deleteRequest = async function (id) {
+    const confirmDelete = confirm("Are you sure you want to delete this submission?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteDoc(doc(db, "studio_requests", id));
+      showToast("Submission deleted.");
+    } catch (err) {
+      console.error("Delete Error", err);
+      showToast("Failed to delete.");
+    }
+  };
+</script>
+
+<script>
+window.addEventListener('load', () => {
+  const overlay = document.getElementById('confirmationOverlay');
+  const shareBtn = document.getElementById('shareOnX');
+  const closeBtn = overlay?.querySelector('button');
+
+  if (shareBtn) {
+    shareBtn.onclick = (e) => {
+      e.preventDefault();
+      const url = shareBtn.href;
+      if (url && url.startsWith('https://x.com')) {
+        window.open(url, '_blank');
+      }
+    };
+  }
+
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      overlay.classList.add('hidden');
+    };
+  }
+});
+</script>
+
+  <script>
+function copyShareText() {
+  const href = document.getElementById('shareOnX')?.href;
+  if (!href) return;
+  const text = decodeURIComponent(new URL(href).searchParams.get('text') || '');
+  navigator.clipboard.writeText(text);
+  showToast("Copied to clipboard.");
+}
+</script>
+  
 </body>
 </html>
