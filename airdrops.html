@@ -441,5 +441,21 @@
   detectAdmin();
   loadLeaderboard();
 </script>
+
+<script>
+const y2kToken = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
+const y2kAbi = ["function balanceOf(address) view returns (uint256)"];
+
+async function fetchLiveBalance(address) {
+  try {
+    const provider = new ethers.providers.JsonRpcProvider("https://cronos.blockpi.network/v1/rpc/public");
+    const contract = new ethers.Contract(y2kToken, y2kAbi, provider);
+    const balance = await contract.balanceOf(address);
+    return parseFloat(ethers.utils.formatUnits(balance, 18)).toFixed(2);
+  } catch {
+    return "N/A";
+  }
+}
+</script>
 </body>
 </html>
