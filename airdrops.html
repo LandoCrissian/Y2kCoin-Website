@@ -345,39 +345,48 @@
   }
 
   async function loadAdminList() {
-    const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
-    const list = document.getElementById("adminList");
-    list.innerHTML = "";
+  const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
+  const list = document.getElementById("adminList");
+  list.innerHTML = "";
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const wallet = doc.id;
-      const x = data.xHandle || "@unknown";
-      const solFull = data.solAddress || "—";
-      const status = data.status || "pending";
-      const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const wallet = doc.id;
+    const x = data.xHandle || "@unknown";
+    const solFull = data.solAddress || "—";
+    const status = data.status || "pending";
+    const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
 
-      const row = document.createElement("div");
-      row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
+    const row = document.createElement("div");
+    row.className = "p-4 border border-gray-700 bg-black/40 rounded-xl shadow-md";
 
-      row.innerHTML = `
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
-          <div class="space-y-1 text-sm">
-            <div><strong>𝕏:</strong> ${x}</div>
-            <div><strong>SOL:</strong> <span style="font-family:monospace; word-break:break-all; display:inline-block; max-width:100%;">${solFull}</span></div>
-            <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
-            </div>
-            <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
-            <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
-            <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
-            <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
-            <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
-            <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
-          </div>
-        </div>`;
-      list.appendChild(row);
+    row.innerHTML = `
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+        <div class="space-y-1 text-sm">
+          <div><strong>𝕏:</strong> ${x}</div>
+          <div><strong>SOL:</strong> <span style="font-family:monospace; word-break:break-all;">${solFull}</span></div>
+          <div><strong>Live Y2K:</strong> <span id="bal-${wallet}">Loading...</span></div>
+          <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:justify-end">
+          <button class="btn" onclick="updateStatus('${wallet}', 'approved')">Approve</button>
+          <button class="btn" onclick="updateStatus('${wallet}', 'denied')">Deny</button>
+          <button class="btn" onclick="deleteUser('${wallet}')">Delete</button>
+          <button class="btn" onclick="airdrop('${wallet}', 'Y2K')">Airdrop Y2K</button>
+          <button class="btn" onclick="airdrop('${wallet}', 'ROAST')">Airdrop ROAST</button>
+        </div>
+      </div>
+    `;
+
+    list.appendChild(row);
+
+    // Fetch live balance after row is rendered
+    fetchLiveBalance(wallet).then(bal => {
+      const el = document.getElementById(`bal-${wallet}`);
+      if (el) el.innerText = `${bal} Y2K`;
     });
-  }
+  });
+}
 
   function updateStatus(wallet, status) {
     db.collection("airdrops").doc(wallet).update({ status }).then(() => {
