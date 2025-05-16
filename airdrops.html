@@ -378,15 +378,18 @@
       </div>
     `;
 
-        list.appendChild(row);
+            list.appendChild(row);
 
     // Delay fetching balance to ensure element exists in DOM
-      requestAnimationFrame(() => {
-  fetchLiveBalance(wallet).then(bal => {
-    const el = document.getElementById(`bal-${wallet}`);
-    if (el) el.innerText = `${bal} Y2K`;
-  });
-});
+    requestAnimationFrame(() => {
+      fetchLiveBalance(wallet).then(bal => {
+        const el = document.getElementById(`bal-${wallet}`);
+        if (el) el.innerText = `${bal} Y2K`;
+      });
+    });
+
+  }); // <-- This closes the forEach loop
+}
 
   function updateStatus(wallet, status) {
     db.collection("airdrops").doc(wallet).update({ status }).then(() => {
