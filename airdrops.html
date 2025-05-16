@@ -448,11 +448,15 @@ const y2kAbi = ["function balanceOf(address) view returns (uint256)"];
 
 async function fetchLiveBalance(address) {
   try {
+    console.log("Fetching Y2K balance for:", address);
     const provider = new ethers.providers.JsonRpcProvider("https://cronos.blockpi.network/v1/rpc/public");
     const contract = new ethers.Contract(y2kToken, y2kAbi, provider);
     const balance = await contract.balanceOf(address);
-    return parseFloat(ethers.utils.formatUnits(balance, 18)).toFixed(2);
-  } catch {
+    const formatted = parseFloat(ethers.utils.formatUnits(balance, 18)).toFixed(2);
+    console.log("Fetched Y2K:", formatted);
+    return formatted;
+  } catch (error) {
+    console.warn("Y2K balance fetch failed for:", address, error);
     return "N/A";
   }
 }
