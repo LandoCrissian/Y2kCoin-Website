@@ -382,11 +382,11 @@
 
     // Delay fetching balance to ensure element exists in DOM
     requestAnimationFrame(() => {
-      fetchLiveBalance(wallet).then(bal => {
-        const el = document.getElementById(`bal-${wallet}`);
-        if (el) el.innerText = `${bal} Y2K`;
-      });
-    });
+  fetchLiveBalance(wallet).then(bal => {
+    const el = document.getElementById(`bal-${wallet}`);
+    if (el) el.innerText = `${bal} Y2K`;
+  });
+});
 
   }); // <-- This closes the forEach loop
 }
