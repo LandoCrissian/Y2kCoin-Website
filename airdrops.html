@@ -452,7 +452,7 @@ const y2kAbi = ["function balanceOf(address) view returns (uint256)"];
 async function fetchLiveBalance(address) {
   try {
     console.log("Fetching Y2K balance for:", address);
-    const provider = new ethers.providers.JsonRpcProvider("https://cronos.blockpi.network/v1/rpc/public");
+    const provider = new ethers.providers.JsonRpcProvider("https://evm.cronos.org");
     const contract = new ethers.Contract(y2kToken, y2kAbi, provider);
     const balance = await contract.balanceOf(address);
     const formatted = parseFloat(ethers.utils.formatUnits(balance, 18)).toFixed(2);
