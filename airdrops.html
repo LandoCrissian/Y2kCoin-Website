@@ -356,21 +356,26 @@ document.getElementById("editSection").prepend(shareBtn);
   const list = document.getElementById("leaderboard");
   list.innerHTML = "";
 
-  const leaderboard = [];
+  const referralCounts = {};
 
+  // First, count all referred invites
   snapshot.forEach(doc => {
     const data = doc.data();
-    if (!data.solAddress || !data.xHandle) return;
-
-    const referrer = data.invitedBy;
-    if (referrer) {
-      const found = leaderboard.find(entry => entry.wallet === referrer);
-      if (found) {
-        found.count += 1;
-      } else {
-        leaderboard.push({ wallet: referrer, count: 1 });
-      }
+    const inviter = data.invitedBy;
+    if (inviter) {
+      referralCounts[inviter] = (referralCounts[inviter] || 0) + 1;
     }
+  });
+
+  // Now, build a list of all approved users with their handle + referral count
+  const leaderboard = [];
+  snapshot.forEach(doc => {
+    const wallet = doc.id;
+    const data = doc.data();
+    const x = data.xHandle || "@unknown";
+    const count = referralCounts[wallet] || 0;
+
+    leaderboard.push({ handle: x, count });
   });
 
   leaderboard.sort((a, b) => b.count - a.count);
@@ -378,7 +383,6 @@ document.getElementById("editSection").prepend(shareBtn);
   leaderboard.forEach((entry, i) => {
     const rank = i + 1;
     const crown = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
-    const short = entry.wallet.slice(0, 6) + "..." + entry.wallet.slice(-4);
 
     const div = document.createElement("div");
     div.className = "p-4 border border-cyan-700 bg-black/40 rounded-xl shadow-md flex justify-between items-center";
@@ -386,7 +390,7 @@ document.getElementById("editSection").prepend(shareBtn);
       <div class="flex items-center gap-3">
         <span class="text-xl">${crown}</span>
         <div class="text-sm">
-          <div class="font-semibold">${short}</div>
+          <div class="font-semibold">${entry.handle}</div>
           <div class="text-gray-400">Invites: ${entry.count}</div>
         </div>
       </div>
