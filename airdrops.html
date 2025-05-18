@@ -412,22 +412,23 @@ document.getElementById("editSection").prepend(shareBtn);
   const crown = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
   const hasBonus = entry.count > 0;
   const badgeHTML = hasBonus
-  ? `<img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD66100A-C097-4B27-A60F-4B650EA6B39E.png" class="rgb-badge" alt="500K Y2K Bonus">`
-  : "";
+    ? `<img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD66100A-C097-4B27-A60F-4B650EA6B39E.png" class="rgb-badge" alt="500K Y2K Bonus">`
+    : "";
 
   const div = document.createElement("div");
   div.className = "p-4 border border-cyan-700 bg-black/40 rounded-xl shadow-md flex justify-between items-center";
   div.innerHTML = `
-  <div class="flex items-center gap-3 justify-between w-full">
-    <div class="flex items-center gap-2">
-      <span class="text-xl">${crown}</span>
-      <div class="text-sm flex items-center gap-2">
-        <div class="font-semibold">${entry.handle}</div>
-        ${badgeHTML}
+    <div class="flex items-center gap-3 justify-between w-full">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">${crown}</span>
+        <div class="text-sm flex items-center gap-2">
+          <div class="font-semibold">${entry.handle}</div>
+          ${badgeHTML}
+        </div>
       </div>
-    </div>
-    <div class="text-sm text-gray-400">Invites: ${entry.count}</div>
-  </div>`;
+      <div class="text-sm text-gray-400">Invites: ${entry.count}</div>
+    </div>`;
+  list.appendChild(div);
 });
 }
 
