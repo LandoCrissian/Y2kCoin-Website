@@ -248,14 +248,14 @@ document.getElementById("editSection").prepend(shareBtn);
     const ref = db.collection("airdrops").doc(userAddress);
     const existing = await ref.get();
     const updates = {
-      croAddress: userAddress,
-      solAddress: sol,
-      xHandle: x,
-      status: "pending",
-      updated: firebase.firestore.FieldValue.serverTimestamp(),
-      joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-      invitedBy: localStorage.getItem("referrerY2K") || null,
-    };
+  croAddress: userAddress,
+  solAddress: sol,
+  xHandle: x,
+  status: "pending",
+  updated: firebase.firestore.FieldValue.serverTimestamp(),
+  joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  invitedBy: localStorage.getItem("referrerY2K") || null,
+};
 
     if (existing.exists) {
       delete updates.joinedAt;
