@@ -149,8 +149,14 @@
   };
 
   firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+const db = firebase.firestore();
 
+// Store referral code from URL (if any)
+const urlParams = new URLSearchParams(window.location.search);
+const referrer = urlParams.get("ref");
+if (referrer) {
+  localStorage.setItem("referrerY2K", referrer);
+}
   const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
   const minHold = 4000000;
   let userAddress = "";
@@ -248,6 +254,7 @@ document.getElementById("editSection").prepend(shareBtn);
       status: "pending",
       updated: firebase.firestore.FieldValue.serverTimestamp(),
       joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+      invitedBy: localStorage.getItem("referrerY2K") || null,
     };
 
     if (existing.exists) {
