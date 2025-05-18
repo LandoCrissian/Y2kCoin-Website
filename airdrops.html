@@ -281,7 +281,7 @@ document.getElementById("editSection").prepend(shareBtn);
 </script>
 
   <div class="glass max-w-4xl mx-auto mt-12">
-  <h2 class="text-2xl mb-4 text-center font-semibold tracking-wide" style="font-family: 'Orbitron', sans-serif;">Verified Y2K Holders</h2>
+  <h2 class="text-2xl mb-4 text-center font-semibold tracking-wide" style="font-family: 'Orbitron', sans-serif;">Referral Leaderboard</h2>
   <div id="leaderboard" class="space-y-4 text-sm"></div>
 </div>
 
@@ -355,30 +355,47 @@ document.getElementById("editSection").prepend(shareBtn);
   }
 
   function renderLeaderboard(snapshot) {
-    const list = document.getElementById("leaderboard");
-    list.innerHTML = "";
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if (!data.solAddress || !data.xHandle) return;
+  const list = document.getElementById("leaderboard");
+  list.innerHTML = "";
 
-      const cro = doc.id;
-      const x = data.xHandle;
-      const sol = data.solAddress;
-      const croShort = cro.slice(0, 6) + "..." + cro.slice(-4);
-      const solShort = sol.slice(0, 4) + "..." + sol.slice(-4);
+  const leaderboard = [];
 
-      const div = document.createElement("div");
-      div.className = "p-4 rounded-lg border border-cyan-700 bg-black/30 shadow-lg flex justify-between items-start flex-wrap gap-3";
-      div.innerHTML = `
-        <div>
-          <div><strong>𝕏:</strong> ${x}</div>
-          <div><strong>CRO:</strong> ${croShort}</div>
-          <div><strong>SOL:</strong> ${solShort}</div>
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    if (!data.solAddress || !data.xHandle) return;
+
+    const referrer = data.invitedBy;
+    if (referrer) {
+      const found = leaderboard.find(entry => entry.wallet === referrer);
+      if (found) {
+        found.count += 1;
+      } else {
+        leaderboard.push({ wallet: referrer, count: 1 });
+      }
+    }
+  });
+
+  leaderboard.sort((a, b) => b.count - a.count);
+
+  leaderboard.forEach((entry, i) => {
+    const rank = i + 1;
+    const crown = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
+    const short = entry.wallet.slice(0, 6) + "..." + entry.wallet.slice(-4);
+
+    const div = document.createElement("div");
+    div.className = "p-4 border border-cyan-700 bg-black/40 rounded-xl shadow-md flex justify-between items-center";
+    div.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-xl">${crown}</span>
+        <div class="text-sm">
+          <div class="font-semibold">${short}</div>
+          <div class="text-gray-400">Invites: ${entry.count}</div>
         </div>
-      `;
-      list.appendChild(div);
-    });
-  }
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
 
   async function loadAdminList() {
   const snapshot = await db.collection("airdrops").orderBy("joinedAt", "desc").get();
