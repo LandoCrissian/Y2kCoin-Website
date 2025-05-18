@@ -114,6 +114,33 @@
   background: rgba(255, 0, 247, 0.15);
   color: #ff00f7;
 }
+    .rgb-badge {
+  width: 40px;
+  border-radius: 8px;
+  box-shadow:
+    0 0 6px rgba(255, 0, 247, 0.6),
+    0 0 12px rgba(0, 255, 225, 0.6),
+    0 0 18px rgba(255, 255, 0, 0.6);
+  animation: pulseRGB 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+.rgb-badge:hover {
+  transform: scale(1.1);
+}
+@keyframes pulseRGB {
+  0%, 100% {
+    box-shadow:
+      0 0 6px #ff00f7,
+      0 0 12px #00ffe1,
+      0 0 18px #ffff00;
+  }
+  50% {
+    box-shadow:
+      0 0 8px #00ffe1,
+      0 0 14px #ff00f7,
+      0 0 20px #00ff6a;
+  }
+}
   </style>
 </head>
 
@@ -381,22 +408,27 @@ document.getElementById("editSection").prepend(shareBtn);
   leaderboard.sort((a, b) => b.count - a.count);
 
   leaderboard.forEach((entry, i) => {
-    const rank = i + 1;
-    const crown = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
+  const rank = i + 1;
+  const crown = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
+  const hasBonus = entry.count > 0;
+  const badgeHTML = hasBonus
+    ? `<img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/CA9AC2C3-5C07-4744-ACBF-6ADEDA667593.png" class="rgb-badge" alt="500K Y2K Badge">`
+    : "";
 
-    const div = document.createElement("div");
-    div.className = "p-4 border border-cyan-700 bg-black/40 rounded-xl shadow-md flex justify-between items-center";
-    div.innerHTML = `
-      <div class="flex items-center gap-3">
-        <span class="text-xl">${crown}</span>
-        <div class="text-sm">
-          <div class="font-semibold">${entry.handle}</div>
-          <div class="text-gray-400">Invites: ${entry.count}</div>
-        </div>
+  const div = document.createElement("div");
+  div.className = "p-4 border border-cyan-700 bg-black/40 rounded-xl shadow-md flex justify-between items-center";
+  div.innerHTML = `
+    <div class="flex items-center gap-3">
+      <span class="text-xl">${crown}</span>
+      <div class="text-sm flex items-center gap-2">
+        <div class="font-semibold">${entry.handle}</div>
+        ${badgeHTML}
       </div>
-    `;
-    list.appendChild(div);
-  });
+      <div class="text-gray-400">Invites: ${entry.count}</div>
+    </div>
+  `;
+  list.appendChild(div);
+});
 }
 
   async function loadAdminList() {
