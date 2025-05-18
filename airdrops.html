@@ -115,14 +115,14 @@
   color: #ff00f7;
 }
     .rgb-badge {
-  width: 40px;
-  border-radius: 8px;
+  width: 28px; /* instead of 40px */
+  height: 28px;
+  border-radius: 6px;
   box-shadow:
-    0 0 6px rgba(255, 0, 247, 0.6),
-    0 0 12px rgba(0, 255, 225, 0.6),
-    0 0 18px rgba(255, 255, 0, 0.6);
-  animation: pulseRGB 3s ease-in-out infinite;
-  transition: transform 0.3s ease;
+    0 0 4px rgba(255, 0, 247, 0.5),
+    0 0 8px rgba(0, 255, 225, 0.5),
+    0 0 12px rgba(255, 255, 0, 0.4);
+  animation: pulseRGB 2.5s ease-in-out infinite;
 }
 .rgb-badge:hover {
   transform: scale(1.1);
@@ -428,8 +428,10 @@ document.getElementById("editSection").prepend(shareBtn);
             ${badgeHTML}
           </div>
         </div>
-        <div class="text-sm text-gray-400">Invites: ${entry.count}</div>
-      </div>`;
+        <div class="text-sm flex items-center gap-1.5">
+  <div class="font-semibold whitespace-nowrap">${entry.handle}</div>
+  ${badgeHTML}
+</div>`;
     list.appendChild(div);
   });
 }
