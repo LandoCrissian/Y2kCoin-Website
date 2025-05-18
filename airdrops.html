@@ -385,34 +385,32 @@ document.getElementById("editSection").prepend(shareBtn);
 
   const referralCounts = {};
 
-  // First, count all referred invites
+  // Count invites
   snapshot.forEach(doc => {
-    const data = doc.data();
-    const inviter = data.invitedBy;
-    if (inviter) {
-      referralCounts[inviter] = (referralCounts[inviter] || 0) + 1;
-    }
+    const inviter = doc.data().invitedBy;
+    if (inviter) referralCounts[inviter] = (referralCounts[inviter] || 0) + 1;
   });
 
-  // Now, build a list of all approved users with handle + referral count
+  // Build leaderboard
   const leaderboard = [];
   snapshot.forEach(doc => {
     const wallet = doc.id;
     const data = doc.data();
-    const x = data.xHandle || "@unknown";
-    const count = referralCounts[wallet] || 0;
-
-    leaderboard.push({ wallet, handle: x, count });
+    leaderboard.push({
+      wallet,
+      handle: data.xHandle || "@unknown",
+      count: referralCounts[wallet] || 0
+    });
   });
 
+  // Sort
   leaderboard.sort((a, b) => b.count - a.count);
 
   leaderboard.forEach((entry, i) => {
     const rank = i + 1;
     const crown = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
     const hasBonus = entry.count > 0;
-    
-    // Only show badge if they have at least 1 invite
+
     const badgeHTML = hasBonus
       ? `<img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD66100A-C097-4B27-A60F-4B650EA6B39E.png" class="rgb-badge" alt="500K Y2K Bonus">`
       : "";
@@ -423,15 +421,14 @@ document.getElementById("editSection").prepend(shareBtn);
       <div class="flex items-center gap-3 justify-between w-full">
         <div class="flex items-center gap-2">
           <span class="text-xl">${crown}</span>
-          <div class="text-sm flex items-center gap-2">
-            <div class="font-semibold">${entry.handle}</div>
+          <div class="text-sm flex items-center gap-1.5">
+            <div class="font-semibold whitespace-nowrap">${entry.handle}</div>
             ${badgeHTML}
           </div>
         </div>
-        <div class="text-sm flex items-center gap-1.5">
-  <div class="font-semibold whitespace-nowrap">${entry.handle}</div>
-  ${badgeHTML}
-</div>`;
+        <div class="text-sm text-gray-400">Invites: ${entry.count}</div>
+      </div>
+    `;
     list.appendChild(div);
   });
 }
