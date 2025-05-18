@@ -148,14 +148,14 @@
   <a id="homeBtn" href="https://y2kcoin.org">← Home</a>
   <div class="glass max-w-xl mx-auto mt-10 text-center">
     <h1 class="text-4xl font-bold mb-4 tracking-wide heading-flicker">Y2K x ROAST Airdrop Access</h1>
-    <p class="mb-4 text-lg text-gray-300">Holding 4M+ Y2K? You’re already staking.<br>Claim your ROAST by verifying below.</p>
+    <p class="mb-4 text-lg text-gray-300">Holding 4M+ Y2K? You’re already staking.<br>Enter your 𝕏 handle to register. Solana wallet is optional (for receiving ROAST).</p>
     <button id="connectBtn" class="btn mb-4">Verify Holdings</button>
     <div id="walletInfo" class="text-sm opacity-80 mb-2"></div>
     <div id="statusMessage" class="text-lg font-bold mb-4"></div>
 
     <div id="formSection" class="hidden">
       <input type="text" id="xHandle" placeholder="Enter 𝕏 handle (e.g. @vaultuser)" class="mb-3" />
-      <input type="text" id="solAddress" placeholder="Enter Solana Wallet Address" class="mb-3" />
+      <input type="text" id="solAddress" placeholder="(Optional) Solana Wallet for ROAST" class="mb-3" />
       <button id="submitBtn" class="btn w-full">Submit Info</button>
     </div>
 
@@ -267,10 +267,10 @@ document.getElementById("editSection").prepend(shareBtn);
       return;
     }
 
-    if (!/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(sol)) {
-      alert("Invalid Solana address.");
-      return;
-    }
+    if (sol && !/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(sol)) {
+  alert("Invalid Solana address.");
+  return;
+}
 
     const ref = db.collection("airdrops").doc(userAddress);
     const existing = await ref.get();
