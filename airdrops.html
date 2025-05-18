@@ -174,6 +174,30 @@
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
+    // Show share button
+const shareBtn = document.createElement("button");
+shareBtn.id = "shareBtn";
+shareBtn.innerText = "Share on 𝕏";
+shareBtn.className = "btn w-full mt-2";
+shareBtn.onclick = () => {
+  const shareText = `The $Y2K Portal just opened.
+
+› You hold 4M+ $Y2K? You're already staking.
+› You verify? You earn $ROAST.
+› You share? Every verified invite earns you 100K $Y2K.
+› They verify with your link? They get 100K $Y2K too.
+
+Use my referral link & let’s eat.
+
+Portal: https://y2kcoin.org/airdrops?ref=${userAddress}
+Swap: https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d
+
+#Y2K #CroFam #AirdropPortal #DOJO`;
+
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+  window.open(tweetUrl, "_blank");
+};
+document.getElementById("editSection").prepend(shareBtn);
 
     userAddress = walletAddress;
     document.getElementById("walletInfo").innerText = `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
@@ -235,6 +259,11 @@
     document.getElementById("statusMessage").innerHTML = `✅ Info submitted.<br>Status: <span class="badge pending">pending</span>`;
     document.getElementById("formSection").classList.add("hidden");
     document.getElementById("editSection").classList.remove("hidden");
+    const shareBtn = document.createElement("button");
+shareBtn.innerText = "Share on 𝕏";
+shareBtn.className = "btn w-full mt-2";
+shareBtn.onclick = sharePost;
+document.getElementById("editSection").prepend(shareBtn);
   };
 
   document.getElementById("editBtn").onclick = () => {
@@ -476,5 +505,13 @@ async function fetchLiveBalance(address) {
   }
 }
 </script>
+
+ <script>
+function sharePost() {
+  const tweetText = encodeURIComponent(`Holding 4M+ $Y2K?\nYou’re already staking — now claim your ROAST.\n\nHere’s the deal:\n- Verify your wallet through the Airdrop Portal\n- Share your referral link\n- Every verified invite =\n  › They get 100,000 bonus $Y2K\n  › You earn 100,000 $Y2K\n\nSteps to get started:\n1. Visit Y2KCoin.org\n2. Scroll to Airdrop Portal\n3. Connect, verify, and share your link\n4. Track invites & rewards live\n\nNew to $Y2K? Grab some:\nobsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d\n\n#Y2K #CroFam #AirdropPortal #DOJO`);
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+  window.open(tweetUrl, "_blank");
+}
+</script> 
 </body>
 </html>
