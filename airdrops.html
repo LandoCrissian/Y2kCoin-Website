@@ -213,19 +213,17 @@ shareBtn.id = "shareBtn";
 shareBtn.innerText = "Share on 𝕏";
 shareBtn.className = "btn w-full mt-2";
 shareBtn.onclick = () => {
-  const shareText = `The $Y2K Portal is active.
+  const shareText = `The $Y2K Portal is live.
 
-› Hold 4M+ $Y2K? You’re eligible.
-› Verify? You get 200K $Y2K.
-› Share your link? Every verified invite earns you 100K $Y2K.
-› Reach 5 invites? You permanently earn 500K extra — plus the badge.
+› 4M+ $Y2K? You’re eligible.
+› Verify: +200K $Y2K
+› Invite: +100K each
+› 5 invites = +500K bonus
 
-Your wallet is your referral code. Let’s grow the network.
+Use your referral link to grow the network.
 
-Portal: https://y2kcoin.org/airdrops?ref=${userAddress}
-Swap: https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d
-
-#Y2K #CroFam #AirdropPortal #DOJO #VaultVerified`;
+https://y2kcoin.org/airdrops?ref=${userAddress}
+#Y2K #CroFam #VaultVerified`;
 
   const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
   window.open(tweetUrl, "_blank");
@@ -258,7 +256,7 @@ document.getElementById("editSection").prepend(shareBtn);
     }
   };
 
-  document.getElementById("submitBtn").onclick = async () => {
+    document.getElementById("submitBtn").onclick = async () => {
     const x = document.getElementById("xHandle").value.trim();
     const sol = document.getElementById("solAddress").value.trim();
 
@@ -268,42 +266,52 @@ document.getElementById("editSection").prepend(shareBtn);
     }
 
     if (sol && !/^([1-9A-HJ-NP-Za-km-z]{32,44})$/.test(sol)) {
-  alert("Invalid Solana address.");
-  return;
-}
+      alert("Invalid Solana address.");
+      return;
+    }
 
     const ref = db.collection("airdrops").doc(userAddress);
     const existing = await ref.get();
+    const invitedBy = localStorage.getItem("referrerY2K") || null;
     const updates = {
-  croAddress: userAddress,
-  solAddress: sol,
-  xHandle: x,
-  status: "pending",
-  updated: firebase.firestore.FieldValue.serverTimestamp(),
-  joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  invitedBy: localStorage.getItem("referrerY2K") || null,
-};
+      croAddress: userAddress,
+      solAddress: sol || "",
+      xHandle: x,
+      status: "pending",
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
+      joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      invitedBy
+    };
 
-    if (existing.exists) {
-      delete updates.joinedAt;
-    }
-
+    if (existing.exists) delete updates.joinedAt;
     await ref.set(updates, { merge: true });
+
+    // Update inviter’s stats if verified and invitedBy exists
+    if (invitedBy) {
+      const inviterRef = db.collection("airdrops").doc(invitedBy);
+      const inviterSnap = await inviterRef.get();
+      if (inviterSnap.exists) {
+        const inviterData = inviterSnap.data();
+        const currentCount = inviterData.inviteCount || 0;
+        const newCount = currentCount + 1;
+        const badgeEarned = newCount >= 5;
+        const earned = newCount * 100000 + (badgeEarned ? 500000 : 0);
+        await inviterRef.update({
+          inviteCount: newCount,
+          earnedFromReferrals: earned,
+          badgeEarned
+        });
+      }
+    }
 
     document.getElementById("statusMessage").innerHTML = `✅ Info submitted.<br>Status: <span class="badge pending">pending</span>`;
     document.getElementById("formSection").classList.add("hidden");
     document.getElementById("editSection").classList.remove("hidden");
     const shareBtn = document.createElement("button");
-shareBtn.innerText = "Share on 𝕏";
-shareBtn.className = "btn w-full mt-2";
-shareBtn.onclick = sharePost;
-document.getElementById("editSection").prepend(shareBtn);
-  };
-
-  document.getElementById("editBtn").onclick = () => {
-    document.getElementById("formSection").classList.remove("hidden");
-    document.getElementById("editSection").classList.add("hidden");
-    document.getElementById("statusMessage").innerText = "Edit your info and resubmit. Status will reset to pending.";
+    shareBtn.innerText = "Share on 𝕏";
+    shareBtn.className = "btn w-full mt-2";
+    shareBtn.onclick = sharePost;
+    document.getElementById("editSection").prepend(shareBtn);
   };
 </script>
 
@@ -379,39 +387,40 @@ document.getElementById("editSection").prepend(shareBtn);
   }
 }
 
-  function renderLeaderboard(snapshot) {
+    function renderLeaderboard(snapshot) {
   const list = document.getElementById("leaderboard");
   list.innerHTML = "";
 
   const referralCounts = {};
 
-  // Count invites
   snapshot.forEach(doc => {
     const inviter = doc.data().invitedBy;
     if (inviter) referralCounts[inviter] = (referralCounts[inviter] || 0) + 1;
   });
 
-  // Build leaderboard
   const leaderboard = [];
   snapshot.forEach(doc => {
     const wallet = doc.id;
     const data = doc.data();
+    const count = referralCounts[wallet] || 0;
+    const bonus = count >= 5 ? 500000 : 0;
+    const earnings = count * 100000 + bonus;
+
     leaderboard.push({
       wallet,
       handle: data.xHandle || "@unknown",
-      count: referralCounts[wallet] || 0
+      count,
+      earnings,
+      hasBadge: count >= 5
     });
   });
 
-  // Sort
   leaderboard.sort((a, b) => b.count - a.count);
 
   leaderboard.forEach((entry, i) => {
     const rank = i + 1;
     const crown = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
-    const hasBonus = entry.count > 0;
-
-    const badgeHTML = hasBonus
+    const badgeHTML = entry.hasBadge
       ? `<img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD66100A-C097-4B27-A60F-4B650EA6B39E.png" class="rgb-badge" alt="500K Y2K Bonus">`
       : "";
 
@@ -426,7 +435,10 @@ document.getElementById("editSection").prepend(shareBtn);
             ${badgeHTML}
           </div>
         </div>
-        <div class="text-sm text-gray-400">Invites: ${entry.count}</div>
+        <div class="text-sm text-right text-gray-400">
+          <div>Invites: ${entry.count}</div>
+          <div>Earnings: ${entry.earnings.toLocaleString()} Y2K</div>
+        </div>
       </div>
     `;
     list.appendChild(div);
