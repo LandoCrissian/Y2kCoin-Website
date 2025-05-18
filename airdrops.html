@@ -340,19 +340,17 @@ document.getElementById("editSection").prepend(shareBtn);
   }
 
   async function loadLeaderboard() {
-    const list = document.getElementById("leaderboard");
-    list.innerHTML = "";
+  const list = document.getElementById("leaderboard");
+  list.innerHTML = "";
 
-    const baseQuery = db.collection("airdrops").where("status", "==", "approved");
-    try {
-      const ordered = await baseQuery.orderBy("joinedAt", "desc").get();
-      if (ordered.empty) throw new Error();
-      renderLeaderboard(ordered);
-    } catch {
-      const fallback = await baseQuery.get();
-      renderLeaderboard(fallback);
-    }
+  try {
+    const snapshot = await db.collection("airdrops").where("status", "==", "approved").get();
+    renderLeaderboard(snapshot);
+  } catch (error) {
+    console.error("Error loading leaderboard:", error);
+    list.innerHTML = "<p class='text-center text-gray-400'>Failed to load leaderboard.</p>";
   }
+}
 
   function renderLeaderboard(snapshot) {
   const list = document.getElementById("leaderboard");
