@@ -403,8 +403,9 @@ document.getElementById("editSection").prepend(shareBtn);
     const wallet = doc.id;
     const data = doc.data();
     const count = referralCounts[wallet] || 0;
-    const bonus = count >= 5 ? 500000 : 0;
-    const earnings = count * 100000 + bonus;
+const bonus = count >= 5 ? 500000 : 0;
+const manualBonus = data.manualBonusY2K || 0;
+const earnings = count * 100000 + bonus + manualBonus;
 
     leaderboard.push({
       wallet,
