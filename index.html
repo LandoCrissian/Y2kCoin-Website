@@ -205,30 +205,27 @@
 </a>
 </section>
 
-<!-- Vault + Token Access -->
+<!-- Vault Access -->
 <section id="vault" class="py-12 px-6 text-center bg-[#111]">
   <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
-  <div class="flex flex-col md:flex-row justify-center gap-6">
+  <div class="flex justify-center">
     <a href="https://y2k-the-vault.netlify.app/" target="_blank"
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">🔐 Enter The Vault</a>
-    <a href="/airdrops.html" 
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">🚀 Airdrop Portal</a>
-    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Buy $Y2K</a>
-    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">Trade $ROAST</a>
+       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
+       🔐 Enter The Vault
+    </a>
   </div>
 
+  <!-- Keep this inside the section -->
   <div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4 hidden">
-  <h2 class="text-3xl neon-text font-bold mb-4">Submission Confirmed!</h2>
-<p class="text-lg text-white mb-2">Your request has been received and is now live.</p>
-<p class="text-sm text-pink-400 mb-2">Request Type: <span id="confirmType"></span></p>
-<p id="sharePreview" class="text-xs text-gray-400 italic text-center max-w-sm mb-2"></p>
-<button onclick="copyShareText()" class="text-xs text-gray-300 underline mb-4">Copy share text</button>
-<p class="text-xs text-gray-500 italic text-center mb-4">Click “Share on 𝕏” to post this automatically.</p>
-<a id="shareOnX" href="#" target="_blank" class="glow-button mb-4">Share on 𝕏</a>
-<button onclick="closeConfirmation()" class="glow-button">Close</button>
-</div>
+    <h2 class="text-3xl neon-text font-bold mb-4">Submission Confirmed!</h2>
+    <p class="text-lg text-white mb-2">Your request has been received and is now live.</p>
+    <p class="text-sm text-pink-400 mb-2">Request Type: <span id="confirmType"></span></p>
+    <p id="sharePreview" class="text-xs text-gray-400 italic text-center max-w-sm mb-2"></p>
+    <button onclick="copyShareText()" class="text-xs text-gray-300 underline mb-4">Copy share text</button>
+    <p class="text-xs text-gray-500 italic text-center mb-4">Click “Share on 𝕏” to post this automatically.</p>
+    <a id="shareOnX" href="#" target="_blank" class="glow-button mb-4">Share on 𝕏</a>
+    <button onclick="closeConfirmation()" class="glow-button">Close</button>
+  </div>
 </section>
 
   <!-- Ecosystem Trust Section -->
@@ -255,6 +252,16 @@
     </div>
   </div>
   <a href="/airdrops.html" class="glow-button text-lg mt-6 inline-block">Access Airdrop Portal</a>
+</section>
+
+  <!-- Token Access Buttons -->
+<section class="mt-10 px-6 text-center">
+  <div class="flex flex-col md:flex-row justify-center gap-6">
+    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
+       class="glow-button text-lg">Buy $Y2K</a>
+    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
+       class="glow-button text-lg">Trade $ROAST</a>
+  </div>
 </section>
 
   <!-- Firebase Setup -->
