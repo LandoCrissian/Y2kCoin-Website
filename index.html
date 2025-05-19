@@ -104,9 +104,9 @@
   Powered by CROFAM • Fueled by $Y2K and $ROAST • Syndicate Verified
 </div>
 
-<!-- Token Price Strip (Fixed Below Trust Strip) -->
+<!-- Live Token Price Strip -->
 <div class="fixed top-28 left-0 w-full bg-black py-2 text-center text-xs text-gray-400 tracking-wide border-b border-pink-500 z-40">
-  $Y2K: 0.0032 CRO  •  $ROAST: 0.0008 SOL  •  Last Updated: Live
+  <span id="y2kPrice">Loading $Y2K...</span> • <span id="roastPrice">Loading $ROAST...</span>
 </div>
 
 <!-- Spacer to offset fixed header + strips -->
@@ -654,6 +654,29 @@ function copyShareText() {
   navigator.clipboard.writeText(text);
   showToast("Copied to clipboard.");
 }
+</script>
+
+  <script>
+async function fetchTokenPrices() {
+  try {
+    const response = await fetch('https://api.coingecko.com/api/v3/simple/token_price/cronos?contract_addresses=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d&vs_currencies=cro');
+    const data = await response.json();
+    const y2k = data['0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d'];
+    if (y2k && y2k.cro) {
+      document.getElementById('y2kPrice').innerText = `$Y2K: ${y2k.cro.toFixed(6)} CRO`;
+    }
+
+    // Static or placeholder for ROAST (adjust when available)
+    document.getElementById('roastPrice').innerText = `$ROAST: 0.0008 SOL`;
+
+  } catch (error) {
+    console.error('Price fetch error:', error);
+  }
+}
+
+// Fetch immediately and then every 60 seconds
+fetchTokenPrices();
+setInterval(fetchTokenPrices, 60000);
 </script>
   
 </body>
