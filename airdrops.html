@@ -176,14 +176,14 @@
   };
 
   firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+  const db = firebase.firestore();
 
-// Store referral code from URL (if any)
-const urlParams = new URLSearchParams(window.location.search);
-const referrer = urlParams.get("ref");
-if (referrer) {
-  localStorage.setItem("referrerY2K", referrer);
-}
+  const urlParams = new URLSearchParams(window.location.search);
+  const referrer = urlParams.get("ref");
+  if (referrer) {
+    localStorage.setItem("referrerY2K", referrer);
+  }
+
   const y2kAddress = "0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d";
   const minHold = 4000000;
   let userAddress = "";
@@ -198,22 +198,8 @@ if (referrer) {
     return { y2kBalance, walletAddress };
   }
 
-  document.getElementById("connectBtn").onclick = async () => {
-    if (typeof window.ethereum === "undefined") {
-      alert("Please install MetaMask.");
-      return;
-    }
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
-    // Show share button
-const shareBtn = document.createElement("button");
-shareBtn.id = "shareBtn";
-shareBtn.innerText = "Share on 𝕏";
-shareBtn.className = "btn w-full mt-2";
-shareBtn.onclick = () => {
-  const shareText = `The $Y2K Portal is live.
+  function sharePost() {
+    const shareText = `The $Y2K Portal is live.
 
 › 4M+ $Y2K? You’re eligible.
 › Verify: +200K $Y2K
@@ -225,38 +211,58 @@ Use your referral link to grow the network.
 https://y2kcoin.org/airdrops?ref=${userAddress}
 #Y2K #CroFam #VaultVerified`;
 
-  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
-  window.open(tweetUrl, "_blank");
-};
-document.getElementById("editSection").prepend(shareBtn);
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    window.open(tweetUrl, "_blank");
+  }
 
-    userAddress = walletAddress;
-    document.getElementById("walletInfo").innerText = `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
+  document.getElementById("connectBtn").onclick = async () => {
+    try {
+      if (typeof window.ethereum === "undefined") {
+        alert("Please install MetaMask.");
+        return;
+      }
 
-    const docRef = db.collection("airdrops").doc(userAddress);
-    const docSnap = await docRef.get();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const { y2kBalance, walletAddress } = await checkY2KBalance(provider);
 
-    if (docSnap.exists) {
-      const data = docSnap.data();
-      const status = data.status || "pending";
-      const x = data.xHandle || "@unknown";
-      const badge = `<span class="badge ${status}">${status}</span>`;
-      const updateBadge = data.updated ? `<span class="badge updated ml-2">updated</span>` : "";
+      userAddress = walletAddress;
+      document.getElementById("walletInfo").innerText =
+        `Wallet: ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)} | Y2K: ${y2kBalance.toLocaleString()}`;
 
-      document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: ${badge} ${updateBadge}`;
-      document.getElementById("editSection").classList.remove("hidden");
-      return;
-    }
+      const docRef = db.collection("airdrops").doc(userAddress);
+      const docSnap = await docRef.get();
 
-    if (y2kBalance >= minHold) {
-      document.getElementById("statusMessage").innerText = "✅ Eligible! Submit your 𝕏 + Sol address.";
-      document.getElementById("formSection").classList.remove("hidden");
-    } else {
-      document.getElementById("statusMessage").innerText = "❌ Must hold 4M+ Y2K to qualify.";
+      const shareBtn = document.createElement("button");
+      shareBtn.id = "shareBtn";
+      shareBtn.innerText = "Share on 𝕏";
+      shareBtn.className = "btn w-full mt-2";
+      shareBtn.onclick = sharePost;
+      document.getElementById("editSection").prepend(shareBtn);
+
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        const status = data.status || "pending";
+        const badge = `<span class="badge ${status}">${status}</span>`;
+        const updateBadge = data.updated ? `<span class="badge updated ml-2">updated</span>` : "";
+        document.getElementById("statusMessage").innerHTML = `✅ You already submitted.<br>Status: ${badge} ${updateBadge}`;
+        document.getElementById("editSection").classList.remove("hidden");
+        return;
+      }
+
+      if (y2kBalance >= minHold) {
+        document.getElementById("statusMessage").innerText = "✅ Eligible! Submit your 𝕏 + Sol address.";
+        document.getElementById("formSection").classList.remove("hidden");
+      } else {
+        document.getElementById("statusMessage").innerText = "❌ Must hold 4M+ Y2K to qualify.";
+      }
+    } catch (err) {
+      console.error("Error during verification:", err);
+      alert("Something went wrong. Please try again.");
     }
   };
 
-    document.getElementById("submitBtn").onclick = async () => {
+  document.getElementById("submitBtn").onclick = async () => {
     const x = document.getElementById("xHandle").value.trim();
     const sol = document.getElementById("solAddress").value.trim();
 
@@ -286,7 +292,7 @@ document.getElementById("editSection").prepend(shareBtn);
     if (existing.exists) delete updates.joinedAt;
     await ref.set(updates, { merge: true });
 
-    // Update inviter’s stats if verified and invitedBy exists
+    // Update inviter stats
     if (invitedBy) {
       const inviterRef = db.collection("airdrops").doc(invitedBy);
       const inviterSnap = await inviterRef.get();
@@ -307,11 +313,18 @@ document.getElementById("editSection").prepend(shareBtn);
     document.getElementById("statusMessage").innerHTML = `✅ Info submitted.<br>Status: <span class="badge pending">pending</span>`;
     document.getElementById("formSection").classList.add("hidden");
     document.getElementById("editSection").classList.remove("hidden");
+
     const shareBtn = document.createElement("button");
     shareBtn.innerText = "Share on 𝕏";
     shareBtn.className = "btn w-full mt-2";
     shareBtn.onclick = sharePost;
     document.getElementById("editSection").prepend(shareBtn);
+  };
+
+  document.getElementById("editBtn").onclick = () => {
+    document.getElementById("formSection").classList.remove("hidden");
+    document.getElementById("editSection").classList.add("hidden");
+    document.getElementById("statusMessage").innerText = "Edit your info and resubmit. Status will reset to pending.";
   };
 </script>
 
