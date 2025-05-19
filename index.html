@@ -86,7 +86,8 @@
   <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
 </div>
 
-<header class="fixed top-0 left-0 w-full p-4 z-40 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
+<!-- Sticky Header -->
+<header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
   <div class="flex items-center gap-4">
     <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
     <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
@@ -98,17 +99,18 @@
   </nav>
 </header>
 
-<!-- CROFAM Trust Strip -->
-<div class="w-full text-center text-sm py-2 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
+<!-- CROFAM Trust Strip (Fixed Below Header) -->
+<div class="fixed top-16 left-0 w-full text-center text-sm py-2 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
   Powered by CROFAM • Fueled by $Y2K and $ROAST • Syndicate Verified
 </div>
 
-<!-- Optional: Token Price Strip -->
-<div class="w-full bg-black py-2 text-center text-xs text-gray-400 tracking-wide border-b border-pink-500">
+<!-- Token Price Strip (Fixed Below Trust Strip) -->
+<div class="fixed top-28 left-0 w-full bg-black py-2 text-center text-xs text-gray-400 tracking-wide border-b border-pink-500 z-40">
   $Y2K: 0.0032 CRO  •  $ROAST: 0.0008 SOL  •  Last Updated: Live
 </div>
 
-<div class="h-20"></div>
+<!-- Spacer to offset fixed header + strips -->
+<div class="h-32"></div>
 
 <section class="text-center py-20 px-6" id="portal">
   <div class="flex justify-center mb-6">
