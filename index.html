@@ -309,6 +309,7 @@
   const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
   window.connectedWallet = "";
 
+  let latestTimestampSeen = 0;
   window.loadSubmissions = () => {
     onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
       const docs = [];
@@ -321,10 +322,10 @@
       if (!window.__loadedIds) window.__loadedIds = new Set();
 
       docs.forEach((data) => {
-        if (!window.__loadedIds.has(data.id)) {
-          showToast(`${data.handle} just submitted a ${data.type}`);
-        }
-
+        if (data.timestamp > latestTimestampSeen) {
+        showToast(`${data.handle} just submitted a ${data.type}`);
+        latestTimestampSeen = data.timestamp;
+      }
         window.__loadedIds.add(data.id);
         const date = new Date(data.timestamp);
         const formattedDate = date.toLocaleString('en-US', {
