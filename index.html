@@ -11,6 +11,8 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
   <script src="https://bundle.run/buffer@6.0.3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <style>
     :root { color-scheme: dark; --accent: #ff00ff; }
     html, body {
@@ -80,11 +82,19 @@
   </style>
 <body class="scroll-smooth overflow-y-auto bg-black">
 
+  <!-- Particle Background -->
+<canvas id="particleCanvas"></canvas>
+
   <!-- Portal Entry Overlay -->
-  <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-    <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
-    <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
+<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+  <div class="portal-container">
+    <div class="portal-ring"></div>
+    <div class="portal-ring" style="animation-delay: -1s;"></div>
+    <div class="portal-ring" style="animation-delay: -2s;"></div>
+    <h1 class="portal-text text-5xl md:text-6xl neon-text font-bold">Welcome to Y2K</h1>
   </div>
+  <button onclick="enterPortal()" class="cyber-button text-2xl mt-8">Enter Portal</button>
+</div>
 
   <!-- Sticky Header -->
   <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
