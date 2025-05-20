@@ -309,8 +309,8 @@
   const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
   window.connectedWallet = "";
 
-  let latestTimestampSeen = 0;
-  window.loadSubmissions = () => {
+  let latestTimestampSeen = Date.now(); // Only show toasts for submissions after page load
+window.loadSubmissions = () => {
     onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
       const docs = [];
       querySnapshot.forEach((doc) => {
