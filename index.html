@@ -57,56 +57,57 @@
       100% { transform: rotate(360deg); }
     }
     .toast {
-  background: rgba(255, 0, 255, 0.15);
-  border: 1px solid var(--accent);
-  padding: 1rem 1.25rem;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 0 20px var(--accent);
-  animation: fadein 0.4s, floatup 0.4s, fadeout 0.4s 4.6s;
-}
-@keyframes fadein {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes floatup {
-  0% { transform: translateY(10px); }
-  100% { transform: translateY(0); }
-}
-@keyframes fadeout {
-  to { opacity: 0; transform: translateY(-10px); }
-}
+      background: rgba(255, 0, 255, 0.15);
+      border: 1px solid var(--accent);
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 0 20px var(--accent);
+      animation: fadein 0.4s, floatup 0.4s, fadeout 0.4s 4.6s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatup {
+      0% { transform: translateY(10px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes fadeout {
+      to { opacity: 0; transform: translateY(-10px); }
+    }
   </style>
 </head>
 <body>
 <div id="app" class="relative">
-<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
-  <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
-</div>
-
-<!-- Sticky Header -->
-<header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
-  <div class="flex items-center gap-4">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
-    <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
+  <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+    <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
+    <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
   </div>
-  <nav class="flex gap-4 text-white text-sm">
-    <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
-    <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
-    <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
-  </nav>
-</header>
 
-<!-- CROFAM Trust Strip (Fixed Below Header) -->
-<div class="fixed top-16 left-0 w-full text-center text-sm py-2 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
-  Powered by CROFAM • Fueled by $Y2K and $ROAST • Syndicate Verified
-</div>
+  <!-- Sticky Header -->
+  <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
+      <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
+    </div>
+    <nav class="flex gap-4 text-white text-sm">
+      <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
+      <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
+      <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
+    </nav>
+  </header>
 
-<!-- Spacer below header and trust strip -->
-<div class="h-24"></div>
+  <!-- CROFAM Trust Strip (Fixed Below Header) -->
+  <div class="fixed top-16 left-0 w-full text-center text-sm py-2 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
+    Powered by CROFAM • Fueled by $Y2K and $ROAST • Syndicate Verified
+  </div>
 
+  <!-- Spacer below header and trust strip -->
+  <div class="h-24"></div>
+
+  <!-- Portal Section -->
 <section class="text-center py-20 px-6" id="portal">
   <div class="flex justify-center mb-6">
     <div class="w-64 h-64 rounded-full neon-border floating"
@@ -117,7 +118,7 @@
     The CROFAM Studio — create your anthem, soundtrack, or roast. Submissions support the ecosystem. All heat, no chill.
   </p>
 
-    <!-- Wallet Connect + Submission Block -->
+  <!-- Wallet Connect + Submission Block -->
   <div class="glass-card max-w-2xl mx-auto space-y-8">
     <div class="grid md:grid-cols-2 gap-4">
       <div>
@@ -163,57 +164,60 @@
   </div>
 </section>
 
-  <section id="live" class="py-16 px-6 bg-[#111] text-center">
+<!-- Live Submissions Section -->
+<section id="live" class="py-16 px-6 bg-[#111] text-center">
   <h2 class="text-3xl neon-text font-bold mb-8">Live Submissions</h2>
   <div id="liveRequests" class="flex overflow-x-auto gap-6 snap-x snap-mandatory"></div>
 </section>
 
-  <section id="mints" class="py-16 px-6 bg-[#111] text-center">
+<!-- Mints Section -->
+<section id="mints" class="py-16 px-6 bg-[#111] text-center">
   <h2 class="text-3xl neon-text font-bold mb-8">Live Mints</h2>
   <div id="mintCarousel" class="flex overflow-x-auto gap-6 snap-x snap-mandatory px-2 pb-4 scroll-smooth">
     <!-- MINT CARD: Eric -->
     <a href="https://eric-mode-business-boomin.nfts2.me/" style="text-decoration: none; color: inherit;" target="_blank">
-  <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mint" class="w-full rounded mb-4"/>
-    <h3 class="text-xl text-white font-bold mb-1">ERIC</h3>
-    <p class="text-gray-400 text-sm">The original anthem. Genesis-level energy.</p>
-  </div>
-</a>
+      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mint" class="w-full rounded mb-4"/>
+        <h3 class="text-xl text-white font-bold mb-1">ERIC</h3>
+        <p class="text-gray-400 text-sm">The original anthem. Genesis-level energy.</p>
+      </div>
+    </a>
 
-<a href="https://cronoshadow.nfts2.me/" style="text-decoration: none; color: inherit;" target="_blank">
-  <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full rounded mb-4"/>
-    <h3 class="text-xl text-white font-bold mb-1">Cards of Cronos</h3>
-    <p class="text-gray-400 text-sm">Your on-chain fate sealed in sound.</p>
-  </div>
-</a>
+    <a href="https://cronoshadow.nfts2.me/" target="_blank">
+      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full rounded mb-4"/>
+        <h3 class="text-xl text-white font-bold mb-1">Cards of Cronos</h3>
+        <p class="text-gray-400 text-sm">Your on-chain fate sealed in sound.</p>
+      </div>
+    </a>
 
-<a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" style="text-decoration: none; color: inherit;" target="_blank">
-  <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="Diamond Hands" class="w-full rounded mb-4"/>
-    <h3 class="text-xl text-white font-bold mb-1">Diamond Hands</h3>
-    <p class="text-gray-400 text-sm">Hold through the static. This one's forever.</p>
-  </div>
-</a>
+    <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
+      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="Diamond Hands" class="w-full rounded mb-4"/>
+        <h3 class="text-xl text-white font-bold mb-1">Diamond Hands</h3>
+        <p class="text-gray-400 text-sm">Hold through the static. This one's forever.</p>
+      </div>
+    </a>
 
-<a href="https://dojo-warriors-anthem.nfts2.me/" style="text-decoration: none; color: inherit;" target="_blank">
-  <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="DOJO" class="w-full rounded mb-4"/>
-    <h3 class="text-xl text-white font-bold mb-1">DOJO</h3>
-    <p class="text-gray-400 text-sm">Discipline, chaos, and rhythm. Mint approved.</p>
-  </div>
-</a>
+    <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
+      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="DOJO" class="w-full rounded mb-4"/>
+        <h3 class="text-xl text-white font-bold mb-1">DOJO</h3>
+        <p class="text-gray-400 text-sm">Discipline, chaos, and rhythm. Mint approved.</p>
+      </div>
+    </a>
 
-<a href="https://dead-chain-syndicate.nfts2.me/" style="text-decoration: none; color: inherit;" target="_blank">
-  <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5743.jpeg" alt="The Syndicate" class="w-full rounded mb-4"/>
-    <h3 class="text-xl text-white font-bold mb-1">The Syndicate</h3>
-    <p class="text-gray-400 text-sm">Degens unite. The chain has no mercy.</p>
+    <a href="https://dead-chain-syndicate.nfts2.me/" target="_blank">
+      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
+        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5743.jpeg" alt="The Syndicate" class="w-full rounded mb-4"/>
+        <h3 class="text-xl text-white font-bold mb-1">The Syndicate</h3>
+        <p class="text-gray-400 text-sm">Degens unite. The chain has no mercy.</p>
+      </div>
+    </a>
   </div>
-</a>
 </section>
 
-<!-- Vault Access -->
+  <!-- Vault Section -->
 <section id="vault" class="py-12 px-6 text-center bg-[#111]">
   <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
   <div class="flex justify-center">
@@ -223,7 +227,7 @@
     </a>
   </div>
 
-  <!-- Keep this inside the section -->
+  <!-- Confirmation Overlay -->
   <div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4 hidden">
     <h2 class="text-3xl neon-text font-bold mb-4">Submission Confirmed!</h2>
     <p class="text-lg text-white mb-2">Your request has been received and is now live.</p>
@@ -236,7 +240,7 @@
   </div>
 </section>
 
-  <!-- Ecosystem Trust Section -->
+<!-- Ecosystem Trust Section -->
 <section class="py-16 px-6 bg-black text-center border-t border-pink-500">
   <h2 class="text-3xl md:text-4xl neon-text font-bold mb-4">The Ecosystem Is Aligning</h2>
   <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
@@ -262,7 +266,7 @@
   <a href="/airdrops.html" class="glow-button text-lg mt-6 inline-block">Access Airdrop Portal</a>
 </section>
 
-  <!-- Token Access Buttons -->
+<!-- Token Buttons -->
 <section class="mt-10 px-6 text-center">
   <div class="flex flex-col md:flex-row justify-center gap-6">
     <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
@@ -272,7 +276,20 @@
   </div>
 </section>
 
-  <!-- Firebase Setup -->
+<!-- Footer -->
+<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm mt-20">
+  <div class="mb-4">Built for CROFAM. Fueled by music, memes, and Y2K energy.</div>
+  <div class="flex justify-center gap-6 text-white mt-6">
+    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
+    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter Vault</a>
+  </div>
+</footer>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <!-- Firebase Init + Load Submissions -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -289,9 +306,8 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const liveContainer = document.getElementById('liveRequests');
-
   const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
-  window.connectedWallet = ""; // Make sure it's defined
+  window.connectedWallet = "";
 
   window.loadSubmissions = () => {
     onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
@@ -352,16 +368,12 @@
   window.db = db;
   window.collection = collection;
   window.addDoc = addDoc;
-
-  // ** FIX: Call immediately on page load **
   window.addEventListener("DOMContentLoaded", loadSubmissions);
 </script>
 
-<!-- Wallet Connect Logic -->
+<!-- Wallet Connect -->
 <script>
-const ADMIN_WALLET = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 let connectedWallet = null;
-
 const CRONOS_MAINNET = {
   chainId: '0x19',
   chainName: 'Cronos Mainnet',
@@ -395,22 +407,21 @@ async function connectCRO() {
     croWallet = provider;
     const signer = provider.getSigner();
     const address = await signer.getAddress();
-    connectedWallet = address.toLowerCase();              // keeps local use
-    window.connectedWallet = address.toLowerCase();       // fix: expose globally
+    connectedWallet = address.toLowerCase();
+    window.connectedWallet = address.toLowerCase();
 
     const balance = await provider.getBalance(address);
     document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO: ${address.slice(0,6)}...${address.slice(-4)}`;
     document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,6)} CRO`;
 
-    loadSubmissions(); // make sure it reloads *after* setting connectedWallet
-
+    loadSubmissions();
   } catch (err) {
     console.error("CRO Connect Error", err);
     document.getElementById('croStatus').innerHTML = `<span class="text-red-400">✗</span> ${err.message}`;
   }
 }
 
-  async function sendCRO(amount, toAddress) {
+async function sendCRO(amount, toAddress) {
   if (!croWallet) throw new Error("Connect your CRO wallet first.");
   const signer = croWallet.getSigner();
   const tx = await signer.sendTransaction({
@@ -421,7 +432,7 @@ async function connectCRO() {
 }
 </script>
 
-<!-- Studio Submission Logic -->
+<!-- Submit Logic -->
 <script>
 async function submitStudioRequest() {
   const type = document.getElementById('requestType').value;
@@ -465,78 +476,7 @@ async function submitStudioRequest() {
 }
 </script>
 
-<!-- Footer -->
-<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm">
-  <div class="mb-4">Built for CROFAM. Fueled by music, memes, and Y2K energy.</div>
-  <div class="flex justify-center gap-6 text-white mt-6">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter Vault</a>
-  </div>
-</footer>
-
-<!-- Entry Logic -->
-<script>
-function enterPortal() {
-  const overlay = document.getElementById('enterOverlay');
-  if (!overlay) return;
-
-  overlay.style.transition = "opacity 1s ease, transform 1s ease";
-  overlay.style.opacity = 0;
-  overlay.style.transform = "scale(1.05)";
-
-  setTimeout(() => {
-    overlay.remove();
-    const portal = document.getElementById('portal');
-    if (portal) {
-      portal.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Now that overlay is gone, play queued toasts
-    if (window.toastQueue?.length) {
-      toastQueue.forEach(msg => showToast(msg));
-      toastQueue = [];
-    }
-  }, 1000);
-}
-</script>
-
-  <script>
-// Smooth scroll nav (FIXED: now inside a proper script tag)
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
-        behavior: 'smooth'
-      });
-    });
-  });
-});
-</script>
-
-  <!-- Live Toast Container -->
-<div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
-
-<script>
-let toastQueue = [];
-
-function showToast(message) {
-  const toastContainer = document.getElementById('toastContainer');
-  if (!toastContainer || document.getElementById('enterOverlay')) {
-    toastQueue.push(message);
-    return;
-  }
-
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = message;
-  toastContainer.appendChild(toast);
-
-  setTimeout(() => toast.remove(), 5000);
-}
-</script>
-
+<!-- Confirmation Logic -->
 <script>
 function showConfirmationOverlay(handle, type) {
   const overlay = document.getElementById('confirmationOverlay');
@@ -548,7 +488,6 @@ function showConfirmationOverlay(handle, type) {
   if (confirmType) confirmType.textContent = type;
 
   let templates = [];
-
   switch (type) {
     case "Roast":
       templates = [
@@ -583,65 +522,37 @@ function showConfirmationOverlay(handle, type) {
 }
 </script>
 
-  <script>
-  const mintCarousel = document.getElementById('mintCarousel');
-  let scrollIndex = 0;
-
-  function autoScrollMints() {
-    if (!mintCarousel) return;
-    const cards = mintCarousel.children;
-    if (!cards.length) return;
-
-    scrollIndex = (scrollIndex + 1) % cards.length;
-    const cardWidth = cards[0].offsetWidth + 24; // width + gap
-    mintCarousel.scrollTo({ left: scrollIndex * cardWidth, behavior: 'smooth' });
-  }
-
-  setInterval(autoScrollMints, 4000); // scroll every 4 seconds
-</script>
-
-  <script type="module">
-  import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-  window.deleteRequest = async function (id) {
-    const confirmDelete = confirm("Are you sure you want to delete this submission?");
-    if (!confirmDelete) return;
-
-    try {
-      await deleteDoc(doc(db, "studio_requests", id));
-      showToast("Submission deleted.");
-    } catch (err) {
-      console.error("Delete Error", err);
-      showToast("Failed to delete.");
-    }
-  };
-</script>
-
+<!-- Toast + Overlay + Mint Auto Scroll -->
 <script>
-window.addEventListener('load', () => {
-  const overlay = document.getElementById('confirmationOverlay');
-  const shareBtn = document.getElementById('shareOnX');
-  const closeBtn = overlay?.querySelector('button');
+let toastQueue = [];
 
-  if (shareBtn) {
-    shareBtn.onclick = (e) => {
-      e.preventDefault();
-      const url = shareBtn.href;
-      if (url && url.startsWith('https://x.com')) {
-        window.open(url, '_blank');
-      }
-    };
+function showToast(message) {
+  const toastContainer = document.getElementById('toastContainer');
+  if (!toastContainer || document.getElementById('enterOverlay')) {
+    toastQueue.push(message);
+    return;
   }
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+  setTimeout(() => toast.remove(), 5000);
+}
 
-  if (closeBtn) {
-    closeBtn.onclick = () => {
-      overlay.classList.add('hidden');
-    };
-  }
-});
-</script>
+function enterPortal() {
+  const overlay = document.getElementById('enterOverlay');
+  if (!overlay) return;
+  overlay.style.transition = "opacity 1s ease, transform 1s ease";
+  overlay.style.opacity = 0;
+  overlay.style.transform = "scale(1.05)";
+  setTimeout(() => {
+    overlay.remove();
+    document.getElementById('portal')?.scrollIntoView({ behavior: 'smooth' });
+    if (toastQueue.length) toastQueue.forEach(msg => showToast(msg));
+    toastQueue = [];
+  }, 1000);
+}
 
-  <script>
 function copyShareText() {
   const href = document.getElementById('shareOnX')?.href;
   if (!href) return;
@@ -649,30 +560,44 @@ function copyShareText() {
   navigator.clipboard.writeText(text);
   showToast("Copied to clipboard.");
 }
-</script>
 
-  <script>
-async function fetchTokenPrices() {
-  try {
-    const response = await fetch('https://api.coingecko.com/api/v3/simple/token_price/cronos?contract_addresses=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d&vs_currencies=cro');
-    const data = await response.json();
-    const y2k = data['0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d'];
-    if (y2k && y2k.cro) {
-      document.getElementById('y2kPrice').innerText = `$Y2K: ${y2k.cro.toFixed(6)} CRO`;
-    }
-
-    // Static or placeholder for ROAST (adjust when available)
-    document.getElementById('roastPrice').innerText = `$ROAST: 0.0008 SOL`;
-
-  } catch (error) {
-    console.error('Price fetch error:', error);
-  }
+const mintCarousel = document.getElementById('mintCarousel');
+let scrollIndex = 0;
+function autoScrollMints() {
+  if (!mintCarousel) return;
+  const cards = mintCarousel.children;
+  if (!cards.length) return;
+  scrollIndex = (scrollIndex + 1) % cards.length;
+  const cardWidth = cards[0].offsetWidth + 24;
+  mintCarousel.scrollTo({ left: scrollIndex * cardWidth, behavior: 'smooth' });
 }
-
-// Fetch immediately and then every 60 seconds
-fetchTokenPrices();
-setInterval(fetchTokenPrices, 60000);
+setInterval(autoScrollMints, 4000);
 </script>
-  
+
+  <!-- Smooth scroll behavior for anchor links -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Confirmation overlay close handler (if reopened)
+    const overlay = document.getElementById('confirmationOverlay');
+    const closeBtn = overlay?.querySelector('button.glow-button');
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        overlay.classList.add('hidden');
+      };
+    }
+  });
+</script>
+
 </body>
 </html>
+  
+  
+  
