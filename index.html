@@ -3,23 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-  <title>Welcome to Y2K | ROAST RECORDS Studio</title>
+  <title>Y2K | ROAST RECORDS</title>
   <meta name="description" content="The CROFAM music studio. Submit a request, fund the ecosystem, own the moment.">
   <meta name="theme-color" content="#0a0a0a" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-  <script src="https://bundle.run/buffer@6.0.3"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <style>
-    :root { color-scheme: dark; --accent: #ff00ff; }
-    html, body {
+    :root { 
+      color-scheme: dark; 
+      --accent: #ff00ff;
+    }
+    html { 
       background-color: #0a0a0a;
+    }
+    body {
       color: #e2e8f0;
       font-family: 'Rubik', sans-serif;
       overflow-x: hidden;
+    }
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
     .neon-text {
       font-family: 'Orbitron', sans-serif;
@@ -30,7 +39,6 @@
       box-shadow: 0 0 10px var(--accent);
       border-radius: 10px;
     }
-    .neon-border:hover { box-shadow: 0 0 20px var(--accent); }
     .glow-button {
       padding: 0.75rem 1.5rem;
       border: 1px solid var(--accent);
@@ -38,332 +46,166 @@
       color: white;
       border-radius: 8px;
       font-weight: bold;
+      transition: all 0.3s ease;
     }
     .glow-button:hover {
       background: rgba(255, 0, 255, 0.2);
       box-shadow: 0 0 20px var(--accent);
+      transform: translateY(-2px);
     }
     .glass-card {
       background: rgba(255, 255, 255, 0.04);
       backdrop-filter: blur(12px);
       border-radius: 14px;
-      padding: 1.5rem;
+      padding: 1.25rem;
     }
-    .floating { animation: floaty 6s ease-in-out infinite; }
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .portal-ring {
+      position: absolute;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      animation: portalPulse 2s infinite;
+    }
+    .portal-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+    .portal-ring:nth-child(2) { width: 160px; height: 160px; animation-delay: -0.5s; }
+    .portal-ring:nth-child(3) { width: 120px; height: 120px; animation-delay: -1s; }
+    @keyframes portalPulse {
+      0% { transform: scale(0.95); opacity: 0.5; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.5; }
     }
     @keyframes spin {
       0% { transform: rotate(0); }
       100% { transform: rotate(360deg); }
     }
-    .toast {
-      background: rgba(255, 0, 255, 0.15);
-      border: 1px solid var(--accent);
-      padding: 1rem 1.25rem;
-      border-radius: 10px;
-      color: white;
-      font-weight: bold;
-      box-shadow: 0 0 20px var(--accent);
-      animation: fadein 0.4s, floatup 0.4s, fadeout 0.4s 4.6s;
-    }
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes floatup {
-      0% { transform: translateY(10px); }
-      100% { transform: translateY(0); }
-    }
-    @keyframes fadeout {
-      to { opacity: 0; transform: translateY(-10px); }
-    }
-    /* Add these to your existing styles */
-.portal-container {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.portal-ring {
-  position: absolute;
-  border: 2px solid var(--accent);
-  border-radius: 50%;
-  animation: portalPulse 2s infinite;
-}
-
-.portal-ring:nth-child(1) { width: 100%; height: 100%; animation-delay: 0s; }
-.portal-ring:nth-child(2) { width: 80%; height: 80%; animation-delay: -0.5s; }
-.portal-ring:nth-child(3) { width: 60%; height: 60%; animation-delay: -1s; }
-
-@keyframes portalPulse {
-  0% { transform: scale(0.95); opacity: 0.5; }
-  50% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.5; }
-}
-
-.cyber-button {
-  background: linear-gradient(45deg, rgba(255, 0, 255, 0.1), rgba(255, 0, 255, 0.2));
-  border: 2px solid var(--accent);
-  padding: 1rem 2rem;
-  color: white;
-  font-weight: bold;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.cyber-button:hover {
-  box-shadow: 0 0 30px var(--accent);
-  transform: translateY(-2px);
-  background: rgba(255, 0, 255, 0.3);
-}
   </style>
-<body class="scroll-smooth overflow-y-auto bg-black">
-
-  <!-- Particle Background -->
-<canvas id="particleCanvas"></canvas>
-
-  <!-- Portal Entry Overlay -->
-<div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-  <div class="portal-container">
-    <div class="portal-ring"></div>
-    <div class="portal-ring"></div>
-    <div class="portal-ring"></div>
-    <h1 class="text-5xl md:text-6xl neon-text font-bold relative z-10">Welcome to Y2K</h1>
-  </div>
-  <button onclick="enterPortal()" class="cyber-button text-xl">Enter Portal</button>
-</div>
-
-  <!-- Sticky Header -->
-  <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
-    <div class="flex items-center gap-4">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
-      <h1 class="text-xl neon-text font-bold">Y2K x ROAST</h1>
-    </div>
-    <nav class="flex gap-4 text-white text-sm">
-      <a href="#console" class="hover:text-pink-400 transition">Access</a>
-      <a href="#studio" class="hover:text-pink-400 transition">Studio</a>
-      <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
-      <a href="#mints" class="hover:text-pink-400 transition">NFTs</a>
-    </nav>
-  </header>
-
-  <!-- CROFAM Trust Strip -->
-  <div class="fixed top-16 left-0 w-full text-center text-sm py-2 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
-    Powered by CROFAM • Fueled by $Y2K and $ROAST • Syndicate Verified
-  </div>
-
-  <!-- Spacer -->
-  <div class="h-24"></div>
-
-<!-- HERO: Emblem Only -->
-<section id="hero" class="min-h-screen flex flex-col justify-end items-center px-6 text-center relative z-10 pt-32 sm:pt-40">
-  <div class="w-64 h-64 sm:w-72 sm:h-72 rounded-full neon-border"
-       style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;"></div>
-</section>
-
-<!-- BUTTON GRID: Syndicate Console -->
-<section id="access" class="relative z-10 py-10 px-6 text-center bg-black -mt-10 sm:-mt-20">
-  <div class="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-
-    <a href="#studio" class="glow-button text-sm sm:text-base flex items-center justify-center gap-2 py-4 hover:scale-105 transition-all duration-300">
-      🎙️ <span>Launch Studio</span>
-    </a>
-
-    <a href="/airdrops.html" class="glow-button text-sm sm:text-base flex items-center justify-center gap-2 py-4 hover:scale-105 transition-all duration-300">
-      🎁 <span>Airdrop Portal</span>
-    </a>
-
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="glow-button text-sm sm:text-base flex items-center justify-center gap-2 py-4 hover:scale-105 transition-all duration-300">
-      🔐 <span>Enter the Vault</span>
-    </a>
-
-    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glow-button text-sm sm:text-base flex items-center justify-center gap-2 py-4 hover:scale-105 transition-all duration-300">
-      🟣 <span>Buy $Y2K</span>
-    </a>
-
-    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="glow-button text-sm sm:text-base flex items-center justify-center gap-2 py-4 hover:scale-105 transition-all duration-300">
-      🔥 <span>Trade $ROAST</span>
-    </a>
-
-  </div>
-</section>
+</head>
   
-  <!-- ROAST RECORDS SUBMISSION -->
-<section id="studio" class="snap-start py-20 px-6 bg-[#0a0a0a] text-center">
-  <h2 class="text-4xl md:text-5xl neon-text font-bold mb-6">ROAST RECORDS</h2>
-  <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10 italic">The Syndicate’s Sound Engine</p>
+<body class="bg-black">
+  <canvas id="particleCanvas"></canvas>
 
-  <div class="glass-card max-w-2xl mx-auto space-y-8">
-    <div class="grid md:grid-cols-2 gap-4">
-      <div>
-        <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
-        <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
-      </div>
-      <div>
-        <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
-        <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
-      </div>
+  <!-- Portal Entry -->
+  <div id="portalEntry" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+    <div class="relative mb-8">
+      <div class="portal-ring"></div>
+      <div class="portal-ring"></div>
+      <div class="portal-ring"></div>
     </div>
-    <div id="balanceStatus" class="text-xs text-gray-400 text-center"></div>
-
-    <form id="submissionForm" class="space-y-4 mt-6">
-      <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
-        <option value="">Select Type</option>
-        <option value="Anthem">Anthem / Theme Song</option>
-        <option value="Custom Song">Custom Song</option>
-        <option value="Roast">Roast</option>
-        <option value="Other">Intro / Skit / Audio Request</option>
-      </select>
-
-      <input type="text" id="handle" placeholder="@YourHandle" required
-             class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
-
-      <textarea id="notes" placeholder="Describe the request: tone, project, name, etc."
-                class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
-
-      <label class="flex items-center gap-3 text-white text-left text-sm">
-        <input type="checkbox" id="limitedMint" class="accent-pink-500 w-5 h-5"/>
-        <span>
-          Request Limited Mint (10 editions at 50 CRO each).<br/>
-          <span class="text-gray-400 text-xs italic">
-            500 CRO will be used to buy back project tokens — or Y2K if personal.
-          </span>
-        </span>
-      </label>
-
-      <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-lg">Submit (20 CRO)</button>
-    </form>
-    <div id="studioStatus" class="mt-6 text-sm text-white"></div>
-  </div>
-</section>
-
-<!-- Live Submissions Section -->
-<section id="live" class="py-16 px-6 bg-[#111] text-center">
-  <h2 class="text-3xl neon-text font-bold mb-8">Live Submissions</h2>
-  <div id="liveRequests" class="flex overflow-x-auto gap-6 snap-x snap-mandatory"></div>
-</section>
-
-<!-- Mints Section -->
-<section id="mints" class="py-16 px-6 bg-[#111] text-center">
-  <h2 class="text-3xl neon-text font-bold mb-8">Live Mints</h2>
-  <div id="mintCarousel" class="flex overflow-x-auto gap-6 snap-x snap-mandatory px-2 pb-4 scroll-smooth">
-    <!-- MINT CARD: Eric -->
-    <a href="https://eric-mode-business-boomin.nfts2.me/" style="text-decoration: none; color: inherit;" target="_blank">
-      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric Mint" class="w-full rounded mb-4"/>
-        <h3 class="text-xl text-white font-bold mb-1">ERIC</h3>
-        <p class="text-gray-400 text-sm">The original anthem. Genesis-level energy.</p>
-      </div>
-    </a>
-
-    <a href="https://cronoshadow.nfts2.me/" target="_blank">
-      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards of Cronos" class="w-full rounded mb-4"/>
-        <h3 class="text-xl text-white font-bold mb-1">Cards of Cronos</h3>
-        <p class="text-gray-400 text-sm">Your on-chain fate sealed in sound.</p>
-      </div>
-    </a>
-
-    <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank">
-      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="Diamond Hands" class="w-full rounded mb-4"/>
-        <h3 class="text-xl text-white font-bold mb-1">Diamond Hands</h3>
-        <p class="text-gray-400 text-sm">Hold through the static. This one's forever.</p>
-      </div>
-    </a>
-
-    <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank">
-      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="DOJO" class="w-full rounded mb-4"/>
-        <h3 class="text-xl text-white font-bold mb-1">DOJO</h3>
-        <p class="text-gray-400 text-sm">Discipline, chaos, and rhythm. Mint approved.</p>
-      </div>
-    </a>
-
-    <a href="https://dead-chain-syndicate.nfts2.me/" target="_blank">
-      <div class="snap-center min-w-[280px] glass-card neon-border p-4 text-left">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5743.jpeg" alt="The Syndicate" class="w-full rounded mb-4"/>
-        <h3 class="text-xl text-white font-bold mb-1">The Syndicate</h3>
-        <p class="text-gray-400 text-sm">Degens unite. The chain has no mercy.</p>
-      </div>
-    </a>
-  </div>
-</section>
-
-  <!-- Vault Section -->
-<section id="vault" class="py-12 px-6 text-center bg-[#111]">
-  <h2 class="text-3xl md:text-5xl neon-text font-bold mb-8">Access the Ecosystem</h2>
-  <div class="flex justify-center">
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank"
-       class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition rounded-lg">
-       🔐 Enter The Vault
-    </a>
+    <h1 class="text-4xl neon-text font-bold mb-6">Welcome to Y2K</h1>
+    <button onclick="enterPortal()" class="glow-button text-xl">Initialize Connection</button>
   </div>
 
-  <!-- Confirmation Overlay -->
-  <div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4 hidden">
-    <h2 class="text-3xl neon-text font-bold mb-4">Submission Confirmed!</h2>
-    <p class="text-lg text-white mb-2">Your request has been received and is now live.</p>
-    <p class="text-sm text-pink-400 mb-2">Request Type: <span id="confirmType"></span></p>
-    <p id="sharePreview" class="text-xs text-gray-400 italic text-center max-w-sm mb-2"></p>
-    <button onclick="copyShareText()" class="text-xs text-gray-300 underline mb-4">Copy share text</button>
-    <p class="text-xs text-gray-500 italic text-center mb-4">Click “Share on 𝕏” to post this automatically.</p>
-    <a id="shareOnX" href="#" target="_blank" class="glow-button mb-4">Share on 𝕏</a>
-    <button onclick="closeConfirmation()" class="glow-button">Close</button>
-  </div>
-</section>
+  <!-- Main Content -->
+  <div id="mainContent" class="hidden relative z-10">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full py-2 px-4 z-50 bg-black bg-opacity-80 backdrop-blur">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-8 h-8 rounded-full neon-border" />
+          <h1 class="text-lg neon-text">Y2K x ROAST</h1>
+        </div>
+        <nav class="flex gap-4 text-sm">
+          <a href="#studio" class="hover:text-pink-400 transition">Studio</a>
+          <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
+          <a href="#mints" class="hover:text-pink-400 transition">NFTs</a>
+        </nav>
+      </div>
+    </header>
 
-<!-- Ecosystem Trust Section -->
-<section class="py-16 px-6 bg-black text-center border-t border-pink-500">
-  <h2 class="text-3xl md:text-4xl neon-text font-bold mb-4">The Ecosystem Is Aligning</h2>
-  <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
-    $ROAST is now visible in the Crypto.com DeFi Wallet. No import. No guesswork. It’s real — and it’s recognized.
-  </p>
-  <div class="flex flex-wrap justify-center gap-6 mb-10">
-    <div class="glass-card w-72">
-      <h3 class="text-xl font-bold text-white mb-2">Wallet Verified</h3>
-      <p class="text-sm text-gray-300 mb-2">ROAST token appears natively in Crypto.com Onchain Wallet.</p>
-      <div class="text-green-400 font-mono text-sm">✓ $ROAST Listed</div>
+    <!-- Trust Strip -->
+    <div class="fixed top-12 left-0 w-full text-center text-xs py-1 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-medium">
+      Powered by CROFAM • Fueled by $Y2K and $ROAST
     </div>
-    <div class="glass-card w-72">
-      <h3 class="text-xl font-bold text-white mb-2">Dual Token Flow</h3>
-      <p class="text-sm text-gray-300 mb-2">Submit in CRO. Get airdropped in Y2K or ROAST.</p>
-      <div class="text-pink-400 font-mono text-sm">→ CRO → Y2K/ROAST</div>
-    </div>
-    <div class="glass-card w-72">
-      <h3 class="text-xl font-bold text-white mb-2">Live Request Engine</h3>
-      <p class="text-sm text-gray-300 mb-2">All submissions are tracked live and fuel the Vault.</p>
-      <div class="text-yellow-400 font-mono text-sm">✓ Synced with Firebase</div>
-    </div>
-  </div>
-  <a href="/airdrops.html" class="glow-button text-lg mt-6 inline-block">Access Airdrop Portal</a>
-</section>
 
-<!-- Token Buttons -->
-<section class="mt-10 px-6 text-center">
-  <div class="flex flex-col md:flex-row justify-center gap-6">
-    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"
-       class="glow-button text-lg">Buy $Y2K</a>
-    <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank"
-       class="glow-button text-lg">Trade $ROAST</a>
-  </div>
-</section>
+    <!-- Main Sections -->
+    <main class="pt-20">
+      <!-- Hero -->
+      <section class="px-4 py-6 text-center">
+        <div class="w-32 h-32 mx-auto rounded-full neon-border mb-6"
+             style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;"></div>
+      </section>
 
-<!-- Footer -->
-<footer class="relative z-10 py-10 bg-black text-center text-gray-500 text-sm mt-20">
-  <div class="mb-4">Built for CROFAM. Fueled by music, memes, and Y2K energy.</div>
-  <div class="flex justify-center gap-6 text-white mt-6">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400 transition">Join Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400 transition">Follow 𝕏</a>
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-yellow-400 transition">Enter Vault</a>
+      <!-- Quick Actions -->
+      <section class="px-4 py-4 grid grid-cols-2 gap-3">
+        <a href="#studio" class="glow-button text-sm flex items-center justify-center gap-2">
+          🎙️ Studio
+        </a>
+        <a href="/airdrops.html" class="glow-button text-sm flex items-center justify-center gap-2">
+          🎁 Airdrops
+        </a>
+        <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">
+          🟣 Buy $Y2K
+        </a>
+        <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">
+          🔥 Trade $ROAST
+        </a>
+      </section>
+
+      <!-- Studio Section -->
+      <section id="studio" class="px-4 py-6">
+        <h2 class="text-2xl neon-text font-bold mb-4 text-center">ROAST RECORDS</h2>
+        <div class="glass-card space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="connectCRO()" class="glow-button text-sm">Connect CRO</button>
+            <button onclick="connectSOL()" class="glow-button text-sm">Connect SOL</button>
+          </div>
+
+          <form id="submissionForm" class="space-y-3">
+            <select id="requestType" required class="w-full p-3 neon-border bg-black text-white text-sm text-center rounded">
+              <option value="">Select Type</option>
+              <option value="Anthem">Anthem / Theme</option>
+              <option value="Custom">Custom Song</option>
+              <option value="Roast">Roast</option>
+              <option value="Other">Intro / Skit</option>
+            </select>
+
+            <input type="text" id="handle" placeholder="@YourHandle" required
+                   class="w-full p-3 neon-border bg-black text-white text-center rounded text-sm"/>
+
+            <textarea id="notes" placeholder="Describe your request..."
+                      class="w-full p-3 neon-border bg-black text-white rounded text-sm h-24 resize-none"></textarea>
+
+            <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-sm">
+              Submit Request (20 CRO)
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Mints Section -->
+      <section id="mints" class="px-4 py-6">
+        <h2 class="text-2xl neon-text font-bold mb-4 text-center">Live Mints</h2>
+        <div class="overflow-x-auto">
+          <div class="flex gap-3 pb-4" style="width: max-content;">
+            <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="glass-card w-64">
+              <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="Eric" class="w-full rounded mb-2"/>
+              <h3 class="font-bold">ERIC</h3>
+              <p class="text-xs text-gray-400">The original anthem</p>
+            </a>
+            <a href="https://cronoshadow.nfts2.me/" target="_blank" class="glass-card w-64">
+              <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards" class="w-full rounded mb-2"/>
+              <h3 class="font-bold">Cards of Cronos</h3>
+              <p class="text-xs text-gray-400">Your on-chain fate</p>
+            </a>
+            <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="glass-card w-64">
+              <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="DOJO" class="w-full rounded mb-2"/>
+              <h3 class="font-bold">DOJO</h3>
+              <p class="text-xs text-gray-400">Discipline & chaos</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="py-6 text-center text-xs text-gray-500">
+        <div class="mb-3">Built for CROFAM • Fueled by Y2K energy</div>
+        <div class="flex justify-center gap-4 text-white">
+          <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400">Discord</a>
+          <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400">𝕏</a>
+          <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-pink-400">Vault</a>
+        </div>
+      </footer>
+    </main>
   </div>
-</footer>
 
 <!-- Toast Container -->
 <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
@@ -687,8 +529,117 @@ setInterval(autoScrollMints, 4000);
   });
 </script>
 
+  <script>
+  // Particle Animation
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const particles = [];
+  const particleCount = 50;
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 1;
+      this.speedX = Math.random() * 2 - 1;
+      this.speedY = Math.random() * 2 - 1;
+      this.life = 1;
+      this.color = `rgba(255, ${Math.random() * 255}, 255, ${Math.random() * 0.5 + 0.2})`;
+    }
+    
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.life -= 0.005;
+      
+      if (this.life <= 0) this.reset();
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(particle => {
+      particle.update();
+      particle.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // Portal Entry Animation
+  function enterPortal() {
+    const portal = document.getElementById('portalEntry');
+    const main = document.getElementById('mainContent');
+    
+    portal.style.transition = 'all 1s ease-in-out';
+    portal.style.opacity = '0';
+    portal.style.transform = 'scale(1.5)';
+    
+    setTimeout(() => {
+      portal.style.display = 'none';
+      main.classList.remove('hidden');
+      main.style.opacity = '0';
+      
+      requestAnimationFrame(() => {
+        main.style.transition = 'all 0.5s ease-out';
+        main.style.opacity = '1';
+      });
+    }, 1000);
+  }
+
+  // Wallet Connections
+  function connectCRO() {
+    alert('Connecting to CRO wallet...');
+  }
+
+  function connectSOL() {
+    alert('Connecting to SOL wallet...');
+  }
+
+  function submitStudioRequest() {
+    const type = document.getElementById('requestType').value;
+    const handle = document.getElementById('handle').value;
+    const notes = document.getElementById('notes').value;
+    
+    if (!type || !handle) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    
+    alert('Submitting request...\nType: ' + type + '\nHandle: ' + handle);
+  }
+</script>
 </body>
 </html>
+
+
   
   
   
