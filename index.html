@@ -78,7 +78,7 @@
       to { opacity: 0; transform: translateY(-10px); }
     }
   </style>
-<body class="scroll-smooth overflow-y-auto">
+<body class="scroll-smooth overflow-y-auto bg-black">
 
   <!-- Portal Entry Overlay -->
   <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
@@ -93,6 +93,7 @@
       <h1 class="text-xl neon-text font-bold">Y2K x ROAST</h1>
     </div>
     <nav class="flex gap-4 text-white text-sm">
+      <a href="#console" class="hover:text-pink-400 transition">Access</a>
       <a href="#studio" class="hover:text-pink-400 transition">Studio</a>
       <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
       <a href="#mints" class="hover:text-pink-400 transition">NFTs</a>
@@ -107,17 +108,48 @@
   <!-- Spacer -->
   <div class="h-24"></div>
 
-  <!-- Portal Hero Section -->
-  <section id="hero" class="snap-start min-h-screen flex flex-col justify-center items-center px-6 text-center">
+  <!-- HERO -->
+  <section id="hero" class="min-h-screen flex flex-col justify-center items-center px-6 text-center">
     <div class="w-64 h-64 rounded-full neon-border floating mb-6"
          style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;"></div>
     <h1 class="text-4xl md:text-6xl neon-text font-bold mb-4">ROAST RECORDS</h1>
     <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
       Submit your anthem. Drop your roast. Fuel the chain.<br/>CROFAM's sonic engine is always live.
     </p>
-    <a href="#studio" class="glow-button text-lg">Launch Studio</a>
+    <a href="#console" class="glow-button text-lg">Enter the Syndicate</a>
   </section>
 
+  <!-- SYNDICATE CONSOLE -->
+  <section id="console" class="relative z-10 py-20 px-6 text-center bg-black bg-opacity-90">
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-96 h-96 object-contain blur-sm grayscale" />
+    </div>
+    <h2 class="text-4xl md:text-5xl neon-text font-bold mb-14 animate-pulse tracking-widest z-10 relative">Enter the Syndicate</h2>
+    <div class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 z-10 relative">
+
+      <a href="#studio" class="glow-button text-lg flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300">
+        🎙️ <span>Launch Studio</span>
+      </a>
+
+      <a href="/airdrops.html" class="glow-button text-lg flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300">
+        🎁 <span>Airdrop Portal</span>
+      </a>
+
+      <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="glow-button text-lg flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300">
+        🔐 <span>Enter the Vault</span>
+      </a>
+
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glow-button text-lg flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300">
+        🟣 <span>Buy $Y2K</span>
+      </a>
+
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="glow-button text-lg flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300">
+        🔥 <span>Trade $ROAST</span>
+      </a>
+
+    </div>
+  </section>
+  
   <!-- STUDIO SECTION -->
   <section id="studio" class="snap-start py-20 px-6 bg-[#0a0a0a] text-center">
     <h2 class="text-4xl md:text-5xl neon-text font-bold mb-6">Studio Portal</h2>
