@@ -79,6 +79,49 @@
     @keyframes fadeout {
       to { opacity: 0; transform: translateY(-10px); }
     }
+    /* Add these to your existing styles */
+.portal-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.portal-ring {
+  position: absolute;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: portalPulse 2s infinite;
+}
+
+.portal-ring:nth-child(1) { width: 100%; height: 100%; animation-delay: 0s; }
+.portal-ring:nth-child(2) { width: 80%; height: 80%; animation-delay: -0.5s; }
+.portal-ring:nth-child(3) { width: 60%; height: 60%; animation-delay: -1s; }
+
+@keyframes portalPulse {
+  0% { transform: scale(0.95); opacity: 0.5; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.5; }
+}
+
+.cyber-button {
+  background: linear-gradient(45deg, rgba(255, 0, 255, 0.1), rgba(255, 0, 255, 0.2));
+  border: 2px solid var(--accent);
+  padding: 1rem 2rem;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.cyber-button:hover {
+  box-shadow: 0 0 30px var(--accent);
+  transform: translateY(-2px);
+  background: rgba(255, 0, 255, 0.3);
+}
   </style>
 <body class="scroll-smooth overflow-y-auto bg-black">
 
@@ -89,11 +132,11 @@
 <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
   <div class="portal-container">
     <div class="portal-ring"></div>
-    <div class="portal-ring" style="animation-delay: -1s;"></div>
-    <div class="portal-ring" style="animation-delay: -2s;"></div>
-    <h1 class="portal-text text-5xl md:text-6xl neon-text font-bold">Welcome to Y2K</h1>
+    <div class="portal-ring"></div>
+    <div class="portal-ring"></div>
+    <h1 class="text-5xl md:text-6xl neon-text font-bold relative z-10">Welcome to Y2K</h1>
   </div>
-  <button onclick="enterPortal()" class="cyber-button text-2xl mt-8">Enter Portal</button>
+  <button onclick="enterPortal()" class="cyber-button text-xl">Enter Portal</button>
 </div>
 
   <!-- Sticky Header -->
@@ -579,15 +622,26 @@ function showToast(message) {
 function enterPortal() {
   const overlay = document.getElementById('enterOverlay');
   if (!overlay) return;
-  overlay.style.transition = "opacity 1s ease, transform 1s ease";
-  overlay.style.opacity = 0;
-  overlay.style.transform = "scale(1.05)";
-  setTimeout(() => {
-    overlay.remove();
-    document.getElementById('portal')?.scrollIntoView({ behavior: 'smooth' });
-    if (toastQueue.length) toastQueue.forEach(msg => showToast(msg));
-    toastQueue = [];
-  }, 1000);
+  
+  gsap.to(overlay, {
+    opacity: 0,
+    duration: 1,
+    ease: "power2.inOut",
+    onComplete: () => {
+      overlay.remove();
+      if (toastQueue.length) {
+        toastQueue.forEach(msg => showToast(msg));
+        toastQueue = [];
+      }
+    }
+  });
+
+  gsap.to('.portal-container', {
+    scale: 1.5,
+    opacity: 0,
+    duration: 1,
+    ease: "power2.in"
+  });
 }
 
 function copyShareText() {
