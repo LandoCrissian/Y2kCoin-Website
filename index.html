@@ -78,9 +78,9 @@
       to { opacity: 0; transform: translateY(-10px); }
     }
   </style>
-</head>
-<body>
-<div id="app" class="relative">
+<body class="snap-y snap-mandatory scroll-smooth overflow-y-scroll h-screen">
+
+  <!-- Portal Entry Overlay -->
   <div id="enterOverlay" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
     <h1 class="text-4xl md:text-5xl neon-text font-bold mb-8 animate-pulse">Welcome to Y2K</h1>
     <button onclick="enterPortal()" class="px-8 py-4 neon-border text-white font-bold text-xl hover:bg-pink-600 transition">Enter Portal</button>
@@ -90,73 +90,84 @@
   <header class="fixed top-0 left-0 w-full p-4 z-50 bg-black bg-opacity-80 backdrop-blur flex justify-between items-center">
     <div class="flex items-center gap-4">
       <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-10 h-10 rounded-full neon-border" />
-      <h1 class="text-xl neon-text font-bold">Welcome to Y2K</h1>
+      <h1 class="text-xl neon-text font-bold">Y2K x ROAST</h1>
     </div>
     <nav class="flex gap-4 text-white text-sm">
-      <a href="#submit" class="hover:text-pink-400 transition">Studio</a>
+      <a href="#studio" class="hover:text-pink-400 transition">Studio</a>
       <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
-      <a href="#nfts" class="hover:text-pink-400 transition">NFTs</a>
+      <a href="#mints" class="hover:text-pink-400 transition">NFTs</a>
     </nav>
   </header>
 
-  <!-- CROFAM Trust Strip (Fixed Below Header) -->
+  <!-- CROFAM Trust Strip -->
   <div class="fixed top-16 left-0 w-full text-center text-sm py-2 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
     Powered by CROFAM • Fueled by $Y2K and $ROAST • Syndicate Verified
   </div>
 
-  <!-- Spacer below header and trust strip -->
+  <!-- Spacer -->
   <div class="h-24"></div>
 
-  <!-- Portal Section -->
-<section class="text-center py-20 px-6" id="portal">
-  <div class="flex justify-center mb-6">
-    <div class="w-64 h-64 rounded-full neon-border floating"
+  <!-- Portal Hero Section -->
+  <section id="hero" class="snap-start min-h-screen flex flex-col justify-center items-center px-6 text-center">
+    <div class="w-64 h-64 rounded-full neon-border floating mb-6"
          style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;"></div>
-  </div>
-  <h1 class="text-4xl md:text-5xl neon-text font-bold mb-4">ROAST RECORDS</h1>
-  <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
-    The CROFAM Studio — create your anthem, soundtrack, or roast. Submissions support the ecosystem. All heat, no chill.
-  </p>
+    <h1 class="text-4xl md:text-6xl neon-text font-bold mb-4">ROAST RECORDS</h1>
+    <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
+      Submit your anthem. Drop your roast. Fuel the chain.<br/>CROFAM's sonic engine is always live.
+    </p>
+    <a href="#studio" class="glow-button text-lg">Launch Studio</a>
+  </section>
 
-  <!-- Wallet Connect + Submission Block -->
-  <div class="glass-card max-w-2xl mx-auto space-y-8">
-    <div class="grid md:grid-cols-2 gap-4">
-      <div>
-        <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
-        <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+  <!-- STUDIO SECTION -->
+  <section id="studio" class="snap-start py-20 px-6 bg-[#0a0a0a] text-center">
+    <h2 class="text-4xl md:text-5xl neon-text font-bold mb-6">Studio Portal</h2>
+    <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
+      Connect your wallets and submit your vision. Requests are tracked and minted into sound history.
+    </p>
+
+    <div class="glass-card max-w-2xl mx-auto space-y-8">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <button onclick="connectCRO()" class="glow-button w-full">Connect CRO Wallet</button>
+          <div id="croStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+        </div>
+        <div>
+          <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
+          <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
+        </div>
       </div>
-      <div>
-        <button onclick="connectSOL()" class="glow-button w-full">Connect SOL Wallet</button>
-        <div id="solStatus" class="text-sm text-gray-400 mt-2">Not connected</div>
-      </div>
-    </div>
-    <div id="balanceStatus" class="text-xs text-gray-400 text-center"></div>
+      <div id="balanceStatus" class="text-xs text-gray-400 text-center"></div>
 
-    <form id="submissionForm" class="space-y-4 mt-6">
-      <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
-        <option value="">Select Type</option>
-        <option value="Anthem">Anthem / Theme Song</option>
-        <option value="Custom Song">Custom Song</option>
-        <option value="Roast">Roast</option>
-        <option value="Other">Intro / Skit / Audio Request</option>
-      </select>
+      <form id="submissionForm" class="space-y-4 mt-6">
+        <select id="requestType" required class="w-full p-4 neon-border bg-black text-white text-lg text-center rounded">
+          <option value="">Select Type</option>
+          <option value="Anthem">Anthem / Theme Song</option>
+          <option value="Custom Song">Custom Song</option>
+          <option value="Roast">Roast</option>
+          <option value="Other">Intro / Skit / Audio Request</option>
+        </select>
 
-      <input type="text" id="handle" placeholder="@YourHandle" required
-        class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
+        <input type="text" id="handle" placeholder="@YourHandle" required
+               class="w-full p-4 neon-border bg-black text-white text-center rounded text-lg"/>
 
-      <textarea id="notes" placeholder="Describe the request: tone, project, name, etc."
-        class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
+        <textarea id="notes" placeholder="Describe the request: tone, project, name, etc."
+                  class="w-full p-4 neon-border bg-black text-white rounded text-lg h-32 resize-none"></textarea>
 
-      <label class="flex items-center gap-3 text-white text-left text-sm">
-        <input type="checkbox" id="limitedMint" class="accent-pink-500 w-5 h-5"/>
-        <span>
-          Request Limited Mint (10 editions at 50 CRO each).
-          <br/>
-          <span class="text-gray-400 text-xs italic">
-            500 CRO will be used to buy back project tokens — or Y2K if personal.
+        <label class="flex items-center gap-3 text-white text-left text-sm">
+          <input type="checkbox" id="limitedMint" class="accent-pink-500 w-5 h-5"/>
+          <span>
+            Request Limited Mint (10 editions at 50 CRO each).<br/>
+            <span class="text-gray-400 text-xs italic">
+              500 CRO will be used to buy back project tokens — or Y2K if personal.
+            </span>
           </span>
-        </span>
-      </label>
+        </label>
+
+        <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-lg">Submit (20 CRO)</button>
+      </form>
+      <div id="studioStatus" class="mt-6 text-sm text-white"></div>
+    </div>
+  </section>
 
       <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-lg">Submit (20 CRO)</button>
     </form>
