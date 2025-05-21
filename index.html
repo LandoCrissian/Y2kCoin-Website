@@ -91,10 +91,10 @@
   </style>
 </head>
   
-<body class="bg-black text-white font-sans overflow-x-hidden">
+<body class="bg-black text-white font-sans overflow-x-hidden relative">
   <canvas id="particleCanvas"></canvas>
 
-  <!-- Portal Entry -->
+  <!-- Portal Entry Overlay -->
   <div id="portalEntry" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
     <div class="relative mb-8 flex justify-center items-center">
       <div class="portal-ring absolute"></div>
@@ -109,27 +109,27 @@
   </div>
 
   <!-- CROFAM Trust Strip -->
-<div class="fixed top-0 left-0 w-full text-center text-sm py-2 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
-  CROFAM Verified • Fueled by $Y2K and $ROAST
-</div>
+  <div class="fixed top-0 left-0 w-full z-40 text-center text-xs sm:text-sm py-2 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide shadow-md">
+    CROFAM Verified • Fueled by $Y2K and $ROAST
+  </div>
 
   <!-- Main Content -->
-  <div id="mainContent" class="hidden relative z-10 pt-20">
+  <div id="mainContent" class="hidden pt-24 relative z-10">
 
     <!-- Spinning Emblem -->
-    <section class="pt-24 pb-10 text-center relative z-10">
-  <div class="w-32 h-32 mx-auto rounded-full neon-border mb-8"
-       style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;">
-  </div>
-</section>
+    <section class="flex flex-col items-center justify-center px-4 pt-6 pb-10">
+      <div class="w-32 h-32 rounded-full neon-border mb-6"
+           style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;">
+      </div>
+    </section>
 
-    <!-- Button Console Grid -->
-    <section class="px-4 pb-10 grid grid-cols-2 gap-4 max-w-md mx-auto">
-  <a href="#studio" class="glow-button text-sm flex items-center justify-center gap-2">🎙️ Studio</a>
-  <a href="/airdrops.html" class="glow-button text-sm flex items-center justify-center gap-2">🎁 Airdrops</a>
-  <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">🟣 Buy $Y2K</a>
-  <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">🔥 Trade $ROAST</a>
-</section>
+    <!-- Action Button Grid -->
+    <section class="px-4 pb-12 max-w-md mx-auto grid grid-cols-2 gap-4">
+      <a href="#studio" class="glow-button text-sm flex items-center justify-center gap-2">🎙️ Studio</a>
+      <a href="/airdrops.html" class="glow-button text-sm flex items-center justify-center gap-2">🎁 Airdrops</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">🟣 Buy $Y2K</a>
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">🔥 Trade $ROAST</a>
+    </section>
 
   </div>
 </body>
