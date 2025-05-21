@@ -138,10 +138,10 @@
 <section id="studio" class="px-4 pb-20">
   <h2 class="text-3xl neon-text font-bold text-center mb-6">ROAST RECORDS</h2>
 
-  <div class="glass-card max-w-md mx-auto space-y-6">
-    <div class="grid grid-cols-2 gap-4">
-      <button onclick="connectCRO()" class="glow-button text-sm w-full">Connect CRO</button>
-      <button onclick="connectSOL()" class="glow-button text-sm w-full">Connect SOL</button>
+  <div class="glass-card max-w-md w-full mx-auto space-y-6">
+    <div class="flex flex-col sm:flex-row gap-4">
+      <button onclick="connectCRO()" class="glow-button flex-1 text-sm">Connect CRO</button>
+      <button onclick="connectSOL()" class="glow-button flex-1 text-sm">Connect SOL</button>
     </div>
 
     <form id="submissionForm" class="space-y-4">
@@ -164,7 +164,9 @@
         <span>Request Limited Mint (10 editions at 50 CRO each)</span>
       </label>
 
-      <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-sm">Submit Request (20 CRO)</button>
+      <button type="button" onclick="submitStudioRequest()" class="w-full glow-button text-sm">
+        Submit Request (20 CRO)
+      </button>
     </form>
 
     <div id="studioStatus" class="text-center text-sm pt-2"></div>
