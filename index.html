@@ -382,7 +382,7 @@ async function submitStudioRequest() {
 
   try {
     status.innerHTML = `<span class="text-yellow-400">Sending 20 CRO...</span>`;
-    const signer = croWallet.getSigner();
+    const signer = croProvider.getSigner(); // ✅ Use this instead
     const userAddress = await signer.getAddress();
     const message = `I authorize this ROAST RECORDS request from ${userAddress} at ${new Date().toISOString()}`;
     const signature = await signer.signMessage(message);
