@@ -91,62 +91,56 @@
   </style>
 </head>
   
-<body class="bg-black">
+<body class="bg-black text-white font-sans overflow-x-hidden">
   <canvas id="particleCanvas"></canvas>
 
   <!-- Portal Entry -->
   <div id="portalEntry" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-    <div class="relative mb-8">
-      <div class="portal-ring"></div>
-      <div class="portal-ring"></div>
-      <div class="portal-ring"></div>
+    <div class="relative mb-8 flex justify-center items-center">
+      <div class="portal-ring absolute"></div>
+      <div class="portal-ring absolute"></div>
+      <div class="portal-ring absolute"></div>
+      <div class="w-32 h-32 rounded-full neon-border"
+        style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;">
+      </div>
     </div>
-    <h1 class="text-4xl neon-text font-bold mb-6">Welcome to Y2K</h1>
-    <button onclick="enterPortal()" class="glow-button text-xl">Initialize Connection</button>
+    <h1 class="text-4xl neon-text font-bold mb-6 text-center">Welcome to Y2K</h1>
+    <button onclick="enterPortal()" class="glow-button text-xl w-full max-w-xs text-center">Initialize Connection</button>
+  </div>
+
+  <!-- Trust Strip -->
+  <div class="fixed top-0 left-0 w-full text-center text-xs py-1 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-semibold tracking-wide">
+    CROFAM Verified • Fueled by $Y2K and $ROAST
   </div>
 
   <!-- Main Content -->
-  <div id="mainContent" class="hidden relative z-10">
-    
-    <!-- Portal Entry -->
-<div id="portalEntry" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
-  <div class="relative mb-8 flex justify-center items-center">
-    <div class="portal-ring absolute"></div>
-    <div class="portal-ring absolute"></div>
-    <div class="portal-ring absolute"></div>
+  <div id="mainContent" class="hidden relative z-10 pt-20">
+
+    <!-- Spinning Emblem -->
+    <section class="flex justify-center items-center pt-10 pb-4">
+      <div class="w-36 h-36 rounded-full neon-border"
+        style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;">
+      </div>
+    </section>
+
+    <!-- Button Console Grid -->
+    <section class="px-4 py-6 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+      <a href="#studio" class="glow-button text-sm flex items-center justify-center gap-2">
+        🎙️ Studio
+      </a>
+      <a href="/airdrops.html" class="glow-button text-sm flex items-center justify-center gap-2">
+        🎁 Airdrops
+      </a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">
+        🟣 Buy $Y2K
+      </a>
+      <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">
+        🔥 Trade $ROAST
+      </a>
+    </section>
+
   </div>
-  <h1 class="text-4xl neon-text font-bold mb-6 text-center">Welcome to Y2K</h1>
-  <button onclick="enterPortal()" class="glow-button text-xl w-full max-w-xs text-center">Initialize Connection</button>
-</div>
-
-    <!-- Trust Strip -->
-    <div class="fixed top-12 left-0 w-full text-center text-xs py-1 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-medium">
-      Powered by CROFAM • Fueled by $Y2K and $ROAST
-    </div>
-
-    <!-- Main Sections -->
-    <main class="pt-20">
-      <!-- Hero -->
-      <section class="px-4 py-6 text-center">
-        <div class="w-32 h-32 mx-auto rounded-full neon-border mb-6"
-             style="background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg') center/cover; animation: spin 14s linear infinite;"></div>
-      </section>
-
-      <!-- Quick Actions -->
-      <section class="px-4 py-4 grid grid-cols-2 gap-3">
-        <a href="#studio" class="glow-button text-sm flex items-center justify-center gap-2">
-          🎙️ Studio
-        </a>
-        <a href="/airdrops.html" class="glow-button text-sm flex items-center justify-center gap-2">
-          🎁 Airdrops
-        </a>
-        <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">
-          🟣 Buy $Y2K
-        </a>
-        <a href="https://raydium.io/launchpad/token/?mint=A6db9o4y5phC5ncSdM8pQKmWanodxLyXgwxuVCuA4ray" target="_blank" class="glow-button text-sm flex items-center justify-center gap-2">
-          🔥 Trade $ROAST
-        </a>
-      </section>
+</body>
 
       <!-- Studio Section -->
       <section id="studio" class="px-4 py-6">
