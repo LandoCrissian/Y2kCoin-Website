@@ -325,19 +325,20 @@ window.loadSubmissions = () => {
   
 
 <!-- Wallet Connect -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
-let walletProvider = null;
+let croProvider = null;
 
 async function connectWallet() {
   try {
-    if (!window.ethereum) throw new Error("Install MetaMask or DeFi Wallet.");
+    if (!window.ethereum) throw new Error("MetaMask or Crypto.com DeFi Wallet not found.");
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
 
-    walletProvider = provider;
+    croProvider = provider;
     window.connectedWallet = address.toLowerCase();
 
     const balance = await provider.getBalance(address);
@@ -355,8 +356,8 @@ async function connectWallet() {
 }
 
 async function sendCRO(amount, toAddress) {
-  if (!walletProvider) throw new Error("Please connect your wallet first.");
-  const signer = walletProvider.getSigner();
+  if (!croProvider) throw new Error("Please connect your CRO wallet first.");
+  const signer = croProvider.getSigner();
   const tx = await signer.sendTransaction({
     to: toAddress,
     value: ethers.utils.parseEther(amount)
