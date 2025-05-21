@@ -40,19 +40,26 @@
       border-radius: 10px;
     }
     .glow-button {
-      padding: 0.75rem 1.5rem;
-      border: 1px solid var(--accent);
-      background: rgba(255, 0, 255, 0.1);
-      color: white;
-      border-radius: 8px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .glow-button:hover {
-      background: rgba(255, 0, 255, 0.2);
-      box-shadow: 0 0 20px var(--accent);
-      transform: translateY(-2px);
-    }
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--accent);
+  background: rgba(255, 0, 255, 0.1);
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  width: auto;
+  min-width: 200px;
+}
+
+.glow-button:hover,
+.glow-button:active {
+  background: rgba(255, 0, 255, 0.2);
+  box-shadow: 0 0 20px var(--accent);
+  transform: translateY(-2px);
+}
     .glass-card {
       background: rgba(255, 255, 255, 0.04);
       backdrop-filter: blur(12px);
@@ -60,19 +67,23 @@
       padding: 1.25rem;
     }
     .portal-ring {
-      position: absolute;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      animation: portalPulse 2s infinite;
-    }
-    .portal-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
-    .portal-ring:nth-child(2) { width: 160px; height: 160px; animation-delay: -0.5s; }
-    .portal-ring:nth-child(3) { width: 120px; height: 120px; animation-delay: -1s; }
-    @keyframes portalPulse {
-      0% { transform: scale(0.95); opacity: 0.5; }
-      50% { transform: scale(1.05); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.5; }
-    }
+  position: absolute;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: portalPulse 2s infinite;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.portal-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+.portal-ring:nth-child(2) { width: 160px; height: 160px; animation-delay: -0.5s; }
+.portal-ring:nth-child(3) { width: 120px; height: 120px; animation-delay: -1s; }
+
+@keyframes portalPulse {
+  0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.5; }
+}
     @keyframes spin {
       0% { transform: rotate(0); }
       100% { transform: rotate(360deg); }
@@ -96,20 +107,17 @@
 
   <!-- Main Content -->
   <div id="mainContent" class="hidden relative z-10">
-    <!-- Header -->
-    <header class="fixed top-0 left-0 w-full py-2 px-4 z-50 bg-black bg-opacity-80 backdrop-blur">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-3">
-          <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg" class="w-8 h-8 rounded-full neon-border" />
-          <h1 class="text-lg neon-text">Y2K x ROAST</h1>
-        </div>
-        <nav class="flex gap-4 text-sm">
-          <a href="#studio" class="hover:text-pink-400 transition">Studio</a>
-          <a href="#vault" class="hover:text-pink-400 transition">Vault</a>
-          <a href="#mints" class="hover:text-pink-400 transition">NFTs</a>
-        </nav>
-      </div>
-    </header>
+    
+    <!-- Portal Entry -->
+<div id="portalEntry" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center z-50 px-4">
+  <div class="relative mb-8 flex justify-center items-center">
+    <div class="portal-ring absolute"></div>
+    <div class="portal-ring absolute"></div>
+    <div class="portal-ring absolute"></div>
+  </div>
+  <h1 class="text-4xl neon-text font-bold mb-6 text-center">Welcome to Y2K</h1>
+  <button onclick="enterPortal()" class="glow-button text-xl w-full max-w-xs text-center">Initialize Connection</button>
+</div>
 
     <!-- Trust Strip -->
     <div class="fixed top-12 left-0 w-full text-center text-xs py-1 z-40 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 text-white font-medium">
