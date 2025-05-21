@@ -138,11 +138,10 @@
 <section id="studio" class="px-4 pb-20">
   <h2 class="text-3xl neon-text font-bold text-center mb-6">ROAST RECORDS</h2>
 
-  <div class="glass-card max-w-md w-full mx-auto space-y-6">
-    <div class="flex flex-col sm:flex-row gap-4">
-      <button onclick="connectCRO()" class="glow-button flex-1 text-sm">Connect CRO</button>
-      <button onclick="connectSOL()" class="glow-button flex-1 text-sm">Connect SOL</button>
-    </div>
+  <div class="flex justify-center mb-2">
+  <button onclick="connectWallet()" class="glow-button text-sm w-full max-w-xs">Connect Wallet</button>
+</div>
+<div id="walletStatus" class="text-center text-sm text-green-400 mt-2"></div>
 
     <form id="submissionForm" class="space-y-4">
       <select id="requestType" required class="w-full p-3 neon-border bg-black text-white text-sm text-center rounded">
@@ -326,57 +325,38 @@ window.loadSubmissions = () => {
 
 <!-- Wallet Connect -->
 <script>
-let connectedWallet = null;
-const CRONOS_MAINNET = {
-  chainId: '0x19',
-  chainName: 'Cronos Mainnet',
-  nativeCurrency: { name: 'CRO', symbol: 'CRO', decimals: 18 },
-  rpcUrls: ['https://evm.cronos.org'],
-  blockExplorerUrls: ['https://cronoscan.com/']
-};
+<script>
+let walletProvider = null;
 
-async function connectCRO() {
+async function connectWallet() {
   try {
     if (!window.ethereum) throw new Error("Install MetaMask or DeFi Wallet.");
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
-
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: CRONOS_MAINNET.chainId }],
-      });
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [CRONOS_MAINNET],
-        });
-      } else {
-        throw switchError;
-      }
-    }
-
-    croWallet = provider;
     const signer = provider.getSigner();
     const address = await signer.getAddress();
-    connectedWallet = address.toLowerCase();
+
+    walletProvider = provider;
     window.connectedWallet = address.toLowerCase();
 
     const balance = await provider.getBalance(address);
-    document.getElementById('croStatus').innerHTML = `<span class="text-green-400">✓</span> CRO: ${address.slice(0,6)}...${address.slice(-4)}`;
-    document.getElementById('balanceStatus').textContent = `CRO Balance: ${ethers.utils.formatEther(balance).slice(0,6)} CRO`;
+    const formattedBalance = ethers.utils.formatEther(balance).slice(0, 6);
+
+    document.getElementById('walletStatus').innerHTML =
+      `Connected: ${address.slice(0, 6)}...${address.slice(-4)} (${formattedBalance} CRO)`;
 
     loadSubmissions();
   } catch (err) {
-    console.error("CRO Connect Error", err);
-    document.getElementById('croStatus').innerHTML = `<span class="text-red-400">✗</span> ${err.message}`;
+    console.error("Wallet Connect Error", err);
+    document.getElementById('walletStatus').innerHTML =
+      `<span class="text-red-400">✗ ${err.message}</span>`;
   }
 }
 
 async function sendCRO(amount, toAddress) {
-  if (!croWallet) throw new Error("Connect your CRO wallet first.");
-  const signer = croWallet.getSigner();
+  if (!walletProvider) throw new Error("Please connect your wallet first.");
+  const signer = walletProvider.getSigner();
   const tx = await signer.sendTransaction({
     to: toAddress,
     value: ethers.utils.parseEther(amount)
