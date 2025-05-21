@@ -244,47 +244,49 @@
 
   let latestTimestampSeen = Date.now(); // Only show toasts for submissions after page load
 window.loadSubmissions = () => {
-    onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
-      const docs = [];
-      querySnapshot.forEach((doc) => {
-        docs.push({ id: doc.id, ...doc.data() });
-      });
-
-      docs.sort((a, b) => a.timestamp - b.timestamp);
-      liveContainer.innerHTML = '';
-      if (!window.__loadedIds) window.__loadedIds = new Set();
-
-      docs.forEach((data) => {
-        if (data.timestamp > latestTimestampSeen) {
-        showToast(`${data.handle} just submitted a ${data.type}`);
-        latestTimestampSeen = data.timestamp;
-      }
-        window.__loadedIds.add(data.id);
-        const date = new Date(data.timestamp);
-        const formattedDate = date.toLocaleString('en-US', {
-          dateStyle: 'medium',
-          timeStyle: 'short',
-        });
-
-        const item = document.createElement('div');
-        item.className = "snap-center bg-black glass-card min-w-[300px] p-4 neon-border text-left";
-        const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
-
-        item.innerHTML = `
-          <div class="flex justify-between items-center mb-2">
-            <div class="text-pink-400 text-sm font-bold">${data.type}</div>
-            ${data.limitedMint ? '<div class="text-xs text-white bg-pink-600 px-2 py-1 rounded-full">LIMITED MINT</div>' : ''}
-          </div>
-          <div class="text-white text-lg mb-1">${data.handle}</div>
-          <div class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</div>
-          <div class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</div>
-          <div class="text-xs text-gray-500">${formattedDate}</div>
-          ${isAdmin ? `<button onclick="deleteRequest('${data.id}')" class="mt-2 px-3 py-1 bg-red-600 text-xs text-white rounded">Delete</button>` : ''}
-        `;
-        liveContainer.appendChild(item);
-      });
+  onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
+    const docs = [];
+    querySnapshot.forEach((doc) => {
+      docs.push({ id: doc.id, ...doc.data() });
     });
-  };
+
+    docs.sort((a, b) => b.timestamp - a.timestamp); // newest first
+    liveContainer.innerHTML = '';
+    if (!window.__loadedIds) window.__loadedIds = new Set();
+
+    docs.forEach((data) => {
+      window.__loadedIds.add(data.id);
+      const date = new Date(data.timestamp);
+      const formattedDate = date.toLocaleString('en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      });
+
+      const item = document.createElement('div');
+      item.className = "snap-center min-w-[280px] glass-card neon-border text-left p-4 bg-black";
+      const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
+
+      item.innerHTML = `
+        <div class="flex justify-between items-center mb-2">
+          <div class="text-pink-400 text-sm font-bold">${data.type}</div>
+          ${data.limitedMint ? '<div class="text-xs bg-pink-600 px-2 py-1 rounded-full text-white">LIMITED</div>' : ''}
+        </div>
+        <div class="text-white font-bold text-lg mb-1">${data.handle}</div>
+        <p class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</p>
+        <p class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</p>
+        <p class="text-xs text-gray-500">${formattedDate}</p>
+        ${isAdmin ? `
+          <div class="mt-4 flex justify-between">
+            <button onclick="deleteRequest('${data.id}')" class="px-3 py-1 text-xs bg-red-600 text-white rounded">Delete</button>
+            <button onclick="stampSubmission('${data.id}')" class="px-3 py-1 text-xs bg-green-500 text-black rounded">Stamp</button>
+          </div>
+        ` : ''}
+      `;
+
+      liveContainer.appendChild(item);
+    });
+  });
+};
 
   window.deleteRequest = async function (id) {
     const confirmDelete = confirm("Are you sure you want to delete this submission?");
@@ -303,7 +305,24 @@ window.loadSubmissions = () => {
   window.collection = collection;
   window.addDoc = addDoc;
   window.addEventListener("DOMContentLoaded", loadSubmissions);
+
+  window.stampSubmission = async function (id) {
+  try {
+    const stampedRef = doc(db, "studio_requests", id);
+    await addDoc(collection(db, "stamped_requests"), {
+      ...(await (await getDoc(stampedRef)).data()),
+      stampedAt: Date.now()
+    });
+    await deleteDoc(stampedRef);
+    showToast("Submission stamped & moved.");
+  } catch (err) {
+    console.error("Stamp Error", err);
+    showToast("Failed to stamp submission.");
+  }
+};
+  
 </script>
+  
 
 <!-- Wallet Connect -->
 <script>
