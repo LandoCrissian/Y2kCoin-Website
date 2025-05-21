@@ -624,27 +624,6 @@ setInterval(autoScrollMints, 4000);
     }, 1000);
   }
 
-  // Wallet Connections
-  function connectCRO() {
-    alert('Connecting to CRO wallet...');
-  }
-
-  function connectSOL() {
-    alert('Connecting to SOL wallet...');
-  }
-
-  function submitStudioRequest() {
-    const type = document.getElementById('requestType').value;
-    const handle = document.getElementById('handle').value;
-    const notes = document.getElementById('notes').value;
-    
-    if (!type || !handle) {
-      alert('Please fill in all required fields');
-      return;
-    }
-    
-    alert('Submitting request...\nType: ' + type + '\nHandle: ' + handle);
-  }
 </script>
 </body>
 </html>
