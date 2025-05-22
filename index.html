@@ -180,8 +180,8 @@
     <p class="text-sm text-gray-300">Let the world know what you submitted.</p>
     <div class="text-sm bg-black text-white p-3 rounded neon-border" id="sharePreview"></div>
     <a id="shareOnX" href="#" target="_blank" class="glow-button text-sm w-full">Share on 𝕏</a>
-    <button onclick="copyShareText(event)" class="glow-button text-sm w-full">Copy Text</button>
-    <button onclick="closeConfirmationOverlay()" class="glow-button text-sm w-full">Close</button>
+    <button id="copyBtn" class="glow-button text-sm w-full">Copy Text</button>
+    <button id="closeBtn" class="glow-button text-sm w-full">Close</button>
   </div>
 </div>
 
@@ -423,62 +423,65 @@ async function submitStudioRequest() {
 
 <!-- Confirmation Logic -->
 <script>
-function showConfirmationOverlay(handle, type) {
-  const overlay = document.getElementById('confirmationOverlay');
-  const shareBtn = document.getElementById('shareOnX');
-  const preview = document.getElementById('sharePreview');
+  function showConfirmationOverlay(handle, type) {
+    const overlay = document.getElementById('confirmationOverlay');
+    const shareBtn = document.getElementById('shareOnX');
+    const preview = document.getElementById('sharePreview');
 
-  if (overlay) overlay.classList.remove('hidden');
+    if (overlay) overlay.classList.remove('hidden');
 
-  const hashtags = {
-    Roast: ["#ROASTRECORDS", "#CROFAM", "#CryptoMusic"],
-    Anthem: ["#Y2KCoin", "#CROFAM", "#CryptoMusic"],
-    Custom: ["#ROASTRECORDS", "#Y2K", "#ChainSound"],
-    Other: ["#Y2KCoin", "#VaultStudio", "#CROFAM"]
-  };
+    const hashtags = {
+      Roast: ["#ROASTRECORDS", "#CROFAM", "#CryptoMusic"],
+      Anthem: ["#Y2KCoin", "#CROFAM", "#CryptoMusic"],
+      Custom: ["#ROASTRECORDS", "#Y2K", "#ChainSound"],
+      Other: ["#Y2KCoin", "#VaultStudio", "#CROFAM"]
+    };
 
-  const templates = {
-    Roast: [
-      `I just dropped a roast request inside the Vault. Let the flames begin.`,
-      `Vault roast request submitted. You better hope it ain't about you.`,
-      `I pulled up to ROAST RECORDS with smoke in mind. Submission locked.`
-    ],
-    Anthem: [
-      `Just locked in an anthem request at ROAST RECORDS. Energy incoming.`,
-      `My sound. My story. Vault anthem request submitted.`,
-      `Anthem request submitted. Soundtrack for the chain activated.`
-    ],
-    Custom: [
-      `I just cooked up a custom track submission. This one’s for the chain.`,
-      `Custom song request locked inside ROAST RECORDS.`,
-      `Submitted a fully personalized track request. Vault studio active.`
-    ],
-    Other: [
-      `Dropped a creative request at ROAST RECORDS. Skit, intro, or something in-between.`,
-      `Intro/Skit request submitted. Vault creativity unleashed.`,
-      `Just added some flavor to the chain. Custom intro/skit request submitted.`
-    ]
-  };
+    const templates = {
+      Roast: [
+        `I just dropped a roast request inside the Vault. Let the flames begin.`,
+        `Vault roast request submitted. You better hope it ain't about you.`,
+        `I pulled up to ROAST RECORDS with smoke in mind. Submission locked.`
+      ],
+      Anthem: [
+        `Just locked in an anthem request at ROAST RECORDS. Energy incoming.`,
+        `My sound. My story. Vault anthem request submitted.`,
+        `Anthem request submitted. Soundtrack for the chain activated.`
+      ],
+      Custom: [
+        `I just cooked up a custom track submission. This one’s for the chain.`,
+        `Custom song request locked inside ROAST RECORDS.`,
+        `Submitted a fully personalized track request. Vault studio active.`
+      ],
+      Other: [
+        `Dropped a creative request at ROAST RECORDS. Skit, intro, or something in-between.`,
+        `Intro/Skit request submitted. Vault creativity unleashed.`,
+        `Just added some flavor to the chain. Custom intro/skit request submitted.`
+      ]
+    };
 
-  const selectedType =
-    type === "Roast" ? "Roast" :
-    type === "Anthem" ? "Anthem" :
-    type === "Custom Song" ? "Custom" : "Other";
+    const selectedType =
+      type === "Roast" ? "Roast" :
+      type === "Anthem" ? "Anthem" :
+      type === "Custom Song" ? "Custom" : "Other";
 
-  const message = templates[selectedType][Math.floor(Math.random() * templates[selectedType].length)];
-  const tagSet = hashtags[selectedType].slice(0, 3).join(" ");
-  const url = "https://y2kcoin.org";
-  const finalMessage = `${message} ${tagSet} ${url}`;
+    const message = templates[selectedType][Math.floor(Math.random() * templates[selectedType].length)];
+    const tagSet = hashtags[selectedType].join(" ");
+    const url = "https://y2kcoin.org";
+    const finalMessage = `${message} ${tagSet} ${url}`;
 
-  if (shareBtn) {
-    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(finalMessage)}`;
-    shareBtn.setAttribute("data-text", finalMessage); // fallback for copy
-  }
-
-  if (preview) {
     preview.textContent = finalMessage;
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(finalMessage)}`;
   }
-}
+
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const text = document.getElementById('sharePreview').textContent;
+    navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard."));
+  });
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('confirmationOverlay').classList.add('hidden');
+  });
 </script>
 
   <script>
