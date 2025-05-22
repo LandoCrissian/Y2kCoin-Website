@@ -481,6 +481,22 @@ function showConfirmationOverlay(handle, type) {
 }
 </script>
 
+  <script>
+function copyShareText(event) {
+  event.preventDefault();
+  const preview = document.getElementById('sharePreview');
+  const text = preview?.textContent?.trim();
+  if (!text) {
+    showToast("No text to copy.");
+    return;
+  }
+
+  navigator.clipboard.writeText(text)
+    .then(() => showToast("Copied to clipboard."))
+    .catch(() => showToast("Copy failed."));
+}
+</script>
+
 <!-- Toast + Overlay + Mint Auto Scroll -->
 <script>
 let toastQueue = [];
