@@ -179,7 +179,7 @@
     <h3 class="text-xl font-bold neon-text">Submission Confirmed</h3>
     <p class="text-sm text-gray-300">Let the world know what you submitted.</p>
     <div class="text-sm bg-black text-white p-3 rounded neon-border" id="sharePreview"></div>
-    <a id="shareOnX" href="#" target="_blank" class="glow-button text-sm w-full">Share on 𝕏</a>
+    <button id="shareOnX" class="glow-button text-sm w-full">Share on 𝕏</button>
     <button id="copyBtn" class="glow-button text-sm w-full">Copy Text</button>
     <button id="closeBtn" class="glow-button text-sm w-full">Close</button>
   </div>
@@ -485,7 +485,10 @@ function showConfirmationOverlay(handle, type) {
   const finalText = `${message} ${tags} ${url}`;
 
   preview.textContent = finalText;
-  shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(finalText)}`;
+  shareBtn.onclick = () => {
+  const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(finalText)}`;
+  window.open(tweetUrl, '_blank');
+};
 
   copyBtn.onclick = () => {
     navigator.clipboard.writeText(finalText)
