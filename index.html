@@ -460,23 +460,35 @@ function showConfirmationOverlay(handle, type) {
     ]
   };
 
-  const selectedType = type === "Roast" ? "Roast"
-                     : type === "Anthem" ? "Anthem"
-                     : type === "Custom Song" ? "Custom"
-                     : "Other";
+  const selectedType =
+    type === "Roast" ? "Roast" :
+    type === "Anthem" ? "Anthem" :
+    type === "Custom Song" ? "Custom" : "Other";
 
-  const text = templates[selectedType][Math.floor(Math.random() * templates[selectedType].length)];
-  const tags = hashtags[selectedType].slice(0, 3).join(" ");
+  const message = templates[selectedType][Math.floor(Math.random() * templates[selectedType].length)];
+  const tagSet = hashtags[selectedType].slice(0, 3).join(" ");
   const url = "https://y2kcoin.org";
 
-  const finalPost = `${text} ${tags} ${url}`;
+  const finalMessage = `${message} ${tagSet} ${url}`;
 
   if (shareBtn) {
-    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(finalPost)}`;
-    shareBtn.setAttribute("data-text", finalPost);
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(finalMessage)}`;
+    shareBtn.dataset.text = finalMessage;
   }
 
-  if (preview) preview.textContent = finalPost;
+  if (preview) preview.textContent = finalMessage;
+}
+
+function copyShareText() {
+  const text = document.getElementById('shareOnX')?.dataset.text || '';
+  navigator.clipboard.writeText(text)
+    .then(() => showToast("Copied to clipboard."))
+    .catch(() => showToast("Copy failed."));
+}
+
+function closeConfirmationOverlay() {
+  const overlay = document.getElementById('confirmationOverlay');
+  if (overlay) overlay.classList.add('hidden');
 }
 </script>
 
