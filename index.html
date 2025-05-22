@@ -181,7 +181,7 @@
     <div class="text-sm bg-black text-white p-3 rounded neon-border" id="sharePreview"></div>
     <a id="shareOnX" href="#" target="_blank" class="glow-button text-sm w-full">Share on 𝕏</a>
     <button onclick="copyShareText()" class="glow-button text-sm w-full">Copy Text</button>
-    <button class="glow-button text-sm w-full">Close</button>
+    <button onclick="closeConfirmationOverlay()" class="glow-button text-sm w-full">Close</button>
   </div>
 </div>
 
@@ -471,8 +471,29 @@ function showConfirmationOverlay(handle, type) {
 
   const finalPost = `${text} ${tags} ${url}`;
 
-  if (shareBtn) shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(finalPost)}`;
+  if (shareBtn) {
+    shareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(finalPost)}`;
+    shareBtn.setAttribute("data-text", finalPost);
+  }
+
   if (preview) preview.textContent = finalPost;
+}
+</script>
+
+  <script>
+function copyShareText() {
+  const shareBtn = document.getElementById('shareOnX');
+  if (!shareBtn) return;
+
+  const text = shareBtn.getAttribute('data-text') || '';
+  navigator.clipboard.writeText(text)
+    .then(() => showToast("Copied to clipboard."))
+    .catch(() => showToast("Copy failed."));
+}
+
+function closeConfirmationOverlay() {
+  const overlay = document.getElementById('confirmationOverlay');
+  if (overlay) overlay.classList.add('hidden');
 }
 </script>
 
