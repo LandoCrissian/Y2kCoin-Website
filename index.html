@@ -479,16 +479,17 @@ function showConfirmationOverlay(handle, type) {
   if (preview) preview.textContent = finalMessage;
 }
 
+<script>
 function copyShareText() {
-  const text = document.getElementById('shareOnX')?.dataset.text || '';
+  const shareBtn = document.getElementById('shareOnX');
+  if (!shareBtn) return;
+
+  const text = shareBtn.getAttribute('data-text');
+  if (!text) return;
+
   navigator.clipboard.writeText(text)
     .then(() => showToast("Copied to clipboard."))
     .catch(() => showToast("Copy failed."));
-}
-
-function closeConfirmationOverlay() {
-  const overlay = document.getElementById('confirmationOverlay');
-  if (overlay) overlay.classList.add('hidden');
 }
 </script>
 
