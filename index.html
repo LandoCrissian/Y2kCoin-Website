@@ -343,17 +343,19 @@ window.stampSubmission = async function (id) {
       return;
     }
 
+    const data = docSnap.data(); // <-- ADD THIS BACK
+
     const songURL = prompt("Enter the IPFS link for the certified track:");
-if (!songURL) {
-  showToast("Stamp cancelled — no song URL provided.");
-  return;
-}
+    if (!songURL) {
+      showToast("Stamp cancelled — no song URL provided.");
+      return;
+    }
 
     await addDoc(collection(db, "stamped_requests"), {
-  ...data,
-  songURL,
-  stampedAt: Date.now()
-});
+      ...data,
+      songURL,
+      stampedAt: Date.now()
+    });
 
     await deleteDoc(sourceRef);
     showToast("Submission stamped and moved.");
