@@ -716,25 +716,14 @@ setInterval(autoScrollMints, 4000);
 </script>
 
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
-    authDomain: "y2kroast-512ee.firebaseapp.com",
-    projectId: "y2kroast-512ee",
-    storageBucket: "y2kroast-512ee.appspot.com",
-    messagingSenderId: "602588659855",
-    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
   const container = document.getElementById("certifiedContainer");
 
-  function createCard(data) {
+  function createCertifiedCard(data) {
     const div = document.createElement("div");
     div.className = "glass-card neon-border text-center p-4";
+
     const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
 
     div.innerHTML = `
@@ -752,15 +741,16 @@ setInterval(autoScrollMints, 4000);
         <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
       </div>
     `;
+
     container.appendChild(div);
   }
 
-  onSnapshot(collection(db, "stamped_requests"), (snapshot) => {
+  onSnapshot(collection(window.db, "stamped_requests"), (snapshot) => {
     container.innerHTML = '';
     snapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() }))
       .sort((a, b) => b.stampedAt - a.stampedAt)
-      .forEach(createCard);
+      .forEach(createCertifiedCard);
   });
 </script>
   
