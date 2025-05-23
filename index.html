@@ -333,15 +333,28 @@ window.loadSubmissions = () => {
   window.addDoc = addDoc;
   window.addEventListener("DOMContentLoaded", loadSubmissions);
 
-  window.stampSubmission = async function (id) {
+  import { getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+window.stampSubmission = async function (id) {
   try {
-    const stampedRef = doc(db, "studio_requests", id);
+    const sourceRef = doc(db, "studio_requests", id);
+    const docSnap = await getDoc(sourceRef);
+
+    if (!docSnap.exists()) {
+      showToast("Submission not found.");
+      return;
+    }
+
+    const data = docSnap.data();
+
     await addDoc(collection(db, "stamped_requests"), {
-      ...(await (await getDoc(stampedRef)).data()),
+      ...data,
       stampedAt: Date.now()
+      // Optionally: add `songURL: "https://..."` later if needed
     });
-    await deleteDoc(stampedRef);
-    showToast("Submission stamped & moved.");
+
+    await deleteDoc(sourceRef);
+    showToast("Submission stamped and moved.");
   } catch (err) {
     console.error("Stamp Error", err);
     showToast("Failed to stamp submission.");
