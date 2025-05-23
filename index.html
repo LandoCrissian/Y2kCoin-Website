@@ -259,7 +259,7 @@ section, footer {
   <!-- Firebase Init + Load Submissions -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
@@ -338,6 +338,7 @@ window.loadSubmissions = () => {
   window.db = db;
   window.collection = collection;
   window.addDoc = addDoc;
+  window.getDoc = getDoc;
   window.addEventListener("DOMContentLoaded", loadSubmissions);
 
   import { getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -756,7 +757,6 @@ setInterval(autoScrollMints, 4000);
   
 </body>
 </html>
-
 
   
   
