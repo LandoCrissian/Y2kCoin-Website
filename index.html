@@ -258,27 +258,27 @@ section, footer {
 
   <!-- Firebase Init + Load Submissions -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
-    authDomain: "y2kroast-512ee.firebaseapp.com",
-    projectId: "y2kroast-512ee",
-    storageBucket: "y2kroast-512ee.appspot.com",
-    messagingSenderId: "602588659855",
-    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
-  };
+// Firebase init
+const firebaseConfig = {
+  apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+  authDomain: "y2kroast-512ee.firebaseapp.com",
+  projectId: "y2kroast-512ee",
+  storageBucket: "y2kroast-512ee.appspot.com",
+  messagingSenderId: "602588659855",
+  appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const liveContainer = document.getElementById('liveRequests');
-  const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
-  window.connectedWallet = "";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const liveContainer = document.getElementById('liveRequests');
+const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
+window.connectedWallet = "";
 
-  let latestTimestampSeen = Date.now(); // Only show toasts for submissions after page load
-  
-  function loadSubmissions() {
+// Load submissions
+function loadSubmissions() {
   onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
     const docs = [];
     querySnapshot.forEach((doc) => {
@@ -324,42 +324,36 @@ section, footer {
 }
 
 window.loadSubmissions = loadSubmissions;
+window.addEventListener("DOMContentLoaded", loadSubmissions);
 
-  window.deleteRequest = async function (id) {
-    const confirmDelete = confirm("Are you sure you want to delete this submission?");
-    if (!confirmDelete) return;
+// Expose deleteRequest to global scope
+window.deleteRequest = async function (id) {
+  const confirmDelete = confirm("Are you sure you want to delete this submission?");
+  if (!confirmDelete) return;
 
-    try {
-      await deleteDoc(doc(db, "studio_requests", id));
-      showToast("Submission deleted.");
-    } catch (err) {
-      console.error("Delete Error", err);
-      showToast("Failed to delete.");
-    }
-  };
+  try {
+    await deleteDoc(doc(db, "studio_requests", id));
+    showToast("Submission deleted.");
+  } catch (err) {
+    console.error("Delete Error", err);
+    showToast("Failed to delete.");
+  }
+};
 
-  window.db = db;
-  window.collection = collection;
-  window.addDoc = addDoc;
-  window.getDoc = getDoc;
-  window.addEventListener("DOMContentLoaded", loadSubmissions);
-
+// FIXED: stampSubmission now works inside same module
 window.stampSubmission = async function (id) {
   try {
-    console.log("Stamping ID:", id);
-    const sourceRef = doc(window.db, "studio_requests", id);
+    const sourceRef = doc(db, "studio_requests", id);
     const docSnap = await getDoc(sourceRef);
 
     if (!docSnap.exists()) {
-      console.log("Doc not found.");
       showToast("Submission not found.");
       return;
     }
 
     const data = docSnap.data();
-    console.log("Doc data:", data);
 
-    await addDoc(collection(window.db, "stamped_requests"), {
+    await addDoc(collection(db, "stamped_requests"), {
       ...data,
       stampedAt: Date.now()
     });
@@ -371,7 +365,8 @@ window.stampSubmission = async function (id) {
     showToast("Failed to stamp submission.");
   }
 };
-  
+
+window.db = db;
 </script>
   
 
