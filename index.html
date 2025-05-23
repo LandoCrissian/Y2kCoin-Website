@@ -210,6 +210,13 @@ section, footer {
   </div>
 </section>
 
+  <!-- Certified Showcase -->
+<section id="certified" class="px-4 pb-20 bg-black text-center">
+  <h2 class="text-3xl neon-text font-bold mb-2">ROAST CERTIFIED</h2>
+  <p class="text-sm text-gray-400 italic mb-6">Official stamped requests from the vault.</p>
+  <div id="certifiedContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+</section>
+
       <!-- Mints Section -->
       <section id="mints" class="px-4 py-6">
         <h2 class="text-2xl neon-text font-bold mb-4 text-center">Live Mints</h2>
@@ -333,7 +340,7 @@ window.loadSubmissions = () => {
   window.addDoc = addDoc;
   window.addEventListener("DOMContentLoaded", loadSubmissions);
 
-  import { getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 window.stampSubmission = async function (id) {
   try {
@@ -707,6 +714,58 @@ setInterval(autoScrollMints, 4000);
   }
 
 </script>
+
+  <script type="module">
+  import { getFirestore, collection, onSnapshot, initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+    authDomain: "y2kroast-512ee.firebaseapp.com",
+    projectId: "y2kroast-512ee",
+    storageBucket: "y2kroast-512ee.appspot.com",
+    messagingSenderId: "602588659855",
+    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const container = document.getElementById("certifiedContainer");
+
+  function createCard(data) {
+    const div = document.createElement("div");
+    div.className = "glass-card neon-border text-center p-4";
+
+    const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
+
+    div.innerHTML = `
+      <img src="${stampURL}" alt="Certified" class="w-16 h-16 mx-auto mb-2" />
+      <div class="text-pink-400 font-bold text-sm">${data.type || "Unknown Type"}</div>
+      <div class="text-xl font-bold">${data.handle}</div>
+      <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
+
+      <audio controls class="w-full mt-2 rounded">
+        <source src="${data.songURL || "#"}" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+
+      <div class="flex justify-center gap-3 pt-4">
+        <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
+        <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
+        <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
+      </div>
+    `;
+    container.appendChild(div);
+  }
+
+  onSnapshot(collection(db, "stamped_requests"), (snapshot) => {
+    container.innerHTML = '';
+    snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => b.stampedAt - a.stampedAt)
+      .forEach(createCard);
+  });
+</script>
+  
 </body>
 </html>
 
