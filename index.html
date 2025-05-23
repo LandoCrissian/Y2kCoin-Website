@@ -277,14 +277,15 @@ section, footer {
   window.connectedWallet = "";
 
   let latestTimestampSeen = Date.now(); // Only show toasts for submissions after page load
-window.loadSubmissions = () => {
+  
+  function loadSubmissions() {
   onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
     const docs = [];
     querySnapshot.forEach((doc) => {
       docs.push({ id: doc.id, ...doc.data() });
     });
 
-    docs.sort((a, b) => b.timestamp - a.timestamp); // newest first
+    docs.sort((a, b) => b.timestamp - a.timestamp);
     liveContainer.innerHTML = '';
     if (!window.__loadedIds) window.__loadedIds = new Set();
 
@@ -320,7 +321,9 @@ window.loadSubmissions = () => {
       liveContainer.appendChild(item);
     });
   });
-};
+}
+
+window.loadSubmissions = loadSubmissions;
 
   window.deleteRequest = async function (id) {
     const confirmDelete = confirm("Are you sure you want to delete this submission?");
@@ -340,8 +343,6 @@ window.loadSubmissions = () => {
   window.addDoc = addDoc;
   window.getDoc = getDoc;
   window.addEventListener("DOMContentLoaded", loadSubmissions);
-
-  import { getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 window.stampSubmission = async function (id) {
   try {
@@ -757,8 +758,6 @@ setInterval(autoScrollMints, 4000);
   
 </body>
 </html>
-
-  
   
   
 
