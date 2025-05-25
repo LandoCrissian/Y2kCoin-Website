@@ -744,10 +744,10 @@ setInterval(autoScrollMints, 4000);
       <div class="text-pink-400 font-bold text-sm">${data.type}</div>
       <div class="text-xl font-bold">${data.handle}</div>
       <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
-      <audio controls class="w-full mt-2 rounded">
-        <source src="${data.songURL || "#"}" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
+      <video controls class="w-full mt-2 rounded" poster="https://yourfallbackimage.jpg">
+      <source src="${data.songURL || "#"}" type="video/mp4">
+       Your browser does not support the video tag.
+      </video>
       <div class="flex justify-center gap-3 pt-4">
         <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
         <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
