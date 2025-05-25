@@ -734,29 +734,30 @@ setInterval(autoScrollMints, 4000);
   const container = document.getElementById("certifiedContainer");
 
   function createCertifiedCard(data) {
-    const div = document.createElement("div");
-    div.className = "glass-card neon-border text-center p-4";
+  const div = document.createElement("div");
+  div.className = "glass-card neon-border text-center p-4";
 
-    const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
+  const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
+  const posterURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5510.jpeg";
 
-    div.innerHTML = `
-      <img src="${stampURL}" alt="Certified" class="w-16 h-16 mx-auto mb-2" />
-      <div class="text-pink-400 font-bold text-sm">${data.type}</div>
-      <div class="text-xl font-bold">${data.handle}</div>
-      <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
-      <video controls class="w-full mt-2 rounded" poster="https://yourfallbackimage.jpg">
+  div.innerHTML = `
+    <img src="${stampURL}" alt="Certified" class="w-16 h-16 mx-auto mb-2" />
+    <div class="text-pink-400 font-bold text-sm">${data.type}</div>
+    <div class="text-xl font-bold">${data.handle}</div>
+    <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
+    <video controls class="w-full max-w-md mx-auto rounded shadow-lg mt-2" poster="${posterURL}">
       <source src="${data.songURL || "#"}" type="video/mp4">
-       Your browser does not support the video tag.
-      </video>
-      <div class="flex justify-center gap-3 pt-4">
-        <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
-        <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
-        <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
-      </div>
-    `;
+      Your browser does not support the video tag.
+    </video>
+    <div class="flex justify-center gap-3 pt-4">
+      <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
+      <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
+      <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
+    </div>
+  `;
 
-    container.appendChild(div);
-  }
+  container.appendChild(div);
+}
 
   onSnapshot(collection(window.db, "stamped_requests"), (snapshot) => {
     container.innerHTML = '';
