@@ -745,9 +745,11 @@ setInterval(autoScrollMints, 4000);
     <div class="text-pink-400 font-bold text-sm">${data.type}</div>
     <div class="text-xl font-bold">${data.handle}</div>
     <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
-    <video controls class="w-full max-w-md mx-auto rounded shadow-lg mt-2" poster="${posterURL}">
-      <source src="${data.songURL || "#"}" type="video/mp4">
-      Your browser does not support the video tag.
+    <video controls 
+    class="w-full max-w-[360px] h-auto aspect-video mx-auto rounded shadow-lg mt-2"
+    poster="${posterURL}">
+    <source src="${data.songURL || "#"}" type="video/mp4">
+    Your browser does not support the video tag.
     </video>
     <div class="flex justify-center gap-3 pt-4">
       <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
