@@ -376,58 +376,65 @@ section, footer {
   });
 </script>
   
-<script>
-let currentStampId = null;
-let currentStampData = null;
+<script type="module">
+  import { doc, getDoc, deleteDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-window.stampSubmission = async function (id) {
-  const sourceRef = doc(window.db, "studio_requests", id);
-  const docSnap = await getDoc(sourceRef);
+  let currentStampId = null;
+  let currentStampData = null;
 
-  if (!docSnap.exists()) {
-    showToast("Submission not found.");
-    return;
-  }
+  window.stampSubmission = async function (id) {
+    try {
+      const sourceRef = doc(window.db, "studio_requests", id);
+      const docSnap = await getDoc(sourceRef);
 
-  currentStampId = id;
-  currentStampData = docSnap.data();
+      if (!docSnap.exists()) {
+        showToast("Submission not found.");
+        return;
+      }
 
-  document.getElementById("stampModal").classList.remove("hidden");
-};
+      currentStampId = id;
+      currentStampData = docSnap.data();
 
-async function confirmStamp() {
-  const songURL = document.getElementById("stampSongURL").value.trim();
-  const imageURL = document.getElementById("stampImageURL").value.trim();
+      document.getElementById("stampModal").classList.remove("hidden");
+    } catch (err) {
+      console.error("Stamp Open Error", err);
+      showToast("Error loading stamp modal.");
+    }
+  };
 
-  if (!songURL) {
-    showToast("Song URL is required.");
-    return;
-  }
+  window.confirmStamp = async function () {
+    const songURL = document.getElementById("stampSongURL").value.trim();
+    const imageURL = document.getElementById("stampImageURL").value.trim();
 
-  try {
-    await addDoc(collection(window.db, "stamped_requests"), {
-      ...currentStampData,
-      songURL,
-      imageURL,
-      stampedAt: Date.now()
-    });
+    if (!songURL) {
+      showToast("Song URL is required.");
+      return;
+    }
 
-    await deleteDoc(doc(window.db, "studio_requests", currentStampId));
-    closeStampModal();
-    showToast("Submission stamped and moved.");
-  } catch (err) {
-    console.error("Stamp Error", err);
-    showToast("Failed to stamp submission.");
-  }
-}
+    try {
+      await addDoc(collection(window.db, "stamped_requests"), {
+        ...currentStampData,
+        songURL,
+        imageURL,
+        stampedAt: Date.now()
+      });
 
-function closeStampModal() {
-  document.getElementById("stampSongURL").value = "";
-  document.getElementById("stampImageURL").value = "";
-  document.getElementById("stampModal").classList.add("hidden");
-  currentStampId = null;
-  currentStampData = null;
-}
+      await deleteDoc(doc(window.db, "studio_requests", currentStampId));
+      closeStampModal();
+      showToast("Submission stamped and moved.");
+    } catch (err) {
+      console.error("Stamp Confirm Error", err);
+      showToast("Failed to stamp submission.");
+    }
+  };
+
+  window.closeStampModal = function () {
+    document.getElementById("stampSongURL").value = "";
+    document.getElementById("stampImageURL").value = "";
+    document.getElementById("stampModal").classList.add("hidden");
+    currentStampId = null;
+    currentStampData = null;
+  };
 </script>
   
 
