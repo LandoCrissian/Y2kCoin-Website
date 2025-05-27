@@ -510,6 +510,7 @@ async function connectWallet() {
       `Connected: ${address.slice(0, 6)}...${address.slice(-4)} (${formattedBalance} CRO)`;
 
     loadSubmissions();
+    loadCertified();
   } catch (err) {
     console.error("Wallet Connect Error", err);
     document.getElementById('walletStatus').innerHTML =
