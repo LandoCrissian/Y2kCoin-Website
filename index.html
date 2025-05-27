@@ -348,50 +348,60 @@ window.loadSubmissions = function () {
   });
 };
 
+<script>
+let currentStampId = null;
+let currentStampData = null;
+
 window.stampSubmission = async function (id) {
+  const sourceRef = doc(db, "studio_requests", id);
+  const docSnap = await getDoc(sourceRef);
+
+  if (!docSnap.exists()) {
+    showToast("Submission not found.");
+    return;
+  }
+
+  currentStampId = id;
+  currentStampData = docSnap.data();
+
+  document.getElementById("stampModal").classList.remove("hidden");
+};
+
+async function confirmStamp() {
+  const songURL = document.getElementById("stampSongURL").value.trim();
+  const imageURL = document.getElementById("stampImageURL").value.trim();
+
+  if (!songURL) {
+    showToast("Song URL is required.");
+    return;
+  }
+
   try {
-    const sourceRef = doc(db, "studio_requests", id);
-    const docSnap = await getDoc(sourceRef);
-
-    if (!docSnap.exists()) {
-      showToast("Submission not found.");
-      return;
-    }
-
-    const data = docSnap.data(); // <-- ADD THIS BACK
-
-    const songURL = prompt("Enter the IPFS link for the certified track:");
-    if (!songURL) {
-      showToast("Stamp cancelled — no song URL provided.");
-      return;
-    }
-
     await addDoc(collection(db, "stamped_requests"), {
-      ...data,
+      ...currentStampData,
       songURL,
+      imageURL,
       stampedAt: Date.now()
     });
 
-    await deleteDoc(sourceRef);
+    await deleteDoc(doc(db, "studio_requests", currentStampId));
+
+    closeStampModal();
     showToast("Submission stamped and moved.");
   } catch (err) {
     console.error("Stamp Error", err);
     showToast("Failed to stamp submission.");
   }
-};
+}
 
-window.deleteRequest = async function (id) {
-  const confirmDelete = confirm("Are you sure you want to delete this submission?");
-  if (!confirmDelete) return;
-
-  try {
-    await deleteDoc(doc(db, "studio_requests", id));
-    showToast("Submission deleted.");
-  } catch (err) {
-    console.error("Delete Error", err);
-    showToast("Failed to delete.");
-  }
-};
+function closeStampModal() {
+  document.getElementById("stampSongURL").value = "";
+  document.getElementById("stampImageURL").value = "";
+  document.getElementById("stampModal").classList.add("hidden");
+  currentStampId = null;
+  currentStampData = null;
+}
+</script>
 
 window.addEventListener("DOMContentLoaded", loadSubmissions);
 
