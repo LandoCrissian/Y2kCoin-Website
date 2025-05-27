@@ -105,6 +105,20 @@ section, footer {
       0% { transform: rotate(0); }
       100% { transform: rotate(360deg); }
     }
+    #certifiedSwipeContainer {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding-bottom: 1rem;
+  scroll-behavior: smooth;
+}
+.certified-card {
+  flex: 0 0 80%;
+  max-width: 320px;
+  scroll-snap-align: start;
+  margin: auto;
+}
   </style>
 </head>
   
@@ -214,7 +228,13 @@ section, footer {
 <section id="certified" class="px-4 pb-20 bg-black text-center">
   <h2 class="text-3xl neon-text font-bold mb-2">ROAST CERTIFIED</h2>
   <p class="text-sm text-gray-400 italic mb-6">Official stamped requests from the vault.</p>
-  <div id="certifiedContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+  
+  <div id="certifiedSwipeContainer" class="max-w-screen-lg mx-auto"></div>
+
+  <!-- Admin Manual Add Button -->
+  <div id="adminAddWrapper" class="mt-6 hidden">
+    <button onclick="openManualAdd()" class="glow-button text-sm mx-auto">+ Add Certified Manually</button>
+  </div>
 </section>
 
       <!-- Mints Section -->
@@ -289,6 +309,23 @@ section, footer {
   </div>
 </div>
 
+ <div id="manualAddModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex justify-center items-center px-4">
+  <div class="glass-card neon-border max-w-md w-full p-6 space-y-4 text-left">
+    <h3 class="text-xl font-bold neon-text text-center">Manually Add Certified</h3>
+    
+    <input type="text" id="manualType" placeholder="Type (Roast, Anthem, etc)" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
+    <input type="text" id="manualHandle" placeholder="@handle" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
+    <textarea id="manualNotes" placeholder="Notes..." class="w-full p-2 neon-border bg-black text-white text-sm rounded h-20 resize-none"></textarea>
+    <input type="text" id="manualSongURL" placeholder="Song/Video URL" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
+    <input type="text" id="manualImageURL" placeholder="Image URL (optional)" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
+
+    <div class="flex justify-between gap-4 pt-4">
+      <button onclick="closeManualAdd()" class="w-full glow-button text-sm bg-red-600 hover:bg-red-700">Cancel</button>
+      <button onclick="submitManualAdd()" class="w-full glow-button text-sm">Add</button>
+    </div>
+  </div>
+</div> 
+
   <!-- Firebase Init + Load Submissions -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -355,51 +392,97 @@ section, footer {
     });
   };
 
+  <script type="module">
+  import { collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+  const container = document.getElementById("certifiedSwipeContainer");
+  const adminAddWrapper = document.getElementById("adminAddWrapper");
+
+  function createCertifiedSwipeCard(data) {
+    const div = document.createElement("div");
+    div.className = "glass-card neon-border certified-card text-center p-4";
+
+    const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
+    const posterImage = data.imageURL || "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61045FBE-92A5-4AAA-983A-6FD1C0B21D1F.png";
+
+    div.innerHTML = `
+      <img src="${stampURL}" alt="Certified" class="w-14 h-14 mx-auto mb-2" />
+      <div class="text-pink-400 font-bold text-sm">${data.type}</div>
+      <div class="text-lg font-bold">${data.handle}</div>
+      <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
+      <video controls class="w-full max-w-xs mx-auto rounded mt-2 shadow-lg" poster="${posterImage}">
+        <source src="${data.songURL}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="flex justify-center gap-3 pt-4" id="actions-${data.id}">
+        <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
+        <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
+        <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
+      </div>
+    `;
+
+    if ((window.connectedWallet || "").toLowerCase() === ADMIN_WALLET) {
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "✎ Edit";
+      editBtn.className = "text-xs px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded";
+      editBtn.onclick = () => window.editCertified(data.id, data);
+      div.querySelector(`#actions-${data.id}`).appendChild(editBtn);
+    }
+
+    container.appendChild(div);
+  }
+
   window.loadCertified = function () {
-    onSnapshot(collection(db, "stamped_requests"), (snapshot) => {
-      certifiedContainer.innerHTML = '';
+    if ((window.connectedWallet || "").toLowerCase() === ADMIN_WALLET) {
+      adminAddWrapper.classList.remove("hidden");
+    }
+
+    onSnapshot(collection(window.db, "stamped_requests"), (snapshot) => {
+      container.innerHTML = '';
       snapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .sort((a, b) => b.stampedAt - a.stampedAt)
-        .forEach(data => {
-          const div = document.createElement("div");
-          div.className = "glass-card neon-border text-center p-4 max-w-[340px] mx-auto";
-
-          const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
-          const posterImage = data.imageURL || "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61045FBE-92A5-4AAA-983A-6FD1C0B21D1F.png";
-
-          div.innerHTML = `
-            <img src="${stampURL}" alt="Certified" class="w-14 h-14 mx-auto mb-2" />
-            <div class="text-pink-400 font-bold text-sm">${data.type}</div>
-            <div class="text-lg font-bold">${data.handle}</div>
-            <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
-            <video controls class="w-full max-w-xs mx-auto rounded mt-2 shadow-lg" poster="${posterImage}">
-              <source src="${data.songURL}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <div class="flex justify-center gap-3 pt-4">
-              <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
-              <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
-              <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
-            </div>
-          `;
-          const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
-if (isAdmin) {
-  const editBtn = document.createElement("button");
-  editBtn.textContent = "✎ Edit";
-  editBtn.className = "text-xs px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded";
-  editBtn.onclick = () => window.editCertified(data.id, data);
-  div.querySelector(".flex.justify-center").appendChild(editBtn);
-}
-          certifiedContainer.appendChild(div);
-        });
+        .forEach(createCertifiedSwipeCard);
     });
   };
 
-  window.addEventListener("DOMContentLoaded", () => {
-    window.loadSubmissions();
-    window.loadCertified();
-  });
+  // Manual Admin Add Logic
+  window.openManualAdd = function () {
+    document.getElementById("manualAddModal").classList.remove("hidden");
+  };
+
+  window.closeManualAdd = function () {
+    document.getElementById("manualAddModal").classList.add("hidden");
+  };
+
+  window.submitManualAdd = async function () {
+    const type = document.getElementById("manualType").value.trim();
+    const handle = document.getElementById("manualHandle").value.trim();
+    const notes = document.getElementById("manualNotes").value.trim();
+    const songURL = document.getElementById("manualSongURL").value.trim();
+    const imageURL = document.getElementById("manualImageURL").value.trim();
+
+    if (!type || !handle || !songURL) {
+      showToast("Missing required fields.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(window.db, "stamped_requests"), {
+        type,
+        handle,
+        notes,
+        songURL,
+        imageURL,
+        stampedAt: Date.now()
+      });
+      closeManualAdd();
+      showToast("Certified song added manually.");
+    } catch (err) {
+      console.error("Manual Add Error", err);
+      showToast("Failed to add manually.");
+    }
+  };
 </script>
   
 <script type="module">
