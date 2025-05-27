@@ -292,7 +292,7 @@ section, footer {
   <!-- Firebase Init + Load Submissions -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
@@ -461,6 +461,29 @@ if (isAdmin) {
     currentStampId = null;
     currentStampData = null;
   };
+</script>
+
+  <script>
+window.editCertified = function (id, data) {
+  const songURL = prompt("Edit Song URL:", data.songURL || "");
+  if (songURL === null) return;
+
+  const imageURL = prompt("Edit Image URL:", data.imageURL || "");
+  if (imageURL === null) return;
+
+  const docRef = doc(window.db, "stamped_requests", id);
+  updateDoc(docRef, {
+    songURL: songURL.trim(),
+    imageURL: imageURL.trim()
+  })
+    .then(() => {
+      showToast("Submission updated successfully.");
+    })
+    .catch((err) => {
+      console.error("Update error", err);
+      showToast("Failed to update submission.");
+    });
+};
 </script>
   
 
