@@ -276,84 +276,117 @@ section, footer {
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// Firebase init
-const firebaseConfig = {
-  apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
-  authDomain: "y2kroast-512ee.firebaseapp.com",
-  projectId: "y2kroast-512ee",
-  storageBucket: "y2kroast-512ee.appspot.com",
-  messagingSenderId: "602588659855",
-  appId: "1:602588659855:web:f01efa4b81e737d26270fa"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
+    authDomain: "y2kroast-512ee.firebaseapp.com",
+    projectId: "y2kroast-512ee",
+    storageBucket: "y2kroast-512ee.appspot.com",
+    messagingSenderId: "602588659855",
+    appId: "1:602588659855:web:f01efa4b81e737d26270fa"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-window.db = db;
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.db = db;
 
-const liveContainer = document.getElementById('liveRequests');
-const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
-window.connectedWallet = "";
+  const liveContainer = document.getElementById("liveRequests");
+  const certifiedContainer = document.getElementById("certifiedContainer");
+  const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
+  window.connectedWallet = "";
 
-// Show toast helper
-window.showToast = function(message) {
-  const toastContainer = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = message;
-  toastContainer.appendChild(toast);
-  setTimeout(() => toast.remove(), 5000);
-};
-
-// Load submissions
-window.loadSubmissions = function () {
-  onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
-    const docs = [];
-    querySnapshot.forEach((doc) => {
-      docs.push({ id: doc.id, ...doc.data() });
-    });
-
-    docs.sort((a, b) => b.timestamp - a.timestamp);
-    liveContainer.innerHTML = '';
-
-    docs.forEach((data) => {
-      const date = new Date(data.timestamp);
-      const formattedDate = date.toLocaleString('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
+  // Load Live Submissions
+  function loadSubmissions() {
+    onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ id: doc.id, ...doc.data() });
       });
 
-      const item = document.createElement('div');
-      item.className = "snap-center min-w-[280px] glass-card neon-border text-left p-4 bg-black";
-      const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
+      docs.sort((a, b) => b.timestamp - a.timestamp);
+      liveContainer.innerHTML = '';
 
-      item.innerHTML = `
-        <div class="flex justify-between items-center mb-2">
-          <div class="text-pink-400 text-sm font-bold">${data.type}</div>
-          ${data.limitedMint ? '<div class="text-xs bg-pink-600 px-2 py-1 rounded-full text-white">LIMITED</div>' : ''}
-        </div>
-        <div class="text-white font-bold text-lg mb-1">${data.handle}</div>
-        <p class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</p>
-        <p class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</p>
-        <p class="text-xs text-gray-500">${formattedDate}</p>
-        ${isAdmin ? `
-          <div class="mt-4 flex justify-between">
-            <button onclick="deleteRequest('${data.id}')" class="px-3 py-1 text-xs bg-red-600 text-white rounded">Delete</button>
-            <button onclick="stampSubmission('${data.id}')" class="px-3 py-1 text-xs bg-green-500 text-black rounded">Stamp</button>
+      docs.forEach((data) => {
+        const date = new Date(data.timestamp);
+        const formattedDate = date.toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        });
+
+        const item = document.createElement('div');
+        item.className = "snap-center min-w-[280px] glass-card neon-border text-left p-4 bg-black";
+        const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
+
+        item.innerHTML = `
+          <div class="flex justify-between items-center mb-2">
+            <div class="text-pink-400 text-sm font-bold">${data.type}</div>
+            ${data.limitedMint ? '<div class="text-xs bg-pink-600 px-2 py-1 rounded-full text-white">LIMITED</div>' : ''}
           </div>
-        ` : ''}
-      `;
+          <div class="text-white font-bold text-lg mb-1">${data.handle}</div>
+          <p class="text-gray-300 text-sm mb-2">${data.notes || 'No notes provided.'}</p>
+          <p class="text-xs text-green-400 break-all mb-1">Tx: ${data.txHash.slice(0, 8)}...${data.txHash.slice(-8)}</p>
+          <p class="text-xs text-gray-500">${formattedDate}</p>
+          ${isAdmin ? `
+            <div class="mt-4 flex justify-between">
+              <button onclick="deleteRequest('${data.id}')" class="px-3 py-1 text-xs bg-red-600 text-white rounded">Delete</button>
+              <button onclick="stampSubmission('${data.id}')" class="px-3 py-1 text-xs bg-green-500 text-black rounded">Stamp</button>
+            </div>
+          ` : ''}
+        `;
 
-      liveContainer.appendChild(item);
+        liveContainer.appendChild(item);
+      });
     });
-  });
-};
+  }
 
+  // Load Stamped Submissions
+  function loadCertified() {
+    onSnapshot(collection(db, "stamped_requests"), (snapshot) => {
+      certifiedContainer.innerHTML = '';
+      snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => b.stampedAt - a.stampedAt)
+        .forEach(data => {
+          const div = document.createElement("div");
+          div.className = "glass-card neon-border text-center p-4 max-w-[340px] mx-auto";
+
+          const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
+          const posterImage = data.imageURL || "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61045FBE-92A5-4AAA-983A-6FD1C0B21D1F.png";
+
+          div.innerHTML = `
+            <img src="${stampURL}" alt="Certified" class="w-14 h-14 mx-auto mb-2" />
+            <div class="text-pink-400 font-bold text-sm">${data.type}</div>
+            <div class="text-lg font-bold">${data.handle}</div>
+            <p class="text-sm text-gray-400 mb-2">${data.notes || "No notes provided."}</p>
+            <video controls class="w-full max-w-xs mx-auto rounded mt-2 shadow-lg" poster="${posterImage}">
+              <source src="${data.songURL}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="flex justify-center gap-3 pt-4">
+              <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
+              <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
+              <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
+            </div>
+          `;
+          certifiedContainer.appendChild(div);
+        });
+    });
+  }
+
+  // Initialize on load
+  window.addEventListener("DOMContentLoaded", () => {
+    loadSubmissions();
+    loadCertified();
+  });
+
+  // Expose db to other scripts
+  window.db = db;
+  
 <script>
 let currentStampId = null;
 let currentStampData = null;
 
 window.stampSubmission = async function (id) {
-  const sourceRef = doc(db, "studio_requests", id);
+  const sourceRef = doc(window.db, "studio_requests", id);
   const docSnap = await getDoc(sourceRef);
 
   if (!docSnap.exists()) {
@@ -377,15 +410,14 @@ async function confirmStamp() {
   }
 
   try {
-    await addDoc(collection(db, "stamped_requests"), {
+    await addDoc(collection(window.db, "stamped_requests"), {
       ...currentStampData,
       songURL,
       imageURL,
       stampedAt: Date.now()
     });
 
-    await deleteDoc(doc(db, "studio_requests", currentStampId));
-
+    await deleteDoc(doc(window.db, "studio_requests", currentStampId));
     closeStampModal();
     showToast("Submission stamped and moved.");
   } catch (err) {
@@ -401,11 +433,6 @@ function closeStampModal() {
   currentStampId = null;
   currentStampData = null;
 }
-</script>
-
-window.addEventListener("DOMContentLoaded", loadSubmissions);
-
-window.db = db;
 </script>
   
 
