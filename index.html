@@ -287,15 +287,14 @@ section, footer {
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  window.db = db;
 
+  window.db = db;
   const liveContainer = document.getElementById("liveRequests");
   const certifiedContainer = document.getElementById("certifiedContainer");
   const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
   window.connectedWallet = "";
 
-  // Load Live Submissions
-  function loadSubmissions() {
+  window.loadSubmissions = function () {
     onSnapshot(collection(db, "studio_requests"), (querySnapshot) => {
       const docs = [];
       querySnapshot.forEach((doc) => {
@@ -336,10 +335,9 @@ section, footer {
         liveContainer.appendChild(item);
       });
     });
-  }
+  };
 
-  // Load Stamped Submissions
-  function loadCertified() {
+  window.loadCertified = function () {
     onSnapshot(collection(db, "stamped_requests"), (snapshot) => {
       certifiedContainer.innerHTML = '';
       snapshot.docs
@@ -370,18 +368,13 @@ section, footer {
           certifiedContainer.appendChild(div);
         });
     });
-  }
+  };
 
-  // Initialize on load
   window.addEventListener("DOMContentLoaded", () => {
-    loadSubmissions();
-    loadCertified();
+    window.loadSubmissions();
+    window.loadCertified();
   });
-
-  // Expose db to other scripts
-  window.db = db;
-  
-  </script>
+</script>
   
 <script>
 let currentStampId = null;
