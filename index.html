@@ -373,12 +373,24 @@ function createCertifiedSwipeCard(data) {
       <source src="${data.songURL}" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <div class="flex justify-center gap-2 pt-4">
-      <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 rounded">♡ Like</button>
-      <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 rounded">Share</button>
-      <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 rounded">Buy NFT</button>
+    <div class="flex justify-center gap-2 pt-4" id="swipe-actions-${data.id}">
+    <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 rounded">♡ Like</button>
+    <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 rounded">Share</button>
+    <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 rounded">Buy NFT</button>
     </div>
   `;
+
+  const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
+
+if (isAdmin) {
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "✎ Edit";
+  editBtn.className = "text-xs px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded";
+  editBtn.onclick = () => window.editCertified(data.id, data);
+
+  const actionBar = div.querySelector(`#swipe-actions-${data.id}`);
+  if (actionBar) actionBar.appendChild(editBtn);
+}
 
   container.appendChild(div);
 }
