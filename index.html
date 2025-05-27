@@ -214,6 +214,15 @@ section, footer {
 <section id="certified" class="px-4 pb-20 bg-black text-center">
   <h2 class="text-3xl neon-text font-bold mb-2">ROAST CERTIFIED</h2>
   <p class="text-sm text-gray-400 italic mb-6">Official stamped requests from the vault.</p>
+
+  <!-- Admin Add Button -->
+  <div id="adminAddCertified" class="mt-4 flex justify-center hidden">
+    <button onclick="openAddCertifiedModal()" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm rounded shadow">
+      + Manually Add Certified
+    </button>
+  </div>
+
+  <!-- Swipeable Cards Container -->
   <div id="certifiedSwipeContainer" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scroll-smooth"></div>
 </section>
 
@@ -285,6 +294,24 @@ section, footer {
     <div class="flex justify-between gap-4 pt-4">
       <button onclick="closeEditModal()" class="w-full glow-button text-sm bg-red-600 hover:bg-red-700">Cancel</button>
       <button onclick="confirmEdit()" class="w-full glow-button text-sm">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Manual Certified Add Modal -->
+<div id="addCertifiedModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-900 p-6 rounded-lg w-[90%] max-w-md shadow-xl border border-pink-600">
+    <h3 class="text-xl font-bold mb-4 text-pink-400">Manually Add Certified Submission</h3>
+
+    <input id="addType" type="text" placeholder="Type (Roast, Anthem, etc.)" class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm">
+    <input id="addHandle" type="text" placeholder="Handle (e.g. @user)" class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm">
+    <textarea id="addNotes" placeholder="Notes..." class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm"></textarea>
+    <input id="addSongURL" type="text" placeholder="Song URL (MP4 or MP3)" class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm">
+    <input id="addImageURL" type="text" placeholder="Image URL (optional)" class="w-full mb-4 px-3 py-2 rounded bg-gray-800 text-white text-sm">
+
+    <div class="flex justify-between">
+      <button onclick="closeAddCertifiedModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white text-sm">Cancel</button>
+      <button onclick="submitCertifiedManually()" class="px-4 py-2 bg-green-700 hover:bg-green-800 rounded text-white text-sm">Submit</button>
     </div>
   </div>
 </div>
@@ -511,6 +538,8 @@ async function connectWallet() {
     const address = await signer.getAddress();
 
     window.connectedWallet = address.toLowerCase();
+    window.connectedWallet = walletAddress;
+    window.dispatchEvent(new Event("walletConnected"));
 
     const balance = await croProvider.getBalance(address);
     const formattedBalance = ethers.utils.formatEther(balance).slice(0, 6);
@@ -536,6 +565,19 @@ async function sendCRO(amount, toAddress) {
   });
   return tx.hash;
 }
+</script>
+
+  <script>
+  const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase(); // Replace with your real admin wallet
+  const checkAdminForCertified = () => {
+    const connectedWallet = window.connectedWallet || "";
+    const isAdmin = connectedWallet.toLowerCase() === ADMIN_WALLET;
+    const adminBtn = document.getElementById("adminAddCertified");
+    if (adminBtn) adminBtn.classList.toggle("hidden", !isAdmin);
+  };
+
+  // Run check after wallet connects
+  window.addEventListener("walletConnected", checkAdminForCertified);
 </script>
 
 <!-- Submit Logic -->
@@ -936,6 +978,50 @@ setInterval(autoScrollMints, 4000);
     }
   };
 </script> 
+
+  <script>
+  function openAddCertifiedModal() {
+    document.getElementById("addCertifiedModal").classList.remove("hidden");
+  }
+
+  function closeAddCertifiedModal() {
+    document.getElementById("addCertifiedModal").classList.add("hidden");
+    document.getElementById("addType").value = "";
+    document.getElementById("addHandle").value = "";
+    document.getElementById("addNotes").value = "";
+    document.getElementById("addSongURL").value = "";
+    document.getElementById("addImageURL").value = "";
+  }
+
+  async function submitCertifiedManually() {
+    const type = document.getElementById("addType").value.trim();
+    const handle = document.getElementById("addHandle").value.trim();
+    const notes = document.getElementById("addNotes").value.trim();
+    const songURL = document.getElementById("addSongURL").value.trim();
+    const imageURL = document.getElementById("addImageURL").value.trim();
+
+    if (!type || !handle || !songURL) {
+      showToast("Type, Handle, and Song URL are required.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "stamped_requests"), {
+        type,
+        handle,
+        notes,
+        songURL,
+        imageURL,
+        stampedAt: Date.now()
+      });
+      closeAddCertifiedModal();
+      showToast("Certified song added.");
+    } catch (err) {
+      console.error("Manual Add Error", err);
+      showToast("Failed to add certified.");
+    }
+  }
+</script>
   
 </body>
 </html>
