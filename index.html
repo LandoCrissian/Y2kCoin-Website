@@ -841,7 +841,7 @@ setInterval(autoScrollMints, 4000);
   div.className = "glass-card neon-border text-center p-4 max-w-[340px] mx-auto";
 
   const stampURL = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3A81E5FC-A03B-4D1D-A93C-79E4C79CCA20.png";
-  const posterImage = "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61045FBE-92A5-4AAA-983A-6FD1C0B21D1F.png";
+  const posterImage = data.imageURL || "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61045FBE-92A5-4AAA-983A-6FD1C0B21D1F.png";
 
   div.innerHTML = `
     <img src="${stampURL}" alt="Certified" class="w-14 h-14 mx-auto mb-2" />
@@ -855,12 +855,21 @@ setInterval(autoScrollMints, 4000);
       <source src="${data.songURL || "#"}" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <div class="flex justify-center gap-3 pt-4">
+    <div class="flex justify-center gap-3 pt-4" id="action-buttons-${data.id}">
       <button onclick="alert('Likes coming soon!')" class="text-xs px-3 py-1 bg-pink-600 hover:bg-pink-700 rounded">♡ Like</button>
       <button onclick="window.open('https://x.com/intent/tweet?text='+encodeURIComponent('🔥 Found this certified submission by ${data.handle}! Listen here: https://y2kcoin.org #ROASTRECORDS #CROFAM'), '_blank')" class="text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded">Share</button>
       <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
     </div>
   `;
+
+  const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
+  if (isAdmin) {
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✎ Edit";
+    editBtn.className = "text-xs px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded";
+    editBtn.onclick = () => window.editCertified(data.id, data);
+    div.querySelector(`#action-buttons-${data.id}`).appendChild(editBtn);
+  }
 
   container.appendChild(div);
 }
