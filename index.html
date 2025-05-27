@@ -271,6 +271,24 @@ section, footer {
   </div>
 </div>
 
+  <!-- Edit Certified Modal -->
+<div id="editModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex justify-center items-center px-4">
+  <div class="glass-card neon-border max-w-md w-full p-6 space-y-4 text-left">
+    <h3 class="text-xl font-bold neon-text text-center">Edit Certified Submission</h3>
+    
+    <input type="text" id="editSongURL" placeholder="IPFS Song URL" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
+    
+    <input type="text" id="editImageURL" placeholder="Image URL (optional)" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
+    
+    <textarea id="editNotes" placeholder="Update notes..." class="w-full p-2 neon-border bg-black text-white text-sm rounded h-24 resize-none"></textarea>
+
+    <div class="flex justify-between gap-4 pt-4">
+      <button onclick="closeEditModal()" class="w-full glow-button text-sm bg-red-600 hover:bg-red-700">Cancel</button>
+      <button onclick="confirmEdit()" class="w-full glow-button text-sm">Save Changes</button>
+    </div>
+  </div>
+</div>
+
   <!-- Firebase Init + Load Submissions -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -365,6 +383,14 @@ section, footer {
               <button onclick="alert('NFT purchasing under development')" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 rounded">Buy NFT</button>
             </div>
           `;
+          const isAdmin = (window.connectedWallet || "").toLowerCase() === ADMIN_WALLET;
+if (isAdmin) {
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "✎ Edit";
+  editBtn.className = "text-xs px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded";
+  editBtn.onclick = () => window.editCertified(data.id, data);
+  div.querySelector(".flex.justify-center").appendChild(editBtn);
+}
           certifiedContainer.appendChild(div);
         });
     });
@@ -824,6 +850,50 @@ setInterval(autoScrollMints, 4000);
       .forEach(createCertifiedCard);
   });
 </script>
+
+ <script type="module">
+  import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+  let editDocId = null;
+
+  window.editCertified = function (id, data) {
+    editDocId = id;
+    document.getElementById("editSongURL").value = data.songURL || "";
+    document.getElementById("editImageURL").value = data.imageURL || "";
+    document.getElementById("editNotes").value = data.notes || "";
+
+    document.getElementById("editModal").classList.remove("hidden");
+  };
+
+  window.closeEditModal = function () {
+    editDocId = null;
+    document.getElementById("editModal").classList.add("hidden");
+  };
+
+  window.confirmEdit = async function () {
+    const songURL = document.getElementById("editSongURL").value.trim();
+    const imageURL = document.getElementById("editImageURL").value.trim();
+    const notes = document.getElementById("editNotes").value.trim();
+
+    if (!editDocId || !songURL) {
+      showToast("Missing ID or song URL.");
+      return;
+    }
+
+    try {
+      await updateDoc(doc(window.db, "stamped_requests", editDocId), {
+        songURL,
+        imageURL,
+        notes
+      });
+      showToast("Submission updated.");
+      closeEditModal();
+    } catch (err) {
+      console.error("Edit Error", err);
+      showToast("Failed to update submission.");
+    }
+  };
+</script> 
   
 </body>
 </html>
