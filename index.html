@@ -383,13 +383,15 @@ function createCertifiedSwipeCard(data) {
   container.appendChild(div);
 }
 
-onSnapshot(collection(window.db, "stamped_requests"), (snapshot) => {
-  container.innerHTML = '';
-  snapshot.docs
-    .map(doc => ({ id: doc.id, ...doc.data() }))
-    .sort((a, b) => b.stampedAt - a.stampedAt)
-    .forEach(createCertifiedSwipeCard);
-});
+window.loadCertified = function () {
+  onSnapshot(collection(window.db, "stamped_requests"), (snapshot) => {
+    container.innerHTML = '';
+    snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => b.stampedAt - a.stampedAt)
+      .forEach(createCertifiedSwipeCard);
+  });
+};
 
   window.addEventListener("DOMContentLoaded", () => {
     window.loadSubmissions();
