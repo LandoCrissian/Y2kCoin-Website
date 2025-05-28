@@ -311,7 +311,9 @@ section, footer {
 
     <div class="flex justify-between">
       <button onclick="closeAddCertifiedModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white text-sm">Cancel</button>
-      <button onclick="submitCertifiedManually()" class="px-4 py-2 bg-green-700 hover:bg-green-800 rounded text-white text-sm">Submit</button>
+      <button onclick="submitCertifiedManually()" class="px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm rounded shadow">
+       Add Certified
+      </button>
     </div>
   </div>
 </div>
@@ -979,12 +981,8 @@ setInterval(autoScrollMints, 4000);
 </script> 
 
   <script type="module">
-  import {
-    collection,
-    addDoc
-  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  // You already defined window.db = getFirestore(app) earlier — reuse it
   window.submitCertifiedManually = async function () {
     const type = document.getElementById("addType").value.trim();
     const handle = document.getElementById("addHandle").value.trim();
@@ -993,7 +991,7 @@ setInterval(autoScrollMints, 4000);
     const imageURL = document.getElementById("addImageURL").value.trim();
 
     if (!type || !handle || !songURL) {
-      showToast("Type, Handle, and Song URL are required.");
+      alert("Type, Handle, and Song URL are required.");
       return;
     }
 
@@ -1007,11 +1005,11 @@ setInterval(autoScrollMints, 4000);
         stampedAt: Date.now()
       });
 
-      closeAddCertifiedModal();
-      showToast("Certified song added.");
+      alert("Certified song added successfully.");
+      document.getElementById("addCertifiedModal").classList.add("hidden");
     } catch (err) {
       console.error("Manual Add Error", err);
-      showToast("Failed to add certified.");
+      alert("Failed to add certified.");
     }
   };
 </script>
