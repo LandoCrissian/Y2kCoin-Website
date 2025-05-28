@@ -978,24 +978,13 @@ setInterval(autoScrollMints, 4000);
   };
 </script> 
 
-  <script>
-  function openAddCertifiedModal() {
-    document.getElementById("addCertifiedModal").classList.remove("hidden");
-  }
-
-  function closeAddCertifiedModal() {
-    document.getElementById("addCertifiedModal").classList.add("hidden");
-    document.getElementById("addType").value = "";
-    document.getElementById("addHandle").value = "";
-    document.getElementById("addNotes").value = "";
-    document.getElementById("addSongURL").value = "";
-    document.getElementById("addImageURL").value = "";
-  }
-
   <script type="module">
-  import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-  import { db } from "./path-to-your-config-or-global"; // You already set `db = getFirestore(app)` above
+  import {
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+  // You already defined window.db = getFirestore(app) earlier — reuse it
   window.submitCertifiedManually = async function () {
     const type = document.getElementById("addType").value.trim();
     const handle = document.getElementById("addHandle").value.trim();
@@ -1017,6 +1006,7 @@ setInterval(autoScrollMints, 4000);
         imageURL,
         stampedAt: Date.now()
       });
+
       closeAddCertifiedModal();
       showToast("Certified song added.");
     } catch (err) {
