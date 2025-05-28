@@ -538,7 +538,6 @@ async function connectWallet() {
     const address = await signer.getAddress();
 
     window.connectedWallet = address.toLowerCase();
-    window.connectedWallet = walletAddress;
     window.dispatchEvent(new Event("walletConnected"));
 
     const balance = await croProvider.getBalance(address);
