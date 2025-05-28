@@ -303,11 +303,13 @@ section, footer {
   <div class="bg-gray-900 p-6 rounded-lg w-[90%] max-w-md shadow-xl border border-pink-600">
     <h3 class="text-xl font-bold mb-4 text-pink-400">Manually Add Certified Submission</h3>
 
-    <input id="addType" type="text" placeholder="Type (Roast, Anthem, etc.)" class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm">
-    <input id="addHandle" type="text" placeholder="Handle (e.g. @user)" class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm">
-    <textarea id="addNotes" placeholder="Notes..." class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm"></textarea>
-    <input id="addSongURL" type="text" placeholder="Song URL (MP4 or MP3)" class="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white text-sm">
-    <input id="addImageURL" type="text" placeholder="Image URL (optional)" class="w-full mb-4 px-3 py-2 rounded bg-gray-800 text-white text-sm">
+<input id="addCertifiedHandle" placeholder="Handle">
+<input id="addCertifiedType" placeholder="Type">
+<input id="addCertifiedNotes" placeholder="Notes (optional)">
+<input id="addCertifiedSongURL" placeholder="Song URL">
+<input id="addCertifiedImageURL" placeholder="Image URL">
+
+<button onclick="addCertifiedManually()">Confirm</button>
 
     <div class="flex justify-between">
       <button onclick="closeAddCertifiedModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white text-sm">Cancel</button>
@@ -981,32 +983,52 @@ setInterval(autoScrollMints, 4000);
 </script> 
 
   <script type="module">
-  import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  window.submitCertifiedManually = async function () {
-    const type = document.getElementById("addType").value.trim();
-    const handle = document.getElementById("addHandle").value.trim();
-    const notes = document.getElementById("addNotes").value.trim();
-    const songURL = document.getElementById("addSongURL").value.trim();
-    const imageURL = document.getElementById("addImageURL").value.trim();
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
-    if (!type || !handle || !songURL) {
-      alert("Type, Handle, and Song URL are required.");
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.db = db;
+
+  window.addCertifiedManually = async function () {
+    const handle = document.getElementById("addCertifiedHandle").value.trim();
+    const type = document.getElementById("addCertifiedType").value.trim();
+    const notes = document.getElementById("addCertifiedNotes").value.trim();
+    const songURL = document.getElementById("addCertifiedSongURL").value.trim();
+    const imageURL = document.getElementById("addCertifiedImageURL").value.trim();
+
+    if (!handle || !type || !songURL) {
+      alert("Handle, Type, and Song URL are required.");
       return;
     }
 
     try {
-      await addDoc(collection(window.db, "stamped_requests"), {
-        type,
+      await addDoc(collection(db, "stamped_requests"), {
         handle,
+        type,
         notes,
         songURL,
         imageURL,
         stampedAt: Date.now()
       });
 
-      alert("Certified song added successfully.");
       document.getElementById("addCertifiedModal").classList.add("hidden");
+      alert("Certified song added.");
     } catch (err) {
       console.error("Manual Add Error", err);
       alert("Failed to add certified.");
