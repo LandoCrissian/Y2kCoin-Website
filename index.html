@@ -532,12 +532,12 @@ async function connectWallet() {
   try {
     if (!window.ethereum) throw new Error("MetaMask or Crypto.com DeFi Wallet not found.");
 
-    croProvider = new ethers.providers.Web3Provider(window.ethereum); // assign FIRST
+    croProvider = new ethers.providers.Web3Provider(window.ethereum);
     await croProvider.send("eth_requestAccounts", []);
     const signer = croProvider.getSigner();
     const address = await signer.getAddress();
 
-    window.connectedWallet = address.toLowerCase();
+    window.connectedWallet = address.toLowerCase(); // ✅ This is correct
     window.dispatchEvent(new Event("walletConnected"));
 
     const balance = await croProvider.getBalance(address);
