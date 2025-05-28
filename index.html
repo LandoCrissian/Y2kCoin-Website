@@ -992,7 +992,11 @@ setInterval(autoScrollMints, 4000);
     document.getElementById("addImageURL").value = "";
   }
 
-  async function submitCertifiedManually() {
+  <script type="module">
+  import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { db } from "./path-to-your-config-or-global"; // You already set `db = getFirestore(app)` above
+
+  window.submitCertifiedManually = async function () {
     const type = document.getElementById("addType").value.trim();
     const handle = document.getElementById("addHandle").value.trim();
     const notes = document.getElementById("addNotes").value.trim();
@@ -1005,7 +1009,7 @@ setInterval(autoScrollMints, 4000);
     }
 
     try {
-      await addDoc(collection(db, "stamped_requests"), {
+      await addDoc(collection(window.db, "stamped_requests"), {
         type,
         handle,
         notes,
@@ -1019,7 +1023,7 @@ setInterval(autoScrollMints, 4000);
       console.error("Manual Add Error", err);
       showToast("Failed to add certified.");
     }
-  }
+  };
 </script>
   
 </body>
