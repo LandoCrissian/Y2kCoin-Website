@@ -330,6 +330,13 @@ document.getElementById("editSection").prepend(shareBtn);
     </span>
   </div>
 
+  <div class="text-sm text-center text-gray-300 break-all mb-4">
+  Y2K Airdrop Wallet:  
+  <span id="y2kWallet" class="text-white font-mono cursor-pointer hover:underline">
+    0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d
+  </span>
+</div>
+
   <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
     <button onclick="airdropAll('Y2K')" class="btn w-full sm:w-auto">Airdrop Y2K to All</button>
     <button onclick="airdropAll('ROAST')" class="btn w-full sm:w-auto">Airdrop ROAST to All</button>
@@ -343,6 +350,11 @@ document.getElementById("editSection").prepend(shareBtn);
     navigator.clipboard.writeText("HQcgVnNacvvjK4ToX8Pcq2bKmD5s32XR6AarQ2EVrrpq");
     alert("ROAST airdrop wallet copied!");
   };
+
+  document.getElementById("y2kWallet").onclick = () => {
+  navigator.clipboard.writeText("0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d");
+  alert("Y2K airdrop wallet copied!");
+};
 
   const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
