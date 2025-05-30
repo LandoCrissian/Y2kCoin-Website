@@ -469,6 +469,7 @@ const earnings = count * 100000 + bonus + manualBonus;
     const wallet = doc.id;
     const x = data.xHandle || "@unknown";
     const solFull = data.solAddress || "—";
+    const croFull = data.croAddress || wallet; // Add this line
     const status = data.status || "pending";
     const updated = data.updated ? `<span class="badge updated ml-2">UPDATED</span>` : "";
 
@@ -480,6 +481,13 @@ const earnings = count * 100000 + bonus + manualBonus;
         <div class="space-y-1 text-sm">
           <div><strong>𝕏:</strong> ${x}</div>
           <div><strong>SOL:</strong> <span style="font-family:monospace; word-break:break-all;">${solFull}</span></div>
+          <div><strong>CRO:</strong> 
+          <span onclick="navigator.clipboard.writeText('${croFull}')" 
+          class="cursor-pointer text-cyan-400 hover:underline" 
+          style="font-family:monospace; word-break:break-all;">
+    ${croFull}
+  </span>
+</div>
           <div><strong>Live Y2K:</strong> <span id="bal-${wallet}">Loading...</span></div>
           <div class="mt-1"><strong>Status:</strong> <span class="badge ${status}">${status}</span> ${updated}</div>
         </div>
