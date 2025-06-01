@@ -537,28 +537,39 @@ window.editCertified = function (id, data) {
 </script>
   
 
-<!-- Wallet Connect + sendCRO (NO module) -->
+<!-- Wallet Connect + CRO Send -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
 let croProvider = null;
 
 async function connectWallet() {
-  if (!window.ethereum) throw new Error("Crypto wallet not detected.");
-  croProvider = new ethers.providers.Web3Provider(window.ethereum);
-  await croProvider.send("eth_requestAccounts", []);
-  const signer = croProvider.getSigner();
-  const address = await signer.getAddress();
-  window.connectedWallet = address.toLowerCase();
-  window.dispatchEvent(new Event("walletConnected"));
-  const balance = await croProvider.getBalance(address);
-  const formattedBalance = ethers.utils.formatEther(balance).slice(0, 6);
-  document.getElementById('walletStatus').innerHTML =
-    `Connected: ${address.slice(0, 6)}...${address.slice(-4)} (${formattedBalance} CRO)`;
-  if (window.loadSubmissions) window.loadSubmissions();
-  if (window.loadCertified) window.loadCertified();
+  try {
+    if (!window.ethereum) throw new Error("Crypto wallet not detected.");
+
+    croProvider = new ethers.providers.Web3Provider(window.ethereum);
+    await croProvider.send("eth_requestAccounts", []);
+    const signer = croProvider.getSigner();
+    const address = await signer.getAddress();
+
+    window.connectedWallet = address.toLowerCase();
+    window.croProvider = croProvider;
+    window.dispatchEvent(new Event("walletConnected"));
+
+    const balance = await croProvider.getBalance(address);
+    const formattedBalance = ethers.utils.formatEther(balance).slice(0, 6);
+    document.getElementById('walletStatus').innerHTML =
+      `Connected: ${address.slice(0, 6)}...${address.slice(-4)} (${formattedBalance} CRO)`;
+
+    if (typeof loadCertified === 'function') loadCertified();
+  } catch (err) {
+    console.error("Wallet Connect Error", err);
+    document.getElementById('walletStatus').innerHTML =
+      `<span class="text-red-400">✗ ${err.message}</span>`;
+  }
 }
 
 async function sendCRO(amount, toAddress) {
-  if (!croProvider) throw new Error("Wallet not connected.");
+  if (!window.croProvider) throw new Error("Wallet not connected.");
   const signer = croProvider.getSigner();
   const tx = await signer.sendTransaction({
     to: toAddress,
@@ -567,11 +578,22 @@ async function sendCRO(amount, toAddress) {
   return tx.hash;
 }
 
-// ✅ Expose globally so modules can use
 window.connectWallet = connectWallet;
 window.sendCRO = sendCRO;
+
+// ✅ ADD THIS RIGHT HERE
+window.addEventListener('walletConnected', () => {
+  if (typeof loadSubmissions === 'function') loadSubmissions();
+});
 </script>
 
+  <script>
+window.addEventListener('walletConnected', () => {
+  if (typeof loadSubmissions === 'function') loadSubmissions();
+  if (typeof loadCertified === 'function') loadCertified();
+});
+</script>
+  
   <script>
   const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase(); // Replace with your real admin wallet
   const checkAdminForCertified = () => {
