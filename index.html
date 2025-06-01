@@ -337,6 +337,16 @@ section, footer {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // Expose Firestore functions globally so all scripts can access them
+window.db = db;
+window.collection = collection;
+window.doc = doc;
+window.getDoc = getDoc;
+window.addDoc = addDoc;
+window.updateDoc = updateDoc;
+window.deleteDoc = deleteDoc;
+window.onSnapshot = onSnapshot;
+
   window.db = db;
   const liveContainer = document.getElementById("liveRequests");
   const certifiedContainer = document.getElementById("certifiedContainer");
