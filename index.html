@@ -429,10 +429,6 @@ if (isAdmin) {
   editBtn.className = "text-xs px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded";
   editBtn.onclick = () => window.editCertified(data.id, data);
 
-  // ✅ Append the button to your certified card's button group
-  div.querySelector(".flex.justify-center").appendChild(editBtn);
-}
-
   const actionBar = div.querySelector(`#swipe-actions-${data.id}`);
   if (actionBar) actionBar.appendChild(editBtn);
 }
