@@ -950,6 +950,46 @@ setInterval(autoScrollMints, 4000);
   <script type="module">
   import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+  // Import ethers
+  import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
+
+  let croProvider = null;
+
+  async function connectWallet() {
+    try {
+      if (!window.ethereum) throw new Error("Crypto wallet not found.");
+      croProvider = new ethers.providers.Web3Provider(window.ethereum);
+      await croProvider.send("eth_requestAccounts", []);
+      const signer = croProvider.getSigner();
+      const address = await signer.getAddress();
+      window.connectedWallet = address.toLowerCase();
+      window.dispatchEvent(new Event("walletConnected"));
+
+      const balance = await croProvider.getBalance(address);
+      const formattedBalance = ethers.utils.formatEther(balance).slice(0, 6);
+
+      document.getElementById('walletStatus').innerHTML =
+        `Connected: ${address.slice(0, 6)}...${address.slice(-4)} (${formattedBalance} CRO)`;
+
+      loadSubmissions();
+      loadCertified();
+    } catch (err) {
+      console.error("Wallet Connect Error", err);
+      document.getElementById('walletStatus').innerHTML =
+        `<span class="text-red-400">✗ ${err.message}</span>`;
+    }
+  }
+
+  async function sendCRO(amount, toAddress) {
+    if (!croProvider) throw new Error("Please connect your CRO wallet first.");
+    const signer = croProvider.getSigner();
+    const tx = await signer.sendTransaction({
+      to: toAddress,
+      value: ethers.utils.parseEther(amount)
+    });
+    return tx.hash;
+  }
+
   async function submitStudioRequest() {
     const type = document.getElementById('requestType').value;
     const handle = document.getElementById('handle').value.trim();
@@ -962,11 +1002,10 @@ setInterval(autoScrollMints, 4000);
       return;
     }
 
-    if (!window.croProvider) {
+    if (!croProvider) {
       try {
-        await window.connectWallet();
+        await connectWallet();
       } catch (err) {
-        console.error("Wallet error:", err);
         status.innerHTML = `<span class="text-red-400">Wallet not connected.</span>`;
         return;
       }
@@ -1001,6 +1040,7 @@ setInterval(autoScrollMints, 4000);
     }
   }
 
+  window.connectWallet = connectWallet;
   window.submitStudioRequest = submitStudioRequest;
 </script>
   
