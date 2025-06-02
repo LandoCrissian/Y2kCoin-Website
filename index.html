@@ -514,6 +514,20 @@ window.loadCertified = function () {
 </script>
 
   <script>
+  async function deleteRequest(id) {
+    if (!confirm("Are you sure you want to delete this submission?")) return;
+
+    try {
+      await deleteDoc(doc(window.db, "studio_requests", id));
+      showToast("Submission deleted.");
+    } catch (err) {
+      console.error("Delete Error", err);
+      showToast("Failed to delete submission.");
+    }
+  }
+</script>
+
+  <script>
 window.editCertified = function (id, data) {
   const songURL = prompt("Edit Song URL:", data.songURL || "");
   if (songURL === null) return;
