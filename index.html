@@ -279,6 +279,8 @@ section, footer {
     
     <input type="text" id="stampImageURL" placeholder="Image URL (optional)" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
 
+    <input type="text" id="stampBuyNftURL" placeholder="Buy NFT Link (optional)" class="w-full p-2 neon-border bg-black text-white text-sm rounded" />
+
     <div class="flex justify-between gap-4 pt-4">
       <button onclick="closeStampModal()" class="w-full glow-button text-sm bg-red-600 hover:bg-red-700">Cancel</button>
       <button onclick="confirmStamp()" class="w-full glow-button text-sm">Confirm Stamp</button>
@@ -494,12 +496,15 @@ window.loadCertified = function () {
     }
 
     try {
-      await addDoc(collection(window.db, "stamped_requests"), {
-        ...currentStampData,
-        songURL,
-        imageURL,
-        stampedAt: Date.now()
-      });
+      const buyNftURL = document.getElementById("stampBuyNftURL").value.trim();
+
+await addDoc(collection(window.db, "stamped_requests"), {
+  ...currentStampData,
+  songURL,
+  imageURL,
+  buyNftURL, // ✅ Include this field
+  stampedAt: Date.now()
+});
 
       await deleteDoc(doc(window.db, "studio_requests", currentStampId));
       closeStampModal();
@@ -511,12 +516,13 @@ window.loadCertified = function () {
   };
 
   window.closeStampModal = function () {
-    document.getElementById("stampSongURL").value = "";
-    document.getElementById("stampImageURL").value = "";
-    document.getElementById("stampModal").classList.add("hidden");
-    currentStampId = null;
-    currentStampData = null;
-  };
+  document.getElementById("stampSongURL").value = "";
+  document.getElementById("stampImageURL").value = "";
+  document.getElementById("stampBuyNftURL").value = ""; // ✅ clear new field too
+  document.getElementById("stampModal").classList.add("hidden");
+  currentStampId = null;
+  currentStampData = null;
+};
 </script>
 
   <script>
