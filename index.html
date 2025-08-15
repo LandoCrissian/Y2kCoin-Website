@@ -3,215 +3,163 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
-<title>Y2K • Bet-Fi on Cronos</title>
-<meta name="theme-color" content="#0a0a0a">
-<meta name="description" content="Y2K Bet-Fi Hub: live parlays, bankroll growth, and Cronos buybacks. Archive of project tracks & NFTs.">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Y2K Bet-Fi — Cronos</title>
+<meta name="theme-color" content="#0b0b0c">
+<meta name="description" content="Y2K Bet-Fi on Cronos. Transparent bets. Bankroll growth. Buybacks for Y2K.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  :root{--accent:#ff00ff}
-  html{background:#0a0a0a}
-  body{color:#e2e8f0;font-family:'Rubik',sans-serif;overflow-x:hidden}
-  .neon-text{font-family:'Orbitron',sans-serif;text-shadow:0 0 6px var(--accent),0 0 12px var(--accent)}
-  .neon{border:2px solid var(--accent);box-shadow:0 0 12px var(--accent);border-radius:12px}
-  .glass{background:rgba(255,255,255,.04);backdrop-filter:blur(10px);border-radius:14px}
-  .btn{border:1px solid var(--accent);background:rgba(255,0,255,.12);border-radius:10px;padding:.7rem 1.1rem;font-weight:700}
-  .btn:hover{background:rgba(255,0,255,.22);box-shadow:0 0 18px var(--accent)}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-  .kpi{border:1px solid rgba(255,255,255,.1)}
-  .tag{border:1px dashed rgba(255,0,255,.5);padding:.3rem .6rem;border-radius:999px;font-size:.75rem}
-  .chip{font-size:.7rem;padding:.25rem .5rem;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
-  .chip.win{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.4)}
-  .chip.loss{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.4)}
-  .chip.live{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.4)}
-  .chip.pending{background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.4)}
+  :root{
+    --bg:#0b0b0c; --card:#121316; --muted:#16171b; --text:#f3f4f6; --sub:#b9beca;
+    --gold:#d4af37; --gold-2:#b9972a; --line:rgba(255,255,255,.08);
+  }
+  html,body{background:var(--bg); color:var(--text); font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 25%),var(--card); border:1px solid var(--line); border-radius:14px;}
+  .btn{border:1px solid var(--line); background:linear-gradient(180deg,#1a1b1f,#131419); border-radius:10px; padding:.7rem 1rem; font-weight:600}
+  .btn:hover{border-color:rgba(212,175,55,.35)}
+  .btn-gold{background:linear-gradient(180deg,var(--gold),var(--gold-2)); color:#111; border-color:transparent}
+  .kpi-label{font-size:.72rem; letter-spacing:.02em; color:var(--sub)}
+  .kpi-value{font-size:1.4rem; font-weight:700}
+  .chip{font-size:.7rem; padding:.2rem .5rem; border-radius:999px; border:1px solid var(--line)}
+  .chip.win{background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.35); color:#d1fae5}
+  .chip.loss{background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.35); color:#ffe2e2}
+  .chip.live{background:rgba(16,185,129,.12); border-color:rgba(16,185,129,.35); color:#d7fff1}
+  .chip.pending{background:rgba(245,158,11,.12); border-color:rgba(245,158,11,.35); color:#fff3da}
+  .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
+  .gold-text{color:var(--gold)}
+  .divider{height:1px; background:var(--line)}
 </style>
 </head>
-<body class="relative">
+<body>
 
-<!-- Top strip -->
-<div class="fixed top-0 left-0 w-full z-40 text-center text-xs sm:text-sm py-2 bg-gradient-to-r from-pink-500 via-fuchsia-600 to-purple-700 font-semibold">
-  CROFAM • Y2K Bet-Fi on Cronos • Wins fuel $Y2K buybacks
-</div>
+<!-- Top Bar -->
+<header class="sticky top-0 z-40 border-b border-[color:var(--line)] bg-[color:rgba(11,11,12,.65)] backdrop-blur">
+  <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded bg-[color:var(--gold)]"></div>
+      <div class="text-sm uppercase tracking-wide text-[color:var(--sub)]">Y2K • Bet-Fi</div>
+    </div>
+    <nav class="hidden sm:flex items-center gap-2">
+      <a href="#bets" class="btn text-sm">Live Bets</a>
+      <a href="#buybacks" class="btn text-sm">Buyback Ledger</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="btn btn-gold text-sm">Buy Y2K</a>
+    </nav>
+  </div>
+</header>
 
-<main class="pt-16">
-
-  <!-- HERO -->
-  <section class="px-4 py-8 max-w-6xl mx-auto">
-    <div class="grid lg:grid-cols-2 gap-5 items-center">
+<main>
+  <!-- Hero -->
+  <section class="max-w-6xl mx-auto px-4 pt-8 pb-6">
+    <div class="grid md:grid-cols-2 gap-6 items-center">
       <div>
-        <div class="tag inline-flex items-center gap-2 mb-3">New • Transparent on-chain betting</div>
-        <h1 class="neon-text text-4xl sm:text-5xl font-extrabold leading-tight">Flip bets. Buy back harder.</h1>
-        <p class="text-gray-300 mt-3">We run a public betting ladder. Every win powers <span class="text-pink-400">$Y2K</span> buybacks on the <span class="font-semibold">Cronos</span> network. Full receipts. No submissions. Music & NFTs stay as our origin story.</p>
-        <div class="flex flex-wrap gap-3 mt-5">
-          <a href="#bets" class="btn">📈 View Live Bets</a>
-          <a href="#buybacks" class="btn">💜 Buyback Ledger</a>
-          <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="btn">🟣 Buy $Y2K</a>
+        <h1 class="text-3xl md:text-4xl font-bold leading-tight">Professional Bet-Fi on <span class="gold-text">Cronos</span></h1>
+        <p class="text-[color:var(--sub)] mt-3">Transparent slips. Disciplined bankroll. A fixed share of wins purchases <span class="gold-text">$Y2K</span> on-chain. No fluff—just the numbers.</p>
+        <div class="flex gap-2 mt-4">
+          <a href="#bets" class="btn">View Bets</a>
+          <a href="#buybacks" class="btn">Ledger</a>
         </div>
       </div>
-      <div class="glass p-4 neon">
-        <img alt="Y2K emblem" class="w-full rounded-lg" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_5445.jpeg">
+      <div class="card p-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
+            <div class="kpi-label">Bankroll</div>
+            <div id="kpi-bankroll" class="kpi-value mono">$—</div>
+          </div>
+          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
+            <div class="kpi-label">Buybacks</div>
+            <div id="kpi-buybacks" class="kpi-value mono">$—</div>
+          </div>
+          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
+            <div class="kpi-label">Hit Rate</div>
+            <div id="kpi-hitrate" class="kpi-value mono">—%</div>
+          </div>
+          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
+            <div class="kpi-label">Best Payout</div>
+            <div id="kpi-best" class="kpi-value mono">$—</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- KPIs -->
-  <section class="px-4 pb-6 max-w-6xl mx-auto">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <div class="glass kpi p-4"><div class="text-xs text-gray-400">Live Bankroll</div><div id="kpi-bankroll" class="text-2xl font-bold mono">$—</div></div>
-      <div class="glass kpi p-4"><div class="text-xs text-gray-400">Total Buybacks</div><div id="kpi-buybacks" class="text-2xl font-bold mono">$—</div></div>
-      <div class="glass kpi p-4"><div class="text-xs text-gray-400">Hit Rate</div><div id="kpi-hitrate" class="text-2xl font-bold mono">—%</div></div>
-      <div class="glass kpi p-4"><div class="text-xs text-gray-400">Best Payout</div><div id="kpi-best" class="text-2xl font-bold mono">$—</div></div>
-    </div>
-  </section>
-
-  <!-- LIVE BETS + BUYBACKS -->
-  <section id="bets" class="px-4 pb-4 max-w-6xl mx-auto grid lg:grid-cols-2 gap-4">
+  <!-- Bets + Buybacks -->
+  <section id="bets" class="max-w-6xl mx-auto px-4 pb-6 grid lg:grid-cols-2 gap-4">
     <!-- Bets -->
-    <div class="glass p-4 neon">
+    <div class="card p-4">
       <div class="flex items-center justify-between mb-2">
-        <h2 class="text-xl font-bold">Live Bets & Results</h2>
-        <div class="flex items-center gap-2">
-          <button id="btn-add-bet" class="btn text-xs px-3 py-1">+ Add Bet</button>
-        </div>
+        <h2 class="text-lg font-semibold">Live Bets & Results</h2>
+        <button id="btn-add-bet" class="btn text-xs px-3 py-1">+ Add Bet</button>
       </div>
       <div id="betsList" class="space-y-2"></div>
     </div>
 
     <!-- Buybacks -->
-    <div id="buybacks" class="glass p-4 neon">
+    <div id="buybacks" class="card p-4">
       <div class="flex items-center justify-between mb-2">
-        <h2 class="text-xl font-bold">Buyback Ledger (Cronos)</h2>
+        <h2 class="text-lg font-semibold">Buyback Ledger</h2>
         <button id="btn-add-buyback" class="btn text-xs px-3 py-1">+ Add Buyback</button>
       </div>
       <div id="buybacksList" class="space-y-2"></div>
     </div>
   </section>
 
-  <!-- WINS TIMELINE -->
-  <section class="px-4 pb-8 max-w-6xl mx-auto">
-    <div class="glass p-4">
+  <!-- Wins -->
+  <section class="max-w-6xl mx-auto px-4 pb-10">
+    <div class="card p-4">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="text-lg font-bold">Recent Big Wins</h3>
-        <span class="text-xs text-gray-400">Auto-populated</span>
+        <h3 class="font-semibold">Recent Big Wins</h3>
+        <span class="text-xs text-[color:var(--sub)]">Auto-generated from bet results</span>
       </div>
-      <div id="winsTimeline" class="space-y-3"></div>
+      <div id="winsTimeline" class="space-y-2"></div>
     </div>
   </section>
-
-  <!-- ARCHIVE: PROJECT TRACKS + NFTS -->
-  <section class="px-4 pb-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-4">
-    <!-- Project Tracks (keep created songs only) -->
-    <div class="glass p-4 neon">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-bold">Project Tracks (Archive)</h3>
-        <a href="#faq" class="text-xs underline">Why archived?</a>
-      </div>
-      <p class="text-sm text-gray-400 mt-1">Our origin: commissioned tracks, anthems, and theme music we already created.</p>
-      <div id="tracksList" class="grid sm:grid-cols-2 gap-3 mt-3">
-        <!-- Add any fixed items you want to showcase permanently -->
-        <div class="glass p-2">
-          <div class="font-semibold text-sm">GLITCH MOB INITIATION — CROPRO ANTHEM</div>
-          <audio controls class="w-full mt-2"></audio>
-        </div>
-        <div class="glass p-2">
-          <div class="font-semibold text-sm">ManeCityAI — Official Anthem</div>
-          <audio controls class="w-full mt-2"></audio>
-        </div>
-      </div>
-    </div>
-
-    <!-- NFTs -->
-    <div class="glass p-4 neon">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-bold">Project NFTs</h3>
-        <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="text-xs underline">Vault →</a>
-      </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
-        <a href="https://eric-mode-business-boomin.nfts2.me/" target="_blank" class="glass p-2">
-          <img class="rounded mb-2" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5510.jpeg" alt="ERIC">
-          <div class="text-sm font-semibold">ERIC</div><div class="text-xs text-gray-400">The original anthem</div>
-        </a>
-        <a href="https://cronoshadow.nfts2.me/" target="_blank" class="glass p-2">
-          <img class="rounded mb-2" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5403.jpeg" alt="Cards">
-          <div class="text-sm font-semibold">Cards of Cronos</div><div class="text-xs text-gray-400">Your on-chain fate</div>
-        </a>
-        <a href="https://dojo-warriors-anthem.nfts2.me/" target="_blank" class="glass p-2">
-          <img class="rounded mb-2" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5285.jpeg" alt="DOJO">
-          <div class="text-sm font-semibold">DOJO</div><div class="text-xs text-gray-400">Discipline & chaos</div>
-        </a>
-        <a href="https://creative-diamondhands-final-strike-mode.nfts2.me/" target="_blank" class="glass p-2">
-          <img class="rounded mb-2" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_5299.jpeg" alt="DiamondHands">
-          <div class="text-sm font-semibold">DiamondHands</div><div class="text-xs text-gray-400">Final Strike Mode</div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ROADMAP + FAQ -->
-  <section id="faq" class="px-4 pb-16 max-w-6xl mx-auto grid lg:grid-cols-2 gap-4">
-    <div class="glass p-4 neon">
-      <h3 class="text-lg font-bold mb-2">Roadmap</h3>
-      <ul class="text-sm text-gray-300 space-y-2">
-        <li>✅ Public Bet-Fi launch (this site)</li>
-        <li>✅ Buyback ledger goes live (Cronos links)</li>
-        <li>➡️ Live Sweat console (real-time odds & alerts)</li>
-        <li>➡️ Community Picks voting (token-gated)</li>
-        <li>➡️ Auto bankroll rules & risk dashboard</li>
-      </ul>
-    </div>
-    <div class="glass p-4 neon">
-      <h3 class="text-lg font-bold mb-2">FAQ</h3>
-      <div class="text-sm text-gray-300 space-y-2">
-        <p><span class="font-semibold">What happened to submissions?</span><br> We sunset the studio intake. Music we already made stays in the archive.</p>
-        <p><span class="font-semibold">How do buybacks work?</span><br> A fixed % of wins is used to market-buy $Y2K on Cronos. Every tx is posted.</p>
-        <p><span class="font-semibold">Is this financial advice?</span><br> No. This is entertainment + transparency. Parlays are high risk.</p>
-      </div>
-    </div>
-  </section>
-
 </main>
 
-<!-- FOOTER -->
-<footer class="py-8 text-center text-xs text-gray-400">
-  <div class="mb-3">© <span id="year"></span> Y2K • Built for CROFAM • Bet-Fi on Cronos</div>
-  <div class="flex justify-center gap-4 text-white">
-    <a href="https://discord.gg/XxtpYNXX4a" target="_blank" class="hover:text-pink-400">Discord</a>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank" class="hover:text-pink-400">𝕏</a>
-    <a href="https://y2k-the-vault.netlify.app/" target="_blank" class="hover:text-pink-400">Vault</a>
+<!-- Footer -->
+<footer class="border-t border-[color:var(--line)]">
+  <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-[color:var(--sub)] flex flex-col md:flex-row items-center justify-between gap-3">
+    <div>© <span id="year"></span> Y2K • Bet-Fi on Cronos</div>
+    <div class="flex items-center gap-4">
+      <a class="hover:underline" href="https://discord.gg/XxtpYNXX4a" target="_blank">Discord</a>
+      <a class="hover:underline" href="https://x.com/y2kc0in?s=21" target="_blank">X</a>
+      <a class="hover:underline" href="https://y2k-the-vault.netlify.app/" target="_blank">Vault (Archive)</a>
+    </div>
   </div>
 </footer>
 
-<!-- Admin: Add Bet Modal -->
-<div id="betModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center px-4">
-  <div class="bg-gray-900 border border-pink-600 rounded-xl w-full max-w-md p-5 space-y-3">
-    <h3 class="text-lg font-bold text-pink-400">Add Bet</h3>
-    <input id="betTitle" class="w-full p-2 neon bg-black text-white text-sm rounded" placeholder="Title (e.g., 3-Leg HR Parlay)">
-    <input id="betMarket" class="w-full p-2 neon bg-black text-white text-sm rounded" placeholder="Market / Odds (e.g., HR Parlay • +6600)">
-    <input id="betPayout" class="w-full p-2 neon bg-black text-white text-sm rounded" placeholder="Potential payout USD (e.g., 666)">
-    <div class="flex gap-2 pt-2">
-      <button id="saveBetBtn" class="btn w-full text-sm">Save</button>
-      <button id="closeBetBtn" class="btn w-full text-sm bg-red-600">Cancel</button>
+<!-- Modals -->
+<div id="betModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 p-4 z-50">
+  <div class="card w-full max-w-md p-5">
+    <h3 class="text-lg font-semibold mb-3">Add Bet</h3>
+    <div class="grid gap-2">
+      <input id="betTitle" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Title (e.g., 3-Leg HR Parlay)">
+      <input id="betMarket" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Market / Odds (e.g., HR Parlay • +6600)">
+      <input id="betPayout" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Potential payout USD">
+    </div>
+    <div class="flex gap-2 justify-end mt-4">
+      <button id="saveBetBtn" class="btn text-sm">Save</button>
+      <button id="closeBetBtn" class="btn text-sm">Close</button>
     </div>
   </div>
 </div>
 
-<!-- Admin: Add Buyback Modal -->
-<div id="buybackModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center px-4">
-  <div class="bg-gray-900 border border-pink-600 rounded-xl w-full max-w-md p-5 space-y-3">
-    <h3 class="text-lg font-bold text-pink-400">Add Buyback</h3>
-    <input id="bbUSD" class="w-full p-2 neon bg-black text-white text-sm rounded" placeholder="USD amount (e.g., 250)">
-    <input id="bbAmount" class="w-full p-2 neon bg-black text-white text-sm rounded" placeholder="Y2K amount (e.g., 120000)">
-    <input id="bbTx" class="w-full p-2 neon bg-black text-white text-sm rounded" placeholder="Cronoscan tx URL">
-    <input id="bbNote" class="w-full p-2 neon bg-black text-white text-sm rounded" placeholder="Note (optional)">
-    <div class="flex gap-2 pt-2">
-      <button id="saveBuybackBtn" class="btn w-full text-sm">Save</button>
-      <button id="closeBuybackBtn" class="btn w-full text-sm bg-red-600">Cancel</button>
+<div id="buybackModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 p-4 z-50">
+  <div class="card w-full max-w-md p-5">
+    <h3 class="text-lg font-semibold mb-3">Add Buyback</h3>
+    <div class="grid gap-2">
+      <input id="bbUSD" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="USD amount">
+      <input id="bbAmount" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Y2K amount">
+      <input id="bbTx" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Cronoscan tx URL">
+      <input id="bbNote" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Note (optional)">
+    </div>
+    <div class="flex gap-2 justify-end mt-4">
+      <button id="saveBuybackBtn" class="btn text-sm">Save</button>
+      <button id="closeBuybackBtn" class="btn text-sm">Close</button>
     </div>
   </div>
 </div>
 
-<!-- Firebase + App -->
+<!-- Firebase + Logic -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import {
@@ -219,7 +167,7 @@
     collection, addDoc, onSnapshot, query, orderBy, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  // ===== Config (same project) =====
+  // --- Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
     authDomain: "y2kroast-512ee.firebaseapp.com",
@@ -231,164 +179,130 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // ===== Globals =====
-  const ADMIN_WALLET = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100".toLowerCase();
-  let connected = ""; // optional: you can wire a wallet connect later
-
-  // ===== UI refs =====
-  const kpiBankroll = document.getElementById('kpi-bankroll');
-  const kpiBuybacks= document.getElementById('kpi-buybacks');
-  const kpiHitRate = document.getElementById('kpi-hitrate');
-  const kpiBest    = document.getElementById('kpi-best');
-  const betsList   = document.getElementById('betsList');
-  const buybacksList = document.getElementById('buybacksList');
-  const winsTimeline = document.getElementById('winsTimeline');
+  // --- UI refs
+  const K = {
+    bankroll: document.getElementById('kpi-bankroll'),
+    buybacks: document.getElementById('kpi-buybacks'),
+    hitrate:  document.getElementById('kpi-hitrate'),
+    best:     document.getElementById('kpi-best'),
+  };
+  const lists = {
+    bets: document.getElementById('betsList'),
+    buy:  document.getElementById('buybacksList'),
+    wins: document.getElementById('winsTimeline')
+  };
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ===== Helpers =====
+  // --- helpers
   const fmtUSD = n => (n==null||isNaN(n)) ? "$—" : Number(n).toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0});
-  const tsTxt  = t => t?.toDate ? t.toDate().toLocaleString() : "";
+  const tsTxt = t => t?.toDate ? t.toDate().toLocaleString() : "";
 
-  // ===== Stats stream =====
-  const statsRef = doc(db,"stats","bankroll");
-  onSnapshot(statsRef,(snap)=>{
+  // --- Stats stream
+  const statsRef = doc(db, "stats", "bankroll");
+  onSnapshot(statsRef, (snap)=>{
     const s = snap.exists()? snap.data() : {bankroll:0,buybacksUSD:0,hitRate:0,bestPayout:0};
-    kpiBankroll.textContent = fmtUSD(s.bankroll||0);
-    kpiBuybacks.textContent = fmtUSD(s.buybacksUSD||0);
-    kpiHitRate.textContent  = (s.hitrateText) ? s.hitrateText : ((s.hitRate||0)*100).toFixed(1)+"%";
-    kpiBest.textContent     = fmtUSD(s.bestPayout||0);
+    K.bankroll.textContent = fmtUSD(s.bankroll||0);
+    K.buybacks.textContent = fmtUSD(s.buybacksUSD||0);
+    K.hitrate.textContent  = ((s.hitRate||0)*100).toFixed(1) + "%";
+    K.best.textContent     = fmtUSD(s.bestPayout||0);
   });
 
-  // ===== Bets stream =====
+  // --- Bets stream
   const betsQ = query(collection(db,"bets"), orderBy("ts","desc"));
-  onSnapshot(betsQ,(snap)=>{
-    betsList.innerHTML = snap.empty? `<div class="text-sm text-gray-400">No bets yet.</div>` : "";
-    winsTimeline.innerHTML = "";
+  onSnapshot(betsQ, (snap)=>{
+    lists.bets.innerHTML = snap.empty ? `<div class="text-sm text-[color:var(--sub)]">No bets yet.</div>` : "";
+    lists.wins.innerHTML = "";
     snap.docs.forEach(d=>{
       const b = { id:d.id, ...d.data() };
       const status = (b.status||"pending").toLowerCase();
-      const chipCls = status==="win"?"chip win":status==="loss"?"chip loss":status==="live"?"chip live":"chip pending";
-      // row
+      const chip =
+        status === "win"   ? "chip win" :
+        status === "loss"  ? "chip loss" :
+        status === "live"  ? "chip live" :
+                             "chip pending";
+
       const row = document.createElement('div');
-      row.className = "flex items-center justify-between gap-3 p-3 rounded-lg bg-black/40 border border-white/10";
+      row.className = "flex items-center justify-between gap-3 p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]";
       row.innerHTML = `
         <div>
           <div class="font-semibold">${b.title||"—"}</div>
-          <div class="text-xs text-gray-400">${b.market||""} • ${tsTxt(b.ts)}</div>
+          <div class="text-xs text-[color:var(--sub)]">${b.market||""} • ${tsTxt(b.ts)}</div>
         </div>
         <div class="flex items-center gap-2">
-          <span class="${chipCls}">${(b.status||"PENDING").toUpperCase()}</span>
-          <div class="mono">${b.payout? fmtUSD(b.payout):""}</div>
-          ${ (connected.toLowerCase()===ADMIN_WALLET)
-            ? `<button data-live class="text-xs px-2 py-1 bg-emerald-700 rounded">Live</button>
-               <button data-win class="text-xs px-2 py-1 bg-green-700 rounded">Win</button>
-               <button data-loss class="text-xs px-2 py-1 bg-red-700 rounded">Loss</button>`
-            : "" }
-        </div>`;
-      // admin actions
-      if (connected.toLowerCase()===ADMIN_WALLET){
-        row.querySelector('[data-live]')?.addEventListener('click',()=>updateDoc(doc(db,"bets",b.id),{status:"live"}));
-        row.querySelector('[data-win]') ?.addEventListener('click',()=>resolveBet(b.id,"win",b.payout));
-        row.querySelector('[data-loss]')?.addEventListener('click',()=>resolveBet(b.id,"loss",0));
-      }
-      betsList.appendChild(row);
+          <span class="${chip}">${(b.status||"PENDING").toUpperCase()}</span>
+          <div class="mono">${b.payout ? fmtUSD(b.payout) : ""}</div>
+        </div>
+      `;
+      lists.bets.appendChild(row);
 
-      // wins timeline (only wins)
-      if (status==="win"){
-        const t = document.createElement('div');
-        t.className = "flex items-center justify-between p-3 rounded-lg bg-black/30 border border-green-700/40";
-        t.innerHTML = `<div class="text-sm">${b.title||"—"} <span class="text-gray-400">• ${b.market||""}</span></div>
-                       <div class="mono font-bold text-green-400">${fmtUSD(b.payout||0)}</div>`;
-        winsTimeline.appendChild(t);
+      if(status==="win"){
+        const win = document.createElement('div');
+        win.className = "flex items-center justify-between p-3 rounded bg-[color:var(--muted)] border border-green-600/30";
+        win.innerHTML = `<div class="text-sm">${b.title||"—"} <span class="text-[color:var(--sub)]">• ${b.market||""}</span></div>
+                         <div class="mono font-semibold text-green-400">${fmtUSD(b.payout||0)}</div>`;
+        lists.wins.appendChild(win);
       }
     });
   });
 
-  // ===== Buybacks stream =====
+  // --- Buybacks stream
   const buyQ = query(collection(db,"buybacks"), orderBy("ts","desc"));
-  onSnapshot(buyQ,(snap)=>{
-    buybacksList.innerHTML = snap.empty? `<div class="text-sm text-gray-400">No buybacks yet.</div>` : "";
+  onSnapshot(buyQ, (snap)=>{
+    lists.buy.innerHTML = snap.empty ? `<div class="text-sm text-[color:var(--sub)]">No buybacks yet.</div>` : "";
     snap.docs.forEach(d=>{
       const x = { id:d.id, ...d.data() };
       const row = document.createElement('div');
-      row.className = "flex items-center justify-between gap-3 p-3 rounded-lg bg-black/40 border border-white/10";
+      row.className = "flex items-center justify-between gap-3 p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]";
       row.innerHTML = `
         <div>
           <div class="font-semibold">Buyback ${fmtUSD(x.usd||0)}</div>
-          <div class="text-xs text-gray-400">${x.note||"Automated"} • ${tsTxt(x.ts)}</div>
+          <div class="text-xs text-[color:var(--sub)]">${x.note||"Automated"} • ${tsTxt(x.ts)}</div>
         </div>
         <div class="flex items-center gap-2">
-          <div class="mono text-sm">${x.amount? `${x.amount} Y2K`:""}</div>
-          ${x.tx? `<a class="text-xs px-2 py-1 bg-purple-700 rounded" href="${x.tx}" target="_blank" rel="noopener">Tx</a>`:""}
-        </div>`;
-      buybacksList.appendChild(row);
+          <div class="mono text-sm">${x.amount ? `${x.amount} Y2K` : ""}</div>
+          ${x.tx ? `<a href="${x.tx}" target="_blank" rel="noopener" class="btn text-xs px-2 py-1">Tx</a>` : ""}
+        </div>
+      `;
+      lists.buy.appendChild(row);
     });
   });
 
-  // ===== Admin buttons (simple show/hide if you later wire a wallet) =====
-  function toggleAdmin(){
-    const show = (connected.toLowerCase()===ADMIN_WALLET);
-    const a = document.getElementById('btn-add-bet');
-    const b = document.getElementById('btn-add-buyback');
-    if(a) a.style.display = show? 'inline-flex':'none';
-    if(b) b.style.display = show? 'inline-flex':'none';
-  }
-  toggleAdmin(); // hidden by default
-
-  // ===== Modals helpers =====
+  // --- Admin modals (optional): remove this block if you don’t want inline creation
   const betModal = document.getElementById('betModal');
   const buyModal = document.getElementById('buybackModal');
-  const show = el => el?.classList.replace('hidden','flex');
-  const hide = el => el?.classList.replace('flex','hidden');
-
+  const show = el => el?.classList.replace("hidden","flex");
+  const hide = el => el?.classList.replace("flex","hidden");
   document.getElementById('btn-add-bet')?.addEventListener('click',()=>show(betModal));
   document.getElementById('closeBetBtn')?.addEventListener('click',()=>hide(betModal));
   document.getElementById('btn-add-buyback')?.addEventListener('click',()=>show(buyModal));
   document.getElementById('closeBuybackBtn')?.addEventListener('click',()=>hide(buyModal));
 
-  // ===== Add Bet / Buyback =====
   document.getElementById('saveBetBtn')?.addEventListener('click', async ()=>{
     const title  = document.getElementById('betTitle').value.trim();
     const market = document.getElementById('betMarket').value.trim();
     const payout = Number(document.getElementById('betPayout').value.trim());
-    if(!title) return alert('Title required');
-    await addDoc(collection(db,'bets'), { title, market, payout:isNaN(payout)?null:payout, status:'pending', ts:serverTimestamp() });
-    ['betTitle','betMarket','betPayout'].forEach(id=>document.getElementById(id).value="");
+    if(!title) return alert("Title required");
+    await addDoc(collection(db,"bets"), { title, market, payout: isNaN(payout)? null : payout, status:"pending", ts: serverTimestamp() });
+    ["betTitle","betMarket","betPayout"].forEach(id=>document.getElementById(id).value="");
     hide(betModal);
   });
 
   document.getElementById('saveBuybackBtn')?.addEventListener('click', async ()=>{
-    const usd    = Number(document.getElementById('bbUSD').value.trim());
+    const usd = Number(document.getElementById('bbUSD').value.trim());
     const amount = Number(document.getElementById('bbAmount').value.trim());
-    const tx     = document.getElementById('bbTx').value.trim();
-    const note   = document.getElementById('bbNote').value.trim();
-    await addDoc(collection(db,'buybacks'), { usd:isNaN(usd)?0:usd, amount:isNaN(amount)?0:amount, tx, note, ts:serverTimestamp() });
+    const tx = document.getElementById('bbTx').value.trim();
+    const note = document.getElementById('bbNote').value.trim();
+    await addDoc(collection(db,"buybacks"), { usd:isNaN(usd)?0:usd, amount:isNaN(amount)?0:amount, tx, note, ts: serverTimestamp() });
 
-    // bump cumulative buybacksUSD
+    // bump cumulative buybacks in stats
     const sSnap = await getDoc(statsRef);
     const curr = sSnap.exists()? (sSnap.data().buybacksUSD||0) : 0;
     await setDoc(statsRef, { buybacksUSD: curr + (isNaN(usd)?0:usd) }, { merge:true });
 
-    ['bbUSD','bbAmount','bbTx','bbNote'].forEach(id=>document.getElementById(id).value="");
+    ["bbUSD","bbAmount","bbTx","bbNote"].forEach(id=>document.getElementById(id).value="");
     hide(buyModal);
   });
-
-  // ===== Resolve bet -> update stats (wins/losses/hit rate, best payout, bankroll optional) =====
-  async function resolveBet(id,status,payout=0){
-    await updateDoc(doc(db,'bets',id), { status });
-    const sSnap = await getDoc(statsRef);
-    const s = sSnap.exists()? sSnap.data() : { wins:0, losses:0, hitRate:0, bestPayout:0, bankroll:0 };
-    const wins   = (s.wins||0)   + (status==='win'?1:0);
-    const losses = (s.losses||0) + (status==='loss'?1:0);
-    const hitRate = (wins+losses)? wins/(wins+losses) : 0;
-    const bestPayout = Math.max(s.bestPayout||0, Number(payout)||0);
-
-    await setDoc(statsRef, { wins, losses, hitRate, bestPayout }, { merge:true });
-
-    // OPTIONAL bankroll math (manual or auto):
-    // const bankroll = Number(s.bankroll||0) + (status==='win'? Number(payout||0) : 0);
-    // await setDoc(statsRef, { bankroll }, { merge:true });
-  }
 </script>
+
 </body>
 </html>
