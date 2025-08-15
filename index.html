@@ -3,78 +3,213 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
-<title>Y2K Bet-Fi — Cronos</title>
-<meta name="theme-color" content="#0b0b0c">
-<meta name="description" content="Y2K Bet-Fi on Cronos. Transparent bets. Bankroll growth. Buybacks for Y2K.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Y2K Bet-Fi — Premium Sports Trading</title>
+<meta name="theme-color" content="#0a0c14">
+<meta name="description" content="Y2K Bet-Fi on Cronos. Professional sports trading platform with transparent analytics and automated buybacks.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  :root{
-    --bg:#0b0b0c; --card:#121316; --muted:#16171b; --text:#f3f4f6; --sub:#b9beca;
-    --gold:#d4af37; --gold-2:#b9972a; --line:rgba(255,255,255,.08);
+  :root {
+    --bg: #0a0c14;
+    --card: #12141c;
+    --muted: #1a1c24;
+    --text: #ffffff;
+    --sub: #9ca3af;
+    --gold: #f7b84b;
+    --gold-2: #f59e0b;
+    --line: rgba(255,255,255,.12);
+    --primary: #00824b;
+    --primary-dark: #006f40;
+    --gradient-card: linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.01) 100%);
+    --gradient-btn: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+    --shadow-card: 0 8px 32px rgba(0,0,0,.2);
   }
-  html,body{background:var(--bg); color:var(--text); font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;}
-  .card{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 25%),var(--card); border:1px solid var(--line); border-radius:14px;}
-  .btn{border:1px solid var(--line); background:linear-gradient(180deg,#1a1b1f,#131419); border-radius:10px; padding:.7rem 1rem; font-weight:600}
-  .btn:hover{border-color:rgba(212,175,55,.35)}
-  .btn-gold{background:linear-gradient(180deg,var(--gold),var(--gold-2)); color:#111; border-color:transparent}
-  .kpi-label{font-size:.72rem; letter-spacing:.02em; color:var(--sub)}
-  .kpi-value{font-size:1.4rem; font-weight:700}
-  .chip{font-size:.7rem; padding:.2rem .5rem; border-radius:999px; border:1px solid var(--line)}
-  .chip.win{background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.35); color:#d1fae5}
-  .chip.loss{background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.35); color:#ffe2e2}
-  .chip.live{background:rgba(16,185,129,.12); border-color:rgba(16,185,129,.35); color:#d7fff1}
-  .chip.pending{background:rgba(245,158,11,.12); border-color:rgba(245,158,11,.35); color:#fff3da}
-  .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
-  .gold-text{color:var(--gold)}
-  .divider{height:1px; background:var(--line)}
+  
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+  }
+  
+  .card {
+    background: var(--gradient-card), var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+  }
+  
+  .btn {
+    background: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: .75rem 1.25rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  
+  .btn:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+  }
+  
+  .btn-primary {
+    background: var(--gradient-btn);
+    color: white;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    opacity: 0.9;
+    border: none;
+  }
+  
+  .kpi-label {
+    font-size: .75rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: var(--sub);
+    text-transform: uppercase;
+  }
+  
+  .kpi-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #fff 0%, #f7f7f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .chip {
+    font-size: .7rem;
+    font-weight: 600;
+    padding: .3rem .7rem;
+    border-radius: 6px;
+  }
+  
+  .chip.win {
+    background: rgba(0,130,75,.15);
+    color: #4ade80;
+  }
+  
+  .chip.loss {
+    background: rgba(239,68,68,.15);
+    color: #fca5a5;
+  }
+  
+  .chip.live {
+    background: rgba(59,130,246,.15);
+    color: #93c5fd;
+  }
+  
+  .chip.pending {
+    background: rgba(245,158,11,.15);
+    color: #fcd34d;
+  }
+  
+  .mono {
+    font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+  }
+  
+  .premium-text {
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  input {
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: white;
+    transition: all 0.2s ease;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(255,255,255,.05);
+  }
+  
+  .hover-scale {
+    transition: transform 0.2s ease;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--muted);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
 </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
 <!-- Top Bar -->
-<header class="sticky top-0 z-40 border-b border-[color:var(--line)] bg-[color:rgba(11,11,12,.65)] backdrop-blur">
-  <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+<header class="sticky top-0 z-40 border-b border-[color:var(--line)] bg-[color:rgba(10,12,20,.85)] backdrop-blur-lg">
+  <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-4">
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded bg-[color:var(--gold)]"></div>
-      <div class="text-sm uppercase tracking-wide text-[color:var(--sub)]">Y2K • Bet-Fi</div>
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-2)] flex items-center justify-center">
+        <span class="text-black font-bold text-xl">Y2K</span>
+      </div>
+      <div class="hidden sm:block">
+        <div class="font-semibold">Y2K Bet-Fi</div>
+        <div class="text-xs text-[color:var(--sub)]">Professional Sports Trading</div>
+      </div>
     </div>
-    <nav class="hidden sm:flex items-center gap-2">
-      <a href="#bets" class="btn text-sm">Live Bets</a>
-      <a href="#buybacks" class="btn text-sm">Buyback Ledger</a>
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="btn btn-gold text-sm">Buy Y2K</a>
+    <nav class="flex items-center gap-3">
+      <a href="#bets" class="btn hidden sm:block text-sm">Live Positions</a>
+      <a href="#buybacks" class="btn hidden sm:block text-sm">Analytics</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="btn btn-primary text-sm">Trade Y2K</a>
     </nav>
   </div>
 </header>
 
-<main>
+<main class="flex-1">
   <!-- Hero -->
-  <section class="max-w-6xl mx-auto px-4 pt-8 pb-6">
-    <div class="grid md:grid-cols-2 gap-6 items-center">
+  <section class="max-w-6xl mx-auto px-4 pt-12 pb-8">
+    <div class="grid lg:grid-cols-2 gap-8 items-center">
       <div>
-        <h1 class="text-3xl md:text-4xl font-bold leading-tight">Professional Bet-Fi on <span class="gold-text">Cronos</span></h1>
-        <p class="text-[color:var(--sub)] mt-3">Transparent slips. Disciplined bankroll. A fixed share of wins purchases <span class="gold-text">$Y2K</span> on-chain. No fluff—just the numbers.</p>
-        <div class="flex gap-2 mt-4">
-          <a href="#bets" class="btn">View Bets</a>
-          <a href="#buybacks" class="btn">Ledger</a>
+        <h1 class="text-4xl lg:text-5xl font-bold leading-tight">Premium Sports Trading on <span class="premium-text">Cronos</span></h1>
+        <p class="text-[color:var(--sub)] mt-4 text-lg">Professional-grade trading platform with transparent analytics and automated buybacks. Powered by Y2K.</p>
+        <div class="flex gap-3 mt-6">
+          <a href="#bets" class="btn btn-primary">View Positions</a>
+          <a href="#buybacks" class="btn">Trading Stats</a>
         </div>
       </div>
-      <div class="card p-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
+      <div class="card p-6">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="p-4 rounded-lg bg-[color:var(--muted)] hover-scale">
             <div class="kpi-label">Bankroll</div>
             <div id="kpi-bankroll" class="kpi-value mono">$—</div>
           </div>
-          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
+          <div class="p-4 rounded-lg bg-[color:var(--muted)] hover-scale">
             <div class="kpi-label">Buybacks</div>
             <div id="kpi-buybacks" class="kpi-value mono">$—</div>
           </div>
-          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
-            <div class="kpi-label">Hit Rate</div>
+          <div class="p-4 rounded-lg bg-[color:var(--muted)] hover-scale">
+            <div class="kpi-label">Win Rate</div>
             <div id="kpi-hitrate" class="kpi-value mono">—%</div>
           </div>
-          <div class="p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]">
-            <div class="kpi-label">Best Payout</div>
+          <div class="p-4 rounded-lg bg-[color:var(--muted)] hover-scale">
+            <div class="kpi-label">Best Trade</div>
             <div id="kpi-best" class="kpi-value mono">$—</div>
           </div>
         </div>
@@ -82,79 +217,83 @@
     </div>
   </section>
 
-  <!-- Bets + Buybacks -->
-  <section id="bets" class="max-w-6xl mx-auto px-4 pb-6 grid lg:grid-cols-2 gap-4">
-    <!-- Bets -->
-    <div class="card p-4">
-      <div class="flex items-center justify-between mb-2">
-        <h2 class="text-lg font-semibold">Live Bets & Results</h2>
-        <button id="btn-add-bet" class="btn text-xs px-3 py-1">+ Add Bet</button>
+  <!-- Main Content -->
+  <section id="bets" class="max-w-6xl mx-auto px-4 pb-8 grid lg:grid-cols-2 gap-6">
+    <!-- Active Positions -->
+    <div class="card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold">Active Positions</h2>
+        <button id="btn-add-bet" class="btn text-sm px-4">New Position</button>
       </div>
-      <div id="betsList" class="space-y-2"></div>
+      <div id="betsList" class="space-y-3"></div>
     </div>
 
-    <!-- Buybacks -->
-    <div id="buybacks" class="card p-4">
-      <div class="flex items-center justify-between mb-2">
-        <h2 class="text-lg font-semibold">Buyback Ledger</h2>
-        <button id="btn-add-buyback" class="btn text-xs px-3 py-1">+ Add Buyback</button>
+    <!-- Analytics -->
+    <div id="buybacks" class="card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold">Trading Analytics</h2>
+        <button id="btn-add-buyback" class="btn text-sm px-4">Add Buyback</button>
       </div>
-      <div id="buybacksList" class="space-y-2"></div>
+      <div id="buybacksList" class="space-y-3"></div>
     </div>
   </section>
 
-  <!-- Wins -->
-  <section class="max-w-6xl mx-auto px-4 pb-10">
-    <div class="card p-4">
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="font-semibold">Recent Big Wins</h3>
-        <span class="text-xs text-[color:var(--sub)]">Auto-generated from bet results</span>
+  <!-- Performance -->
+  <section class="max-w-6xl mx-auto px-4 pb-12">
+    <div class="card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">Recent Performance</h3>
+        <span class="text-sm text-[color:var(--sub)]">Auto-generated from position results</span>
       </div>
-      <div id="winsTimeline" class="space-y-2"></div>
+      <div id="winsTimeline" class="space-y-3"></div>
     </div>
   </section>
 </main>
 
 <!-- Footer -->
-<footer class="border-t border-[color:var(--line)]">
-  <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-[color:var(--sub)] flex flex-col md:flex-row items-center justify-between gap-3">
-    <div>© <span id="year"></span> Y2K • Bet-Fi on Cronos</div>
-    <div class="flex items-center gap-4">
-      <a class="hover:underline" href="https://discord.gg/XxtpYNXX4a" target="_blank">Discord</a>
-      <a class="hover:underline" href="https://x.com/y2kc0in?s=21" target="_blank">X</a>
-      <a class="hover:underline" href="https://y2k-the-vault.netlify.app/" target="_blank">Vault (Archive)</a>
+<footer class="border-t border-[color:var(--line)] mt-auto">
+  <div class="max-w-6xl mx-auto px-4 py-8 text-sm text-[color:var(--sub)] flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span>© <span id="year"></span></span>
+      <span class="text-[color:var(--primary)]">•</span>
+      <span>Y2K Premium Trading</span>
+    </div>
+    <div class="flex items-center gap-6">
+      <a class="hover:text-white transition-colors" href="https://discord.gg/XxtpYNXX4a" target="_blank">Discord</a>
+      <a class="hover:text-white transition-colors" href="https://x.com/y2kc0in?s=21" target="_blank">Twitter</a>
+      <a class="hover:text-white transition-colors" href="https://y2k-the-vault.netlify.app/" target="_blank">Trading Vault</a>
     </div>
   </div>
 </footer>
 
 <!-- Modals -->
-<div id="betModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 p-4 z-50">
-  <div class="card w-full max-w-md p-5">
-    <h3 class="text-lg font-semibold mb-3">Add Bet</h3>
-    <div class="grid gap-2">
-      <input id="betTitle" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Title (e.g., 3-Leg HR Parlay)">
-      <input id="betMarket" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Market / Odds (e.g., HR Parlay • +6600)">
-      <input id="betPayout" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Potential payout USD">
+<div id="betModal" class="fixed inset-0 hidden items-center justify-center bg-black/80 p-4 z-50 backdrop-blur-sm">
+  <div class="card w-full max-w-md p-6">
+    <h3 class="text-xl font-bold mb-4">New Position</h3>
+    <div class="space-y-3">
+      <input id="betTitle" class="w-full" placeholder="Position Title">
+      <input id="betMarket" class="w-full" placeholder="Market Details & Odds">
+      <input id="betPayout" class="w-full" placeholder="Potential Return (USD)">
     </div>
-    <div class="flex gap-2 justify-end mt-4">
-      <button id="saveBetBtn" class="btn text-sm">Save</button>
-      <button id="closeBetBtn" class="btn text-sm">Close</button>
+    <div class="flex gap-3 justify-end mt-6">
+      <button id="closeBetBtn" class="btn text-sm">Cancel</button>
+      <button id="saveBetBtn" class="btn btn-primary text-sm">Create Position</button>
     </div>
   </div>
 </div>
 
-<div id="buybackModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 p-4 z-50">
-  <div class="card w-full max-w-md p-5">
-    <h3 class="text-lg font-semibold mb-3">Add Buyback</h3>
-    <div class="grid gap-2">
-      <input id="bbUSD" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="USD amount">
-      <input id="bbAmount" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Y2K amount">
-      <input id="bbTx" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Cronoscan tx URL">
-      <input id="bbNote" class="w-full p-2 rounded bg-[color:var(--muted)] border border-[color:var(--line)]" placeholder="Note (optional)">
+<div id="buybackModal" class="fixed inset-0 hidden items-center justify-center bg-black/80 p-4 z-50 backdrop-blur-sm">
+  <div class="card w-full max-w-md p-6">
+    <h3 class="text-xl font-bold mb-4">Record Buyback</h3>
+    <div class="space-y-3">
+      <input id="bbUSD" class="w-full" placeholder="USD Amount">
+      <input id="bbAmount" class="w-full" placeholder="Y2K Amount">
+      <input id="bbTx" class="w-full" placeholder="Transaction URL">
+      <input id="bbNote" class="w-full" placeholder="Notes (Optional)">
     </div>
-    <div class="flex gap-2 justify-end mt-4">
-      <button id="saveBuybackBtn" class="btn text-sm">Save</button>
-      <button id="closeBuybackBtn" class="btn text-sm">Close</button>
+    <div class="flex gap-3 justify-end mt-6">
+      <button id="closeBuybackBtn" class="btn text-sm">Cancel</button>
+      <button id="saveBuybackBtn" class="btn btn-primary text-sm">Save Buyback</button>
     </div>
   </div>
 </div>
@@ -167,7 +306,7 @@
     collection, addDoc, onSnapshot, query, orderBy, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-  // --- Firebase
+  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyCLGt0gVlI8BKdrpME4IefwVjF_ehJJmug",
     authDomain: "y2kroast-512ee.firebaseapp.com",
@@ -179,7 +318,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // --- UI refs
+  // UI References
   const K = {
     bankroll: document.getElementById('kpi-bankroll'),
     buybacks: document.getElementById('kpi-buybacks'),
@@ -193,11 +332,20 @@
   };
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // --- helpers
+  // Helpers
   const fmtUSD = n => (n==null||isNaN(n)) ? "$—" : Number(n).toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0});
-  const tsTxt = t => t?.toDate ? t.toDate().toLocaleString() : "";
+  const tsTxt = t => {
+    if (!t?.toDate) return "";
+    const date = t.toDate();
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
+    }).format(date);
+  };
 
-  // --- Stats stream
+  // Stats Stream
   const statsRef = doc(db, "stats", "bankroll");
   onSnapshot(statsRef, (snap)=>{
     const s = snap.exists()? snap.data() : {bankroll:0,buybacksUSD:0,hitRate:0,bestPayout:0};
@@ -207,11 +355,12 @@
     K.best.textContent     = fmtUSD(s.bestPayout||0);
   });
 
-  // --- Bets stream
+  // Bets Stream
   const betsQ = query(collection(db,"bets"), orderBy("ts","desc"));
   onSnapshot(betsQ, (snap)=>{
-    lists.bets.innerHTML = snap.empty ? `<div class="text-sm text-[color:var(--sub)]">No bets yet.</div>` : "";
-    lists.wins.innerHTML = "";
+    lists.bets.innerHTML = snap.empty ? `<div class="text-sm text-[color:var(--sub)] text-center py-4">No active positions</div>` : "";
+    lists.wins.innerHTML = snap.empty ? `<div class="text-sm text-[color:var(--sub)] text-center py-4">No performance data yet</div>` : "";
+    
     snap.docs.forEach(d=>{
       const b = { id:d.id, ...d.data() };
       const status = (b.status||"pending").toLowerCase();
@@ -219,59 +368,71 @@
         status === "win"   ? "chip win" :
         status === "loss"  ? "chip loss" :
         status === "live"  ? "chip live" :
-                             "chip pending";
+                           "chip pending";
 
       const row = document.createElement('div');
-      row.className = "flex items-center justify-between gap-3 p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]";
+      row.className = "card p-4 hover-scale transition-all duration-200";
       row.innerHTML = `
-        <div>
-          <div class="font-semibold">${b.title||"—"}</div>
-          <div class="text-xs text-[color:var(--sub)]">${b.market||""} • ${tsTxt(b.ts)}</div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="${chip}">${(b.status||"PENDING").toUpperCase()}</span>
-          <div class="mono">${b.payout ? fmtUSD(b.payout) : ""}</div>
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <div class="font-semibold">${b.title||"—"}</div>
+            <div class="text-sm text-[color:var(--sub)]">${b.market||""} • ${tsTxt(b.ts)}</div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="${chip}">${(b.status||"PENDING").toUpperCase()}</span>
+            <div class="mono font-medium">${b.payout ? fmtUSD(b.payout) : ""}</div>
+          </div>
         </div>
       `;
       lists.bets.appendChild(row);
 
       if(status==="win"){
         const win = document.createElement('div');
-        win.className = "flex items-center justify-between p-3 rounded bg-[color:var(--muted)] border border-green-600/30";
-        win.innerHTML = `<div class="text-sm">${b.title||"—"} <span class="text-[color:var(--sub)]">• ${b.market||""}</span></div>
-                         <div class="mono font-semibold text-green-400">${fmtUSD(b.payout||0)}</div>`;
+        win.className = "card p-4 bg-gradient-to-r from-[color:var(--primary)] to-[color:var(--primary-dark)] hover-scale transition-all duration-200";
+        win.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="font-semibold">${b.title||"—"}</div>
+              <div class="text-sm opacity-75">${b.market||""}</div>
+            </div>
+            <div class="mono font-bold text-lg">${fmtUSD(b.payout||0)}</div>
+          </div>
+        `;
         lists.wins.appendChild(win);
       }
     });
   });
 
-  // --- Buybacks stream
+  // Buybacks Stream
   const buyQ = query(collection(db,"buybacks"), orderBy("ts","desc"));
   onSnapshot(buyQ, (snap)=>{
-    lists.buy.innerHTML = snap.empty ? `<div class="text-sm text-[color:var(--sub)]">No buybacks yet.</div>` : "";
+    lists.buy.innerHTML = snap.empty ? `<div class="text-sm text-[color:var(--sub)] text-center py-4">No buybacks recorded</div>` : "";
     snap.docs.forEach(d=>{
       const x = { id:d.id, ...d.data() };
       const row = document.createElement('div');
-      row.className = "flex items-center justify-between gap-3 p-3 rounded bg-[color:var(--muted)] border border-[color:var(--line)]";
+      row.className = "card p-4 hover-scale transition-all duration-200";
       row.innerHTML = `
-        <div>
-          <div class="font-semibold">Buyback ${fmtUSD(x.usd||0)}</div>
-          <div class="text-xs text-[color:var(--sub)]">${x.note||"Automated"} • ${tsTxt(x.ts)}</div>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="mono text-sm">${x.amount ? `${x.amount} Y2K` : ""}</div>
-          ${x.tx ? `<a href="${x.tx}" target="_blank" rel="noopener" class="btn text-xs px-2 py-1">Tx</a>` : ""}
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <div class="font-semibold">${fmtUSD(x.usd||0)} Buyback</div>
+            <div class="text-sm text-[color:var(--sub)]">${x.note||"Automated"} • ${tsTxt(x.ts)}</div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="mono text-sm font-medium">${x.amount ? `${x.amount.toLocaleString()} Y2K` : ""}</div>
+            ${x.tx ? `<a href="${x.tx}" target="_blank" rel="noopener" class="btn text-xs px-3 py-1.5">View Tx</a>` : ""}
+          </div>
         </div>
       `;
       lists.buy.appendChild(row);
     });
   });
 
-  // --- Admin modals (optional): remove this block if you don’t want inline creation
+  // Modal Handlers
   const betModal = document.getElementById('betModal');
   const buyModal = document.getElementById('buybackModal');
   const show = el => el?.classList.replace("hidden","flex");
   const hide = el => el?.classList.replace("flex","hidden");
+  
   document.getElementById('btn-add-bet')?.addEventListener('click',()=>show(betModal));
   document.getElementById('closeBetBtn')?.addEventListener('click',()=>hide(betModal));
   document.getElementById('btn-add-buyback')?.addEventListener('click',()=>show(buyModal));
@@ -294,7 +455,6 @@
     const note = document.getElementById('bbNote').value.trim();
     await addDoc(collection(db,"buybacks"), { usd:isNaN(usd)?0:usd, amount:isNaN(amount)?0:amount, tx, note, ts: serverTimestamp() });
 
-    // bump cumulative buybacks in stats
     const sSnap = await getDoc(statsRef);
     const curr = sSnap.exists()? (sSnap.data().buybacksUSD||0) : 0;
     await setDoc(statsRef, { buybacksUSD: curr + (isNaN(usd)?0:usd) }, { merge:true });
