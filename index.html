@@ -2,195 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Y2K Coin | Meme Coin Graveyard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    /* Reset */
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       box-sizing: border-box;
     }
-
-    html, body {
-      background-color: #0a0a0a;
-      color: #f0f0f0;
-      font-family: 'Orbitron', monospace;
+    html {
       scroll-behavior: smooth;
     }
-
-    /* Top Glow Border */
-    body::before {
-      content: "";
-      display: block;
-      height: 5px;
-      background: linear-gradient(90deg, #ff00ff, #00fff0, #00ff66, #ff00ff);
-      animation: border-glow 10s linear infinite;
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      line-height: 1.6;
+      padding-bottom: 4rem;
     }
-
-    @keyframes border-glow {
-      0% {background-position: 0%;}
-      100% {background-position: 1000%;}
-    }
-
-    /* Header */
     header {
+      background: url("https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png") center/cover no-repeat;
+      padding: 4rem 1rem 3rem;
       text-align: center;
-      padding: 3rem 1rem 2rem;
-      background: linear-gradient(to right, #ff00ff, #00fff0);
-      color: #000;
-      border-bottom: 2px solid #111;
+      border-top: 4px solid #00ffcc;
+      border-image: linear-gradient(to right, #00ffcc, #ff00ff, #00ffcc) 1;
     }
-
-    h1 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      animation: flicker 2s infinite alternate;
-      letter-spacing: 2px;
+    header h1 {
+      font-size: 3rem;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+      animation: flicker 3s infinite alternate;
     }
-
-    @keyframes flicker {
-      0%, 18%, 22%, 25%, 53%, 57%, 100% {
-        opacity: 1;
-        text-shadow: 0 0 10px #ff00ff, 0 0 20px #00fff0;
-      }
-      20%, 24%, 55% {
-        opacity: 0.3;
-        text-shadow: none;
-      }
-    }
-
     header p {
+      font-size: 1.1rem;
+      color: #ff00ff;
       margin-top: 0.5rem;
-      font-size: 1rem;
-      font-weight: bold;
+      letter-spacing: 1px;
     }
-
-    /* Nav */
     nav {
+      background: #111;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1rem;
-      background-color: #111;
+      gap: 1.5rem;
       padding: 1rem;
-      border-bottom: 2px solid #222;
+      border-bottom: 1px solid #222;
     }
-
     nav a {
-      color: #00fff0;
+      color: #00ffcc;
+      font-weight: bold;
       text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
+      transition: color 0.3s ease;
     }
-
     nav a:hover {
       color: #ff00ff;
+      text-shadow: 0 0 5px #ff00ff;
     }
-
-    /* Sections */
     section {
-      max-width: 960px;
+      max-width: 900px;
       margin: 2rem auto;
-      padding: 1rem;
+      padding: 0 1rem;
     }
-
     details {
-      background-color: #111;
+      background: #111;
       border: 1px solid #333;
       margin-bottom: 1rem;
+      border-radius: 4px;
     }
-
     summary {
       padding: 1rem;
       cursor: pointer;
-      background-color: #222;
-      color: #00fff0;
+      background: #1a1a1a;
+      color: #00ffcc;
       font-weight: bold;
+      font-size: 1.1rem;
+      user-select: none;
     }
-
     details[open] summary {
-      background-color: #1a1a1a;
+      background: #0f0f0f;
     }
-
     details p {
       padding: 1rem;
-      background-color: #000;
+      background: #000;
       color: #ccc;
     }
-
-    /* Buttons */
-    .cta-group {
+    .button-group {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
-      margin-top: 2rem;
+      padding: 1rem;
+      background: #000;
     }
-
-    .cta-group a {
-      text-decoration: none;
-      color: #000;
-      background-color: #00fff0;
+    .button-group a {
       padding: 0.75rem 1.5rem;
-      border-radius: 6px;
       font-weight: bold;
-      transition: 0.3s;
+      font-size: 1rem;
+      color: #000;
+      background: #00ffcc;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #00ffcc;
     }
-
-    .cta-group a:hover {
-      background-color: #ff00ff;
+    .button-group a:hover {
+      background: #ff00ff;
       color: #fff;
       box-shadow: 0 0 12px #ff00ff;
     }
-
-    /* Tombstone Wall */
-    .wall {
+    .tombstone-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .stone {
-      background: linear-gradient(145deg, #1c1c1c, #111);
       padding: 1rem;
+    }
+    .tombstone {
+      background: #111;
       border: 1px solid #333;
+      border-radius: 5px;
+      padding: 1.5rem 1rem;
       text-align: center;
-      font-size: 0.9rem;
       color: #ccc;
-      border-radius: 6px;
-      transition: 0.3s;
+      font-weight: bold;
+      text-shadow: 0 0 3px #00ffcc;
+      transition: all 0.3s ease;
     }
-
-    .stone:hover {
-      background-color: #222;
-      color: #fff;
-      box-shadow: 0 0 10px #ff00ff80;
+    .tombstone:hover {
+      background: #1a1a1a;
+      transform: translateY(-2px);
+      box-shadow: 0 0 10px #00ffcc50;
     }
-
-    /* Footer */
     footer {
       text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: #777;
-      background-color: #111;
+      font-size: 0.85rem;
+      color: #666;
+      padding: 2rem 1rem 1rem;
+      margin-top: 2rem;
       border-top: 1px solid #222;
-      margin-top: 4rem;
     }
 
-    /* Responsive Nav (basic) */
+    @keyframes flicker {
+      0% { opacity: 1; text-shadow: 0 0 10px #00ffcc; }
+      45% { opacity: 0.8; }
+      50% { opacity: 0.4; text-shadow: 0 0 5px #00ffcc; }
+      55% { opacity: 1; }
+      100% { opacity: 0.95; text-shadow: 0 0 10px #00ffcc; }
+    }
+
     @media (max-width: 600px) {
-      nav {
-        flex-direction: column;
-        align-items: center;
-      }
+      header h1 { font-size: 2.2rem; }
+      .button-group a { width: 100%; text-align: center; }
     }
   </style>
 </head>
-
 <body>
 
   <header>
@@ -207,14 +172,14 @@
 
   <section id="about">
     <details open>
-      <summary>What is Y2K?</summary>
+      <summary>▸ What is Y2K?</summary>
       <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
     </details>
   </section>
 
   <section id="how">
     <details>
-      <summary>How It Works</summary>
+      <summary>▸ How It Works</summary>
       <p>1. Submit your failed coin<br>
          2. Pair it with Y2K (LP)<br>
          3. It gets a tombstone on the Graveyard wall<br>
@@ -224,15 +189,15 @@
 
   <section id="submit">
     <details>
-      <summary>Submit a Dead Coin</summary>
+      <summary>▸ Submit a Dead Coin</summary>
       <p>Coming soon: a form to submit your abandoned token. For now, reach out through backchannels. We're watching.</p>
     </details>
   </section>
 
   <section id="links">
     <details open>
-      <summary>Quick Links</summary>
-      <div class="cta-group">
+      <summary>▾ Quick Links</summary>
+      <div class="button-group">
         <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy Y2K</a>
         <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank">View Chart</a>
         <a href="https://x.com/y2kc0in" target="_blank">Follow on 𝕏</a>
@@ -241,18 +206,18 @@
   </section>
 
   <section>
-    <h2 style="color:#00fff0; font-size: 1.2rem; margin-bottom: 1rem;">Tombstone Wall Preview</h2>
-    <div class="wall">
-      <div class="stone">💀 $REKT</div>
-      <div class="stone">🪦 $MEMED</div>
-      <div class="stone">⚰️ $PEPEZ</div>
-      <div class="stone">🕯 $DEADMOON</div>
-      <div class="stone">👻 $GHOSTCOIN</div>
+    <h2 style="color:#00ffcc; font-size:1.5rem; text-align:center; margin-top:2rem;">Tombstone Wall Preview</h2>
+    <div class="tombstone-grid">
+      <div class="tombstone">💀 $REKT</div>
+      <div class="tombstone">🪦 $MEMED</div>
+      <div class="tombstone">🪵 $PEPEZ</div>
+      <div class="tombstone">🕯️ $DEADMOON</div>
+      <div class="tombstone">👻 $GHOSTCOIN</div>
     </div>
   </section>
 
   <footer>
-    &copy; 2025 Y2K Coin. Born dead. Buried with style.
+    <p>&copy; 2025 Y2K Coin. Born dead. Buried with style.</p>
   </footer>
 
 </body>
