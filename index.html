@@ -2,223 +2,154 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Y2K Coin | Meme Coin Graveyard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --bg: #0a0a0a;
+      --text: #c3faff;
+      --accent: #00ffc3;
+      --hover: #ff00ff;
+      --muted: #999;
+    }
     * {
       margin: 0; padding: 0;
       box-sizing: border-box;
     }
-    html {
-      scroll-behavior: smooth;
-    }
     body {
-      font-family: 'Orbitron', monospace;
-      background: #0a0a0a;
-      color: #e0e0e0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
       line-height: 1.6;
-      padding-bottom: 4rem;
     }
     header {
-      background: url("https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png") center/cover no-repeat;
-      padding: 4rem 1rem 3rem;
+      background: #000;
       text-align: center;
-      border-top: 4px solid #00ffcc;
-      border-image: linear-gradient(to right, #00ffcc, #ff00ff, #00ffcc) 1;
+      padding: 1.5rem 1rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 2px solid var(--hover);
     }
-    header h1 {
-      font-size: 3rem;
-      color: #00ffcc;
-      text-shadow: 0 0 10px #00ffcc;
-      animation: flicker 3s infinite alternate;
-    }
-    header p {
-      font-size: 1.1rem;
-      color: #ff00ff;
-      margin-top: 0.5rem;
-      letter-spacing: 1px;
+    header img {
+      max-width: 100%;
+      height: auto;
     }
     nav {
-      background: #111;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 1rem;
-      border-bottom: 1px solid #222;
+      margin-top: 1rem;
     }
     nav a {
-      color: #00ffcc;
-      font-weight: bold;
+      margin: 0 1rem;
       text-decoration: none;
+      color: var(--accent);
+      font-weight: bold;
       transition: color 0.3s ease;
     }
     nav a:hover {
-      color: #ff00ff;
-      text-shadow: 0 0 5px #ff00ff;
+      color: var(--hover);
     }
-    section {
+    .tagline {
+      font-size: 1.25rem;
+      margin: 1rem 0 2rem;
+      color: var(--hover);
+      text-shadow: 0 0 8px var(--hover);
+    }
+    main {
       max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+      margin: 0 auto;
+      padding: 1rem;
     }
     details {
       background: #111;
-      border: 1px solid #333;
-      margin-bottom: 1rem;
+      border: 1px solid var(--accent);
+      margin-bottom: 1.5rem;
+      padding: 1rem;
       border-radius: 4px;
     }
     summary {
-      padding: 1rem;
+      font-size: 1.2rem;
+      color: var(--accent);
       cursor: pointer;
-      background: #1a1a1a;
-      color: #00ffcc;
-      font-weight: bold;
-      font-size: 1.1rem;
-      user-select: none;
     }
-    details[open] summary {
-      background: #0f0f0f;
+    p {
+      margin-top: 0.75rem;
     }
-    details p {
-      padding: 1rem;
-      background: #000;
-      color: #ccc;
-    }
-    .button-group {
+    .buttons {
       display: flex;
       flex-wrap: wrap;
+      gap: 1rem;
+      margin: 2rem 0;
       justify-content: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: #000;
     }
-    .button-group a {
-      padding: 0.75rem 1.5rem;
-      font-weight: bold;
-      font-size: 1rem;
+    .buttons a {
+      background: var(--hover);
       color: #000;
-      background: #00ffcc;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px #00ffcc;
-    }
-    .button-group a:hover {
-      background: #ff00ff;
-      color: #fff;
-      box-shadow: 0 0 12px #ff00ff;
-    }
-    .tombstone-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
-    }
-    .tombstone {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 5px;
-      padding: 1.5rem 1rem;
-      text-align: center;
-      color: #ccc;
+      padding: 0.75rem 1.25rem;
+      border-radius: 4px;
       font-weight: bold;
-      text-shadow: 0 0 3px #00ffcc;
-      transition: all 0.3s ease;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+      box-shadow: 0 0 12px var(--hover);
     }
-    .tombstone:hover {
-      background: #1a1a1a;
-      transform: translateY(-2px);
-      box-shadow: 0 0 10px #00ffcc50;
+    .buttons a:hover {
+      transform: scale(1.05);
     }
     footer {
       text-align: center;
-      font-size: 0.85rem;
-      color: #666;
-      padding: 2rem 1rem 1rem;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 2px solid var(--hover);
       margin-top: 2rem;
-      border-top: 1px solid #222;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 1; text-shadow: 0 0 10px #00ffcc; }
-      45% { opacity: 0.8; }
-      50% { opacity: 0.4; text-shadow: 0 0 5px #00ffcc; }
-      55% { opacity: 1; }
-      100% { opacity: 0.95; text-shadow: 0 0 10px #00ffcc; }
-    }
-
-    @media (max-width: 600px) {
-      header h1 { font-size: 2.2rem; }
-      .button-group a { width: 100%; text-align: center; }
     }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>Y2K Coin</h1>
-    <p>Meme Coin Graveyard. No hype. Just decay.</p>
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png" alt="Y2K Banner">
+    <div class="tagline">Meme Coin Graveyard. No hype. Just decay.</div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#how">How It Works</a>
+      <a href="#submit">Submit</a>
+      <a href="#links">Links</a>
+    </nav>
   </header>
 
-  <nav>
-    <a href="#about">About</a>
-    <a href="#how">How It Works</a>
-    <a href="#submit">Submit</a>
-    <a href="#links">Links</a>
-  </nav>
+  <main>
+    <section id="about">
+      <details open>
+        <summary>▸ What is Y2K?</summary>
+        <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
+      </details>
+    </section>
 
-  <section id="about">
-    <details open>
-      <summary>▸ What is Y2K?</summary>
-      <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
-    </details>
-  </section>
+    <section id="how">
+      <details>
+        <summary>▸ How It Works</summary>
+        <p>Submit any abandoned coin to the graveyard. If verified as inactive, we pair it with Y2K in the Dead Coin Redemption Protocol. This creates narrative, liquidity, and ironic value — not hype. Legacy through loss.</p>
+      </details>
+    </section>
 
-  <section id="how">
-    <details>
-      <summary>▸ How It Works</summary>
-      <p>1. Submit your failed coin<br>
-         2. Pair it with Y2K (LP)<br>
-         3. It gets a tombstone on the Graveyard wall<br>
-         4. Community decides if it deserves resurrection or eternal death.</p>
-    </details>
-  </section>
+    <section id="submit">
+      <details>
+        <summary>▸ Submit a Dead Coin</summary>
+        <p>Use our dApp (coming soon) or DM the team on 𝕏. Must include: contract address, status, and optional tombstone art.</p>
+      </details>
+    </section>
 
-  <section id="submit">
-    <details>
-      <summary>▸ Submit a Dead Coin</summary>
-      <p>Coming soon: a form to submit your abandoned token. For now, reach out through backchannels. We're watching.</p>
-    </details>
-  </section>
-
-  <section id="links">
-    <details open>
-      <summary>▾ Quick Links</summary>
-      <div class="button-group">
-        <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy Y2K</a>
-        <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank">View Chart</a>
-        <a href="https://x.com/y2kc0in" target="_blank">Follow on 𝕏</a>
+    <section id="links">
+      <div class="buttons">
+        <a href="https://pump.fun/board/solana/8rQyx4H9Kqfv64LLfJmCmhE7zqzNoiyvEk9vnzhjQ2EK" target="_blank">Buy Y2K</a>
+        <a href="https://www.dextools.io/app/en/solana/pair-explorer/8rQyx4H9Kqfv64LLfJmCmhE7zqzNoiyvEk9vnzhjQ2EK" target="_blank">View Chart</a>
+        <a href="https://x.com/y2kcoin" target="_blank">Follow on 𝕏</a>
       </div>
-    </details>
-  </section>
-
-  <section>
-    <h2 style="color:#00ffcc; font-size:1.5rem; text-align:center; margin-top:2rem;">Tombstone Wall Preview</h2>
-    <div class="tombstone-grid">
-      <div class="tombstone">💀 $REKT</div>
-      <div class="tombstone">🪦 $MEMED</div>
-      <div class="tombstone">🪵 $PEPEZ</div>
-      <div class="tombstone">🕯️ $DEADMOON</div>
-      <div class="tombstone">👻 $GHOSTCOIN</div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <footer>
-    <p>&copy; 2025 Y2K Coin. Born dead. Buried with style.</p>
+    Born dead. Buried with style. <br/>© 2025 Y2K Coin.
   </footer>
-
 </body>
 </html>
