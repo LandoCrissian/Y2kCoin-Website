@@ -2,99 +2,197 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Y2K Coin | Meme Coin Graveyard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
   <style>
+    /* Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    body {
+
+    html, body {
       background-color: #0a0a0a;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
+      color: #f0f0f0;
+      font-family: 'Orbitron', monospace;
+      scroll-behavior: smooth;
     }
+
+    /* Top Glow Border */
+    body::before {
+      content: "";
+      display: block;
+      height: 5px;
+      background: linear-gradient(90deg, #ff00ff, #00fff0, #00ff66, #ff00ff);
+      animation: border-glow 10s linear infinite;
+    }
+
+    @keyframes border-glow {
+      0% {background-position: 0%;}
+      100% {background-position: 1000%;}
+    }
+
+    /* Header */
     header {
-      padding: 2rem 1rem;
-      background: linear-gradient(to right, #ff00ff, #00ffcc);
       text-align: center;
+      padding: 3rem 1rem 2rem;
+      background: linear-gradient(to right, #ff00ff, #00fff0);
+      color: #000;
+      border-bottom: 2px solid #111;
     }
-    header h1 {
-      font-size: 2.5rem;
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      animation: flicker 2s infinite alternate;
+      letter-spacing: 2px;
+    }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #00fff0;
+      }
+      20%, 24%, 55% {
+        opacity: 0.3;
+        text-shadow: none;
+      }
+    }
+
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1rem;
       font-weight: bold;
     }
-    header p {
-      font-size: 1rem;
-      color: #0a0a0a;
-    }
+
+    /* Nav */
     nav {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
       background-color: #111;
-      padding: 1rem 0;
+      padding: 1rem;
+      border-bottom: 2px solid #222;
     }
+
     nav a {
-      color: #00ffcc;
+      color: #00fff0;
       text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s ease;
+      font-weight: 600;
+      transition: color 0.3s;
     }
+
     nav a:hover {
       color: #ff00ff;
     }
+
+    /* Sections */
     section {
-      max-width: 900px;
+      max-width: 960px;
       margin: 2rem auto;
       padding: 1rem;
     }
-    .dropdown {
+
+    details {
       background-color: #111;
-      margin-bottom: 1rem;
       border: 1px solid #333;
+      margin-bottom: 1rem;
     }
-    .dropdown summary {
-      cursor: pointer;
+
+    summary {
       padding: 1rem;
+      cursor: pointer;
       background-color: #222;
+      color: #00fff0;
       font-weight: bold;
-      color: #00ffcc;
     }
-    .dropdown p {
+
+    details[open] summary {
+      background-color: #1a1a1a;
+    }
+
+    details p {
       padding: 1rem;
       background-color: #000;
       color: #ccc;
     }
+
+    /* Buttons */
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .cta-group a {
+      text-decoration: none;
+      color: #000;
+      background-color: #00fff0;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .cta-group a:hover {
+      background-color: #ff00ff;
+      color: #fff;
+      box-shadow: 0 0 12px #ff00ff;
+    }
+
+    /* Tombstone Wall */
+    .wall {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stone {
+      background: linear-gradient(145deg, #1c1c1c, #111);
+      padding: 1rem;
+      border: 1px solid #333;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ccc;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    .stone:hover {
+      background-color: #222;
+      color: #fff;
+      box-shadow: 0 0 10px #ff00ff80;
+    }
+
+    /* Footer */
     footer {
-      background-color: #111;
-      color: #666;
       text-align: center;
       padding: 2rem 1rem;
-      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #777;
+      background-color: #111;
+      border-top: 1px solid #222;
+      margin-top: 4rem;
     }
-    .button-group {
-      text-align: center;
-      margin-top: 2rem;
-    }
-    .button-group a {
-      display: inline-block;
-      margin: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      color: #0a0a0a;
-      background-color: #00ffcc;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .button-group a:hover {
-      background-color: #ff00ff;
-      color: #000;
+
+    /* Responsive Nav (basic) */
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+      }
     }
   </style>
 </head>
+
 <body>
+
   <header>
     <h1>Y2K Coin</h1>
     <p>Meme Coin Graveyard. No hype. Just decay.</p>
@@ -102,17 +200,20 @@
 
   <nav>
     <a href="#about">About</a>
+    <a href="#how">How It Works</a>
     <a href="#submit">Submit</a>
     <a href="#links">Links</a>
   </nav>
 
   <section id="about">
-    <details class="dropdown" open>
+    <details open>
       <summary>What is Y2K?</summary>
       <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
     </details>
+  </section>
 
-    <details class="dropdown">
+  <section id="how">
+    <details>
       <summary>How It Works</summary>
       <p>1. Submit your failed coin<br>
          2. Pair it with Y2K (LP)<br>
@@ -122,16 +223,16 @@
   </section>
 
   <section id="submit">
-    <details class="dropdown">
+    <details>
       <summary>Submit a Dead Coin</summary>
       <p>Coming soon: a form to submit your abandoned token. For now, reach out through backchannels. We're watching.</p>
     </details>
   </section>
 
   <section id="links">
-    <details class="dropdown" open>
+    <details open>
       <summary>Quick Links</summary>
-      <div class="button-group">
+      <div class="cta-group">
         <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy Y2K</a>
         <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank">View Chart</a>
         <a href="https://x.com/y2kc0in" target="_blank">Follow on 𝕏</a>
@@ -139,8 +240,20 @@
     </details>
   </section>
 
+  <section>
+    <h2 style="color:#00fff0; font-size: 1.2rem; margin-bottom: 1rem;">Tombstone Wall Preview</h2>
+    <div class="wall">
+      <div class="stone">💀 $REKT</div>
+      <div class="stone">🪦 $MEMED</div>
+      <div class="stone">⚰️ $PEPEZ</div>
+      <div class="stone">🕯 $DEADMOON</div>
+      <div class="stone">👻 $GHOSTCOIN</div>
+    </div>
+  </section>
+
   <footer>
-    <p>&copy; 2025 Y2K Coin. Born dead. Buried with style.</p>
+    &copy; 2025 Y2K Coin. Born dead. Buried with style.
   </footer>
+
 </body>
 </html>
