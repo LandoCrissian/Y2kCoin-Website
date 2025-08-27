@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Y2K Coin | Meme Coin Graveyard</title>
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap');
-
     :root {
       --neon-fuchsia: #ff00ff;
       --neon-green: #00ffcc;
-      --cyber-red: #ff0033;
       --dark-bg: #0a0a0a;
       --zinc: #1a1a1a;
     }
@@ -24,14 +23,14 @@
     body {
       background: var(--dark-bg);
       color: #f5f5f5;
-      font-family: 'Orbitron', monospace;
+      font-family: 'Orbitron', sans-serif;
       scroll-behavior: smooth;
     }
 
     #terminal {
       background: black;
       color: var(--neon-green);
-      font-size: 0.95rem;
+      font-size: 1rem;
       padding: 2rem;
       font-family: monospace;
       height: 100vh;
@@ -42,7 +41,7 @@
 
     #terminal pre {
       white-space: pre-wrap;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     #enter-btn {
@@ -63,23 +62,21 @@
     }
 
     header {
-      background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png') no-repeat center;
-      background-size: cover;
+      background-color: #111;
       text-align: center;
-      padding: 5rem 1rem 2rem;
+      padding: 4rem 1rem 2rem;
       border-top: 4px solid var(--neon-fuchsia);
       border-bottom: 1px solid #333;
     }
 
     header h1 {
-      font-size: 3rem;
+      font-size: 2.75rem;
       color: var(--neon-green);
       text-shadow: 0 0 10px var(--neon-green);
-      animation: flicker 2s infinite alternate;
     }
 
     header p {
-      color: #ddd;
+      color: #ccc;
       margin-top: 1rem;
       font-size: 1rem;
     }
@@ -88,8 +85,9 @@
       background: var(--zinc);
       padding: 1rem;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 2rem;
+      gap: 1.25rem;
       border-bottom: 1px solid #333;
     }
 
@@ -97,7 +95,8 @@
       color: var(--neon-green);
       text-decoration: none;
       font-weight: bold;
-      transition: 0.3s ease;
+      font-size: 1rem;
+      padding: 0.25rem 0.5rem;
     }
 
     nav a:hover {
@@ -137,21 +136,20 @@
 
     .button-group {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
       gap: 1rem;
       margin-top: 1rem;
     }
 
     .button-group a {
-      padding: 0.75rem 1.5rem;
+      text-align: center;
+      padding: 0.75rem;
       border-radius: 4px;
       background: var(--neon-green);
       color: #000;
       font-weight: bold;
       text-decoration: none;
       box-shadow: 0 0 10px var(--neon-green);
-      transition: all 0.3s ease;
     }
 
     .button-group a:hover {
@@ -172,7 +170,7 @@
       border: 1px solid #333;
       padding: 1rem;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #999;
     }
 
@@ -186,26 +184,22 @@
       margin-top: 4rem;
     }
 
-    @keyframes flicker {
-      0%   { opacity: 1; text-shadow: 0 0 10px var(--neon-green); }
-      50%  { opacity: 0.8; text-shadow: 0 0 15px var(--neon-fuchsia); }
-      100% { opacity: 1; text-shadow: 0 0 12px var(--neon-green); }
-    }
-
     @media (max-width: 600px) {
       header h1 {
         font-size: 2rem;
       }
+
       nav {
         flex-direction: column;
-        align-items: center;
-        gap: 1rem;
+      }
+
+      .button-group {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-
   <div id="terminal">
     <pre id="terminal-text"></pre>
     <button id="enter-btn" style="display:none;" onclick="enterSite()">Enter the Grave Site</button>
@@ -228,7 +222,6 @@
         <summary>What is Y2K?</summary>
         <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
       </details>
-
       <details>
         <summary>How It Works</summary>
         <p>1. Submit your failed coin<br>2. Pair it with Y2K (LP)<br>3. It gets a tombstone on the Graveyard wall<br>4. Community decides if it deserves resurrection or eternal death.</p>
@@ -308,6 +301,5 @@
 
     window.onload = typeLine;
   </script>
-
 </body>
 </html>
