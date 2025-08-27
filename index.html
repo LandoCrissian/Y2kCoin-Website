@@ -4,105 +4,111 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content=" width=device-width, initial-scale=1.0" />
   <title>Y2K | Meme Coin Graveyard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Space+Mono&family=Uncut+Sans&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-color: #000;
-      color: #00ff99;
-      font-family: 'VT323', monospace;
+      background: #000;
+      font-family: 'Space Mono', monospace;
+      color: #00ffcc;
     }
-    .terminal-text {
-      animation: flicker 1.5s infinite alternate;
-    }
-    @keyframes flicker {
-      0% { opacity: 1; }
-      100% { opacity: 0.8; }
-    }
-    .glitch {
+    .glitch-title {
       position: relative;
       color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      text-transform: uppercase;
     }
-    .glitch::before,
-    .glitch::after {
+    .glitch-title::before, .glitch-title::after {
       content: attr(data-text);
       position: absolute;
-      left: 0;
       width: 100%;
       overflow: hidden;
+      top: 0;
     }
-    .glitch::before {
-      animation: glitchTop 1s infinite linear alternate-reverse;
-      color: #f0f;
-      top: -2px;
+    .glitch-title::before {
+      left: 2px;
+      text-shadow: -2px 0 magenta;
+      animation: glitch-anim 2s infinite linear alternate-reverse;
     }
-    .glitch::after {
-      animation: glitchBot 1s infinite linear alternate-reverse;
-      color: #0ff;
-      top: 2px;
+    .glitch-title::after {
+      left: -2px;
+      text-shadow: -2px 0 cyan;
+      animation: glitch-anim2 1.5s infinite linear alternate-reverse;
     }
-    @keyframes glitchTop {
-      0% { clip: rect(0, 9999px, 0, 0); }
-      100% { clip: rect(0, 9999px, 100%, 0); }
+    @keyframes glitch-anim {
+      0% { clip: rect(24px, 9999px, 28px, 0); }
+      100% { clip: rect(80px, 9999px, 100px, 0); }
     }
-    @keyframes glitchBot {
-      0% { clip: rect(100%, 9999px, 100%, 0); }
-      100% { clip: rect(0, 9999px, 100%, 0); }
+    @keyframes glitch-anim2 {
+      0% { clip: rect(10px, 9999px, 14px, 0); }
+      100% { clip: rect(60px, 9999px, 80px, 0); }
+    }
+    .section-header {
+      font-family: 'Uncut Sans', sans-serif;
+      font-size: 1.75rem;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+    .terminal-line {
+      font-family: 'VT323', monospace;
+      color: #22ff99;
+      animation: blink 1.5s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0.5; }
     }
   </style>
 </head>
-<body class="text-green-400 px-4 sm:px-8 lg:px-24 pt-12">
-  <div class="text-lg sm:text-xl lg:text-2xl space-y-6 max-w-3xl mx-auto">
+<body class="bg-black px-6 sm:px-12 py-10 text-lg sm:text-xl max-w-5xl mx-auto space-y-12">
 
-    <div class="mb-12">
-      <div class="terminal-text">> INIT Y2K.PROTOCOL</div>
-      <div class="terminal-text">> SCANNING BLOCKCHAINS...</div>
-      <div class="terminal-text">> MEMECOIN CORPSES FOUND</div>
-      <div class="terminal-text">> LAUNCHING GRAVEYARD.EXE</div>
-    </div>
-
-    <h1 class="text-4xl sm:text-5xl lg:text-6xl glitch" data-text="Y2K COIN">Y2K COIN</h1>
-    <h2 class="text-xl sm:text-2xl glitch mb-8" data-text="MEMECOIN GRAVEYARD">MEMECOIN GRAVEYARD</h2>
-
-    <section>
-      <h3 class="text-2xl mt-12 mb-2 text-white">What Happened?</h3>
-      <p>
-        Y2K died like the rest of them. But in death, it built something...  
-        A crypt for all the forgotten tokens, rugged chains, and ghost communities.
-        No roadmap. No revival. Just a tomb.
-      </p>
-    </section>
-
-    <section>
-      <h3 class="text-2xl mt-12 mb-2 text-white">How It Works</h3>
-      <ul class="list-disc ml-5">
-        <li>We find dead meme coins</li>
-        <li>We pair them with $Y2K to bury or burn them</li>
-        <li>The chain remembers... even when the devs forget</li>
-      </ul>
-    </section>
-
-    <section>
-      <h3 class="text-2xl mt-12 mb-2 text-white">Tombstone Ledger</h3>
-      <p>
-        A growing archive of digital corpses. Cause of death. Last known LP. Status: Buried, Burned, or... Resurrected.
-        <br/><br/>
-        Coming soon.
-      </p>
-    </section>
-
-    <section>
-      <h3 class="text-2xl mt-12 mb-2 text-white">GL1TCHBALL.exe</h3>
-      <p>
-        An unstable experiment.  
-        Random numbers. Rituals. Burned remains as prizes.  
-        This will get weird.
-      </p>
-    </section>
-
-    <footer class="mt-24 border-t border-green-800 pt-6 text-sm text-green-600 text-center">
-      > SYSTEM IDLE... Awaiting next corpse.
-    </footer>
+  <div class="space-y-4">
+    <div class="terminal-line">> BOOTING Y2K GRAVEYARD.PROTOCOL</div>
+    <div class="terminal-line">> MEMECOIN EXHUMATION SEQUENCE INITIATED</div>
   </div>
+
+  <div class="mt-10 text-center">
+    <h1 class="glitch-title" data-text="Y2K COIN">Y2K COIN</h1>
+    <h2 class="text-2xl sm:text-3xl mt-2 tracking-widest text-pink-500">MEMECOIN GRAVEYARD</h2>
+  </div>
+
+  <section>
+    <h3 class="section-header">What Happened?</h3>
+    <p>
+      The world moved on. Tokens died. Threads went silent.  
+      But not Y2K. It rotted... mutated... and returned — to bury the rest.
+    </p>
+  </section>
+
+  <section>
+    <h3 class="section-header">How It Works</h3>
+    <ul class="list-disc ml-6 space-y-1 text-base sm:text-lg">
+      <li>Users can propose pairing their dead meme coin with $Y2K</li>
+      <li>If accepted, the LP pair is locked or burned as proof of death</li>
+      <li>The tombstone is added to the on-chain ledger</li>
+      <li>Only true corpses make it — no zombies, no hype</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3 class="section-header">Tombstone Ledger (Soon)</h3>
+    <p>
+      A digital cemetery.  
+      Coin name. Cause of death. Time of last breath.  
+      Status: Buried / Burned / Forgotten.
+    </p>
+  </section>
+
+  <section>
+    <h3 class="section-header">GL1TCHBALL.exe (Classified)</h3>
+    <p>
+      System instability detected. Ritual pending. Numbers corrupt.  
+      One winner. Multiple victims.
+    </p>
+  </section>
+
+  <footer class="text-sm text-center mt-20 border-t border-green-700 pt-6 text-green-300">
+    > SYSTEM IDLE — Awaiting next corpse.
+  </footer>
 </body>
 </html>
