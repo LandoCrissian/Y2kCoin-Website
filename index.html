@@ -29,6 +29,24 @@
       scroll-behavior: smooth;
     }
 
+    .terminal-log {
+      background: #000;
+      color: var(--neon-green);
+      font-family: monospace;
+      font-size: 0.85rem;
+      padding: 1rem;
+      border-bottom: 1px solid #222;
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+      animation: flickerSoft 2s infinite alternate;
+      white-space: pre-wrap;
+    }
+
+    @keyframes flickerSoft {
+      0% { opacity: 1; }
+      50% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+
     header {
       background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png') no-repeat center;
       background-size: cover;
@@ -173,6 +191,22 @@
 </head>
 
 <body>
+
+  <div class="terminal-log">
+    <pre>
+&gt; connecting to y2kcoin.org...
+&gt; gravechain access granted_
+&gt; status: DECODED
+&gt; user: undefined
+&gt; message: this site operates without oversight.
+&gt; purpose: decay, anomaly retention, asset preservation.
+&gt; logs indicate past lifeforms attempted redemption.
+&gt; the vault rejects them.
+&gt; submission channel remains open.
+&gt; signal detected from ████.███.███.███
+&gt; they are watching.
+    </pre>
+  </div>
 
   <header>
     <h1>Y2K COIN</h1>
