@@ -2,113 +2,225 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content=" width=device-width, initial-scale=1.0" />
-  <title>Y2K | Meme Coin Graveyard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Space+Mono&family=Uncut+Sans&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Y2K Coin — Meme Coin Graveyard</title>
+  <meta name="description" content="Y2K is the final resting place for dead meme coins. Built for silence. Built for decay.">
   <style>
     body {
-      background: #000;
-      font-family: 'Space Mono', monospace;
-      color: #00ffcc;
-    }
-    .glitch-title {
-      position: relative;
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      background-color: #000;
       color: white;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 3rem;
+    }
+    h1, h2, h3 {
       text-transform: uppercase;
     }
-    .glitch-title::before, .glitch-title::after {
-      content: attr(data-text);
-      position: absolute;
+    a {
+      text-decoration: none;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .uppercase {
+      text-transform: uppercase;
+    }
+    .btn {
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      display: inline-block;
+    }
+    .btn-pink {
+      background-color: #ff00ff;
+      color: black;
+    }
+    .btn-pink:hover {
+      background-color: #ff33cc;
+    }
+    .btn-cyan {
+      background-color: #00ffcc;
+      color: black;
+    }
+    .btn-cyan:hover {
+      background-color: #00e6b2;
+    }
+    .btn-yellow {
+      background-color: #ffff00;
+      color: black;
+    }
+    .btn-yellow:hover {
+      background-color: #e6e600;
+    }
+    .btn-white {
+      background-color: white;
+      color: black;
+    }
+    .btn-white:hover {
+      background-color: #e0e0e0;
+    }
+    .section {
+      padding: 5rem 1.5rem;
+    }
+    .section-dark {
+      background-color: #0a0a0a;
+    }
+    .section-black {
+      background-color: #000;
+    }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .form-input, .form-textarea {
       width: 100%;
-      overflow: hidden;
-      top: 0;
+      padding: 0.75rem;
+      background-color: #111;
+      border: 1px solid #444;
+      color: white;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      margin-bottom: 1.5rem;
     }
-    .glitch-title::before {
-      left: 2px;
-      text-shadow: -2px 0 magenta;
-      animation: glitch-anim 2s infinite linear alternate-reverse;
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #00ffcc;
     }
-    .glitch-title::after {
-      left: -2px;
-      text-shadow: -2px 0 cyan;
-      animation: glitch-anim2 1.5s infinite linear alternate-reverse;
+    .checkbox {
+      margin-top: 0.5rem;
+      accent-color: #00ffcc;
     }
-    @keyframes glitch-anim {
-      0% { clip: rect(24px, 9999px, 28px, 0); }
-      100% { clip: rect(80px, 9999px, 100px, 0); }
+    .footer {
+      font-size: 0.75rem;
+      color: #777;
+      text-align: center;
+      padding: 2rem 1rem;
+      background-color: #000;
     }
-    @keyframes glitch-anim2 {
-      0% { clip: rect(10px, 9999px, 14px, 0); }
-      100% { clip: rect(60px, 9999px, 80px, 0); }
+    .footer p {
+      margin: 0.25rem 0;
     }
-    .section-header {
-      font-family: 'Uncut Sans', sans-serif;
-      font-size: 1.75rem;
-      color: #ffffff;
-      margin-bottom: 0.5rem;
+    .border-left {
+      border-left: 4px solid;
+      padding-left: 1rem;
     }
-    .terminal-line {
-      font-family: 'VT323', monospace;
-      color: #22ff99;
-      animation: blink 1.5s step-end infinite;
+    .border-pink { border-color: #ff00ff; }
+    .border-cyan { border-color: #00ffcc; }
+    .border-yellow { border-color: #ffff00; }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
     }
-    @keyframes blink {
-      50% { opacity: 0.5; }
+    ::selection {
+      background: #ff00ff;
+      color: #000;
     }
   </style>
 </head>
-<body class="bg-black px-6 sm:px-12 py-10 text-lg sm:text-xl max-w-5xl mx-auto space-y-12">
+<body>
 
-  <div class="space-y-4">
-    <div class="terminal-line">> BOOTING Y2K GRAVEYARD.PROTOCOL</div>
-    <div class="terminal-line">> MEMECOIN EXHUMATION SEQUENCE INITIATED</div>
+<!-- HERO -->
+<section class="hero">
+  <h1 style="color:#ff00ff; font-size: 3.5rem; font-weight: 900;">Y2K Coin</h1>
+  <h2 class="uppercase" style="color: #ccc; margin-top: 0.5rem;">The Meme Coin Graveyard</h2>
+  <p style="max-width: 600px; margin: 2rem auto; color: #888;">Where abandoned tokens rot into legacy. A digital cemetery for the cryptographically damned.</p>
+  <div style="margin-top: 2rem;">
+    <a href="https://raydium.io/swap/" target="_blank" class="btn btn-pink">Buy $Y2K</a>
+    <a href="https://dexscreener.com" target="_blank" class="btn btn-cyan" style="margin-left: 1rem;">View Chart</a>
   </div>
+</section>
 
-  <div class="mt-10 text-center">
-    <h1 class="glitch-title" data-text="Y2K COIN">Y2K COIN</h1>
-    <h2 class="text-2xl sm:text-3xl mt-2 tracking-widest text-pink-500">MEMECOIN GRAVEYARD</h2>
+<!-- WHAT IS THIS -->
+<section class="section section-dark text-center">
+  <h2 class="uppercase" style="color: #00ffcc; font-size: 2rem;">What Is This?</h2>
+  <p style="max-width: 700px; margin: 2rem auto; color: #aaa;">
+    A place for tokens that never made it. No VC, no revival pump — just a wall of digital gravestones.  
+    Some die quietly. Some come back. But all end up here.
+  </p>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section section-dark">
+  <div class="container text-center">
+    <h2 class="uppercase" style="color: #00ffcc; font-size: 2rem;">How It Works</h2>
+    <p style="max-width: 700px; margin: 1.5rem auto; color: #aaa;">
+      Bring your failed meme coin to the only place it still has value: the Y2K Graveyard.  
+      Here, failure becomes fuel. Dust becomes data. And your bag finally gets closure.
+    </p>
+    <div class="grid-3 text-left">
+      <div class="border-left border-pink">
+        <h3 class="uppercase" style="color: #ff00ff;">01. Connect the Corpse</h3>
+        <p style="color: #ccc;">Find your old coin. No pump. No hope. Just decay. Submit its info through the Dead Terminal.</p>
+      </div>
+      <div class="border-left border-cyan">
+        <h3 class="uppercase" style="color: #00ffcc;">02. Pair With Y2K</h3>
+        <p style="color: #ccc;">Provide LP using your coin + Y2K. We lock it. Your coin gets immortalized in our graveyard.</p>
+      </div>
+      <div class="border-left border-yellow">
+        <h3 class="uppercase" style="color: #ffff00;">03. Let the Degens Decide</h3>
+        <p style="color: #ccc;">Some coins rot. Some resurrect. You did your part. The chain decides the rest.</p>
+      </div>
+    </div>
   </div>
+</section>
 
-  <section>
-    <h3 class="section-header">What Happened?</h3>
-    <p>
-      The world moved on. Tokens died. Threads went silent.  
-      But not Y2K. It rotted... mutated... and returned — to bury the rest.
+<!-- DEAD COIN FORM -->
+<section class="section section-black">
+  <div class="container">
+    <h2 class="uppercase text-center" style="color: #ff00ff; font-size: 2rem;">Dead Coin Submission Terminal</h2>
+    <p class="text-center" style="color: #aaa; margin-top: 1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+      You found a token abandoned. Lifeless. Forgotten. Submit it to the Y2K Graveyard. If it qualifies, it gets a tombstone.  
+      If it pairs with us, it gets a new purpose.
     </p>
-  </section>
+    <form style="margin-top: 2rem;">
+      <label class="uppercase text-sm text-gray-300">Token Name</label>
+      <input class="form-input" type="text" placeholder="e.g. SHIBX" />
 
-  <section>
-    <h3 class="section-header">How It Works</h3>
-    <ul class="list-disc ml-6 space-y-1 text-base sm:text-lg">
-      <li>Users can propose pairing their dead meme coin with $Y2K</li>
-      <li>If accepted, the LP pair is locked or burned as proof of death</li>
-      <li>The tombstone is added to the on-chain ledger</li>
-      <li>Only true corpses make it — no zombies, no hype</li>
-    </ul>
-  </section>
+      <label class="uppercase text-sm text-gray-300">Contract Address</label>
+      <input class="form-input" type="text" placeholder="0x..." />
 
-  <section>
-    <h3 class="section-header">Tombstone Ledger (Soon)</h3>
-    <p>
-      A digital cemetery.  
-      Coin name. Cause of death. Time of last breath.  
-      Status: Buried / Burned / Forgotten.
-    </p>
-  </section>
+      <label class="uppercase text-sm text-gray-300">Reason for Death</label>
+      <textarea class="form-textarea" rows="3" placeholder="Abandoned, rugged, LP drained, no comms..."></textarea>
 
-  <section>
-    <h3 class="section-header">GL1TCHBALL.exe (Classified)</h3>
-    <p>
-      System instability detected. Ritual pending. Numbers corrupt.  
-      One winner. Multiple victims.
-    </p>
-  </section>
+      <div style="display: flex; align-items: start;">
+        <input type="checkbox" class="checkbox" id="agree" />
+        <label for="agree" style="margin-left: 0.5rem; font-size: 0.875rem; color: #ccc;">I agree to pair this token with Y2K and accept its fate.</label>
+      </div>
 
-  <footer class="text-sm text-center mt-20 border-t border-green-700 pt-6 text-green-300">
-    > SYSTEM IDLE — Awaiting next corpse.
-  </footer>
+      <button type="submit" class="btn btn-pink" style="width: 100%; margin-top: 1.5rem;">Submit to the Graveyard</button>
+    </form>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="section-dark text-center" style="padding-top: 3rem; padding-bottom: 3rem;">
+  <h3 class="uppercase" style="color: #00ffcc; font-size: 1.5rem;">Join the Graveyard</h3>
+  <p style="color: #888; margin-bottom: 1.5rem;">Dead doesn’t mean over. It means we’ve just begun.</p>
+  <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem;">
+    <a href="https://dexscreener.com" class="btn btn-pink" target="_blank">Chart</a>
+    <a href="https://raydium.io/swap/" class="btn btn-cyan" target="_blank">Buy $Y2K</a>
+    <a href="https://x.com" class="btn btn-yellow" target="_blank">X (Twitter)</a>
+    <a href="/docs" class="btn btn-white">Docs</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>&copy; 2025 Y2K Coin — Meme Coin Graveyard</p>
+  <p>Site operates in silence. No roadmap. No promises. Only code and decay.</p>
+</footer>
+
 </body>
 </html>
