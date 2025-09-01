@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Y2K Coin | Meme Coin Graveyard</title>
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -15,32 +14,16 @@
       --terminal-font: 'Space Mono', monospace;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: var(--dark-bg);
       color: #f5f5f5;
       font-family: 'Orbitron', sans-serif;
       scroll-behavior: smooth;
-      position: relative;
       overflow-x: hidden;
     }
 
-    canvas#particleCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    /* TERMINAL INTRO */
     #terminal {
       background: black;
       color: var(--neon-green);
@@ -55,10 +38,7 @@
       overflow: hidden;
     }
 
-    #terminal pre {
-      white-space: pre-wrap;
-      line-height: 1.6;
-    }
+    #terminal pre { white-space: pre-wrap; line-height: 1.6; }
 
     #enter-btn {
       background: var(--neon-green);
@@ -74,9 +54,7 @@
       animation: fadeIn 1s ease 3s forwards;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+    @keyframes fadeIn { to { opacity: 1; } }
 
     #main-content {
       display: none;
@@ -103,56 +81,32 @@
 
     nav {
       background: var(--zinc);
-      padding: 0.75rem 1rem;
+      padding: 1rem;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      flex-wrap: nowrap;
-      overflow-x: auto;
+      gap: 1rem;
       border-bottom: 1px solid #333;
-      font-size: 0.95rem;
     }
 
     nav a {
       color: var(--neon-green);
       text-decoration: none;
       font-weight: bold;
-      padding: 0.25rem 0.5rem;
-      white-space: nowrap;
-      position: relative;
+      font-size: 1rem;
+      padding: 0.5rem;
       transition: 0.2s;
     }
 
-    nav a::after {
-      content: "";
-      display: block;
-      height: 2px;
-      width: 0%;
-      background: var(--neon-fuchsia);
-      transition: width 0.3s;
-      margin-top: 4px;
-    }
-
-    nav a:hover::after {
-      width: 100%;
+    nav a:hover {
+      color: var(--neon-fuchsia);
+      text-shadow: 0 0 5px var(--neon-fuchsia);
     }
 
     section {
       max-width: 900px;
       margin: 2rem auto;
       padding: 0 1.5rem;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.7s ease-out;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     details {
@@ -172,9 +126,7 @@
       background-color: #222;
     }
 
-    details[open] summary {
-      background-color: #111;
-    }
+    details[open] summary { background-color: #111; }
 
     details p {
       padding: 1rem;
@@ -212,6 +164,7 @@
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 1rem;
       margin-top: 2rem;
+      position: relative;
     }
 
     .tombstone {
@@ -231,21 +184,27 @@
       color: var(--neon-fuchsia);
     }
 
-    .glitch-title {
-      text-align: center;
-      color: var(--neon-fuchsia);
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      animation: glitch 1.2s infinite;
+    .ghost {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.7;
+      animation: float 4s ease-in-out infinite;
+      cursor: pointer;
     }
 
-    @keyframes glitch {
-      0% { text-shadow: 0 0 1px #f0f; }
-      20% { text-shadow: 2px 0 #0ff; }
-      40% { text-shadow: -2px 0 #f0f; }
-      60% { text-shadow: 2px -2px #0ff; }
-      80% { text-shadow: -2px 2px #f0f; }
-      100% { text-shadow: 0 0 1px #f0f; }
+    .ghost.wraith { color: var(--neon-green); animation-delay: 0s; }
+    .ghost.nullface { color: var(--neon-fuchsia); animation-delay: 2s; }
+    .ghost.redacted { color: red; animation: flicker 0.2s steps(2) infinite alternate; }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.1; transform: translateX(0); }
+      100% { opacity: 1; transform: translateX(300vw); }
     }
 
     footer {
@@ -258,33 +217,50 @@
       margin-top: 4rem;
     }
 
-    @media (max-width: 600px) {
-      nav {
-        font-size: 0.85rem;
-        gap: 1rem;
-        padding: 0.5rem 1rem;
-      }
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      color: var(--neon-green);
+      font-family: var(--terminal-font);
+      justify-content: center;
+      align-items: center;
+      z-index: 99;
+    }
 
-      .button-group {
-        flex-direction: column;
-      }
+    #modal-content {
+      background: #111;
+      padding: 2rem;
+      border: 1px solid var(--neon-green);
+      max-width: 500px;
+      text-align: center;
+    }
+
+    #modal button {
+      margin-top: 1rem;
+      background: var(--neon-green);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      nav { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
-  <!-- Particle Background -->
-  <canvas id="particleCanvas"></canvas>
-
-  <!-- Terminal Intro -->
   <div id="terminal">
     <pre id="terminal-text"></pre>
     <button id="enter-btn" onclick="enterSite()">Enter the Grave Site</button>
   </div>
 
-  <!-- Main Content -->
   <div id="main-content">
     <div class="hero-banner">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png" alt="Y2K Coin Banner" />
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png" alt="Y2K Coin Banner"/>
     </div>
 
     <nav>
@@ -293,37 +269,36 @@
       <a href="#links">Links</a>
     </nav>
 
-    <section id="about" class="fade-in">
-      <details open>
-        <summary>What is Y2K?</summary>
-        <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
+    <section id="about">
+      <details open><summary>What is Y2K?</summary>
+        <p>Y2K is where dead meme coins go to die with dignity...</p>
       </details>
-      <details>
-        <summary>How It Works</summary>
-        <p>1. Submit your failed coin<br>2. Pair it with Y2K (LP)<br>3. It gets a tombstone on the Graveyard wall<br>4. Community decides if it deserves resurrection or eternal death.</p>
+      <details><summary>How It Works</summary>
+        <p>1. Submit your failed coin<br>2. Pair with Y2K<br>3. Gets a tombstone...</p>
       </details>
     </section>
 
-    <section id="submit" class="fade-in">
-      <details>
-        <summary>Submit a Dead Coin</summary>
-        <p>Coming soon: a form to submit your abandoned token. For now, reach out through backchannels. We're watching.</p>
-      </details>
-    </section>
-
-    <section id="links" class="fade-in">
-      <details open>
-        <summary>Quick Links</summary>
+    <section id="submit">
+      <details><summary>Submit a Dead Coin</summary>
+        <p>Click below to summon the ritual modal.</p>
         <div class="button-group">
-          <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy Y2K</a>
-          <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank">View Chart</a>
-          <a href="https://x.com/y2kc0in?s=21" target="_blank">Follow on 𝕏</a>
+          <a href="#" onclick="openModal()">Summon Redemption</a>
         </div>
       </details>
     </section>
 
-    <section class="fade-in">
-      <h2 class="glitch-title">Graveyard Wall</h2>
+    <section id="links">
+      <details open><summary>Quick Links</summary>
+        <div class="button-group">
+          <a href="https://obsidian.finance/?outputCurrency=..." target="_blank">Buy Y2K</a>
+          <a href="https://dexscreener.com/cronos/..." target="_blank">View Chart</a>
+          <a href="https://x.com/y2kc0in" target="_blank">Follow on 𝕏</a>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h2 style="text-align:center;color:var(--neon-fuchsia);margin-bottom:1rem;">Graveyard Wall</h2>
       <div class="tombstone-wall">
         <div class="tombstone">💀 RUGTOKEN</div>
         <div class="tombstone">☠️ SHIBAFLOP</div>
@@ -333,6 +308,9 @@
         <div class="tombstone">🩸 DRIPFLOP</div>
         <div class="tombstone">⚰️ DEADPOO</div>
         <div class="tombstone">🧬 GLITCHPET</div>
+        <span class="ghost wraith" style="top:40%;left:20%;">👻</span>
+        <span class="ghost nullface" style="top:60%;left:70%;">🕳️</span>
+        <span class="ghost redacted" style="top:30%;left:-300px;">🔥</span>
       </div>
     </section>
 
@@ -341,19 +319,20 @@
     </footer>
   </div>
 
-  <!-- JavaScript for Terminal and Effects -->
+  <div id="modal">
+    <div id="modal-content">
+      <h3>Summon the Dead</h3>
+      <p>Redemption ritual initializing...</p>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
   <script>
     const lines = [
       "> connecting to y2kcoin.org...",
       "> gravechain access granted_",
-      "> status: DECODED",
-      "> user: undefined",
-      "> message: this site operates without oversight.",
-      "> purpose: decay, anomaly retention, asset preservation.",
-      "> logs indicate past lifeforms attempted redemption.",
-      "> the vault rejects them.",
-      "> submission channel remains open.",
       "> signal detected from █.███.███",
+      "> purpose: decay, anomaly retention, asset preservation...",
       "> they are watching."
     ];
 
@@ -374,75 +353,15 @@
       document.getElementById("main-content").style.display = "block";
     }
 
+    function openModal() {
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
     window.onload = typeLine;
-
-    // Fade-in on scroll
-    const faders = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.2 });
-
-    faders.forEach(el => observer.observe(el));
-
-    // Glowing particles
-    const canvas = document.getElementById("particleCanvas");
-    const ctx = canvas.getContext("2d");
-    let particles = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedY = Math.random() * 0.5 + 0.2;
-      }
-      update() {
-        this.y += this.speedY;
-        if (this.y > canvas.height) {
-          this.y = 0;
-          this.x = Math.random() * canvas.width;
-        }
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0,255,204,0.15)';
-        ctx.shadowColor = '#00ffcc';
-        ctx.shadowBlur = 6;
-        ctx.fill();
-      }
-    }
-
-    function initParticles(count = 60) {
-      particles = [];
-      for (let i = 0; i < count; i++) {
-        particles.push(new Particle());
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-      requestAnimationFrame(animateParticles);
-    }
-
-    initParticles();
-    animateParticles();
   </script>
 </body>
 </html>
