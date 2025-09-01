@@ -26,6 +26,18 @@
       color: #f5f5f5;
       font-family: 'Orbitron', sans-serif;
       scroll-behavior: smooth;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    canvas#particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
 
     /* TERMINAL INTRO */
@@ -108,18 +120,39 @@
       font-weight: bold;
       padding: 0.25rem 0.5rem;
       white-space: nowrap;
+      position: relative;
       transition: 0.2s;
     }
 
-    nav a:hover {
-      color: var(--neon-fuchsia);
-      text-shadow: 0 0 5px var(--neon-fuchsia);
+    nav a::after {
+      content: "";
+      display: block;
+      height: 2px;
+      width: 0%;
+      background: var(--neon-fuchsia);
+      transition: width 0.3s;
+      margin-top: 4px;
+    }
+
+    nav a:hover::after {
+      width: 100%;
     }
 
     section {
       max-width: 900px;
       margin: 2rem auto;
       padding: 0 1.5rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.7s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     details {
@@ -198,6 +231,23 @@
       color: var(--neon-fuchsia);
     }
 
+    .glitch-title {
+      text-align: center;
+      color: var(--neon-fuchsia);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      animation: glitch 1.2s infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 0 0 1px #f0f; }
+      20% { text-shadow: 2px 0 #0ff; }
+      40% { text-shadow: -2px 0 #f0f; }
+      60% { text-shadow: 2px -2px #0ff; }
+      80% { text-shadow: -2px 2px #f0f; }
+      100% { text-shadow: 0 0 1px #f0f; }
+    }
+
     footer {
       text-align: center;
       padding: 2rem 1rem;
@@ -222,6 +272,9 @@
   </style>
 </head>
 <body>
+  <!-- Particle Background -->
+  <canvas id="particleCanvas"></canvas>
+
   <!-- Terminal Intro -->
   <div id="terminal">
     <pre id="terminal-text"></pre>
@@ -240,7 +293,7 @@
       <a href="#links">Links</a>
     </nav>
 
-    <section id="about">
+    <section id="about" class="fade-in">
       <details open>
         <summary>What is Y2K?</summary>
         <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
@@ -251,14 +304,14 @@
       </details>
     </section>
 
-    <section id="submit">
+    <section id="submit" class="fade-in">
       <details>
         <summary>Submit a Dead Coin</summary>
         <p>Coming soon: a form to submit your abandoned token. For now, reach out through backchannels. We're watching.</p>
       </details>
     </section>
 
-    <section id="links">
+    <section id="links" class="fade-in">
       <details open>
         <summary>Quick Links</summary>
         <div class="button-group">
@@ -269,8 +322,8 @@
       </details>
     </section>
 
-    <section>
-      <h2 style="text-align:center;color:var(--neon-fuchsia);margin-bottom:1rem;">Graveyard Wall</h2>
+    <section class="fade-in">
+      <h2 class="glitch-title">Graveyard Wall</h2>
       <div class="tombstone-wall">
         <div class="tombstone">💀 RUGTOKEN</div>
         <div class="tombstone">☠️ SHIBAFLOP</div>
@@ -288,7 +341,7 @@
     </footer>
   </div>
 
-  <!-- Terminal Logic -->
+  <!-- JavaScript for Terminal and Effects -->
   <script>
     const lines = [
       "> connecting to y2kcoin.org...",
@@ -322,6 +375,74 @@
     }
 
     window.onload = typeLine;
+
+    // Fade-in on scroll
+    const faders = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    faders.forEach(el => observer.observe(el));
+
+    // Glowing particles
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedY = Math.random() * 0.5 + 0.2;
+      }
+      update() {
+        this.y += this.speedY;
+        if (this.y > canvas.height) {
+          this.y = 0;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,255,204,0.15)';
+        ctx.shadowColor = '#00ffcc';
+        ctx.shadowBlur = 6;
+        ctx.fill();
+      }
+    }
+
+    function initParticles(count = 60) {
+      particles = [];
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
   </script>
 </body>
 </html>
