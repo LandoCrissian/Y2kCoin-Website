@@ -77,10 +77,16 @@
     }
 
     .hero-banner {
-      background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png') center top / cover no-repeat;
-      height: 240px;
+      width: 100%;
+      overflow: hidden;
       border-top: 4px solid var(--neon-fuchsia);
       border-bottom: 1px solid #333;
+    }
+
+    .hero-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
     nav {
@@ -220,7 +226,9 @@
 
   <!-- Main Content -->
   <div id="main-content">
-    <div class="hero-banner"></div>
+    <div class="hero-banner">
+      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png" alt="Y2K Coin Banner" />
+    </div>
 
     <nav>
       <a href="#about">About</a>
