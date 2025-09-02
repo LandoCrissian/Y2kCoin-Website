@@ -225,6 +225,23 @@
       50% { transform: translateY(-20px); }
       100% { transform: translateY(0); }
     }
+
+    .floating-ghost {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  z-index: 20;
+  animation: floatGhost 6s ease-in-out infinite, fadeGhost 8s ease-in-out infinite;
+  transition: transform 0.5s ease;
+  filter: drop-shadow(0 0 6px #00ffcc88);
+}
+
+@keyframes fadeGhost {
+  0%   { opacity: 0; transform: translateY(0px) scale(1); }
+  50%  { opacity: 0.4; transform: translateY(-10px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(0px) scale(1); }
+}
     /* Modal */
     #summon-modal {
       position: fixed;
@@ -271,11 +288,6 @@
     <pre id="terminal-text"></pre>
     <button id="enter-btn" onclick="enterSite()">Enter the Grave Site</button>
   </div>
-
-  <!-- Ghosts -->
-  <div class="ghost" style="top:10%; left:5%; animation-delay: 0s;"></div>
-  <div class="ghost" style="top:30%; left:80%; animation-delay: 2s;"></div>
-  <div class="ghost" style="top:60%; left:20%; animation-delay: 4s;"></div>
 
   <!-- Modal -->
   <div id="summon-modal">
@@ -458,5 +470,39 @@
     initParticles();
     animateParticles();
   </script>
+
+  <script>
+  // ... existing scripts (typeLine, modal, particles, etc.)
+
+  // Floating Ghost Logic
+  const ghostImages = [
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost1.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost2.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost3.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost4.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost5.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost6.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost7.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost8.png"
+  ];
+
+  function spawnGhosts() {
+    ghostImages.forEach((src, i) => {
+      const ghost = document.createElement("img");
+      ghost.src = src;
+      ghost.className = "floating-ghost";
+      ghost.style.top = Math.random() * 90 + "%";
+      ghost.style.left = Math.random() * 90 + "%";
+      ghost.style.animationDelay = `${Math.random() * 10}s`;
+      ghost.style.opacity = `${Math.random() * 0.4 + 0.1}`; // 0.1 to 0.5
+      document.body.appendChild(ghost);
+    });
+  }
+
+  window.onload = () => {
+    typeLine();
+    spawnGhosts();
+  };
+</script>
 </body>
 </html>
