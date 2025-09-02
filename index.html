@@ -227,12 +227,10 @@
     }
 
     .floating-ghost {
-  position: fixed;
-  pointer-events: none;
-  z-index: 25;
-  animation: floatGhost 6s ease-in-out infinite, fadeGhost 8s ease-in-out infinite;
-  filter: drop-shadow(0 0 4px #00ffcc80);
-  transition: transform 0.3s ease;
+  position: absolute;
+  animation: none;
+  transition: top 10s ease-in-out, left 10s ease-in-out, opacity 2s ease-in-out;
+  will-change: transform, opacity;
 }
 
 @keyframes fadeGhost {
@@ -476,78 +474,68 @@
   </script>
 
   <script>
-const ghostImages = [
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost1.png",
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost2.png",
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost3.png",
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost4.png",
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost5.png",
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost6.png",
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost7.png",
-  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost8.png"
-];
+  const ghostImageUrls = [
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/E74E4164-6823-4EDA-82F8-430805F548A7.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BB82A8AD-CC4D-4A6A-BF61-631B6FB14A6C.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61AC60EE-9D31-472A-BF74-787FD1B92550.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/45684CFA-78F1-46DB-BBBD-ADDC974C2D05.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/42BEB3CE-FAA0-4F17-954F-3DACB8F8585A.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3E63EC46-2A23-42B7-BD42-73EB75A22D55.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/2EDE1153-B7DD-4DDD-B566-A2CA2F8F793C.png",
+    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/0102A710-54CD-467B-B8E3-CBA227E1BA10.png"
+  ];
 
-function spawnGhosts() {
-  ghostImages.forEach((src, index) => {
-    const ghost = document.createElement("img");
-    ghost.src = src;
-    ghost.className = "floating-ghost";
-    ghost.style.position = "fixed";
-    ghost.style.width = "48px";
-    ghost.style.height = "48px";
-    ghost.style.pointerEvents = "none";
-    ghost.style.zIndex = 20;
+  function spawnGhosts() {
+    ghostImageUrls.forEach((url, index) => {
+      const ghost = document.createElement("img");
+      ghost.src = url;
+      ghost.className = "floating-ghost";
+      ghost.style.position = "absolute";
+      ghost.style.zIndex = "999";
+      ghost.style.width = `${40 + Math.random() * 60}px`;
+      ghost.style.opacity = 0;
+      ghost.style.pointerEvents = "none";
 
-    // Randomize initial position
-    let x = Math.random() * window.innerWidth;
-    let y = Math.random() * window.innerHeight;
-    ghost.style.left = `${x}px`;
-    ghost.style.top = `${y}px`;
+      // Random start position
+      ghost.style.top = `${Math.random() * 100}vh`;
+      ghost.style.left = `${Math.random() * 100}vw`;
 
-    // Add to DOM
-    document.body.appendChild(ghost);
-
-    // Start ghost animation loop
-    animateGhost(ghost);
-  });
-}
-
-function animateGhost(ghost) {
-  const driftDistance = 40 + Math.random() * 30; // px
-  const duration = 4000 + Math.random() * 3000; // ms
-  const fadeTime = 500 + Math.random() * 1500;
-
-  let angle = Math.random() * Math.PI * 2;
-
-  function loop() {
-    // Calculate drift direction
-    angle += (Math.random() - 0.5) * 0.4;
-
-    // New position
-    const dx = Math.cos(angle) * driftDistance;
-    const dy = Math.sin(angle) * driftDistance;
-
-    const newX = Math.min(Math.max(0, parseFloat(ghost.style.left) + dx), window.innerWidth - 48);
-    const newY = Math.min(Math.max(0, parseFloat(ghost.style.top) + dy), window.innerHeight - 48);
-
-    // Animate movement + opacity
-    ghost.style.transition = `all ${duration}ms ease-in-out`;
-    ghost.style.left = `${newX}px`;
-    ghost.style.top = `${newY}px`;
-    ghost.style.opacity = Math.random() * 0.5 + 0.1;
-
-    // Repeat after random delay
-    setTimeout(loop, duration + fadeTime);
+      document.body.appendChild(ghost);
+      animateGhost(ghost, index);
+    });
   }
 
-  // Initial delay to avoid all ghosts acting at once
-  setTimeout(loop, Math.random() * 4000);
-}
+  function animateGhost(ghost, index) {
+    const duration = 10000 + Math.random() * 5000;
+    const fadeTime = 1000 + Math.random() * 2000;
 
-window.onload = () => {
-  typeLine();       // Terminal typing
-  spawnGhosts();    // Floaty haunted chaos
-};
+    function loop() {
+      // Random new position
+      const top = Math.random() * window.innerHeight;
+      const left = Math.random() * window.innerWidth;
+
+      ghost.style.transition = `top ${duration}ms ease-in-out, left ${duration}ms ease-in-out, opacity ${fadeTime}ms ease-in-out`;
+
+      // Fade in
+      ghost.style.opacity = 0.6 + Math.random() * 0.3;
+
+      ghost.style.top = `${top}px`;
+      ghost.style.left = `${left}px`;
+
+      // Fade out after some time
+      setTimeout(() => {
+        ghost.style.opacity = 0;
+      }, duration * 0.8);
+
+      setTimeout(loop, duration + Math.random() * 3000);
+    }
+
+    setTimeout(loop, index * 700); // slight delay to offset animations
+  }
+
+  window.addEventListener("load", () => {
+    spawnGhosts();
+  });
 </script>
 </body>
 </html>
