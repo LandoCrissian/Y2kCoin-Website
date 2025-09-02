@@ -228,19 +228,23 @@
 
     .floating-ghost {
   position: fixed;
-  width: 48px;
-  height: 48px;
   pointer-events: none;
-  z-index: 20;
+  z-index: 25;
   animation: floatGhost 6s ease-in-out infinite, fadeGhost 8s ease-in-out infinite;
-  transition: transform 0.5s ease;
-  filter: drop-shadow(0 0 6px #00ffcc88);
+  filter: drop-shadow(0 0 4px #00ffcc80);
+  transition: transform 0.3s ease;
 }
 
 @keyframes fadeGhost {
   0%   { opacity: 0; transform: translateY(0px) scale(1); }
   50%  { opacity: 0.4; transform: translateY(-10px) scale(1.1); }
   100% { opacity: 0; transform: translateY(0px) scale(1); }
+}
+
+    @keyframes floatGhost {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-10px, -20px); }
+  100% { transform: translate(10px, 0); }
 }
     /* Modal */
     #summon-modal {
@@ -474,35 +478,38 @@
   <script>
   // ... existing scripts (typeLine, modal, particles, etc.)
 
-  // Floating Ghost Logic
-  const ghostImages = [
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost1.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost2.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost3.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost4.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost5.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost6.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost7.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/ghost8.png"
-  ];
+  // Spawn floating ghosts using your exact 8 images
+const ghostImages = [
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61AC60EE-9D31-472A-BF74-787FD1B92550.png",
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/42BEB3CE-FAA0-4F17-954F-3DACB8F8585A.png",
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3E63EC46-2A23-42B7-BD42-73EB75A22D55.png",
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/2EDE1153-B7DD-4DDD-B566-A2CA2F8F793C.png",
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/20A1E09D-8C1D-40CF-A1C3-B9B368B3CBE9.png",
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/A3F99BB6-F0EF-40C8-AC31-3324B85F977F.png",
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/0339DB69-2436-43DB-8D4A-BE35CDF42734.png",
+  "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/D52D78F5-EDB8-47AE-9BCC-A10C74012389.png"
+];
 
-  function spawnGhosts() {
-    ghostImages.forEach((src, i) => {
-      const ghost = document.createElement("img");
-      ghost.src = src;
-      ghost.className = "floating-ghost";
-      ghost.style.top = Math.random() * 90 + "%";
-      ghost.style.left = Math.random() * 90 + "%";
-      ghost.style.animationDelay = `${Math.random() * 10}s`;
-      ghost.style.opacity = `${Math.random() * 0.4 + 0.1}`; // 0.1 to 0.5
-      document.body.appendChild(ghost);
-    });
-  }
+function spawnGhosts() {
+  ghostImages.forEach((src, index) => {
+    const ghost = document.createElement("img");
+    ghost.src = src;
+    ghost.className = "floating-ghost";
+    ghost.style.top = Math.random() * 90 + "%";
+    ghost.style.left = Math.random() * 90 + "%";
+    ghost.style.opacity = (Math.random() * 0.4 + 0.2).toFixed(2); // between 0.2 and 0.6
+    ghost.style.animationDelay = `${Math.random() * 10}s`;
+    ghost.style.width = `${Math.floor(Math.random() * 40 + 40)}px`; // 40–80px
+    document.body.appendChild(ghost);
+  });
+}
 
-  window.onload = () => {
-    typeLine();
-    spawnGhosts();
-  };
+// Append ghost spawner to existing window.onload
+const oldLoad = window.onload;
+window.onload = function () {
+  if (typeof oldLoad === 'function') oldLoad();
+  spawnGhosts();
+};
 </script>
 </body>
 </html>
