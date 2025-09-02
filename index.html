@@ -228,9 +228,24 @@
 
     .floating-ghost {
   position: absolute;
+  transition: all 10s ease-in-out;
+  filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 5px #0ff);
   animation: none;
-  transition: top 10s ease-in-out, left 10s ease-in-out, opacity 2s ease-in-out;
   will-change: transform, opacity;
+}
+
+/* Jumpscare body shake */
+@keyframes bodyShake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(4px, -1px); }
+  60% { transform: translate(-2px, -3px); }
+  80% { transform: translate(2px, 3px); }
+  100% { transform: translate(0, 0); }
+}
+
+body.jumpscare {
+  animation: bodyShake 0.3s;
 }
 
 @keyframes fadeGhost {
@@ -495,8 +510,8 @@
       ghost.style.width = `${40 + Math.random() * 60}px`;
       ghost.style.opacity = 0;
       ghost.style.pointerEvents = "none";
+      ghost.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.8 + Math.random() * 0.4})`;
 
-      // Random start position
       ghost.style.top = `${Math.random() * 100}vh`;
       ghost.style.left = `${Math.random() * 100}vw`;
 
@@ -506,36 +521,43 @@
   }
 
   function animateGhost(ghost, index) {
-    const duration = 10000 + Math.random() * 5000;
-    const fadeTime = 1000 + Math.random() * 2000;
-
     function loop() {
-      // Random new position
+      const duration = 8000 + Math.random() * 5000;
+      const fadeTime = 800 + Math.random() * 2000;
+      const rotate = Math.random() > 0.5 ? `rotate(${Math.random() * 360}deg)` : "";
+      const scale = `scale(${0.7 + Math.random() * 0.6})`;
+      const flip = Math.random() > 0.5 ? "scaleX(-1)" : "scaleX(1)";
+      const glitch = Math.random() > 0.8 ? "skew(1deg, 1deg)" : "";
+
       const top = Math.random() * window.innerHeight;
       const left = Math.random() * window.innerWidth;
 
-      ghost.style.transition = `top ${duration}ms ease-in-out, left ${duration}ms ease-in-out, opacity ${fadeTime}ms ease-in-out`;
-
-      // Fade in
-      ghost.style.opacity = 0.6 + Math.random() * 0.3;
-
+      ghost.style.transition = `all ${duration}ms ease-in-out`;
+      ghost.style.opacity = 0.5 + Math.random() * 0.4;
       ghost.style.top = `${top}px`;
       ghost.style.left = `${left}px`;
+      ghost.style.transform = `${rotate} ${scale} ${flip} ${glitch}`;
 
-      // Fade out after some time
+      // Fade out after time
       setTimeout(() => {
         ghost.style.opacity = 0;
       }, duration * 0.8);
 
-      setTimeout(loop, duration + Math.random() * 3000);
+      // Rare jump scare shake
+      if (Math.random() > 0.98) {
+        document.body.classList.add("jumpscare");
+        setTimeout(() => {
+          document.body.classList.remove("jumpscare");
+        }, 300);
+      }
+
+      setTimeout(loop, duration + Math.random() * 4000);
     }
 
-    setTimeout(loop, index * 700); // slight delay to offset animations
+    setTimeout(loop, index * 500);
   }
 
-  window.addEventListener("load", () => {
-    spawnGhosts();
-  });
+  window.addEventListener("load", spawnGhosts);
 </script>
 </body>
 </html>
