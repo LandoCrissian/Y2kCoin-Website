@@ -220,11 +220,6 @@
       opacity: 0.1;
       animation: floatGhost 8s ease-in-out infinite;
     }
-    @keyframes floatGhost {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0); }
-    }
 
     .floating-ghost {
   position: absolute;
@@ -293,6 +288,42 @@ body.jumpscare {
     @media (max-width: 600px) {
       nav { font-size: 0.85rem; gap: 1rem; padding: 0.5rem 1rem; }
     }
+
+    .glitch-char {
+  display: inline-block;
+  animation: glitchFlicker 0.2s infinite;
+  animation-delay: calc(var(--delay, 0ms));
+}
+
+@keyframes glitchFlicker {
+  0% { opacity: 1; transform: translate(0, 0); }
+  25% { opacity: 0.6; transform: translate(-1px, 1px); }
+  50% { opacity: 1; transform: translate(1px, -1px); }
+  75% { opacity: 0.8; transform: translate(-1px, 0); }
+  100% { opacity: 1; transform: translate(0, 0); }
+}
+
+    #cursor {
+  font-family: var(--terminal-font);
+  color: var(--neon-green);
+  animation: blinkCursor 1s infinite;
+  font-size: 1rem;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+    #terminal {
+  animation: terminalFlicker 3s infinite alternate;
+}
+
+@keyframes terminalFlicker {
+  0% { background-color: #000; }
+  45% { background-color: #040404; }
+  100% { background-color: #000; }
+}
   </style>
 </head>
 <body>
@@ -304,6 +335,7 @@ body.jumpscare {
   <div id="terminal">
     <pre id="terminal-text"></pre>
     <button id="enter-btn" onclick="enterSite()">Enter the Grave Site</button>
+    <span id="cursor">_</span>
   </div>
 
   <!-- Modal -->
@@ -397,17 +429,29 @@ body.jumpscare {
     let idx = 0;
 
     function typeLine() {
-      if (idx < lines.length) {
-        terminalText.innerHTML += lines[idx] + "\n";
-        idx++;
-        setTimeout(typeLine, 100);
-      }
-    }
+  if (idx < lines.length) {
+    const line = lines[idx];
+    const lineEl = document.createElement("div");
+
+    [...line].forEach((char, i) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.classList.add("glitch-char");
+      span.style.setProperty('--delay', `${Math.random() * 400}ms`);
+      lineEl.appendChild(span);
+    });
+
+    terminalText.appendChild(lineEl);
+    idx++;
+    setTimeout(typeLine, 400);
+  }
+}
 
     function enterSite() {
-      document.getElementById("terminal").style.display = "none";
-      document.getElementById("main-content").style.display = "block";
-    }
+  document.getElementById("terminal").style.display = "none";
+  document.getElementById("main-content").style.display = "block";
+  document.getElementById("cursor").style.display = "none";
+}
 
     function openModal() {
       document.getElementById("summon-modal").style.display = "flex";
@@ -558,6 +602,27 @@ body.jumpscare {
   }
 
   window.addEventListener("load", spawnGhosts);
+</script>
+
+  <script>
+let commandBuffer = "";
+
+document.addEventListener("keydown", function (e) {
+  if (document.getElementById("main-content").style.display === "block") return;
+  if (e.key.length === 1) {
+    commandBuffer += e.key.toLowerCase();
+    if (commandBuffer.length > 10) {
+      commandBuffer = commandBuffer.slice(-10);
+    }
+
+    if (commandBuffer.includes("summon")) openModal();
+    else if (commandBuffer.includes("vault")) alert("🔒 ACCESS DENIED.");
+    else if (commandBuffer.includes("ghost")) spawnGhosts(); // re-spawns ghosts
+    else if (commandBuffer.includes("redeem")) {
+      alert("⚠️ Redemption protocol offline. Try again later.");
+    }
+  }
+});
 </script>
 </body>
 </html>
