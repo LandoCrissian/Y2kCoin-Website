@@ -476,9 +476,6 @@
   </script>
 
   <script>
-  // ... existing scripts (typeLine, modal, particles, etc.)
-
-  // Spawn floating ghosts using your exact 8 images
 const ghostImages = [
   "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/E74E4164-6823-4EDA-82F8-430805F548A7.png",
   "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BB82A8AD-CC4D-4A6A-BF61-631B6FB14A6C.png",
@@ -491,23 +488,43 @@ const ghostImages = [
 ];
 
 function spawnGhosts() {
-  ghostImages.forEach((src, index) => {
+  ghostImages.forEach((src, i) => {
     const ghost = document.createElement("img");
     ghost.src = src;
     ghost.className = "floating-ghost";
-    ghost.style.top = Math.random() * 90 + "%";
-    ghost.style.left = Math.random() * 90 + "%";
-    ghost.style.opacity = (Math.random() * 0.4 + 0.2).toFixed(2); // between 0.2 and 0.6
-    ghost.style.animationDelay = `${Math.random() * 10}s`;
-    ghost.style.width = `${Math.floor(Math.random() * 40 + 40)}px`; // 40–80px
+    ghost.style.position = "fixed";
+    ghost.style.width = "48px";
+    ghost.style.height = "48px";
+    ghost.style.pointerEvents = "none";
+    ghost.style.zIndex = 999;
+    ghost.style.opacity = Math.random() * 0.4 + 0.2;
     document.body.appendChild(ghost);
+
+    moveGhost(ghost); // start moving
   });
 }
 
-// Append ghost spawner to existing window.onload
-const oldLoad = window.onload;
-window.onload = function () {
-  if (typeof oldLoad === 'function') oldLoad();
+function moveGhost(ghost) {
+  function randomPos(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  const screenW = window.innerWidth;
+  const screenH = window.innerHeight;
+  const duration = Math.random() * 8000 + 4000; // 4s – 12s
+
+  const top = randomPos(screenH - 100);
+  const left = randomPos(screenW - 100);
+
+  ghost.style.transition = `top ${duration}ms ease-in-out, left ${duration}ms ease-in-out`;
+  ghost.style.top = top + "px";
+  ghost.style.left = left + "px";
+
+  setTimeout(() => moveGhost(ghost), duration);
+}
+
+window.onload = () => {
+  typeLine();
   spawnGhosts();
 };
 </script>
