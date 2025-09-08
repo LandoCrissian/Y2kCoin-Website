@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,618 +11,287 @@
       --neon-fuchsia: #ff00ff;
       --neon-green: #00ffcc;
       --dark-bg: #0a0a0a;
-      --zinc: #1a1a1a;
       --terminal-font: 'Space Mono', monospace;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       background: var(--dark-bg);
       color: #f5f5f5;
       font-family: 'Orbitron', sans-serif;
-      scroll-behavior: smooth;
-      position: relative;
       overflow-x: hidden;
     }
-    canvas#particleCanvas {
+
+    .terminal-overlay {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-    #terminal {
-      background: black;
-      color: var(--neon-green);
-      font-size: 1rem;
-      padding: 2rem;
-      font-family: var(--terminal-font);
+      width: 100vw;
       height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      overflow: hidden;
-    }
-    #terminal pre {
-      white-space: pre-wrap;
-      line-height: 1.6;
-    }
-    #enter-btn {
-      background: var(--neon-green);
-      color: #000;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      font-weight: bold;
-      font-family: 'Orbitron', monospace;
-      margin-top: 2rem;
-      box-shadow: 0 0 12px var(--neon-green);
-      cursor: pointer;
-      opacity: 0;
-      animation: fadeIn 1s ease 3s forwards;
-    }
-    @keyframes fadeIn { to { opacity: 1; } }
-    #main-content {
-      display: none;
-      animation: fadeInMain 1s ease forwards;
-    }
-    @keyframes fadeInMain { from { opacity: 0; } to { opacity: 1; } }
-    .hero-banner {
-      width: 100%;
-      overflow: hidden;
-      border-top: 4px solid var(--neon-fuchsia);
-      border-bottom: 1px solid #333;
-    }
-    .hero-banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    nav {
-      background: var(--zinc);
-      padding: 0.75rem 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      overflow-x: auto;
-      border-bottom: 1px solid #333;
-      font-size: 0.95rem;
-    }
-    nav a {
+      background: #000;
       color: var(--neon-green);
-      text-decoration: none;
+      font-family: var(--terminal-font);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      padding: 2rem;
+    }
+
+    .terminal-output {
+      width: 100%;
+      max-width: 700px;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      line-height: 1.5;
+      animation: typeOut 4s steps(50) forwards;
+    }
+
+    .enter-btn {
+      margin-top: 2rem;
+      color: var(--neon-fuchsia);
+      text-shadow: 0 0 5px var(--neon-fuchsia);
       font-weight: bold;
-      padding: 0.25rem 0.5rem;
-      white-space: nowrap;
-      position: relative;
-      transition: 0.2s;
+      cursor: pointer;
+      animation: flicker 2s infinite alternate;
     }
-    nav a::after {
-      content: "";
-      display: block;
-      height: 2px;
-      width: 0%;
-      background: var(--neon-fuchsia);
-      transition: width 0.3s;
-      margin-top: 4px;
+
+    @keyframes flicker {
+      0% { opacity: 1; text-shadow: 0 0 5px var(--neon-fuchsia); }
+      50% { opacity: 0.6; text-shadow: 0 0 12px var(--neon-fuchsia); }
+      100% { opacity: 1; text-shadow: 0 0 6px var(--neon-green); }
     }
-    nav a:hover::after { width: 100%; }
-    section {
+
+    @keyframes typeOut {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+
+    header {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png') center/cover no-repeat;
+      padding: 6rem 1rem 3rem;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    header h1 {
+      font-size: 3.2rem;
+      color: var(--neon-green);
+      text-shadow: 0 0 12px var(--neon-green);
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #ccc;
+      margin-top: 0.5rem;
+    }
+
+    main {
+      padding: 2rem 1rem;
       max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      margin: auto;
     }
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.7s ease-out;
+
+    nav {
+      background: #111;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem 0;
     }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
+
+    nav a {
+      text-decoration: none;
+      color: var(--neon-green);
+      font-weight: bold;
     }
+
+    nav a:hover {
+      color: var(--neon-fuchsia);
+    }
+
     details {
       background: #111;
-      border: 1px solid #333;
+      border: 1px solid #222;
       margin-bottom: 1rem;
-      border-radius: 4px;
     }
+
     summary {
       padding: 1rem;
-      cursor: pointer;
       font-weight: bold;
-      font-family: var(--terminal-font);
+      cursor: pointer;
+      background: #1a1a1a;
       color: var(--neon-green);
-      background-color: #222;
     }
-    details[open] summary { background-color: #111; }
+
+    details[open] summary {
+      background: #111;
+    }
+
     details p {
       padding: 1rem;
-      color: #ccc;
       font-size: 0.95rem;
-      font-family: var(--terminal-font);
+      color: #ccc;
     }
+
     .button-group {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 1rem;
       margin-top: 1rem;
     }
+
     .button-group a {
-      text-align: center;
-      padding: 0.75rem;
+      padding: 0.75rem 1.25rem;
       border-radius: 4px;
       background: var(--neon-green);
       color: #000;
       font-weight: bold;
       text-decoration: none;
       box-shadow: 0 0 10px var(--neon-green);
-      transition: 0.2s;
     }
+
     .button-group a:hover {
       background: var(--neon-fuchsia);
-      box-shadow: 0 0 15px var(--neon-fuchsia);
+      box-shadow: 0 0 12px var(--neon-fuchsia);
     }
+
     .tombstone-wall {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 1rem;
       margin-top: 2rem;
     }
+
     .tombstone {
-      background: #111;
-      border: 1px solid #333;
+      background: #1b1b1b;
       padding: 1rem;
+      border: 1px solid #333;
       text-align: center;
       font-size: 0.85rem;
-      color: #999;
-      font-family: var(--terminal-font);
-      animation: tombstoneFloat 4s ease-in-out infinite alternate;
+      color: #888;
     }
-    @keyframes tombstoneFloat {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-5px) rotate(-1deg); }
-    }
-    .glitch-title {
-      text-align: center;
-      color: var(--neon-fuchsia);
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      animation: glitch 1.2s infinite;
-    }
-    @keyframes glitch {
-      0% { text-shadow: 0 0 1px #f0f; }
-      20% { text-shadow: 2px 0 #0ff; }
-      40% { text-shadow: -2px 0 #f0f; }
-      60% { text-shadow: 2px -2px #0ff; }
-      80% { text-shadow: -2px 2px #f0f; }
-      100% { text-shadow: 0 0 1px #f0f; }
-    }
+
     footer {
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 3rem 1rem;
       color: #666;
-      background: #111;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       border-top: 1px solid #333;
-      margin-top: 4rem;
-    }
-    /* Ghosts */
-    .ghost {
-      position: fixed;
-      width: 40px;
-      height: 40px;
-      background: url('https://i.ibb.co/Nt6vwvM/ghost-icon.png') no-repeat center center;
-      background-size: contain;
-      pointer-events: none;
-      opacity: 0.1;
-      animation: floatGhost 8s ease-in-out infinite;
     }
 
-    .floating-ghost {
-  position: absolute;
-  transition: all 10s ease-in-out;
-  filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 5px #0ff);
-  animation: none;
-  will-change: transform, opacity;
-}
-
-/* Jumpscare body shake */
-@keyframes bodyShake {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-3px, 2px); }
-  40% { transform: translate(4px, -1px); }
-  60% { transform: translate(-2px, -3px); }
-  80% { transform: translate(2px, 3px); }
-  100% { transform: translate(0, 0); }
-}
-
-body.jumpscare {
-  animation: bodyShake 0.3s;
-}
-
-@keyframes fadeGhost {
-  0%   { opacity: 0; transform: translateY(0px) scale(1); }
-  50%  { opacity: 0.4; transform: translateY(-10px) scale(1.1); }
-  100% { opacity: 0; transform: translateY(0px) scale(1); }
-}
-
-    @keyframes floatGhost {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(-10px, -20px); }
-  100% { transform: translate(10px, 0); }
-}
-    /* Modal */
-    #summon-modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    #summon-modal .content {
-      background: #111;
-      border: 1px solid var(--neon-green);
-      padding: 2rem;
-      text-align: center;
-      box-shadow: 0 0 15px var(--neon-green);
-      font-family: var(--terminal-font);
-      color: var(--neon-green);
-    }
-    #summon-modal button {
-      background: var(--neon-fuchsia);
-      color: black;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      margin-top: 1rem;
-      font-weight: bold;
-      font-family: 'Orbitron', monospace;
-      cursor: pointer;
-      box-shadow: 0 0 12px var(--neon-fuchsia);
-    }
     @media (max-width: 600px) {
-      nav { font-size: 0.85rem; gap: 1rem; padding: 0.5rem 1rem; }
+      header h1 { font-size: 2rem; }
+      nav { flex-direction: column; gap: 1rem; }
     }
-
-    .glitch-char {
-  display: inline-block;
-  animation: glitchFlicker 0.2s infinite;
-  animation-delay: calc(var(--delay, 0ms));
-}
-
-@keyframes glitchFlicker {
-  0% { opacity: 1; transform: translate(0, 0); }
-  25% { opacity: 0.6; transform: translate(-1px, 1px); }
-  50% { opacity: 1; transform: translate(1px, -1px); }
-  75% { opacity: 0.8; transform: translate(-1px, 0); }
-  100% { opacity: 1; transform: translate(0, 0); }
-}
-
-    #cursor {
-  font-family: var(--terminal-font);
-  color: var(--neon-green);
-  animation: blinkCursor 1s infinite;
-  font-size: 1rem;
-}
-
-@keyframes blinkCursor {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-    #terminal {
-  animation: terminalFlicker 3s infinite alternate;
-}
-
-@keyframes terminalFlicker {
-  0% { background-color: #000; }
-  45% { background-color: #040404; }
-  100% { background-color: #000; }
-}
   </style>
 </head>
 <body>
-<!-- full body continues in next message -->
-    <!-- Particle Background -->
-  <canvas id="particleCanvas"></canvas>
 
   <!-- Terminal Intro -->
-  <div id="terminal">
-    <pre id="terminal-text"></pre>
-    <button id="enter-btn" onclick="enterSite()">Enter the Grave Site</button>
-    <span id="cursor">_</span>
+  <div class="terminal-overlay" id="terminal">
+    <div class="terminal-output" id="terminalOutput"></div>
+    <div class="enter-btn" onclick="enterSite()">> Enter the grave site</div>
   </div>
 
-  <!-- Modal -->
-  <div id="summon-modal">
-    <div class="content">
-      <h2>🧙 Summon Redemption</h2>
-      <p>Enter the vault of forgotten tokens.<br>Only the worthy will return.</p>
-      <button onclick="closeModal()">Close Portal</button>
-    </div>
-  </div>
+  <header>
+    <h1>Y2K COIN</h1>
+    <p>The Meme Coin Graveyard</p>
+  </header>
 
-  <!-- Main Content -->
-  <div id="main-content">
-    <div class="hero-banner">
-      <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png" alt="Y2K Coin Banner" />
-    </div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#submit">Submit</a>
+    <a href="#links">Links</a>
+  </nav>
 
-    <nav>
-      <a href="#about">About</a>
-      <a href="#submit">Submit</a>
-      <a href="#links">Links</a>
-      <a href="javascript:void(0);" onclick="openModal()">Summon</a>
-    </nav>
-
-    <section id="about" class="fade-in">
+  <main>
+    <section id="about">
       <details open>
         <summary>What is Y2K?</summary>
-        <p>Y2K is where dead meme coins go to die with dignity. A brutalist dApp that gives abandoned tokens a final resting place on-chain. Pair your dead coin with Y2K and let it rot with meaning.</p>
+        <p>Y2K is where dead meme coins go to rot. It’s a brutalist dApp where abandoned tokens can find one last use — redemption. No hype. No roadmap. Just ruin.</p>
       </details>
+
       <details>
         <summary>How It Works</summary>
-        <p>1. Submit your failed coin<br>2. Pair it with Y2K (LP)<br>3. It gets a tombstone on the Graveyard wall<br>4. Community decides if it deserves resurrection or eternal death.</p>
+        <p>1. Submit your dead token<br>2. Pair it with Y2K<br>3. Burn it<br>4. Get $5 or Y2K back<br>5. Join the wall of shame</p>
       </details>
     </section>
 
-    <section id="submit" class="fade-in">
+    <section id="submit">
       <details>
-        <summary>Submit a Dead Coin</summary>
-        <p>Coming soon: a form to submit your abandoned token. For now, reach out through backchannels. We're watching.</p>
+        <summary>Submit a Dead Token</summary>
+        <p>Coming soon: On-chain redemption UI. For now, make noise on 𝕏 or summon us through hidden channels.</p>
       </details>
     </section>
 
-    <section id="links" class="fade-in">
+    <section id="links">
       <details open>
-        <summary>Quick Links</summary>
+        <summary>Links</summary>
         <div class="button-group">
           <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy Y2K</a>
-          <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank">View Chart</a>
-          <a href="https://x.com/y2kc0in?s=21" target="_blank">Follow on 𝕏</a>
+          <a href="https://dexscreener.com/cronos/0xDdF11258F392080BC16cF26aA1C58A19c50b9641" target="_blank">Chart</a>
+          <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
         </div>
       </details>
     </section>
 
-    <section class="fade-in">
-      <h2 class="glitch-title">Graveyard Wall</h2>
+    <section>
+      <h2 style="text-align:center; color:var(--neon-fuchsia); margin-top:2rem;">Graveyard Wall</h2>
       <div class="tombstone-wall">
         <div class="tombstone">💀 RUGTOKEN</div>
-        <div class="tombstone">☠️ SHIBAFLOP</div>
-        <div class="tombstone">👻 PEPE69</div>
-        <div class="tombstone">🪦 MEVDEAD</div>
-        <div class="tombstone">🧟‍♂️ BOUNCENOINU</div>
-        <div class="tombstone">🩸 DRIPFLOP</div>
-        <div class="tombstone">⚰️ DEADPOO</div>
-        <div class="tombstone">🧬 GLITCHPET</div>
+        <div class="tombstone">☠️ FLOPCHAIN</div>
+        <div class="tombstone">🧟‍♂️ INURUG</div>
+        <div class="tombstone">⚰️ DEADPEPE</div>
+        <div class="tombstone">🪦 BURNTRASH</div>
+        <div class="tombstone">👻 ZEROCAPINU</div>
       </div>
     </section>
+  </main>
 
-    <footer>
-      &copy; 2025 Y2K Coin. Born dead. Buried with style.
-    </footer>
-  </div>
+  <footer>
+    &copy; 2025 Y2K Coin. No hope. No refunds.
+  </footer>
 
-  <!-- Scripts -->
   <script>
-    const lines = [
-      "> connecting to y2kcoin.org...",
-      "> gravechain access granted_",
-      "> status: DECODED",
-      "> user: undefined",
-      "> message: this site operates without oversight.",
-      "> purpose: decay, anomaly retention, asset preservation.",
-      "> logs indicate past lifeforms attempted redemption.",
-      "> the vault rejects them.",
-      "> submission channel remains open.",
-      "> signal detected from █.███.███",
-      "> they are watching."
-    ];
+    const terminalText = `
+> SYSTEM LOG_008X-Y2K.REDEEM
+> DECAY DETECTED
+> LOADING MEMECOIN CEMETERY...
+> DEAD TOKEN INDEX FOUND [17482x]
+> INITIATING REDEMPTION RITUAL
+> YOU SHOULDN'T BE HERE.
+    `;
 
-    const terminalText = document.getElementById("terminal-text");
-    const enterBtn = document.getElementById("enter-btn");
-    let idx = 0;
+    let i = 0;
+    const output = document.getElementById("terminalOutput");
 
-    function typeLine() {
-  if (idx < lines.length) {
-    const line = lines[idx];
-    const lineEl = document.createElement("div");
-
-    [...line].forEach((char, i) => {
-      const span = document.createElement("span");
-      span.textContent = char;
-      span.classList.add("glitch-char");
-      span.style.setProperty('--delay', `${Math.random() * 400}ms`);
-      lineEl.appendChild(span);
-    });
-
-    terminalText.appendChild(lineEl);
-    idx++;
-    setTimeout(typeLine, 400);
-  }
-}
+    function typeTerminal() {
+      if (i < terminalText.length) {
+        output.textContent += terminalText.charAt(i);
+        i++;
+        setTimeout(typeTerminal, 35);
+      }
+    }
 
     function enterSite() {
-  document.getElementById("terminal").style.display = "none";
-  document.getElementById("main-content").style.display = "block";
-  document.getElementById("cursor").style.display = "none";
-}
-
-    function openModal() {
-      document.getElementById("summon-modal").style.display = "flex";
+      const term = document.getElementById("terminal");
+      term.style.opacity = 0;
+      setTimeout(() => term.style.display = 'none', 500);
     }
 
-    function closeModal() {
-      document.getElementById("summon-modal").style.display = "none";
-    }
-
-    window.onload = typeLine;
-
-    // Fade-in on scroll
-    const faders = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.2 });
-
-    faders.forEach(el => observer.observe(el));
-
-    // Particle Background
-    const canvas = document.getElementById("particleCanvas");
-    const ctx = canvas.getContext("2d");
-    let particles = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedY = Math.random() * 0.5 + 0.2;
-      }
-      update() {
-        this.y += this.speedY;
-        if (this.y > canvas.height) {
-          this.y = 0;
-          this.x = Math.random() * canvas.width;
-        }
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0,255,204,0.15)';
-        ctx.shadowColor = '#00ffcc';
-        ctx.shadowBlur = 6;
-        ctx.fill();
-      }
-    }
-
-    function initParticles(count = 60) {
-      particles = [];
-      for (let i = 0; i < count; i++) {
-        particles.push(new Particle());
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-      requestAnimationFrame(animateParticles);
-    }
-
-    initParticles();
-    animateParticles();
+    window.onload = () => {
+      typeTerminal();
+    };
   </script>
 
-  <script>
-  const ghostImageUrls = [
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/E74E4164-6823-4EDA-82F8-430805F548A7.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BB82A8AD-CC4D-4A6A-BF61-631B6FB14A6C.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/61AC60EE-9D31-472A-BF74-787FD1B92550.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/45684CFA-78F1-46DB-BBBD-ADDC974C2D05.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/42BEB3CE-FAA0-4F17-954F-3DACB8F8585A.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/3E63EC46-2A23-42B7-BD42-73EB75A22D55.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/2EDE1153-B7DD-4DDD-B566-A2CA2F8F793C.png",
-    "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/0102A710-54CD-467B-B8E3-CBA227E1BA10.png"
-  ];
-
-  function spawnGhosts() {
-    ghostImageUrls.forEach((url, index) => {
-      const ghost = document.createElement("img");
-      ghost.src = url;
-      ghost.className = "floating-ghost";
-      ghost.style.position = "absolute";
-      ghost.style.zIndex = "999";
-      ghost.style.width = `${40 + Math.random() * 60}px`;
-      ghost.style.opacity = 0;
-      ghost.style.pointerEvents = "none";
-      ghost.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.8 + Math.random() * 0.4})`;
-
-      ghost.style.top = `${Math.random() * 100}vh`;
-      ghost.style.left = `${Math.random() * 100}vw`;
-
-      document.body.appendChild(ghost);
-      animateGhost(ghost, index);
-    });
-  }
-
-  function animateGhost(ghost, index) {
-    function loop() {
-      const duration = 8000 + Math.random() * 5000;
-      const fadeTime = 800 + Math.random() * 2000;
-      const rotate = Math.random() > 0.5 ? `rotate(${Math.random() * 360}deg)` : "";
-      const scale = `scale(${0.7 + Math.random() * 0.6})`;
-      const flip = Math.random() > 0.5 ? "scaleX(-1)" : "scaleX(1)";
-      const glitch = Math.random() > 0.8 ? "skew(1deg, 1deg)" : "";
-
-      const top = Math.random() * window.innerHeight;
-      const left = Math.random() * window.innerWidth;
-
-      ghost.style.transition = `all ${duration}ms ease-in-out`;
-      ghost.style.opacity = 0.5 + Math.random() * 0.4;
-      ghost.style.top = `${top}px`;
-      ghost.style.left = `${left}px`;
-      ghost.style.transform = `${rotate} ${scale} ${flip} ${glitch}`;
-
-      // Fade out after time
-      setTimeout(() => {
-        ghost.style.opacity = 0;
-      }, duration * 0.8);
-
-      // Rare jump scare shake
-      if (Math.random() > 0.98) {
-        document.body.classList.add("jumpscare");
-        setTimeout(() => {
-          document.body.classList.remove("jumpscare");
-        }, 300);
-      }
-
-      setTimeout(loop, duration + Math.random() * 4000);
-    }
-
-    setTimeout(loop, index * 500);
-  }
-
-  window.addEventListener("load", spawnGhosts);
-</script>
-
-  <script>
-let commandBuffer = "";
-
-document.addEventListener("keydown", function (e) {
-  if (document.getElementById("main-content").style.display === "block") return;
-  if (e.key.length === 1) {
-    commandBuffer += e.key.toLowerCase();
-    if (commandBuffer.length > 10) {
-      commandBuffer = commandBuffer.slice(-10);
-    }
-
-    if (commandBuffer.includes("summon")) openModal();
-    else if (commandBuffer.includes("vault")) alert("🔒 ACCESS DENIED.");
-    else if (commandBuffer.includes("ghost")) spawnGhosts(); // re-spawns ghosts
-    else if (commandBuffer.includes("redeem")) {
-      alert("⚠️ Redemption protocol offline. Try again later.");
-    }
-  }
-});
-</script>
 </body>
 </html>
