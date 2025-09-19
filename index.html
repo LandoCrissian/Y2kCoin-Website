@@ -1,91 +1,159 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Y2K Records — AI Music Studio</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Y2K Records — Request a Song</title>
+  <meta name="theme-color" content="#0b0d12" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #0b0d12;
+      color: #f5f5f5;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #e2e8f0;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #f5f5f5;
+    }
+    button {
+      background: #eab308;
+      color: #0b0d12;
+      font-weight: bold;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #facc15;
+    }
+    .treasury-box {
+      background: #111827;
+      border: 1px solid #2c2f36;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .copy-btn {
+      float: right;
+      margin-top: -36px;
+      background: #374151;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .qr {
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
 
-  <body>
-    <!-- Header -->
-    <header class="header">
-      <div class="container">
-        <h1 class="logo">Y2K Records</h1>
-        <p class="tagline">AI-Powered Soundtracks for the Web3 World</p>
-      </div>
-    </header>
+<h1>🎵 Y2K Records</h1>
+<h2>Request a Custom Song</h2>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="container">
-        <h2>Original music for the future of crypto culture.</h2>
-        <p>
-          Request a custom song for your Web3 project, DAO, or meme coin.
-        </p>
-        <a href="#request" class="button">Request a Song</a>
-      </div>
-    </section>
+<div class="treasury-box">
+  <p><strong>Step 1:</strong> Send exactly <strong>30 CRO</strong> to:</p>
+  <input type="text" id="walletAddress" readonly value="0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100" />
+  <button class="copy-btn" onclick="copyWallet()">Copy</button>
 
-    <!-- Request a Song Form -->
-    <section id="request" class="form-section">
-      <div class="container">
-        <h3>🎵 Request a Custom Track</h3>
-        <form>
-          <label for="project">Project Name</label>
-          <input type="text" id="project" name="project" required />
+  <div class="qr">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100" alt="QR Code"/>
+  </div>
 
-          <label for="vibe">Describe the Vibe</label>
-          <textarea id="vibe" name="vibe" rows="4" required></textarea>
+  <p><strong>Step 2:</strong> Connect your wallet and fill out the form.</p>
+</div>
 
-          <label for="wallet">Your Wallet Address (for delivery)</label>
-          <input type="text" id="wallet" name="wallet" required />
+<button onclick="connectWallet()">🔌 Connect Wallet</button>
 
-          <button type="submit">Submit Request</button>
-        </form>
-      </div>
-    </section>
+<form id="requestForm">
+  <input type="text" id="project" placeholder="Project Name (e.g. CroPro, ManeCity)" required />
+  <textarea id="vibe" placeholder="Describe the vibe (anthem, tribal, glitch, sad...)" required></textarea>
+  <input type="text" id="x_username" placeholder="Your 𝕏 Username (e.g. @handle)" required />
+  <input type="text" id="wallet" placeholder="Your Wallet Address" required />
+  <button type="submit">📤 Submit Request</button>
+</form>
 
-    <!-- Previous Songs -->
-    <section class="drops">
-      <div class="container">
-        <h3>🔥 Previous Drops</h3>
-        <ul class="song-list">
-          <li>• CROPRO Anthem — Glitch Dub Trap Fusion</li>
-          <li>• Welcome to the Dojo — Wu-Tang x Cyberpunk Energy</li>
-          <li>• ManeCityAI Theme — Cinematic, Aggressive, Tribal</li>
-          <li>• Lil Pissy’s Theme — Meme Rap Chaos</li>
-        </ul>
-      </div>
-    </section>
+<script>
+  // FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "000000000",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    <!-- About -->
-    <section class="about">
-      <div class="container">
-        <h3>About Y2K Records</h3>
-        <p>
-          Y2K Records is an experimental AI music lab crafting original tracks
-          for the new internet. From meme coin anthems to cinematic glitch
-          drops, we score the culture of crypto.
-        </p>
-        <p>
-          Proudly built on Cronos. Fueled by creativity, not hype.
-        </p>
-      </div>
-    </section>
+  // Connect Wallet
+  async function connectWallet() {
+    if (window.ethereum) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        document.getElementById('wallet').value = address;
+        alert("Wallet connected: " + address);
+      } catch (err) {
+        alert("Wallet connection failed.");
+      }
+    } else {
+      alert("Please install MetaMask.");
+    }
+  }
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <p>&copy; 2025 Y2K Records. All rights reserved.</p>
-        <p><a href="https://y2kcoin.org" target="_blank">y2kcoin.org</a></p>
-      </div>
-    </footer>
-  </body>
+  // Copy Treasury Address
+  function copyWallet() {
+    const copyText = document.getElementById("walletAddress");
+    navigator.clipboard.writeText(copyText.value);
+    alert("Address copied to clipboard.");
+  }
+
+  // Handle Form Submission
+  document.getElementById('requestForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+      project: document.getElementById('project').value,
+      vibe: document.getElementById('vibe').value,
+      x_username: document.getElementById('x_username').value,
+      wallet: document.getElementById('wallet').value,
+      timestamp: new Date().toISOString()
+    };
+    try {
+      await db.collection("song_requests").add(data);
+      alert("Request submitted successfully!");
+      document.getElementById('requestForm').reset();
+    } catch (err) {
+      alert("Error saving request.");
+    }
+  });
+</script>
+
+</body>
 </html>
