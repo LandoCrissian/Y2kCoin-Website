@@ -2,209 +2,258 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Y2K Records — AI Music for Web3</title>
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Y2K Records | AI Sound for Cronos</title>
+  <meta name="theme-color" content="#0b0d12" />
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #0a0a0a;
-      color: #fff;
+      background: #0b0d12;
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
-    #particles-js {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: #0a0a0a;
+    a, button {
+      font-family: inherit;
     }
 
-    .container {
-      padding: 2rem;
-      max-width: 600px;
+    header {
+      text-align: center;
+      padding: 2rem 1rem 0;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+
+    .connect-btn {
+      display: inline-block;
+      background: #ff007a;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      margin: 2rem auto;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .connect-btn:hover {
+      background: #d60065;
+    }
+
+    .section {
+      padding: 2rem 1.5rem;
+      max-width: 840px;
       margin: auto;
     }
 
-    .center {
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      color: #aaa;
-      margin-bottom: 2rem;
-    }
-
-    button, input, textarea {
-      width: 100%;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      padding: 1rem;
+    .section h2 {
+      font-size: 1.6rem;
       margin-bottom: 1rem;
-      background: #1c1c1c;
-      color: #fff;
+      border-bottom: 2px solid #ff007a;
+      display: inline-block;
+      padding-bottom: 4px;
     }
 
-    button {
-      background-color: #4f46e5;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s ease;
+    form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
     }
 
-    button:hover {
-      background-color: #4338ca;
+    input, textarea {
+      background: #1c1f26;
+      border: 1px solid #333;
+      color: white;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
 
     .submit-btn {
-      background-color: #22c55e;
+      background: #00ffc3;
       color: #000;
-      font-weight: 600;
+      font-weight: bold;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
 
-    .submit-btn:hover {
-      background-color: #16a34a;
+    .vault-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
     }
 
-    .playlist {
-      margin-top: 4rem;
-    }
-
-    .track {
-      background: #141414;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
+    .vault-card {
+      background: #1b1d24;
+      border-radius: 10px;
       padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,255,195,0.1);
     }
 
-    .track audio {
+    .vault-card img {
       width: 100%;
-      margin-top: 1rem;
+      border-radius: 6px;
+    }
+
+    .vault-card audio {
+      width: 100%;
+      margin-top: 0.75rem;
     }
 
     footer {
       text-align: center;
-      margin-top: 4rem;
-      font-size: 0.8rem;
-      color: #555;
+      padding: 3rem 1rem 2rem;
+      opacity: 0.5;
+      font-size: 0.9rem;
     }
   </style>
+
+  <!-- FIREBASE + ETH LIBS -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 </head>
-
 <body>
-  <div id="particles-js"></div>
 
-  <div class="container center">
+  <header>
     <h1>Y2K Records</h1>
-    <p>Custom AI-generated music for your Web3 project</p>
+    <p>AI-powered soundtracks for the Cronos ecosystem</p>
+    <div class="connect-btn" onclick="connectWallet()">Connect Wallet</div>
+  </header>
 
-    <button onclick="connectWallet()">Connect Wallet</button>
-
-    <form id="musicRequestForm">
-      <input type="text" id="project" placeholder="Project Name" required />
-      <textarea id="vibe" rows="4" placeholder="Describe the Vibe" required></textarea>
-      <input type="text" id="xhandle" placeholder="Your 𝕏 Handle (so we can tag you)" required />
-      <button type="submit" class="submit-btn">Submit — 30 CRO</button>
+  <section class="section" id="request">
+    <h2>🎵 Submit a Song Request</h2>
+    <form id="songForm">
+      <input type="text" id="projectName" placeholder="Project or Token Name" required />
+      <input type="text" id="vibe" placeholder="Describe the vibe (e.g. hype, cinematic, glitch)" required />
+      <input type="text" id="twitterHandle" placeholder="Your 𝕏 Username (e.g. @yourhandle)" required />
+      <button class="submit-btn" type="submit">Submit (30 CRO)</button>
     </form>
-  </div>
+  </section>
 
-  <div class="container playlist">
-    <h2 class="center">Certified Tracks</h2>
-
-    <div class="track">
-      <strong>🌕 Mooncast: Y2K Edition</strong>
-      <audio controls>
-        <source src="https://y2kcoin.mypinata.cloud/ipfs/QmNj9rKa2KXTe5yMXD6Dq7SLrU2M3dEbhfXWwihsbA5FdX" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
+  <section class="section" id="certified">
+    <h2>✅ Certified Drops</h2>
+    <div class="vault-grid" id="certifiedTracks">
+      <!-- Songs injected from Firestore -->
     </div>
-
-    <div class="track">
-      <strong>🔥 Viva CRO Vegas</strong>
-      <audio controls>
-        <source src="https://y2kcoin.mypinata.cloud/ipfs/QmZghExzBhHaQDK3NGJjexMA3K9mf6V3k6X1uKe88VD4mZ" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-
-    <div class="track">
-      <strong>🧨 Roast Records Anthem</strong>
-      <audio controls>
-        <source src="https://y2kcoin.mypinata.cloud/ipfs/QmYrgBapZSpZ86eqeZBzPtGYtBQuhfrpHfbmVkHEaAMAR2" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-  </div>
+  </section>
 
   <footer>
-    &copy; 2025 Y2K Records. Powered by Cronos.
+    Powered by Cronos · © Y2K Records
   </footer>
 
-  <!-- Particles.js -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script>
-    particlesJS.load('particles-js', 'https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/particles.json');
-  </script>
+    const treasuryAddress = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
 
-  <!-- Wallet & Submission Logic -->
-  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCdc0esSNeL9TfPxW7DA9vBhuuK__GnL0E",
+      authDomain: "y2k-arcade.firebaseapp.com",
+      projectId: "y2k-arcade",
+      storageBucket: "y2k-arcade.appspot.com",
+      messagingSenderId: "909241204952",
+      appId: "1:909241204952:web:660f580017fd11f08ab93b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let currentAccount = null;
+
     async function connectWallet() {
-      if (window.ethereum) {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          window.walletAddress = accounts[0];
-          alert("Wallet connected: " + accounts[0]);
-        } catch (err) {
-          console.error(err);
-        }
+      if (typeof window.ethereum !== 'undefined') {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const accounts = await provider.send("eth_requestAccounts", []);
+        currentAccount = accounts[0];
+        document.querySelector(".connect-btn").innerText = "Connected: " + currentAccount.slice(0, 6) + "..." + currentAccount.slice(-4);
       } else {
-        alert("Please install a Web3 wallet like MetaMask.");
+        alert("MetaMask is required.");
       }
     }
 
-    const CRO_TREASURY = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-
-    document.getElementById("musicRequestForm").addEventListener("submit", async (e) => {
+    document.getElementById("songForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const project = document.getElementById("project").value;
-      const vibe = document.getElementById("vibe").value;
-      const xhandle = document.getElementById("xhandle").value;
-
-      if (!window.walletAddress) {
+      if (!currentAccount) {
         alert("Please connect your wallet first.");
         return;
       }
 
-      const CRO_DECIMALS = 1e18;
-      const value = (30 * CRO_DECIMALS).toString(16);
+      const projectName = document.getElementById("projectName").value;
+      const vibe = document.getElementById("vibe").value;
+      const twitterHandle = document.getElementById("twitterHandle").value;
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
 
       try {
-        await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{
-            from: window.walletAddress,
-            to: CRO_TREASURY,
-            value: value,
-          }],
+        const tx = await signer.sendTransaction({
+          to: treasuryAddress,
+          value: ethers.utils.parseEther("30.0")
         });
 
-        alert("Thanks for your request! We’ll tag you when it’s done.");
-        // TODO: Save submission to Firestore if needed
+        await tx.wait();
+
+        await db.collection("y2k_submissions").add({
+          wallet: currentAccount,
+          project: projectName,
+          vibe: vibe,
+          twitter: twitterHandle,
+          timestamp: new Date().toISOString(),
+          txHash: tx.hash
+        });
+
+        alert("Submission successful!");
+        document.getElementById("songForm").reset();
       } catch (err) {
         console.error(err);
         alert("Transaction failed.");
       }
     });
+
+    async function loadCertified() {
+      const container = document.getElementById("certifiedTracks");
+      const snap = await db.collection("y2k_certified").orderBy("timestamp", "desc").get();
+
+      snap.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "vault-card";
+
+        if (data.image) {
+          div.innerHTML += `<img src="${data.image}" alt="Song Cover" />`;
+        }
+
+        if (data.audio) {
+          div.innerHTML += `<audio controls src="${data.audio}"></audio>`;
+        }
+
+        if (data.project || data.twitter) {
+          div.innerHTML += `<p style="margin-top: 0.5rem;"><strong>${data.project || ""}</strong><br><span style="opacity: 0.6;">${data.twitter || ""}</span></p>`;
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    loadCertified();
   </script>
 </body>
 </html>
