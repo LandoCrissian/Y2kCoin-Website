@@ -1,175 +1,210 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Y2K Records | AI Music for Web3</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --bg: #0b0d12;
-        --text: #ffffff;
-        --accent: #8f5fff;
-        --btn: #4ade80;
-        --card: #1a1c21;
-      }
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        background: var(--bg);
-        font-family: 'Space Grotesk', sans-serif;
-        color: var(--text);
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        text-align: center;
-      }
-      p {
-        color: #aaa;
-        margin-bottom: 2rem;
-        text-align: center;
-      }
-      button, input, textarea {
-        font-family: inherit;
-        font-size: 1rem;
-      }
-      .connect-btn {
-        background: var(--accent);
-        color: #fff;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        cursor: pointer;
-        margin-bottom: 2rem;
-      }
-      form {
-        background: var(--card);
-        padding: 2rem;
-        border-radius: 12px;
-        width: 100%;
-        max-width: 480px;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-bottom: 3rem;
-      }
-      input, textarea {
-        background: #121317;
-        border: 1px solid #333;
-        border-radius: 8px;
-        color: var(--text);
-        padding: 0.75rem;
-      }
-      .submit-btn {
-        background: var(--btn);
-        color: #000;
-        font-weight: bold;
-        border: none;
-        padding: 0.75rem;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-      .playlist {
-        width: 100%;
-        max-width: 640px;
-      }
-      .track {
-        background: var(--card);
-        padding: 1rem;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-      }
-      .track-title {
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
-      audio {
-        width: 100%;
-      }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Y2K Records — AI Music for Web3</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #0a0a0a;
+      color: #fff;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: #0a0a0a;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 2rem;
+    }
+
+    button, input, textarea {
+      width: 100%;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #1c1c1c;
+      color: #fff;
+    }
+
+    button {
+      background-color: #4f46e5;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #4338ca;
+    }
+
+    .submit-btn {
+      background-color: #22c55e;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .submit-btn:hover {
+      background-color: #16a34a;
+    }
+
+    .playlist {
+      margin-top: 4rem;
+    }
+
+    .track {
+      background: #141414;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+    }
+
+    .track audio {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.8rem;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="particles-js"></div>
+
+  <div class="container center">
     <h1>Y2K Records</h1>
     <p>Custom AI-generated music for your Web3 project</p>
 
-    <button class="connect-btn" id="connectWallet">Connect Wallet</button>
+    <button onclick="connectWallet()">Connect Wallet</button>
 
-    <form id="requestForm">
-      <input type="text" id="projectName" placeholder="Project Name" required />
-      <textarea id="vibe" rows="3" placeholder="Describe the Vibe" required></textarea>
-      <input type="text" id="xHandle" placeholder="Your 𝕏 Handle (so we can tag you)" required />
+    <form id="musicRequestForm">
+      <input type="text" id="project" placeholder="Project Name" required />
+      <textarea id="vibe" rows="4" placeholder="Describe the Vibe" required></textarea>
+      <input type="text" id="xhandle" placeholder="Your 𝕏 Handle (so we can tag you)" required />
       <button type="submit" class="submit-btn">Submit — 30 CRO</button>
     </form>
+  </div>
 
-    <div class="playlist">
-      <h2 style="margin-bottom: 1rem;">🎵 Previously Created Songs</h2>
-      <div class="track">
-        <div class="track-title">CroVegas Theme</div>
-        <audio controls src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/crovegas.mp3"></audio>
-      </div>
-      <div class="track">
-        <div class="track-title">Roast Records — Glitchball</div>
-        <audio controls src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/glitchball.mp3"></audio>
-      </div>
-      <!-- Add more tracks here -->
+  <div class="container playlist">
+    <h2 class="center">Certified Tracks</h2>
+
+    <div class="track">
+      <strong>🌕 Mooncast: Y2K Edition</strong>
+      <audio controls>
+        <source src="https://y2kcoin.mypinata.cloud/ipfs/QmNj9rKa2KXTe5yMXD6Dq7SLrU2M3dEbhfXWwihsbA5FdX" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
     </div>
 
-    <script>
-      const CRO_TREASURY = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-      const CRO_AMOUNT = "30.0";
+    <div class="track">
+      <strong>🔥 Viva CRO Vegas</strong>
+      <audio controls>
+        <source src="https://y2kcoin.mypinata.cloud/ipfs/QmZghExzBhHaQDK3NGJjexMA3K9mf6V3k6X1uKe88VD4mZ" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
 
-      let provider;
-      let signer;
+    <div class="track">
+      <strong>🧨 Roast Records Anthem</strong>
+      <audio controls>
+        <source src="https://y2kcoin.mypinata.cloud/ipfs/QmYrgBapZSpZ86eqeZBzPtGYtBQuhfrpHfbmVkHEaAMAR2" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </div>
 
-      document.getElementById("connectWallet").addEventListener("click", async () => {
-        if (typeof window.ethereum !== "undefined") {
-          await window.ethereum.request({ method: "eth_requestAccounts" });
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          signer = provider.getSigner();
+  <footer>
+    &copy; 2025 Y2K Records. Powered by Cronos.
+  </footer>
 
-          const { chainId } = await provider.getNetwork();
-          if (chainId !== 25) {
-            alert("Please switch to the Cronos Mainnet (Chain ID 25)");
-          } else {
-            const address = await signer.getAddress();
-            document.getElementById("connectWallet").innerText = address.slice(0, 6) + "..." + address.slice(-4);
-          }
-        } else {
-          alert("Please install MetaMask");
-        }
-      });
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script>
+    particlesJS.load('particles-js', 'https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/particles.json');
+  </script>
 
-      document.getElementById("requestForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (!signer) {
-          alert("Connect your wallet first");
-          return;
-        }
-
-        const tx = {
-          to: CRO_TREASURY,
-          value: ethers.utils.parseEther(CRO_AMOUNT)
-        };
-
+  <!-- Wallet & Submission Logic -->
+  <script>
+    async function connectWallet() {
+      if (window.ethereum) {
         try {
-          const transaction = await signer.sendTransaction(tx);
-          await transaction.wait();
-          alert("Request submitted! We'll tag you on 𝕏 once it's ready.");
-          document.getElementById("requestForm").reset();
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          window.walletAddress = accounts[0];
+          alert("Wallet connected: " + accounts[0]);
         } catch (err) {
-          alert("Transaction failed or rejected.");
+          console.error(err);
         }
-      });
-    </script>
-  </body>
+      } else {
+        alert("Please install a Web3 wallet like MetaMask.");
+      }
+    }
+
+    const CRO_TREASURY = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+
+    document.getElementById("musicRequestForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const project = document.getElementById("project").value;
+      const vibe = document.getElementById("vibe").value;
+      const xhandle = document.getElementById("xhandle").value;
+
+      if (!window.walletAddress) {
+        alert("Please connect your wallet first.");
+        return;
+      }
+
+      const CRO_DECIMALS = 1e18;
+      const value = (30 * CRO_DECIMALS).toString(16);
+
+      try {
+        await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [{
+            from: window.walletAddress,
+            to: CRO_TREASURY,
+            value: value,
+          }],
+        });
+
+        alert("Thanks for your request! We’ll tag you when it’s done.");
+        // TODO: Save submission to Firestore if needed
+      } catch (err) {
+        console.error(err);
+        alert("Transaction failed.");
+      }
+    });
+  </script>
+</body>
 </html>
