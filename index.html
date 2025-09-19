@@ -1,159 +1,169 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Y2K Records — Request a Song</title>
-  <meta name="theme-color" content="#0b0d12" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Y2K Records — AI Music for Web3</title>
+
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+
   <style>
     body {
+      margin: 0;
       font-family: 'Space Grotesk', sans-serif;
-      background: #0b0d12;
-      color: #f5f5f5;
+      background-color: #0b0d12;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 2rem;
-      max-width: 600px;
-      margin: auto;
     }
-    h1, h2 {
+    header {
       text-align: center;
-      color: #e2e8f0;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      color: #aaa;
+    }
+    button, input, textarea {
+      font-family: inherit;
+    }
+    .form-container {
+      background: #111;
+      padding: 2rem;
+      border: 1px solid #333;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      margin-bottom: 3rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
     }
     input, textarea {
       width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      margin-bottom: 16px;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 6px;
-      color: #f5f5f5;
+      padding: 0.8rem;
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 8px;
+      margin-top: 0.5rem;
     }
     button {
-      background: #eab308;
-      color: #0b0d12;
-      font-weight: bold;
+      margin-top: 1.5rem;
+      padding: 0.9rem 1.5rem;
+      background: #19c37d;
+      color: #000;
       border: none;
-      padding: 12px;
-      width: 100%;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #facc15;
-    }
-    .treasury-box {
-      background: #111827;
-      border: 1px solid #2c2f36;
       border-radius: 8px;
-      padding: 1rem;
-      margin: 1rem 0;
-    }
-    .copy-btn {
-      float: right;
-      margin-top: -36px;
-      background: #374151;
-      border: none;
-      color: white;
-      padding: 6px 10px;
-      font-size: 0.8rem;
-      border-radius: 4px;
+      font-weight: 600;
       cursor: pointer;
     }
-    .qr {
-      text-align: center;
-      margin-top: 10px;
+    #connectBtn {
+      margin-top: 1rem;
+      background: #3f51b5;
+      color: #fff;
+    }
+    iframe {
+      border-radius: 16px;
+      border: none;
+      width: 100%;
+      max-width: 600px;
+      height: 400px;
+      margin-top: 3rem;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Y2K Records</h1>
+    <p>Custom AI-generated music for your Web3 project</p>
+    <button id="connectBtn">Connect Wallet</button>
+  </header>
 
-<h1>🎵 Y2K Records</h1>
-<h2>Request a Custom Song</h2>
+  <div class="form-container">
+    <form id="requestForm">
+      <label>Project Name</label>
+      <input type="text" id="project" required />
 
-<div class="treasury-box">
-  <p><strong>Step 1:</strong> Send exactly <strong>30 CRO</strong> to:</p>
-  <input type="text" id="walletAddress" readonly value="0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100" />
-  <button class="copy-btn" onclick="copyWallet()">Copy</button>
+      <label>Describe the Vibe</label>
+      <textarea id="vibe" rows="4" required></textarea>
 
-  <div class="qr">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100" alt="QR Code"/>
+      <label>Your 𝕏 Handle (so we can tag you)</label>
+      <input type="text" id="twitter" placeholder="@yourhandle" required />
+
+      <button type="submit">Submit — 30 CRO</button>
+    </form>
   </div>
 
-  <p><strong>Step 2:</strong> Connect your wallet and fill out the form.</p>
-</div>
+  <iframe src="https://open.spotify.com/embed/playlist/0J86lmXD8OBCQdTnctFQNm?utm_source=generator" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy"></iframe>
 
-<button onclick="connectWallet()">🔌 Connect Wallet</button>
-
-<form id="requestForm">
-  <input type="text" id="project" placeholder="Project Name (e.g. CroPro, ManeCity)" required />
-  <textarea id="vibe" placeholder="Describe the vibe (anthem, tribal, glitch, sad...)" required></textarea>
-  <input type="text" id="x_username" placeholder="Your 𝕏 Username (e.g. @handle)" required />
-  <input type="text" id="wallet" placeholder="Your Wallet Address" required />
-  <button type="submit">📤 Submit Request</button>
-</form>
-
-<script>
-  // FIREBASE CONFIG
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "000000000",
-    appId: "YOUR_APP_ID"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  // Connect Wallet
-  async function connectWallet() {
-    if (window.ethereum) {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        document.getElementById('wallet').value = address;
-        alert("Wallet connected: " + address);
-      } catch (err) {
-        alert("Wallet connection failed.");
-      }
-    } else {
-      alert("Please install MetaMask.");
-    }
-  }
-
-  // Copy Treasury Address
-  function copyWallet() {
-    const copyText = document.getElementById("walletAddress");
-    navigator.clipboard.writeText(copyText.value);
-    alert("Address copied to clipboard.");
-  }
-
-  // Handle Form Submission
-  document.getElementById('requestForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = {
-      project: document.getElementById('project').value,
-      vibe: document.getElementById('vibe').value,
-      x_username: document.getElementById('x_username').value,
-      wallet: document.getElementById('wallet').value,
-      timestamp: new Date().toISOString()
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDL3zWfSYDQfQ0da_ekkl5R6b5jE_uMC4g",
+      authDomain: "y2k-arcade.firebaseapp.com",
+      projectId: "y2k-arcade",
+      storageBucket: "y2k-arcade.appspot.com",
+      messagingSenderId: "474998263174",
+      appId: "1:474998263174:web:ae37bbcdde96b93d6bb539"
     };
-    try {
-      await db.collection("song_requests").add(data);
-      alert("Request submitted successfully!");
-      document.getElementById('requestForm').reset();
-    } catch (err) {
-      alert("Error saving request.");
-    }
-  });
-</script>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
+    let provider, signer, userAddress;
+
+    document.getElementById('connectBtn').addEventListener('click', async () => {
+      if (typeof window.ethereum !== 'undefined') {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        signer = provider.getSigner();
+        userAddress = await signer.getAddress();
+        document.getElementById('connectBtn').innerText = 'Connected: ' + userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+      } else {
+        alert('Please install MetaMask');
+      }
+    });
+
+    document.getElementById('requestForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const project = document.getElementById('project').value.trim();
+      const vibe = document.getElementById('vibe').value.trim();
+      const twitter = document.getElementById('twitter').value.trim();
+
+      if (!signer || !userAddress) return alert('Please connect your wallet first.');
+
+      const tx = {
+        to: '0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100',
+        value: ethers.utils.parseUnits("30", "ether") // 30 CRO
+      };
+
+      try {
+        await signer.sendTransaction(tx);
+        await db.collection('songRequests').add({
+          wallet: userAddress,
+          project,
+          vibe,
+          twitter,
+          timestamp: new Date().toISOString()
+        });
+        alert('Request submitted! We’ll tag you when your track drops.');
+        document.getElementById('requestForm').reset();
+      } catch (err) {
+        console.error(err);
+        alert('Submission failed.');
+      }
+    });
+  </script>
 </body>
 </html>
