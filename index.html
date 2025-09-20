@@ -4,10 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K Roast Records</title>
-  <meta name="description" content="The Official Y2K Roast Records – Where Web3 Music Gets Certified." />
+
+  <!-- Meta -->
+  <meta name="description" content="Where Web3 Anthems Get Certified. Y2K Roast Records on Cronos." />
   <meta name="theme-color" content="#000000" />
+  <meta property="og:title" content="Y2K Roast Records" />
+  <meta property="og:description" content="Certified Web3 Music on Cronos – Submit yours." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_6957.png" />
+  <meta property="og:url" content="https://y2kcoin.org" />
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
 
+  <!-- Firebase & Ethers -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <!-- Styles -->
   <style>
     :root {
       --neon: #00fff7;
@@ -16,16 +30,13 @@
       --glitch: #f0f;
       --text: #f8f8f8;
     }
-
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      background: var(--dark);
       font-family: 'Orbitron', sans-serif;
+      background: var(--dark);
       color: var(--text);
       overflow-x: hidden;
     }
-
     canvas#bg {
       position: fixed;
       top: 0;
@@ -35,28 +46,24 @@
       height: 100%;
       background: linear-gradient(#050505, #0f0f0f);
     }
-
     .hero {
       text-align: center;
       padding: 3rem 1rem 1rem;
       position: relative;
       z-index: 2;
     }
-
     .hero-banner {
       width: 90%;
       max-width: 900px;
       border-radius: 10px;
       margin-bottom: 2rem;
     }
-
     .glitch-title {
       font-size: 2.8rem;
       color: var(--neon);
       text-shadow: 0 0 10px var(--neon);
       animation: glitch 2s infinite;
     }
-
     .neon-btn {
       background: none;
       color: var(--neon);
@@ -67,20 +74,15 @@
       cursor: pointer;
       transition: background 0.2s ease;
     }
-
     .neon-btn:hover {
       background: var(--neon);
       color: #000;
     }
-
     .content {
       padding: 2rem;
       position: relative;
       z-index: 2;
     }
-
-    section { margin-bottom: 4rem; }
-
     form input {
       display: block;
       margin: 1rem 0;
@@ -93,14 +95,12 @@
       color: white;
       border-radius: 6px;
     }
-
     #submissionList, #certifiedGallery {
       display: grid;
       gap: 1rem;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       margin-top: 1rem;
     }
-
     footer#nowPlaying {
       background: rgba(255,255,255,0.05);
       padding: 1rem;
@@ -109,7 +109,6 @@
       bottom: 0;
       z-index: 3;
     }
-
     @keyframes glitch {
       0% { text-shadow: 2px 2px var(--glitch); }
       25% { text-shadow: -2px 2px var(--accent); }
@@ -117,19 +116,7 @@
       75% { text-shadow: -2px -2px var(--accent); }
       100% { text-shadow: 2px 2px var(--glitch); }
     }
-
-    @media (max-width: 768px) {
-      .glitch-title { font-size: 2rem; }
-      form input, .neon-btn { width: 100%; }
-      section h2 { font-size: 1.25rem; }
-      footer#nowPlaying { font-size: 0.9rem; }
-    }
   </style>
-
-  <!-- LIBRARIES -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 
 <body>
@@ -146,7 +133,7 @@
       <h2>🔥 Submit Your Request</h2>
       <form id="submitForm">
         <input type="text" placeholder="Project Name" id="projectName" required />
-        <input type="text" placeholder="Vibe (e.g. aggressive glitch, sexy dub, etc.)" id="vibe" required />
+        <input type="text" placeholder="Vibe (e.g. glitch trap, sexy dub...)" id="vibe" required />
         <input type="text" placeholder="Your Twitter Handle" id="twitter" required />
         <button type="submit" class="neon-btn">Submit (30 CRO)</button>
       </form>
@@ -186,18 +173,17 @@
       messagingSenderId: "313829428782",
       appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     const treasury = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
     const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
-    let currentAccount;
+    let currentAccount = "";
 
     const shareTemplates = [
-      `I just submitted a 🔥 track request for \${project} — vibe: \${vibe}. Certified heat coming soon. Tag a project that needs one.\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
-      `Submitted a theme track for \${project} — vibe: \${vibe}. Let the Roast begin 🔥\n→ y2kcoin.org\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
-      `Track locked in for \${project} — \${vibe} style loading…\n→ y2kcoin.org\n#CROfam #Y2KRecords #RoastRecords #Web3Music`
+      `I just submitted a 🔥 track request for \${project} — vibe: \${vibe}. Certified heat coming soon.\n\nKnow a project that needs one?\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+      `Track locked in for \${project} — vibe: \${vibe}. Who's next?\n→ y2kcoin.org\n\n#Y2KRecords #RoastRecords #Cronos`,
+      `\${project} is next up. Vibe: \${vibe} → y2kcoin.org\nTag a project that needs theirs!\n#CROfam #Web3Music`
     ];
 
     document.getElementById("connectWallet").addEventListener("click", async () => {
@@ -205,11 +191,14 @@
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       currentAccount = await signer.getAddress();
-      const network = await provider.getNetwork();
-      if (network.chainId !== 25) return alert("Switch to Cronos Mainnet");
+      const net = await provider.getNetwork();
+      if (net.chainId !== 25) return alert("Switch to Cronos Mainnet");
       document.getElementById("connectWallet").textContent = `Connected: ${currentAccount.slice(0, 6)}...`;
       loadSubmissions();
       loadCertified();
+      if (currentAccount.toLowerCase() === adminWallet) {
+        document.getElementById("adminStamp").style.display = "block";
+      }
     });
 
     document.getElementById("submitForm").addEventListener("submit", async (e) => {
@@ -217,18 +206,28 @@
       const project = document.getElementById("projectName").value;
       const vibe = document.getElementById("vibe").value;
       const twitter = document.getElementById("twitter").value;
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      await signer.sendTransaction({ to: treasury, value: ethers.utils.parseEther("30") });
-      await db.collection("requests").add({ project, vibe, twitter, wallet: currentAccount, timestamp: Date.now() });
-      document.getElementById("submitForm").reset();
 
-      const randomIndex = Math.floor(Math.random() * shareTemplates.length);
-      const tweet = shareTemplates[randomIndex]
-        .replace(/\${project}/g, project)
-        .replace(/\${vibe}/g, vibe);
-      const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`;
-      if (confirm("Share it on 𝕏?")) window.open(tweetURL, "_blank");
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const tx = await signer.sendTransaction({
+          to: treasury,
+          value: ethers.utils.parseEther("30")
+        });
+        await tx.wait();
+
+        await db.collection("requests").add({ project, vibe, twitter, wallet: currentAccount, timestamp: Date.now() });
+        alert("Request submitted! 🔥");
+        document.getElementById("submitForm").reset();
+
+        const randomIndex = Math.floor(Math.random() * shareTemplates.length);
+        const tweetText = shareTemplates[randomIndex].replace(/\${project}/g, project).replace(/\${vibe}/g, vibe);
+        const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+        if (confirm("Want to share on 𝕏?")) window.open(tweetURL, "_blank");
+      } catch (err) {
+        console.error(err);
+        alert("Transaction failed.");
+      }
     });
 
     function loadSubmissions() {
@@ -236,9 +235,9 @@
         const list = document.getElementById("submissionList");
         list.innerHTML = "";
         snapshot.forEach(doc => {
-          const data = doc.data();
+          const d = doc.data();
           const item = document.createElement("div");
-          item.innerHTML = `<p><strong>${data.project}</strong></p><p>${data.vibe}</p><p>From: ${data.twitter}</p>`;
+          item.innerHTML = `<p><strong>${d.project}</strong></p><p>${d.vibe}</p><p>${d.twitter}</p>`;
           list.appendChild(item);
         });
       });
@@ -249,39 +248,34 @@
         const gallery = document.getElementById("certifiedGallery");
         gallery.innerHTML = "";
         snapshot.forEach(doc => {
-          const data = doc.data();
+          const d = doc.data();
           const item = document.createElement("div");
           item.innerHTML = `
-            <img src="${data.cover}" style="width:100%;border-radius:8px;" />
-            <audio controls src="${data.audio}" style="width:100%;margin-top:.5rem;"></audio>
-            <p>${data.project}</p>`;
+            <img src="${d.cover}" style="width:100%;border-radius:8px;" />
+            <audio controls src="${d.audio}" style="width:100%;margin-top:.5rem;"></audio>
+            <p>${d.project}</p>`;
           gallery.appendChild(item);
         });
         if (snapshot.docs.length > 0) {
           const now = snapshot.docs[0].data();
-          document.getElementById("nowTrack").textContent = now.project;
+          document.getElementById("nowTrack").textContent = `${now.project}`;
         }
       });
     }
 
-    window.addEventListener("load", () => {
-      if (typeof isAdmin === "function" && isAdmin()) {
-        document.getElementById("adminStamp").style.display = "block";
-        document.getElementById("certForm").addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const project = document.getElementById("certName").value;
-          const audio = document.getElementById("audioURL").value;
-          const cover = document.getElementById("coverURL").value;
-          await db.collection("certified").add({ project, audio, cover, timestamp: Date.now() });
-          document.getElementById("certForm").reset();
-          alert("Certified 🔥");
-        });
-      }
-    });
+    document.getElementById("certForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const project = document.getElementById("certName").value;
+      const audio = document.getElementById("audioURL").value;
+      const cover = document.getElementById("coverURL").value;
 
-    function isAdmin() {
-      return currentAccount?.toLowerCase() === adminWallet;
-    }
+      await db.collection("certified").add({
+        project, audio, cover, timestamp: Date.now()
+      });
+
+      alert("Certified 🔥");
+      document.getElementById("certForm").reset();
+    });
   </script>
 </body>
 </html>
