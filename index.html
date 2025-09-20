@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K Roast Records</title>
-
   <meta name="description" content="The Official Y2K Roast Records – Where Web3 Music Gets Certified." />
   <meta name="theme-color" content="#000000" />
-
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
 
-  <!-- ✅ INLINE CSS -->
   <style>
     :root {
       --neon: #00fff7;
@@ -139,7 +136,7 @@
   <canvas id="bg"></canvas>
 
   <header class="hero">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png" alt="Banner" class="hero-banner" />
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_6957.png" alt="Banner" class="hero-banner" />
     <div class="glitch-title">Y2K ROAST RECORDS</div>
     <button id="connectWallet" class="neon-btn">CONNECT WALLET</button>
   </header>
@@ -180,7 +177,6 @@
     </footer>
   </main>
 
-  <!-- ✅ INLINE JS -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
@@ -199,9 +195,9 @@
     let currentAccount;
 
     const shareTemplates = [
-      `I just submitted a 🔥 track request for \${project} — vibe: \${vibe}. Certified heat coming soon.\n\nKnow a project that needs one?\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
-      `Submitted a theme track for \${project} — vibe: \${vibe}. Let the Roast begin 🔥\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
-      `Track locked in for \${project} — \${vibe} style loading…\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+      `I just submitted a 🔥 track request for \${project} — vibe: \${vibe}. Certified heat coming soon. Tag a project that needs one.\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+      `Submitted a theme track for \${project} — vibe: \${vibe}. Let the Roast begin 🔥\n→ y2kcoin.org\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+      `Track locked in for \${project} — \${vibe} style loading…\n→ y2kcoin.org\n#CROfam #Y2KRecords #RoastRecords #Web3Music`
     ];
 
     document.getElementById("connectWallet").addEventListener("click", async () => {
