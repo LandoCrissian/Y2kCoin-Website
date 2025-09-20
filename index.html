@@ -1,209 +1,302 @@
-<!-- index.html — Y2K | Roast Records -->
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
-  <meta name="description" content="Y2K | Roast Records — Custom AI Music for Web3. Request tracks, hear roasts, and witness the glitch-dub-trap revolution on Cronos." />
+
+  <!-- SEO + Open Graph -->
+  <meta name="description" content="The official site of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
   <meta name="theme-color" content="#0b0d12" />
   <meta property="og:title" content="Y2K | Roast Records" />
-  <meta property="og:description" content="Request custom tracks. Experience AI music magic on Cronos." />
+  <meta property="og:description" content="Submit a track. Join the legacy. The future of on-chain music starts here." />
   <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" />
-  <meta property="og:url" content="https://y2kcoin.org/" />
-  <meta name="color-scheme" content="dark light">
+  <meta property="og:url" content="https://y2kcoin.org" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon -->
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --glitch-pink: #ff007a;
-      --glitch-cyan: #00ffff;
-      --dark-bg: #0b0d12;
-      --zinc: #1a1a1a;
-      --text: #f0f0f0;
-      --accent: #00ffcc;
-      --font-main: 'Orbitron', sans-serif;
+      --dark: #0b0d12;
+      --pink: #ff2aad;
+      --teal: #00ffc3;
+      --white: #f0f0f0;
+      --gray: #aaa;
+      --font: 'Space Grotesk', sans-serif;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     html, body {
-      font-family: var(--font-main);
-      background: var(--dark-bg);
-      color: var(--text);
-      scroll-behavior: smooth;
+      background: var(--dark);
+      font-family: var(--font);
+      color: var(--white);
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
-    header, footer {
+
+    a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    a:hover {
+      animation: glitch 0.3s steps(2, end) infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 1px 0 var(--teal); }
+      50% { text-shadow: -1px 0 var(--pink); }
+      100% { text-shadow: 1px 0 var(--teal); }
+    }
+
+    /* Mobile Nav */
+    .nav-toggle {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 25px;
+      cursor: pointer;
+      z-index: 1001;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      position: sticky;
+    }
+
+    .nav-toggle span {
+      display: block;
+      height: 4px;
+      background: var(--teal);
+      border-radius: 2px;
+      transition: 0.4s ease;
+    }
+
+    .nav-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .nav-menu {
+      position: fixed;
       top: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 999;
+      right: -100%;
+      width: 80%;
+      height: 100vh;
+      background: #121318;
+      padding: 6vh 6vw;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transition: right 0.4s ease;
+      z-index: 1000;
     }
-    .connect-btn {
-      background: var(--glitch-cyan);
-      color: #000;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
+
+    .nav-menu.open {
+      right: 0;
     }
-    .dropdown {
-      background: #111;
-      padding: 10px;
-      border: 1px solid #333;
-      margin: 10px 0;
-      border-radius: 6px;
-    }
-    section {
-      margin: 1rem;
-    }
-    .collapsible {
-      background: #121212;
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    .collapsible h2 {
-      cursor: pointer;
+
+    .nav-menu a {
       font-size: 1.2rem;
+      font-weight: 600;
     }
-    .collapsible-content {
-      display: none;
-      margin-top: 10px;
+
+    /* Disable scroll when nav open */
+    body.menu-open {
+      overflow: hidden;
+      height: 100vh;
     }
-    .banner img {
+
+    /* Banner */
+    .hero-banner {
+      width: 100%;
+      max-height: 60vh;
+      overflow: hidden;
+      animation: fadeUp 1.2s ease-out both;
+    }
+
+    .hero-banner img {
       width: 100%;
       height: auto;
-      object-fit: cover;
-      border-bottom: 2px solid var(--glitch-pink);
+      display: block;
     }
-    .footer-logo {
-      width: 40px;
-      transition: transform 0.4s ease;
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .footer-logo:hover {
-      transform: scale(1.1);
-      filter: drop-shadow(0 0 5px var(--glitch-cyan));
+
+    .neon-line {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--pink), var(--teal));
+      box-shadow: 0 0 12px var(--teal);
+      animation: pulseLine 2.5s infinite ease-in-out;
     }
-    .pulse {
-      animation: pulse 2s infinite;
+
+    @keyframes pulseLine {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
     }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+
+    /* Sections */
+    .dropdown-section {
+      padding: 2vh 6vw;
     }
-    .submit-btn {
-      background: var(--glitch-pink);
-      color: white;
-      border: none;
-      padding: 10px;
+
+    details {
+      background: #101114;
+      border: 1px solid #1f1f1f;
       border-radius: 6px;
-      font-weight: bold;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--teal);
       cursor: pointer;
+      list-style: none;
     }
-    .hidden { display: none; }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary {
+      background: #141518;
+    }
+
+    .dropdown-content {
+      padding: 0 1rem 1rem;
+      font-size: 0.95rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 4vh 6vw;
+      font-size: 0.9rem;
+      color: var(--gray);
+      border-top: 1px solid #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .footer-token {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      animation: pulse 3s infinite ease-in-out;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .footer-token:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 12px var(--teal);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    @media (min-width: 768px) {
+      .nav-toggle { display: none; }
+    }
   </style>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.querySelector('.nav-toggle');
+      const menu = document.querySelector('.nav-menu');
+
+      toggle.addEventListener('click', () => {
+        toggle.classList.toggle('open');
+        menu.classList.toggle('open');
+        document.body.classList.toggle('menu-open');
+      });
+
+      document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+          menu.classList.remove('open');
+          toggle.classList.remove('open');
+          document.body.classList.remove('menu-open');
+        });
+      });
+    });
+  </script>
 </head>
+
 <body>
-
-<header>
-  <div id="menuToggle">☰</div>
-  <button class="connect-btn" onclick="connectWallet()">Connect</button>
-</header>
-
-<div class="banner">
-  <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Banner" />
-</div>
-
-<main>
-  <!-- Request A Song -->
-  <section class="collapsible">
-    <h2 onclick="toggleCollapse(this)">🎤 Request a Song</h2>
-    <div class="collapsible-content">
-      <form id="requestForm">
-        <input required type="text" placeholder="Project Name" /><br/>
-        <input required type="text" placeholder="𝕏 Handle" /><br/>
-        <select required>
-          <option disabled selected>Choose a Vibe</option>
-          <option>Roast</option>
-          <option>Anthem</option>
-          <option>Hype</option>
-          <option>Funny</option>
-          <option>Love Song</option>
-          <option>Theme Song</option>
-          <option>Dark Trap</option>
-        </select><br/>
-        <textarea placeholder="Additional Ideas (optional)"></textarea><br/>
-        <button class="submit-btn" type="button" onclick="submitSong()">Submit</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- More Sections Below -->
-  <section class="collapsible"><h2 onclick="toggleCollapse(this)">📡 About</h2><div class="collapsible-content"><p>Y2K | Roast Records crafts AI-powered music on Cronos...</p></div></section>
-  <section class="collapsible"><h2 onclick="toggleCollapse(this)">🧠 How It Works</h2><div class="collapsible-content"><p>Connect, submit, pay 30 CRO, get your track.</p></div></section>
-  <section class="collapsible"><h2 onclick="toggleCollapse(this)">🔥 Live Submissions</h2><div class="collapsible-content"><p>Coming soon...</p></div></section>
-  <section class="collapsible"><h2 onclick="toggleCollapse(this)">💎 Certified Tracks</h2><div class="collapsible-content"><p>IPFS-hosted music by Y2K.</p></div></section>
-  <section class="collapsible"><h2 onclick="toggleCollapse(this)">❓ FAQ</h2><div class="collapsible-content"><p>More coming soon...</p></div></section>
-</main>
-
-<footer>
-  <img class="footer-logo pulse" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Token Logo" />
-  <nav>
-    <a href="https://x.com" target="_blank">𝕏</a> |
-    <a href="https://discord.gg" target="_blank">Discord</a> |
-    <a href="https://obsidian.xyz" target="_blank">Buy</a>
+  <!-- Mobile Nav -->
+  <div class="nav-toggle"><span></span><span></span><span></span></div>
+  <nav class="nav-menu">
+    <a href="#about">About</a>
+    <a href="#how">How It Works</a>
+    <a href="#subs">Live Submissions</a>
+    <a href="#certs">Certified Tracks</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
+    <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
   </nav>
-</footer>
 
-<!-- JS Logic -->
-<script>
-  const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
-  let userWallet = null;
+  <!-- Banner -->
+  <div class="hero-banner">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
+  </div>
+  <div class="neon-line"></div>
 
-  function toggleCollapse(el) {
-    const content = el.nextElementSibling;
-    content.style.display = content.style.display === "block" ? "none" : "block";
-  }
+  <!-- Drop-down Sections -->
+  <div class="dropdown-section">
+    <details id="about"><summary>About</summary><div class="dropdown-content">Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.</div></details>
+    <details id="how"><summary>How It Works</summary><div class="dropdown-content">Connect your wallet. Submit your track for 30 CRO. Include your project name, vibe, and 𝕏 handle. If it fits the energy — you're officially stamped into the label.</div></details>
+    <details id="subs"><summary>Live Submissions</summary><div class="dropdown-content">Community-submitted tracks will appear here. This section updates in real-time once submissions open.</div></details>
+    <details id="certs"><summary>Certified Tracks</summary><div class="dropdown-content">Approved drops curated by the team. These represent the most savage tracks officially minted into Y2K Roast Records history.</div></details>
+    <details id="faq"><summary>FAQ</summary><div class="dropdown-content"><strong>How much does it cost?</strong> 30 CRO per submission.<br><br><strong>Who can submit?</strong> Anyone with a supported wallet.<br><br><strong>What happens after approval?</strong> Your music becomes part of our legacy drop list — forever.</div></details>
+  </div>
 
-  async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        userWallet = accounts[0];
-        const chainId = await ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x19') {
-          alert("Please switch to Cronos Mainnet");
-        } else {
-          const sig = await ethereum.request({
-            method: 'personal_sign',
-            params: ["Please sign to confirm wallet connection", userWallet]
-          });
-          document.querySelector('.connect-btn').innerText = userWallet.slice(0,6) + "..." + userWallet.slice(-4);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      alert("Please install MetaMask or a Web3 wallet.");
-    }
-  }
-
-  async function submitSong() {
-    if (!userWallet) {
-      alert("Connect wallet first.");
-      return;
-    }
-    const confirmed = confirm("Sign to pay 30 CRO and submit?");
-    if (confirmed) {
-      // Simulate success
-      alert("✅ Track Requested!");
-      document.getElementById("requestForm").reset();
-    }
-  }
-</script>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
+      <a href="/"><img class="footer-token" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Token" /></a>
+    </div>
+    <div>&copy; 2025 Y2K | Roast Records</div>
+  </footer>
 </body>
 </html>
