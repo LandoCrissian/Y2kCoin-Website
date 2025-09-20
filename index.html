@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -6,38 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
 
-  <!-- SEO + OG -->
-  <meta name="description" content="The official dApp of Y2K | Roast Records — glitch-dub-trap label on Cronos." />
+  <!-- SEO & OG -->
+  <meta name="description" content="Submit a track. Join the legacy. The future of on-chain music starts here.">
+  <meta property="og:title" content="Y2K | Roast Records" />
+  <meta property="og:description" content="Glitch-dub-trap music label. Submit your anthem now." />
   <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" />
   <meta property="og:url" content="https://y2kcoin.org" />
-  <meta property="og:title" content="Y2K | Roast Records" />
-  <meta property="og:description" content="Submit your vibe. Join the legacy. Cronos music lives here." />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#0b0d12" />
 
-  <!-- Styles + Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
-      --dark: #0b0d12;
-      --pink: #ff4fc9;
+      --bg: #0b0d12;
+      --text: #ffffff;
       --teal: #00fff7;
-      --glow: 0 0 10px var(--pink);
+      --pink: #ff00b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      margin: 0;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Space Grotesk', sans-serif;
-      background: var(--dark);
-      color: #fff;
-    }
-
-    .hero-banner img {
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      display: block;
+      padding-bottom: 100px;
     }
 
     header {
@@ -45,194 +46,234 @@
       justify-content: space-between;
       align-items: center;
       padding: 12px 6vw;
+      background: #0b0d12;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
-    button#connectBtn {
-      padding: 8px 18px;
+    .connect-btn {
       background: var(--teal);
       border: none;
+      padding: 8px 16px;
+      font-weight: bold;
       color: #000;
-      font-weight: 600;
       border-radius: 6px;
       cursor: pointer;
     }
 
-    .dropdown-section details {
-      margin: 10px 6vw;
-      border: 1px solid #333;
-      border-radius: 6px;
-      overflow: hidden;
+    .hero-banner img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-bottom: 2px solid var(--pink);
     }
 
-    .dropdown-section summary {
-      padding: 12px;
-      background: #111;
+    details {
+      border-bottom: 1px solid #222;
+    }
+
+    summary {
+      padding: 16px 6vw;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #12141a;
+    }
+
+    .dropdown-content {
+      padding: 16px 6vw;
+      background: #16181f;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px;
+      background: #0e0f14;
+      border: 1px solid #333;
+      color: var(--text);
+      border-radius: 4px;
+    }
+
+    button[type="submit"] {
+      background: var(--pink);
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .dropdown-content {
-      padding: 12px;
-      background: #191919;
-    }
-
     footer {
-      text-align: center;
-      padding: 20px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #0b0d12;
       border-top: 1px solid #222;
+      padding: 10px 6vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .footer-token {
-      width: 30px;
-      margin-top: 8px;
+      height: 28px;
       transition: transform 0.3s ease;
     }
 
     .footer-token:hover {
-      transform: scale(1.2);
-      filter: drop-shadow(0 0 6px var(--pink));
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 6px var(--teal));
     }
 
-    /* Modal styles */
-    #paymentModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(4px);
-      z-index: 99;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #paymentModal .modal-box {
-      background: #111;
-      padding: 24px;
-      border-radius: 8px;
-      max-width: 90%;
-    }
-
-    #paymentModal button {
-      margin-top: 16px;
-      padding: 10px 20px;
-      background: var(--pink);
-      border: none;
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-      border-radius: 6px;
+    @media (min-width: 768px) {
+      .hero-banner img {
+        max-height: 300px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- Header -->
   <header>
     <div><strong>Y2K | Roast Records</strong></div>
-    <button id="connectBtn">Connect Wallet</button>
+    <button id="connectBtn" class="connect-btn">Connect Wallet</button>
   </header>
 
-  <!-- Banner -->
   <div class="hero-banner">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Banner" />
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
   </div>
 
   <!-- Sections -->
   <div class="dropdown-section">
-    <details id="submit"><summary>🎤 Submit a Track</summary>
+    <details open><summary>About</summary>
+      <div class="dropdown-content">Y2K | Roast Records is a glitch-dub-trap label based on Cronos. We create soundtracks for Web3 culture.</div>
+    </details>
+
+    <details><summary>How It Works</summary>
       <div class="dropdown-content">
         <form id="submitForm">
-          <label>Project Name:</label><br>
-          <input name="project" required style="width:100%"><br><br>
+          <label>Project Name:</label>
+          <input type="text" name="project" required />
 
-          <label>𝕏 Handle:</label><br>
-          <input name="twitter" required style="width:100%"><br><br>
+          <label>𝕏 Handle:</label>
+          <input type="text" name="twitter" required />
 
-          <label>Choose a Vibe:</label><br>
-          <select name="vibe" required style="width:100%">
-            <option value="">-- Choose Vibe --</option>
+          <label>Vibe:</label>
+          <select name="vibe" required>
+            <option value="">-- Select --</option>
             <option>Glitch</option>
             <option>Dub</option>
             <option>Trap</option>
             <option>Roast</option>
             <option>Other</option>
-          </select><br><br>
+          </select>
 
-          <label>Additional Info:</label><br>
-          <textarea name="extra" style="width:100%"></textarea><br><br>
+          <label>Additional Info:</label>
+          <textarea name="extra" rows="3" placeholder="Mood, story, sound you want..."></textarea>
 
           <button type="submit">Submit (30 CRO)</button>
         </form>
       </div>
     </details>
 
-    <details id="about"><summary>About</summary><div class="dropdown-content">Y2K is a glitch-dub-trap label minting on Cronos, forever on-chain.</div></details>
-    <details id="faq"><summary>FAQ</summary><div class="dropdown-content">Each track submission costs 30 CRO. Admin will review and stamp approved tracks.</div></details>
+    <details><summary>Live Submissions</summary>
+      <div class="dropdown-content" id="subs">Songs submitted will appear here.</div>
+    </details>
+
+    <details><summary>Certified Tracks</summary>
+      <div class="dropdown-content">Admin-approved tracks will be added here manually after release.</div>
+    </details>
+
+    <details><summary>FAQ</summary>
+      <div class="dropdown-content">
+        - 30 CRO per submission<br />
+        - Only Cronos mainnet supported<br />
+        - Connect your wallet and sign to get started
+      </div>
+    </details>
   </div>
 
-  <!-- Footer -->
   <footer>
     <div>&copy; 2025 Y2K | Roast Records</div>
-    <img class="footer-token" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Token">
+    <a href="/"><img class="footer-token" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Token" /></a>
   </footer>
 
-  <!-- Modal -->
-  <div id="paymentModal">
-    <div class="modal-box">
-      <h3>Confirm Submission</h3>
-      <p>This will request a 30 CRO payment to Y2K Treasury.</p>
-      <button id="confirmPaymentBtn">Confirm & Pay</button>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <!-- WALLET + FIREBASE LOGIC -->
   <script>
-    let signer, userAddress, formData;
     const admin = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
+    const treasury = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+    let signer, provider, userAddress;
 
     async function connectWallet() {
-      if (!window.ethereum) return alert("Install MetaMask.");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      if (!window.ethereum) return alert("Install MetaMask!");
+      provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       signer = provider.getSigner();
       userAddress = await signer.getAddress();
-      document.getElementById("connectBtn").textContent = userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
-      document.getElementById("connectBtn").onclick = disconnectWallet;
-      await signer.signMessage("Welcome to Y2K | Roast Records");
-      if (userAddress.toLowerCase() === admin.toLowerCase()) alert("Admin Mode Activated");
+      await signer.signMessage("Connect to Y2K | Roast Records");
+
+      const btn = document.getElementById("connectBtn");
+      btn.textContent = userAddress.slice(0,6) + "..." + userAddress.slice(-4);
+      btn.onclick = disconnectWallet;
+
+      if (userAddress.toLowerCase() === admin.toLowerCase()) {
+        alert("Admin mode unlocked");
+      }
     }
 
     function disconnectWallet() {
       userAddress = null;
       signer = null;
-      document.getElementById("connectBtn").textContent = "Connect Wallet";
-      document.getElementById("connectBtn").onclick = connectWallet;
+      const btn = document.getElementById("connectBtn");
+      btn.textContent = "Connect Wallet";
+      btn.onclick = connectWallet;
     }
 
     document.getElementById("connectBtn").onclick = connectWallet;
 
     document.getElementById("submitForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!signer || !userAddress) return alert("Please connect your wallet.");
+      if (!signer || !userAddress) return alert("Please connect wallet first.");
 
-      formData = Object.fromEntries(new FormData(e.target).entries());
-      document.getElementById("paymentModal").style.display = "flex";
-    });
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
 
-    document.getElementById("confirmPaymentBtn").onclick = async () => {
+      if (!data.project || !data.twitter || !data.vibe) {
+        alert("Please fill out all required fields.");
+        return;
+      }
+
+      if (!confirm("Confirm payment of 30 CRO and submit?")) return;
+
       try {
-        const tx = await signer.sendTransaction({
-          to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+        await signer.sendTransaction({
+          to: treasury,
           value: ethers.utils.parseEther("30")
         });
-        alert("Payment sent. Song request submitted!");
-        document.getElementById("submitForm").reset();
-        document.getElementById("paymentModal").style.display = "none";
+
+        const db = firebase.firestore();
+        await db.collection("submissions").add({
+          ...data,
+          wallet: userAddress,
+          timestamp: new Date()
+        });
+
+        alert("Submitted successfully!");
+        e.target.reset();
       } catch (err) {
-        alert("Transaction failed or rejected.");
+        alert("Error submitting: " + err.message);
       }
-    };
+    });
+
+    // Firebase Init
+    firebase.initializeApp({
+      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+      authDomain: "y2kroastrecords.firebaseapp.com",
+      projectId: "y2kroastrecords",
+    });
   </script>
 </body>
 </html>
