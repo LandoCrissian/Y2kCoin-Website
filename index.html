@@ -15,7 +15,6 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
   <style>
     :root {
       --dark: #0b0d12;
@@ -42,6 +41,17 @@
     a {
       color: var(--teal);
       text-decoration: none;
+      position: relative;
+    }
+
+    a:hover {
+      animation: glitch 0.3s steps(2, end) infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 1px 0 var(--teal); }
+      50% { text-shadow: -1px 0 var(--pink); }
+      100% { text-shadow: 1px 0 var(--teal); }
     }
 
     /* Hamburger */
@@ -53,16 +63,29 @@
       height: 25px;
       cursor: pointer;
       z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .nav-toggle span {
       display: block;
-      width: 100%;
       height: 4px;
-      margin-bottom: 5px;
       background: var(--teal);
       border-radius: 2px;
-      transition: 0.3s ease;
+      transition: 0.4s ease;
+    }
+
+    .nav-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
     }
 
     .nav-menu {
@@ -95,12 +118,38 @@
       width: 100%;
       max-height: 65vh;
       overflow: hidden;
+      position: relative;
+      animation: fadeUp 1.2s ease-out both;
     }
 
     .hero-banner img {
       width: 100%;
       height: auto;
       display: block;
+    }
+
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .neon-line {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--pink), var(--teal));
+      box-shadow: 0 0 12px var(--teal);
+      animation: pulseLine 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseLine {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
     }
 
     .dropdown-section {
@@ -114,6 +163,7 @@
       border-radius: 6px;
       margin-bottom: 1.2rem;
       overflow: hidden;
+      transition: all 0.4s ease;
     }
 
     summary {
@@ -123,6 +173,7 @@
       color: var(--teal);
       cursor: pointer;
       list-style: none;
+      transition: background 0.2s ease;
     }
 
     summary::-webkit-details-marker {
@@ -138,6 +189,12 @@
       font-size: 0.95rem;
       color: var(--gray);
       line-height: 1.6;
+      animation: fadeIn 0.4s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Footer */
@@ -165,6 +222,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
+      animation: pulse 3s infinite ease-in-out;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -173,24 +231,30 @@
       box-shadow: 0 0 12px var(--teal);
     }
 
+    @keyframes pulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
     @media (min-width: 768px) {
       .nav-toggle { display: none; }
     }
   </style>
 
-  <!-- Script -->
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const toggle = document.querySelector('.nav-toggle');
       const menu = document.querySelector('.nav-menu');
 
       toggle.addEventListener('click', () => {
+        toggle.classList.toggle('open');
         menu.classList.toggle('open');
       });
 
       document.querySelectorAll('.nav-menu a').forEach(link => {
         link.addEventListener('click', () => {
           menu.classList.remove('open');
+          toggle.classList.remove('open');
         });
       });
     });
@@ -217,10 +281,11 @@
     <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
   </nav>
 
-  <!-- Hero -->
+  <!-- Hero Banner -->
   <div class="hero-banner">
     <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Banner" />
   </div>
+  <div class="neon-line"></div>
 
   <!-- Drop-Down Sections -->
   <div class="dropdown-section">
