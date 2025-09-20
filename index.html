@@ -21,9 +21,6 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Ethers.js -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
   <style>
     :root {
       --dark: #0b0d12;
@@ -63,6 +60,7 @@
       100% { text-shadow: 1px 0 var(--teal); }
     }
 
+    /* Mobile Nav */
     .nav-toggle {
       position: fixed;
       top: 14px;
@@ -120,11 +118,13 @@
       font-weight: 600;
     }
 
+    /* Disable scroll when nav open */
     body.menu-open {
       overflow: hidden;
       height: 100vh;
     }
 
+    /* Banner */
     .hero-banner {
       width: 100%;
       max-height: 60vh;
@@ -156,6 +156,7 @@
       50% { opacity: 1; }
     }
 
+    /* Sections */
     .dropdown-section {
       padding: 2vh 6vw;
     }
@@ -192,6 +193,7 @@
       line-height: 1.6;
     }
 
+    /* Footer */
     footer {
       text-align: center;
       padding: 4vh 6vw;
@@ -233,68 +235,24 @@
     @media (min-width: 768px) {
       .nav-toggle { display: none; }
     }
-
-    .btn {
-      margin-top: 20px;
-      background: var(--pink);
-      color: var(--white);
-      padding: 0.8rem 1.5rem;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      background: var(--teal);
-      color: #000;
-    }
   </style>
 
   <script>
-    let userAddress = null;
-    let provider;
-
-    async function connectWallet() {
-      if (!window.ethereum) return alert("Install MetaMask or a Web3 wallet.");
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      userAddress = await signer.getAddress();
-      const message = "Sign to enter Y2K | Roast Records";
-      await signer.signMessage(message);
-
-      const network = await provider.getNetwork();
-      if (network.chainId !== 25) return alert("Please connect to Cronos Mainnet");
-
-      if (userAddress.toLowerCase() === '0x7fc2ab08f46c10489bab5d694d574022f1048198'.toLowerCase()) {
-        alert("Admin access granted");
-      }
-    }
-
-    async function payAndSubmit() {
-      if (!userAddress) return alert("Connect wallet first.");
-      const signer = provider.getSigner();
-      const tx = await signer.sendTransaction({
-        to: '0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100',
-        value: ethers.utils.parseEther("30")
-      });
-      await tx.wait();
-      alert("Payment successful! Submission ready.");
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('.nav-toggle').addEventListener('click', () => {
+      const toggle = document.querySelector('.nav-toggle');
+      const menu = document.querySelector('.nav-menu');
+
+      toggle.addEventListener('click', () => {
+        toggle.classList.toggle('open');
+        menu.classList.toggle('open');
         document.body.classList.toggle('menu-open');
-        document.querySelector('.nav-menu').classList.toggle('open');
-        document.querySelector('.nav-toggle').classList.toggle('open');
       });
 
       document.querySelectorAll('.nav-menu a').forEach(link => {
         link.addEventListener('click', () => {
+          menu.classList.remove('open');
+          toggle.classList.remove('open');
           document.body.classList.remove('menu-open');
-          document.querySelector('.nav-menu').classList.remove('open');
-          document.querySelector('.nav-toggle').classList.remove('open');
         });
       });
     });
@@ -321,10 +279,10 @@
   </div>
   <div class="neon-line"></div>
 
-  <!-- Dropdown Sections -->
+  <!-- Drop-down Sections -->
   <div class="dropdown-section">
     <details id="about"><summary>About</summary><div class="dropdown-content">Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.</div></details>
-    <details id="how"><summary>How It Works</summary><div class="dropdown-content">Connect your wallet. Submit your track for 30 CRO. Include your project name, vibe, and 𝕏 handle. If it fits the energy — you're officially stamped into the label.<br><button class="btn" onclick="connectWallet()">Connect Wallet</button><br><button class="btn" onclick="payAndSubmit()">Submit (30 CRO)</button></div></details>
+    <details id="how"><summary>How It Works</summary><div class="dropdown-content">Connect your wallet. Submit your track for 30 CRO. Include your project name, vibe, and 𝕏 handle. If it fits the energy — you're officially stamped into the label.</div></details>
     <details id="subs"><summary>Live Submissions</summary><div class="dropdown-content">Community-submitted tracks will appear here. This section updates in real-time once submissions open.</div></details>
     <details id="certs"><summary>Certified Tracks</summary><div class="dropdown-content">Approved drops curated by the team. These represent the most savage tracks officially minted into Y2K Roast Records history.</div></details>
     <details id="faq"><summary>FAQ</summary><div class="dropdown-content"><strong>How much does it cost?</strong> 30 CRO per submission.<br><br><strong>Who can submit?</strong> Anyone with a supported wallet.<br><br><strong>What happens after approval?</strong> Your music becomes part of our legacy drop list — forever.</div></details>
