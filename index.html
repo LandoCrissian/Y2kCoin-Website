@@ -1,207 +1,258 @@
-<!-- SECTION 1: BASE HTML + METADATA -->
+<!-- ===========================
+  SECTION 1: BASE SETUP + HEAD
+=========================== -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Y2K Roast Records — Born on Cronos</title>
-  <meta name="description" content="Submit a track. Support Cronos music. Get roasted." />
-  <meta name="theme-color" content="#000000" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Space+Mono&display=swap" rel="stylesheet" />
-  <style>
-    /* SECTION 2: GLOBAL STYLES + THEME */
-    :root {
-      --bg: #000;
-      --fg: #fff;
-      --neon: #ff00cc;
-      --neon-blue: #00f0ff;
-      --danger: #ff003c;
-      --font-display: 'Orbitron', sans-serif;
-      --font-mono: 'Space Mono', monospace;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Y2K | Roast Records</title>
+  <meta name="description" content="Born on Cronos. Request a song. Support the CROfam. Discover the underground label built for the future." />
+  <meta name="theme-color" content="#0b0d12" />
 
+  <!-- Fonts + Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+
+  <!-- Ethers for Web3 -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <!-- STYLES -->
+  <style>
+    :root {
+      --neon-pink: #ff00cc;
+      --neon-blue: #00ffff;
+      --bg-dark: #0b0d12;
+      --text-light: #ffffff;
+    }
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
-    body {
-      background: radial-gradient(ellipse at center, #050505 0%, #000000 100%);
-      color: var(--fg);
-      font-family: var(--font-mono);
-      padding: 2rem 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+    html, body {
+      font-family: 'Space Mono', monospace;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
     }
-
-    h1 {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      color: var(--neon);
-      text-shadow: 0 0 5px var(--neon), 0 0 10px var(--neon);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
-
-    p {
-      max-width: 600px;
-      text-align: center;
-      margin: 1rem 0;
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .neon-button {
-      background: var(--neon);
-      color: #000;
+    button {
+      font-family: inherit;
       border: none;
-      padding: 0.75rem 1.5rem;
-      font-size: 0.9rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      border-radius: 8px;
       cursor: pointer;
-      margin: 1rem 0;
-      box-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
-      transition: all 0.3s ease;
     }
 
-    .neon-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon);
-    }
-
-    .link-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .link-btn {
-      border: 2px solid var(--neon-blue);
-      color: var(--neon-blue);
-      background: transparent;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      padding: 0.75rem 1.2rem;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .link-btn:hover {
-      background: var(--neon-blue);
-      color: #000;
-      transform: scale(1.05);
-      box-shadow: 0 0 15px var(--neon-blue);
-    }
-
-    footer {
-      margin-top: auto;
-      font-size: 0.75rem;
-      color: #aaa;
-      padding: 2rem 0 1rem;
+    /* Layout */
+    .container {
+      padding: 3rem 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
       text-align: center;
     }
 
-    .glitch-hero {
-      animation: flicker 3s infinite alternate;
+    /* Neon Buttons */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      margin: 0.75rem;
+      border: 2px solid var(--neon-blue);
+      border-radius: 8px;
+      color: var(--neon-blue);
+      font-size: 1rem;
+      background: transparent;
+      transition: all 0.2s ease-in-out;
+    }
+    .btn:hover {
+      background-color: var(--neon-blue);
+      color: #000;
+      box-shadow: 0 0 12px var(--neon-blue);
+    }
+    .btn-primary {
+      border-color: var(--neon-pink);
+      color: var(--neon-pink);
+    }
+    .btn-primary:hover {
+      background-color: var(--neon-pink);
+      color: #000;
+      box-shadow: 0 0 12px var(--neon-pink);
     }
 
-    @keyframes flicker {
-      0% {
-        opacity: 0.9;
-        text-shadow: 0 0 4px var(--neon), 0 0 8px var(--neon-blue);
-      }
-      100% {
-        opacity: 1;
-        text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon);
-      }
+    /* Headings */
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin: 2rem 0 1rem;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
     }
 
-    @media (min-width: 768px) {
-      h1 {
-        font-size: 2.5rem;
-      }
+    /* Certified Gallery */
+    .track-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .track-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1rem;
+      transition: transform 0.3s;
+    }
+    .track-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 12px var(--neon-blue);
+    }
+    .track-image {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .track-link {
+      display: block;
+      font-weight: bold;
+      color: var(--neon-blue);
+      margin-top: 0.25rem;
+    }
 
-      p {
-        font-size: 1.1rem;
-      }
+    /* Footer */
+    footer {
+      margin-top: 3rem;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    /* Glitch FX */
+    .glitch {
+      position: relative;
+      display: inline-block;
+      color: white;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.7;
+    }
+    .glitch::before {
+      color: var(--neon-pink);
+      animation: glitch 2s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      color: var(--neon-blue);
+      animation: glitch 1.5s infinite linear alternate-reverse;
+    }
+    @keyframes glitch {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-1px, 1px); }
+      40% { transform: translate(-3px, 0); }
+      60% { transform: translate(3px, 2px); }
+      80% { transform: translate(1px, -1px); }
+      100% { transform: translate(0, 0); }
     }
   </style>
 </head>
 
-<!-- SECTION 3: BODY CONTENT -->
+<!-- ===========================
+  SECTION 2: BODY + UI
+=========================== -->
 <body>
-  <h1 class="glitch-hero">🔥 Y2K Roast Records</h1>
-  <p>
-    Welcome to the underground label for the degens, dreamers, and disruptors.
-    Submit a song request, pay 30 CRO, and watch us bring your project to life with a full-blown roast anthem.
-    Connect your wallet to explore certified tracks, mint history, and support the Cronos music movement.<br><br>
-    All wallets holding $CRO are welcome — MetaMask, Trust, On-Chain, etc.
-  </p>
+  <div class="container">
+    <!-- HERO SECTION -->
+    <h1 class="glitch" data-text="Y2K Roast Records">Y2K Roast Records</h1>
+    <p>🔥 Born on Cronos. Welcome to the underground label for dreamers, degens, and disruptors.</p>
+    <p>Submit a roast request (30 CRO), connect your wallet, and explore certified bangers.</p>
+    <button class="btn-primary" onclick="connectWallet()">CONNECT WALLET</button>
 
-  <!-- SECTION 4: WALLET CONNECT -->
-  <button id="connectBtn" class="neon-button">Connect Wallet</button>
+    <!-- LINKS -->
+    <div>
+      <a href="https://x.com/y2kc0in?s=21" class="btn" target="_blank">𝕏 / Twitter</a>
+      <a href="https://discord.gg/jpFbSapSAh" class="btn" target="_blank">Discord</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn" target="_blank">Buy on Obsidian</a>
+    </div>
 
-  <!-- SECTION 5: LINKS -->
-  <div class="link-row">
-    <a class="link-btn" href="https://x.com/y2kc0in?s=21" target="_blank">𝕏 / Twitter</a>
-    <a class="link-btn" href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
-    <a class="link-btn" href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy on Obsidian</a>
+    <!-- CERTIFIED GALLERY -->
+    <h2>🔥 Certified Tracks</h2>
+    <div class="track-grid" id="certifiedTracks">
+      <!-- Injected by Firebase -->
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      Powered by Roast Records | Contract: 0xB4Df7...Ac6d | Admin: 0x7FC2...8198
+    </footer>
   </div>
 
-  <!-- SECTION 6: FOOTER -->
-  <footer>
-    Powered by Roast Records <br />
-    Contract: 0xB4Df7...Ac6d | Admin: 0x7FC2...8198
-  </footer>
+<!-- ===========================
+  SECTION 3: FIREBASE + WALLET
+=========================== -->
+<script>
+  // FIREBASE INIT
+  const firebaseConfig = {
+    apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+    authDomain: "y2kroastrecords.firebaseapp.com",
+    projectId: "y2kroastrecords",
+    storageBucket: "y2kroastrecords.appspot.com",
+    messagingSenderId: "313829428782",
+    appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-  <!-- SECTION 7: FIREBASE + WALLET SCRIPT -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-    import { getAuth, signInWithPopup, signOut, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-      authDomain: "y2kroastrecords.firebaseapp.com",
-      projectId: "y2kroastrecords",
-      storageBucket: "y2kroastrecords.appspot.com",
-      messagingSenderId: "313829428782",
-      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-    };
+  // WALLET LOGIC
+  let userWallet = null;
 
-    const app = initializeApp(firebaseConfig);
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth();
-
-    const connectBtn = document.getElementById('connectBtn');
-
-    let connected = false;
-
-    connectBtn.addEventListener('click', async () => {
-      if (!connected) {
-        try {
-          const result = await signInWithPopup(auth, provider);
-          const user = result.user;
-          connectBtn.textContent = 'Disconnect';
-          connected = true;
-        } catch (error) {
-          alert("Connection failed.");
-        }
-      } else {
-        await signOut(auth);
-        connectBtn.textContent = 'Connect Wallet';
-        connected = false;
+  async function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        userWallet = await signer.getAddress();
+        alert("Wallet connected: " + userWallet);
+      } catch (err) {
+        alert("Connection failed");
       }
+    } else {
+      alert("Install MetaMask or Trust Wallet to connect.");
+    }
+  }
+
+  // LOAD CERTIFIED TRACKS
+  async function loadCertifiedTracks() {
+    const container = document.getElementById("certifiedTracks");
+    const snapshot = await db.collection("certified").orderBy("timestamp", "desc").get();
+    snapshot.forEach((doc) => {
+      const track = doc.data();
+      const html = `
+        <div class="track-card">
+          <img src="${track.image}" alt="cover" class="track-image" />
+          <a href="${track.audio}" class="track-link" target="_blank">🎧 Listen</a>
+        </div>`;
+      container.innerHTML += html;
     });
-  </script>
+  }
+
+  loadCertifiedTracks();
+</script>
 </body>
 </html>
