@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -27,6 +26,7 @@
       --white: #f0f0f0;
       --gray: #aaa;
       --font: 'Space Grotesk', sans-serif;
+      --header-height: 64px; /* Consistent header height for calculations */
     }
 
     * {
@@ -46,16 +46,18 @@
     a {
       color: var(--teal);
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     a:hover {
+      color: var(--pink);
       animation: glitch 0.3s steps(2, end) infinite;
     }
 
     @keyframes glitch {
-      0% { text-shadow: 1px 0 var(--teal); }
-      50% { text-shadow: -1px 0 var(--pink); }
-      100% { text-shadow: 1px 0 var(--teal); }
+      0% { text-shadow: 1px 0 var(--teal), -1px 0 var(--pink); }
+      50% { text-shadow: -1px 0 var(--pink), 1px 0 var(--teal); }
+      100% { text-shadow: 1px 0 var(--teal), -1px 0 var(--pink); }
     }
 
     header {
@@ -69,6 +71,13 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem 1.2rem;
+      height: var(--header-height);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 700;
     }
 
     .wallet-btn {
@@ -80,6 +89,7 @@
       border-radius: 6px;
       font-size: 0.9rem;
       cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     .wallet-btn:hover {
@@ -88,28 +98,30 @@
     }
 
     .hero {
-      margin-top: 64px;
+      margin-top: var(--header-height);
       width: 100%;
       max-height: 60vh;
       overflow: hidden;
+      position: relative;
     }
 
     .hero img {
       width: 100%;
       display: block;
+      object-fit: cover;
     }
 
     .neon-line {
       height: 3px;
       width: 100%;
       background: linear-gradient(90deg, var(--pink), var(--teal));
-      box-shadow: 0 0 12px var(--teal);
+      box-shadow: 0 0 12px var(--teal), 0 0 8px var(--pink);
       animation: pulseLine 2.5s infinite ease-in-out;
     }
 
     @keyframes pulseLine {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
+      0%, 100% { opacity: 0.6; transform: scaleX(0.98); }
+      50% { opacity: 1; transform: scaleX(1); }
     }
 
     section {
@@ -121,11 +133,12 @@
       font-size: 1.4rem;
       margin-bottom: 1rem;
       color: var(--teal);
+      text-shadow: 0 0 5px var(--teal);
     }
 
     .track-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1rem;
     }
 
@@ -134,6 +147,12 @@
       border: 1px solid #222;
       padding: 1rem;
       border-radius: 8px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .track-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 255, 195, 0.2);
     }
 
     .footer {
@@ -141,30 +160,44 @@
       padding: 2rem 1.2rem;
       font-size: 0.9rem;
       color: var(--gray);
+      border-top: 1px solid #111;
     }
 
-    @media (min-width: 640px) {
-      .track-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .social-links a {
+      margin: 0 0.5rem;
+    }
+
+    /* Enhanced Responsiveness */
+    @media (min-width: 768px) {
+      header {
+        padding: 1rem 2rem;
+      }
+
+      section {
+        padding: 3rem 2rem;
+      }
+
+      section h2 {
+        font-size: 1.6rem;
       }
     }
 
     @media (min-width: 1024px) {
-      .track-grid {
-        grid-template-columns: repeat(3, 1fr);
+      .hero {
+        max-height: 70vh;
       }
     }
   </style>
 </head>
 
-<body>
+<body id="top">
   <header>
-    <div><a href="#top" class="glitch-hover">Y2K | Roast Records</a></div>
+    <div class="logo"><a href="#top" class="glitch-hover">Y2K | Roast Records</a></div>
     <button class="wallet-btn" onclick="connectWallet()">Connect Wallet</button>
   </header>
 
   <div class="hero">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner featuring glitch-dub-trap aesthetics" loading="lazy" />
   </div>
   <div class="neon-line"></div>
 
@@ -182,7 +215,7 @@
     <section id="submit">
       <h2>📤 Submit a Track</h2>
       <p>To submit your music to Y2K | Roast Records, connect your wallet and fill out the form. Cost: <strong>30 CRO</strong></p>
-      <!-- Placeholder form UI -->
+      <!-- Placeholder form UI - Consider integrating a real form with validation -->
       <p>[Form goes here]</p>
     </section>
 
@@ -193,8 +226,14 @@
 
     <section id="faq">
       <h2>❓ FAQ</h2>
-      <p><strong>Q:</strong> Who can submit?<br><strong>A:</strong> Anyone with a Cronos wallet.</p>
-      <p><strong>Q:</strong> What happens after approval?<br><strong>A:</strong> You get immortalized in our on-chain catalog.</p>
+      <details>
+        <summary><strong>Q:</strong> Who can submit?</summary>
+        <p><strong>A:</strong> Anyone with a Cronos wallet.</p>
+      </details>
+      <details>
+        <summary><strong>Q:</strong> What happens after approval?</summary>
+        <p><strong>A:</strong> You get immortalized in our on-chain catalog.</p>
+      </details>
     </section>
 
     <section id="admin" style="display:none;">
@@ -205,26 +244,35 @@
 
   <footer class="footer">
     <p>&copy; 2025 Y2K | Roast Records — Built for the CROfam</p>
-    <div style="margin-top: 1rem;">
-      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="glitch-hover">𝕏</a> • 
-      <a href="https://discord.gg/jpFbSapSAh" target="_blank" class="glitch-hover">Discord</a> • 
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glitch-hover">Buy Token</a>
+    <div class="social-links" style="margin-top: 1rem;">
+      <a href="https://x.com/y2kc0in?s=21" target="_blank" rel="noopener noreferrer" class="glitch-hover">𝕏</a> • 
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank" rel="noopener noreferrer" class="glitch-hover">Discord</a> • 
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" rel="noopener noreferrer" class="glitch-hover">Buy Token</a>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
     async function connectWallet() {
-      if (!window.ethereum) return alert("Please install MetaMask or a Web3 wallet.");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = (await signer.getAddress()).toLowerCase();
-      console.log("Wallet connected:", address);
-      if (address === "0x7fc2ab08f46c10489bab5d694d574022f1048198") {
-        document.getElementById('admin').style.display = 'block';
+      if (!window.ethereum) {
+        alert("Please install MetaMask or a Web3 wallet.");
+        return;
+      }
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = (await signer.getAddress()).toLowerCase();
+        console.log("Wallet connected:", address);
+        if (address === "0x7fc2ab08f46c10489bab5d694d574022f1048198") {
+          document.getElementById('admin').style.display = 'block';
+        }
+      } catch (error) {
+        console.error("Wallet connection failed:", error);
+        alert("Failed to connect wallet. Please try again.");
       }
     }
   </script>
 </body>
 </html>
+```​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
