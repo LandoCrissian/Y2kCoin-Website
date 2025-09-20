@@ -47,14 +47,13 @@
     <header class="fixed top-0 left-0 w-full z-50 bg-[#0b0d12] flex items-center justify-between px-4 py-3 border-b border-[#111]">
       <a href="#top" class="text-teal-300 font-semibold text-sm glitch-hover" tabindex="0" aria-label="Go to top" role="link">Y2K | Roast Records</a>
       <button
-        class="bg-teal-300 text-black font-semibold text-sm px-4 py-2 rounded-md hover:bg-pink-500 hover:text-white transition"
-        onclick="handleConnectWallet()"
-        tabindex="0"
-        aria-label="Connect Wallet"
-        onkeydown="if(event.key==='Enter'){handleConnectWallet()}"
-      >
-        Connect Wallet
-      </button>
+  class="bg-teal-300 text-black font-semibold text-sm px-4 py-2 rounded-md hover:bg-pink-500 hover:text-white transition"
+  tabindex="0"
+  aria-label="Connect Wallet"
+  data-connected="false"
+>
+  Connect Wallet
+</button>
     </header>
 
     <!-- Hero Banner -->
@@ -121,32 +120,93 @@
       </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script>
-      const ADMIN_ADDRESS = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
+    <!-- Ethers.js -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const ADMIN_ADDRESS = "0x7fc2ab08f46c10489bab5d694d574022f1048198".toLowerCase();
+    const adminPanel = document.getElementById("adminPanel");
 
-      const handleConnectWallet = async () => {
-        if (!window.ethereum) {
-          alert("Please install MetaMask or a Web3 wallet.");
-          return;
+    const walletBtn = document.querySelector("[aria-label='Connect Wallet']");
+    walletBtn.addEventListener("click", () => {
+      const isConnected = walletBtn.dataset.connected === "true";
+      if (isConnected) {
+        handleDisconnectWallet();
+      } else {
+        handleConnectWallet();
+      }
+    });
+
+    walletBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        walletBtn.click();
+      }
+    });
+
+    const updateButtonUI = (connected, address = "") => {
+      if (connected) {
+        walletBtn.textContent = "Disconnect";
+        walletBtn.dataset.connected = "true";
+        walletBtn.setAttribute("aria-label", `Disconnect Wallet ${address}`);
+      } else {
+        walletBtn.textContent = "Connect Wallet";
+        walletBtn.dataset.connected = "false";
+        walletBtn.setAttribute("aria-label", "Connect Wallet");
+        adminPanel.classList.add("hidden");
+      }
+    };
+
+    const handleConnectWallet = async () => {
+      if (!window.ethereum) {
+        alert("No wallet detected. Please install MetaMask or a Web3 wallet.");
+        return;
+      }
+
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = (await signer.getAddress()).toLowerCase();
+
+        const message = `Sign in to Y2K | Roast Records\n\nWallet: ${address}`;
+        const signature = await signer.signMessage(message);
+
+        console.log("✅ Signature:", signature);
+        alert(`✅ Wallet connected and verified.\nAddress: ${address}`);
+
+        localStorage.setItem("connectedWallet", address);
+        updateButtonUI(true, address);
+
+        if (address === ADMIN_ADDRESS) {
+          adminPanel.classList.remove("hidden");
+          console.log("🛡️ Admin access granted.");
         }
+      } catch (err) {
+        console.error("❌ Connection error:", err);
+        alert("❌ Wallet connection failed or signature denied.");
+      }
+    };
 
-        try {
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          await provider.send("eth_requestAccounts", []);
-          const signer = provider.getSigner();
-          const address = (await signer.getAddress()).toLowerCase();
+    const handleDisconnectWallet = () => {
+      localStorage.removeItem("connectedWallet");
+      updateButtonUI(false);
+      alert("👋 Wallet disconnected.");
+    };
 
-          console.log("Wallet connected:", address);
-
-          if (address === ADMIN_ADDRESS.toLowerCase()) {
-            document.getElementById("adminPanel").classList.remove("hidden");
-          }
-        } catch (error) {
-          console.error("Wallet connection failed:", error);
+    const autoReconnect = () => {
+      const saved = localStorage.getItem("connectedWallet");
+      if (saved) {
+        updateButtonUI(true, saved);
+        if (saved === ADMIN_ADDRESS) {
+          adminPanel.classList.remove("hidden");
         }
-      };
-    </script>
+      } else {
+        updateButtonUI(false);
+      }
+    };
+
+    autoReconnect(); // Run on load
+  });
+</script>
   </body>
 </html>
