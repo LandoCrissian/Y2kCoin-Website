@@ -6,14 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
 
-  <!-- SEO + OG -->
-  <meta name="description" content="Y2K | Roast Records — Where glitch-dub-trap meets the blockchain. Submit your track. Get roasted. Get minted." />
+  <!-- SEO + Open Graph -->
+  <meta name="description" content="The official home of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
   <meta name="theme-color" content="#0b0d12" />
+  <meta property="og:title" content="Y2K | Roast Records" />
+  <meta property="og:description" content="Submit your track. Join the movement. Discover underground music on-chain." />
   <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" />
   <meta property="og:url" content="https://y2kcoin.org" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Font + Favicon -->
+  <!-- Favicon + Fonts -->
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
 
@@ -23,12 +25,15 @@
       --pink: #ff2aad;
       --teal: #00ffc3;
       --white: #f0f0f0;
-      --gray: #999;
+      --gray: #aaa;
       --font: 'Space Grotesk', sans-serif;
-      --header-height: 64px;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     html, body {
       background: var(--dark);
@@ -38,81 +43,73 @@
       overflow-x: hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: repeating-radial-gradient(circle at center, #111 0, #0b0d12 2px, transparent 4px);
-      opacity: 0.04;
-      pointer-events: none;
-      z-index: 0;
+    a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    a:hover {
+      animation: glitch 0.3s steps(2, end) infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 1px 0 var(--teal); }
+      50% { text-shadow: -1px 0 var(--pink); }
+      100% { text-shadow: 1px 0 var(--teal); }
     }
 
     header {
       position: fixed;
-      top: 0; left: 0; width: 100%;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 1.2rem;
-      background: #0b0d12e0;
-      height: var(--header-height);
+      top: 0;
+      left: 0;
+      width: 100%;
       z-index: 1000;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-    }
-
-    .logo {
-      font-weight: bold;
-      font-size: 1rem;
-      letter-spacing: 1px;
-      color: var(--teal);
-      text-shadow: 0 0 6px var(--pink);
+      background: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.2rem;
     }
 
     .wallet-btn {
       background: var(--teal);
-      color: black;
-      border: none;
+      color: #000;
       padding: 8px 14px;
-      border-radius: 6px;
       font-weight: bold;
-      cursor: pointer;
+      border: none;
+      border-radius: 6px;
       font-size: 0.9rem;
+      cursor: pointer;
     }
 
     .wallet-btn:hover {
       background: var(--pink);
-      color: white;
+      color: #fff;
     }
 
     .hero {
-      margin-top: var(--header-height);
+      margin-top: 64px;
       width: 100%;
-      height: 60vh;
-      background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png') center/cover no-repeat;
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
+      max-height: 60vh;
+      overflow: hidden;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, #0b0d12 10%, transparent 90%);
+    .hero img {
+      width: 100%;
+      display: block;
     }
 
     .neon-line {
       height: 3px;
+      width: 100%;
       background: linear-gradient(90deg, var(--pink), var(--teal));
-      box-shadow: 0 0 12px var(--pink), 0 0 6px var(--teal);
-      animation: pulseLine 2s infinite ease-in-out;
+      box-shadow: 0 0 12px var(--teal);
+      animation: pulseLine 2.5s infinite ease-in-out;
     }
 
     @keyframes pulseLine {
-      0%,100% { transform: scaleX(0.95); opacity: 0.7; }
-      50% { transform: scaleX(1); opacity: 1; }
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
     }
 
     section {
@@ -121,152 +118,97 @@
     }
 
     section h2 {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       margin-bottom: 1rem;
       color: var(--teal);
-      text-shadow: 0 0 5px var(--teal);
     }
 
     .track-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: 1fr;
       gap: 1rem;
     }
 
     .track-card {
-      background: #131417;
+      background: #111214;
       border: 1px solid #222;
       padding: 1rem;
-      border-radius: 10px;
-      position: relative;
-    }
-
-    .track-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      border: 2px dashed var(--pink);
-      opacity: 0.1;
-      pointer-events: none;
-    }
-
-    .submit-form input, .submit-form textarea, .submit-form select {
-      width: 100%;
-      background: #111;
-      color: var(--white);
-      border: 1px solid #333;
-      padding: 0.75rem;
       border-radius: 8px;
-      margin-bottom: 1rem;
-      font-family: var(--font);
     }
 
-    .submit-form button {
-      background: var(--pink);
-      color: white;
-      padding: 10px 18px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-
-    .meter {
-      background: #111;
-      height: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-
-    .meter-fill {
-      height: 100%;
-      background: linear-gradient(to right, var(--teal), var(--pink));
-      width: 0%;
-      transition: width 0.5s ease;
-    }
-
-    footer {
+    .footer {
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 2rem 1.2rem;
       font-size: 0.9rem;
       color: var(--gray);
     }
 
-    .social-links a {
-      color: var(--teal);
-      margin: 0 0.6rem;
-      font-weight: bold;
-      text-shadow: 0 0 4px var(--pink);
+    @media (min-width: 640px) {
+      .track-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
-    @media(min-width: 768px) {
-      section { padding: 3rem 2rem; }
-      .logo { font-size: 1.3rem; }
+    @media (min-width: 1024px) {
+      .track-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <div class="logo">Y2K | Roast Records</div>
+    <div><a href="#top" class="glitch-hover">Y2K | Roast Records</a></div>
     <button class="wallet-btn" onclick="connectWallet()">Connect Wallet</button>
   </header>
 
-  <div class="hero"></div>
+  <div class="hero">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
+  </div>
   <div class="neon-line"></div>
 
   <main>
     <section id="featured">
-      <h2>🎧 Certified Tracks</h2>
+      <h2>🔥 Certified Tracks</h2>
       <div class="track-grid" id="certifiedTracks">
-        <div class="track-card">001 – Glitchwave (V1RUS)</div>
-        <div class="track-card">002 – RawSignal (SYNAPS3)</div>
+        <!-- IPFS music cards will go here -->
+        <div class="track-card">Track 001 — Coming soon</div>
+        <div class="track-card">Track 002 — Glitchwave by V1RUS</div>
+        <div class="track-card">Track 003 — RawSignal by SYNAPS3</div>
       </div>
     </section>
 
     <section id="submit">
       <h2>📤 Submit a Track</h2>
-      <form class="submit-form" onsubmit="simulateSubmit(event)">
-        <input type="text" placeholder="Track Name" required />
-        <input type="text" placeholder="𝕏 Handle" required />
-        <select required>
-          <option value="">Select Vibe</option>
-          <option>Glitch</option>
-          <option>Dub</option>
-          <option>Trap</option>
-          <option>Fusion</option>
-        </select>
-        <textarea placeholder="Optional description or roast" rows="3"></textarea>
-        <button type="submit">Mint Track (30 CRO)</button>
-        <div class="meter"><div class="meter-fill" id="roastMeter"></div></div>
-      </form>
+      <p>To submit your music to Y2K | Roast Records, connect your wallet and fill out the form. Cost: <strong>30 CRO</strong></p>
+      <!-- Placeholder form UI -->
+      <p>[Form goes here]</p>
     </section>
 
     <section id="live">
-      <h2>🚨 Live Feed</h2>
-      <p>[On-chain event feed integration]</p>
+      <h2>🔄 Live Submissions</h2>
+      <p>[Real-time feed from Firestore here]</p>
     </section>
 
     <section id="faq">
       <h2>❓ FAQ</h2>
-      <details><summary>Who can submit?</summary><p>Anyone with a Cronos wallet and 30 CRO.</p></details>
-      <details><summary>Where does my submission go?</summary><p>To the decentralized on-chain archive of underground music.</p></details>
+      <p><strong>Q:</strong> Who can submit?<br><strong>A:</strong> Anyone with a Cronos wallet.</p>
+      <p><strong>Q:</strong> What happens after approval?<br><strong>A:</strong> You get immortalized in our on-chain catalog.</p>
     </section>
 
     <section id="admin" style="display:none;">
       <h2>🔐 Admin Panel</h2>
-      <p>[Manage submissions, verify IPFS links]</p>
+      <p>[Approve tracks, attach IPFS, verify status]</p>
     </section>
   </main>
 
-  <footer>
-    <p>© 2025 Y2K | Roast Records. CROfam forever.</p>
-    <div class="social-links">
-      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>•
-      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>•
-      <a href="https://obsidian.finance" target="_blank">Buy Token</a>
+  <footer class="footer">
+    <p>&copy; 2025 Y2K | Roast Records — Built for the CROfam</p>
+    <div style="margin-top: 1rem;">
+      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="glitch-hover">𝕏</a> • 
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank" class="glitch-hover">Discord</a> • 
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glitch-hover">Buy Token</a>
     </div>
   </footer>
 
@@ -277,16 +219,11 @@
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      if (address.toLowerCase() === "0x7fc2ab08f46c10489bab5d694d574022f1048198")
-        document.getElementById("admin").style.display = "block";
-    }
-
-    function simulateSubmit(e) {
-      e.preventDefault();
-      const roastMeter = document.getElementById('roastMeter');
-      const randomRoast = Math.floor(Math.random() * 100);
-      roastMeter.style.width = randomRoast + '%';
+      const address = (await signer.getAddress()).toLowerCase();
+      console.log("Wallet connected:", address);
+      if (address === "0x7fc2ab08f46c10489bab5d694d574022f1048198") {
+        document.getElementById('admin').style.display = 'block';
+      }
     }
   </script>
 </body>
