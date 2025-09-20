@@ -1,236 +1,320 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
-  <meta name="description" content="Submit your track to Y2K | Roast Records for 30 CRO. If it hits, you’re stamped into the label.">
-  <meta name="theme-color" content="#000000" />
+
+  <!-- SEO + Open Graph -->
+  <meta name="description" content="The official site of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
+  <meta name="theme-color" content="#0b0d12" />
   <meta property="og:title" content="Y2K | Roast Records" />
-  <meta property="og:description" content="Neon. Glitch. Fire. Submit your sound to the future." />
+  <meta property="og:description" content="Submit a track. Join the legacy. The future of on-chain music starts here." />
   <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" />
+  <meta property="og:url" content="https://y2kcoin.org" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon -->
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Ethers.js -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
-      --bg: #0a0a0a;
-      --primary: #00fff0;
-      --accent: #ff00aa;
-      --text: #f0f0f0;
-      --card: #121212;
+      --dark: #0b0d12;
+      --pink: #ff2aad;
+      --teal: #00ffc3;
+      --white: #f0f0f0;
+      --gray: #aaa;
+      --font: 'Space Grotesk', sans-serif;
     }
-    body {
+
+    * {
       margin: 0;
-      font-family: 'Space Grotesk', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      padding: 0;
+      box-sizing: border-box;
     }
-    header {
+
+    html, body {
+      background: var(--dark);
+      font-family: var(--font);
+      color: var(--white);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { animation: glitch 0.3s steps(2, end) infinite; }
+
+    @keyframes glitch {
+      0% { text-shadow: 1px 0 var(--teal); }
+      50% { text-shadow: -1px 0 var(--pink); }
+      100% { text-shadow: 1px 0 var(--teal); }
+    }
+
+    .nav-toggle {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 25px;
+      cursor: pointer;
+      z-index: 1001;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      border-bottom: 1px solid #222;
-      background: #000;
-      position: sticky;
-      top: 0;
-      z-index: 99;
     }
-    .wallet-btn {
-      background: var(--accent);
-      color: black;
-      padding: 0.5rem 1rem;
-      border: none;
-      font-weight: 600;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .disconnect {
-      background: transparent;
-      color: var(--text);
-      font-size: 0.9rem;
-      border: none;
-      margin-top: 0.5rem;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    .section {
-      margin: 2rem auto;
-      max-width: 640px;
-      padding: 1rem;
-      background: var(--card);
-      border-radius: 10px;
-    }
-    h2 {
-      color: var(--primary);
-    }
-    label {
+
+    .nav-toggle span {
       display: block;
-      margin-top: 1rem;
+      height: 4px;
+      background: var(--teal);
+      border-radius: 2px;
+      transition: 0.4s ease;
+    }
+
+    .nav-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      height: 100vh;
+      background: #121318;
+      padding: 6vh 6vw;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transition: right 0.4s ease;
+      z-index: 1000;
+    }
+
+    .nav-menu.open {
+      right: 0;
+    }
+
+    .nav-menu a {
+      font-size: 1.2rem;
       font-weight: 600;
     }
-    input, select, textarea {
+
+    body.menu-open {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .hero-banner {
       width: 100%;
+      max-height: 60vh;
+      overflow: hidden;
+      animation: fadeUp 1.2s ease-out both;
+    }
+
+    .hero-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .neon-line {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--pink), var(--teal));
+      box-shadow: 0 0 12px var(--teal);
+      animation: pulseLine 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseLine {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .dropdown-section {
+      padding: 2vh 6vw;
+    }
+
+    details {
+      background: #101114;
+      border: 1px solid #1f1f1f;
+      border-radius: 6px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--teal);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary {
+      background: #141518;
+    }
+
+    .dropdown-content {
+      padding: 0 1rem 1rem;
+      font-size: 0.95rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    input, select, textarea {
+      background: #0e0f13;
+      border: 1px solid #1f1f1f;
+      color: var(--white);
       padding: 0.6rem;
       margin-top: 0.5rem;
-      border-radius: 5px;
-      border: none;
-      background: #1a1a1a;
-      color: var(--text);
-      font-size: 1rem;
-    }
-    button.submit-btn {
-      margin-top: 2rem;
-      padding: 0.8rem 1.2rem;
-      background: var(--primary);
-      border: none;
-      color: black;
-      font-weight: 700;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
       width: 100%;
-    }
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: #666;
-    }
-    footer img {
-      width: 64px;
-      opacity: 0.6;
-      transition: transform 0.4s ease, opacity 0.3s ease;
-    }
-    footer img:hover {
-      transform: scale(1.15);
-      opacity: 1;
-    }
-    .admin-badge {
-      margin-top: 1rem;
-      padding: 0.4rem 1rem;
-      background: #111;
-      color: #0f0;
-      display: inline-block;
-      font-size: 0.85rem;
+      font-family: var(--font);
       border-radius: 4px;
     }
+
+    .form-group { margin-bottom: 1rem; }
+
+    footer {
+      text-align: center;
+      padding: 4vh 6vw;
+      font-size: 0.9rem;
+      color: var(--gray);
+      border-top: 1px solid #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .footer-token {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      animation: pulse 3s infinite ease-in-out;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .footer-token:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 12px var(--teal);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .btn {
+      margin-top: 20px;
+      background: var(--pink);
+      color: var(--white);
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: var(--teal);
+      color: #000;
+    }
   </style>
+
+  <!-- You’ll receive JS + Firestore submission logic next (split for readability) -->
 </head>
+
 <body>
+  <!-- Top Nav -->
+  <div class="nav-toggle"><span></span><span></span><span></span></div>
+  <nav class="nav-menu">
+    <a href="#about">About</a>
+    <a href="#how">How It Works</a>
+    <a href="#subs">Live Submissions</a>
+    <a href="#certs">Certified Tracks</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
+    <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
+  </nav>
 
-  <header>
-    <h1>Y2K | Roast Records</h1>
-    <div id="walletArea">
-      <button class="wallet-btn" onclick="connectWallet()">Connect Wallet</button>
-    </div>
-  </header>
+  <!-- Banner -->
+  <div class="hero-banner">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
+  </div>
+  <div class="neon-line"></div>
 
-  <main class="section" id="submissionSection">
-    <h2>Submit Your Track</h2>
-    <p>Connect your wallet. Fill out the form. Pay 30 CRO to stamp your spot.</p>
-    <form id="trackForm">
-      <label>Project Name</label>
-      <input type="text" id="projectName" required>
+  <!-- Dropdowns -->
+  <div class="dropdown-section">
+    <details id="about"><summary>About</summary>
+      <div class="dropdown-content">
+        Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.
+      </div>
+    </details>
 
-      <label>𝕏 / Twitter Handle</label>
-      <input type="text" id="xHandle" required>
+    <details id="how"><summary>How It Works</summary>
+      <div class="dropdown-content" id="submission-area">
+        <!-- Wallet connect + song submission UI will render here dynamically -->
+      </div>
+    </details>
 
-      <label>Choose a Vibe</label>
-      <select id="vibeSelect" required>
-        <option value="">— Select Vibe —</option>
-        <option>Roast</option>
-        <option>Chill</option>
-        <option>Hype</option>
-        <option>Dark</option>
-        <option>Emotional</option>
-        <option>Glitchcore</option>
-        <option>Banger</option>
-        <option>Cinematic</option>
-        <option>Weird</option>
-        <option>Experimental</option>
-        <option>Lyrical</option>
-        <option>Violent</option>
-        <option>Freestyle</option>
-        <option>Other (describe below)</option>
-      </select>
+    <details id="subs"><summary>Live Submissions</summary><div class="dropdown-content">Coming soon...</div></details>
+    <details id="certs"><summary>Certified Tracks</summary><div class="dropdown-content">Coming soon...</div></details>
+    <details id="faq"><summary>FAQ</summary>
+      <div class="dropdown-content">
+        <strong>How much does it cost?</strong> 30 CRO per submission.<br><br>
+        <strong>Who can submit?</strong> Anyone with a Cronos-compatible wallet.<br><br>
+        <strong>Where does the music go?</strong> Certified songs are manually uploaded to IPFS by the label.
+      </div>
+    </details>
+  </div>
 
-      <label>Extra Notes (optional)</label>
-      <textarea id="extraNotes" rows="4" placeholder="Include any extra notes, FX, lyrics, etc."></textarea>
-
-      <button type="submit" class="submit-btn">Submit (30 CRO)</button>
-    </form>
-    <div id="adminBadge" class="admin-badge" style="display:none">Admin Mode Unlocked</div>
-  </main>
-
+  <!-- Footer -->
   <footer>
-    <p>Built for the underground. Fueled by CRO.</p>
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo">
+    <div class="footer-links">
+      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
+      <a href="/"><img class="footer-token" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Token" /></a>
+    </div>
+    <div>&copy; 2025 Y2K | Roast Records</div>
   </footer>
-
-  <script>
-    const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
-    let userWallet = "";
-
-    async function connectWallet() {
-      if (!window.ethereum) return alert("Please use a wallet-enabled browser.");
-      const [address] = await window.ethereum.request({ method: "eth_requestAccounts" });
-      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-      if (chainId !== '0x19') return alert("Please switch to Cronos Mainnet (Chain ID 25)");
-
-      userWallet = address;
-      document.getElementById('walletArea').innerHTML = `
-        <div style="text-align:right">
-          <div style="font-size:0.9rem; color:var(--primary);">${address.slice(0, 6)}...${address.slice(-4)}</div>
-          <button class="disconnect" onclick="disconnect()">Disconnect</button>
-        </div>`;
-      if (address.toLowerCase() === adminWallet.toLowerCase()) {
-        document.getElementById("adminBadge").style.display = "inline-block";
-      }
-    }
-
-    function disconnect() {
-      userWallet = "";
-      document.getElementById('walletArea').innerHTML = `<button class="wallet-btn" onclick="connectWallet()">Connect Wallet</button>`;
-      document.getElementById("adminBadge").style.display = "none";
-    }
-
-    document.getElementById("trackForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!userWallet) return alert("Please connect your wallet first.");
-
-      const project = document.getElementById("projectName").value.trim();
-      const handle = document.getElementById("xHandle").value.trim();
-      const vibe = document.getElementById("vibeSelect").value;
-      const notes = document.getElementById("extraNotes").value.trim();
-      if (!project || !handle || !vibe) return alert("Please fill in all required fields.");
-
-      const confirmed = confirm(`You’re about to pay 30 CRO to submit.\n\nProceed?`);
-      if (!confirmed) return;
-
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const tx = await signer.sendTransaction({
-          to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
-          value: ethers.utils.parseEther("30")
-        });
-        await tx.wait();
-
-        alert("Payment confirmed! Submitting your info now...");
-
-        // TODO: FIREBASE PUSH HERE
-        console.log({ project, handle, vibe, notes, wallet: userWallet });
-
-        alert("Submission complete. We'll be in touch if it fits the label 🔥");
-        document.getElementById("trackForm").reset();
-      } catch (err) {
-        alert("Transaction failed or rejected.");
-        console.error(err);
-      }
-    });
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </body>
 </html>
