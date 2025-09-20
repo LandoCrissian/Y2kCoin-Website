@@ -24,10 +24,6 @@
   <!-- Ethers.js -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
-
   <style>
     :root {
       --dark: #0b0d12;
@@ -52,8 +48,14 @@
       scroll-behavior: smooth;
     }
 
-    a { color: var(--teal); text-decoration: none; }
-    a:hover { animation: glitch 0.3s steps(2, end) infinite; }
+    a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    a:hover {
+      animation: glitch 0.3s steps(2, end) infinite;
+    }
 
     @keyframes glitch {
       0% { text-shadow: 1px 0 var(--teal); }
@@ -190,19 +192,6 @@
       line-height: 1.6;
     }
 
-    input, select, textarea {
-      background: #0e0f13;
-      border: 1px solid #1f1f1f;
-      color: var(--white);
-      padding: 0.6rem;
-      margin-top: 0.5rem;
-      width: 100%;
-      font-family: var(--font);
-      border-radius: 4px;
-    }
-
-    .form-group { margin-bottom: 1rem; }
-
     footer {
       text-align: center;
       padding: 4vh 6vw;
@@ -241,6 +230,10 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
+    @media (min-width: 768px) {
+      .nav-toggle { display: none; }
+    }
+
     .btn {
       margin-top: 20px;
       background: var(--pink);
@@ -258,11 +251,58 @@
     }
   </style>
 
-  <!-- You’ll receive JS + Firestore submission logic next (split for readability) -->
+  <script>
+    let userAddress = null;
+    let provider;
+
+    async function connectWallet() {
+      if (!window.ethereum) return alert("Install MetaMask or a Web3 wallet.");
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+      const message = "Sign to enter Y2K | Roast Records";
+      await signer.signMessage(message);
+
+      const network = await provider.getNetwork();
+      if (network.chainId !== 25) return alert("Please connect to Cronos Mainnet");
+
+      if (userAddress.toLowerCase() === '0x7fc2ab08f46c10489bab5d694d574022f1048198'.toLowerCase()) {
+        alert("Admin access granted");
+      }
+    }
+
+    async function payAndSubmit() {
+      if (!userAddress) return alert("Connect wallet first.");
+      const signer = provider.getSigner();
+      const tx = await signer.sendTransaction({
+        to: '0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100',
+        value: ethers.utils.parseEther("30")
+      });
+      await tx.wait();
+      alert("Payment successful! Submission ready.");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.nav-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('menu-open');
+        document.querySelector('.nav-menu').classList.toggle('open');
+        document.querySelector('.nav-toggle').classList.toggle('open');
+      });
+
+      document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+          document.body.classList.remove('menu-open');
+          document.querySelector('.nav-menu').classList.remove('open');
+          document.querySelector('.nav-toggle').classList.remove('open');
+        });
+      });
+    });
+  </script>
 </head>
 
 <body>
-  <!-- Top Nav -->
+  <!-- Mobile Nav -->
   <div class="nav-toggle"><span></span><span></span><span></span></div>
   <nav class="nav-menu">
     <a href="#about">About</a>
@@ -281,29 +321,13 @@
   </div>
   <div class="neon-line"></div>
 
-  <!-- Dropdowns -->
+  <!-- Dropdown Sections -->
   <div class="dropdown-section">
-    <details id="about"><summary>About</summary>
-      <div class="dropdown-content">
-        Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.
-      </div>
-    </details>
-
-    <details id="how"><summary>How It Works</summary>
-      <div class="dropdown-content" id="submission-area">
-        <!-- Wallet connect + song submission UI will render here dynamically -->
-      </div>
-    </details>
-
-    <details id="subs"><summary>Live Submissions</summary><div class="dropdown-content">Coming soon...</div></details>
-    <details id="certs"><summary>Certified Tracks</summary><div class="dropdown-content">Coming soon...</div></details>
-    <details id="faq"><summary>FAQ</summary>
-      <div class="dropdown-content">
-        <strong>How much does it cost?</strong> 30 CRO per submission.<br><br>
-        <strong>Who can submit?</strong> Anyone with a Cronos-compatible wallet.<br><br>
-        <strong>Where does the music go?</strong> Certified songs are manually uploaded to IPFS by the label.
-      </div>
-    </details>
+    <details id="about"><summary>About</summary><div class="dropdown-content">Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.</div></details>
+    <details id="how"><summary>How It Works</summary><div class="dropdown-content">Connect your wallet. Submit your track for 30 CRO. Include your project name, vibe, and 𝕏 handle. If it fits the energy — you're officially stamped into the label.<br><button class="btn" onclick="connectWallet()">Connect Wallet</button><br><button class="btn" onclick="payAndSubmit()">Submit (30 CRO)</button></div></details>
+    <details id="subs"><summary>Live Submissions</summary><div class="dropdown-content">Community-submitted tracks will appear here. This section updates in real-time once submissions open.</div></details>
+    <details id="certs"><summary>Certified Tracks</summary><div class="dropdown-content">Approved drops curated by the team. These represent the most savage tracks officially minted into Y2K Roast Records history.</div></details>
+    <details id="faq"><summary>FAQ</summary><div class="dropdown-content"><strong>How much does it cost?</strong> 30 CRO per submission.<br><br><strong>Who can submit?</strong> Anyone with a supported wallet.<br><br><strong>What happens after approval?</strong> Your music becomes part of our legacy drop list — forever.</div></details>
   </div>
 
   <!-- Footer -->
