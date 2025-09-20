@@ -1,27 +1,25 @@
-<!-- ==================================== -->
-<!-- SECTION 1: HTML HEAD + GLOBAL STYLES -->
-<!-- ==================================== -->
+<!-- SECTION 1: BASE HTML + METADATA -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Y2K Roast Records</title>
-
-  <!-- Fonts -->
+  <title>Y2K Roast Records — Born on Cronos</title>
+  <meta name="description" content="Submit a track. Support Cronos music. Get roasted." />
+  <meta name="theme-color" content="#000000" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Space+Mono&display=swap" rel="stylesheet" />
-
-  <!-- Banner Icon -->
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
-
-  <!-- Glitchy Neon Styles -->
   <style>
+    /* SECTION 2: GLOBAL STYLES + THEME */
     :root {
-      --neon-pink: #ff00cc;
-      --neon-blue: #00ffff;
-      --dark-bg: #0a0a0a;
-      --highlight: #39ff14;
-      --terminal: 'Space Mono', monospace;
+      --bg: #000;
+      --fg: #fff;
+      --neon: #ff00cc;
+      --neon-blue: #00f0ff;
+      --danger: #ff003c;
+      --font-display: 'Orbitron', sans-serif;
+      --font-mono: 'Space Mono', monospace;
     }
 
     * {
@@ -31,140 +29,146 @@
     }
 
     body {
-      background: linear-gradient(180deg, #000 0%, #111 100%);
-      color: white;
-      font-family: var(--terminal);
-      overflow-x: hidden;
+      background: radial-gradient(ellipse at center, #050505 0%, #000000 100%);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
 
-    header {
+    h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 1rem;
       text-align: center;
-      padding: 2rem 1rem 1rem;
-      background-color: #0a0a0a;
+      color: var(--neon);
+      text-shadow: 0 0 5px var(--neon), 0 0 10px var(--neon);
     }
 
-    header img {
-      width: 100%;
-      max-width: 1200px;
-      border-radius: 16px;
-      box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
-    }
-
-    .logo {
-      margin: 1.5rem auto;
-      width: 150px;
-      height: auto;
-      border-radius: 50%;
-      border: 2px solid var(--neon-pink);
-      box-shadow: 0 0 12px var(--neon-pink);
-    }
-
-    .intro {
+    p {
+      max-width: 600px;
       text-align: center;
-      margin: 2rem auto;
-      max-width: 800px;
-      padding: 0 1rem;
-      font-size: 1.1rem;
+      margin: 1rem 0;
+      font-size: 1rem;
       line-height: 1.6;
     }
 
-    .btn-glow {
-      background: var(--neon-pink);
+    .neon-button {
+      background: var(--neon);
       color: #000;
-      padding: 12px 24px;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
-      font-family: var(--terminal);
-      border: none;
-      border-radius: 6px;
-      box-shadow: 0 0 10px var(--neon-pink);
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .btn-glow:hover {
-      transform: scale(1.05);
-    }
-
-    .socials {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .socials a {
-      text-decoration: none;
-      font-weight: bold;
-      color: var(--neon-blue);
-      border: 2px solid var(--neon-blue);
-      padding: 0.6rem 1rem;
       border-radius: 8px;
-      transition: all 0.2s ease;
+      cursor: pointer;
+      margin: 1rem 0;
+      box-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
+      transition: all 0.3s ease;
     }
 
-    .socials a:hover {
+    .neon-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon);
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .link-btn {
+      border: 2px solid var(--neon-blue);
+      color: var(--neon-blue);
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 0.75rem 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .link-btn:hover {
       background: var(--neon-blue);
       color: #000;
-      box-shadow: 0 0 12px var(--neon-blue);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px var(--neon-blue);
     }
 
     footer {
-      margin-top: 4rem;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
+      margin-top: auto;
+      font-size: 0.75rem;
       color: #aaa;
+      padding: 2rem 0 1rem;
+      text-align: center;
+    }
+
+    .glitch-hero {
+      animation: flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% {
+        opacity: 0.9;
+        text-shadow: 0 0 4px var(--neon), 0 0 8px var(--neon-blue);
+      }
+      100% {
+        opacity: 1;
+        text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon);
+      }
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      p {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 
-<!-- ============================= -->
-<!-- SECTION 2: PAGE STRUCTURE -->
-<!-- ============================= -->
+<!-- SECTION 3: BODY CONTENT -->
 <body>
+  <h1 class="glitch-hero">🔥 Y2K Roast Records</h1>
+  <p>
+    Welcome to the underground label for the degens, dreamers, and disruptors.
+    Submit a song request, pay 30 CRO, and watch us bring your project to life with a full-blown roast anthem.
+    Connect your wallet to explore certified tracks, mint history, and support the Cronos music movement.<br><br>
+    All wallets holding $CRO are welcome — MetaMask, Trust, On-Chain, etc.
+  </p>
 
-  <!-- HEADER + BANNER -->
-  <header>
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
-    <img class="logo" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo" />
-  </header>
+  <!-- SECTION 4: WALLET CONNECT -->
+  <button id="connectBtn" class="neon-button">Connect Wallet</button>
 
-  <!-- ============================== -->
-  <!-- SECTION 3: PROJECT INTRO -->
-  <!-- ============================== -->
-  <div class="intro">
-    <h2>🔥 Y2K Roast Records — Born on Cronos</h2>
-    <p>
-      Welcome to the underground label for the degens, dreamers, and disruptors. Submit a song request, pay 30 CRO, and watch us bring your project to life with a full-blown roast anthem.
-    </p>
-    <p>
-      Connect your wallet to submit, explore certified tracks, and support the Cronos music renaissance. All wallets holding $CRO are welcome — On-Chain, MetaMask, Trust, etc.
-    </p>
-    <button class="btn-glow" onclick="connectWallet()">Connect Wallet</button>
-
-    <!-- SOCIALS + LINKS -->
-    <div class="socials">
-      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏 / Twitter</a>
-      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy on Obsidian</a>
-    </div>
+  <!-- SECTION 5: LINKS -->
+  <div class="link-row">
+    <a class="link-btn" href="https://x.com/y2kc0in?s=21" target="_blank">𝕏 / Twitter</a>
+    <a class="link-btn" href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+    <a class="link-btn" href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy on Obsidian</a>
   </div>
 
-  <!-- ============================== -->
-  <!-- SECTION 4: FOOTER -->
-  <!-- ============================== -->
+  <!-- SECTION 6: FOOTER -->
   <footer>
-    Powered by Roast Records | Contract: <code>0xB4Df7...Ac6d</code> | Admin: <code>0x7FC2...8198</code>
+    Powered by Roast Records <br />
+    Contract: 0xB4Df7...Ac6d | Admin: 0x7FC2...8198
   </footer>
 
-  <!-- ============================== -->
-  <!-- SECTION 5: FIREBASE INIT + WALLET LOGIC -->
-  <!-- ============================== -->
+  <!-- SECTION 7: FIREBASE + WALLET SCRIPT -->
   <script type="module">
-    // FIREBASE INIT
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getAuth, signInWithPopup, signOut, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+    
     const firebaseConfig = {
       apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
       authDomain: "y2kroastrecords.firebaseapp.com",
@@ -173,24 +177,31 @@
       messagingSenderId: "313829428782",
       appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
     };
-    const app = initializeApp(firebaseConfig);
 
-    // WALLET CONNECT PLACEHOLDER (next we’ll add viem / ethers support)
-    async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
+    const app = initializeApp(firebaseConfig);
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+
+    const connectBtn = document.getElementById('connectBtn');
+
+    let connected = false;
+
+    connectBtn.addEventListener('click', async () => {
+      if (!connected) {
         try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const address = accounts[0];
-          alert(`Connected: ${address}`);
-        } catch (err) {
-          console.error(err);
-          alert('Connection rejected.');
+          const result = await signInWithPopup(auth, provider);
+          const user = result.user;
+          connectBtn.textContent = 'Disconnect';
+          connected = true;
+        } catch (error) {
+          alert("Connection failed.");
         }
       } else {
-        alert('No wallet detected. Please install MetaMask or Trust Wallet.');
+        await signOut(auth);
+        connectBtn.textContent = 'Connect Wallet';
+        connected = false;
       }
-    }
+    });
   </script>
-
 </body>
 </html>
