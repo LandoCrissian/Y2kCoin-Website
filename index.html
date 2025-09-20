@@ -1,81 +1,27 @@
-<!-- ============================================= -->
-<!-- File: certified.html                          -->
-<!-- Certified Track Gallery – Y2K | Roast Records -->
-<!-- Fully Self-Contained: HTML + CSS + Firebase   -->
-<!-- ============================================= -->
-
+<!-- ==================================== -->
+<!-- SECTION 1: HTML HEAD + GLOBAL STYLES -->
+<!-- ==================================== -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Certified Tracks | Y2K Roast Records</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Y2K Roast Records</title>
 
-  <!-- ========== FONTS & ICONS ========== -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Space+Mono&display=swap" rel="stylesheet" />
+
+  <!-- Banner Icon -->
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
 
-  <!-- ========== FIREBASE SDK ========== -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      query,
-      orderBy,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-      authDomain: "y2kroastrecords.firebaseapp.com",
-      projectId: "y2kroastrecords",
-      storageBucket: "y2kroastrecords.firebasestorage.app",
-      messagingSenderId: "313829428782",
-      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const gallery = document.getElementById("trackGallery");
-
-    async function loadTracks() {
-      const q = query(collection(db, "certified"), orderBy("certifiedAt", "desc"));
-      const snapshot = await getDocs(q);
-
-      if (snapshot.empty) {
-        gallery.innerHTML = "<p class='status-text'>No certified tracks yet. Stay tuned…</p>";
-        return;
-      }
-
-      snapshot.forEach(doc => {
-        const { project, audioURL, imageURL, twitter } = doc.data();
-
-        const card = document.createElement("div");
-        card.className = "track-card";
-        card.innerHTML = `
-          <img src="${imageURL}" alt="${project} Cover" class="track-cover" />
-          <h3>${project}</h3>
-          ${twitter ? `<a href="https://x.com/${twitter.replace('@', '')}" target="_blank" class="track-twitter">${twitter}</a>` : ''}
-          <audio controls src="${audioURL}" class="audio-player"></audio>
-        `;
-        gallery.appendChild(card);
-      });
-    }
-
-    window.addEventListener("DOMContentLoaded", loadTracks);
-  </script>
-
-  <!-- ========== STYLES ========== -->
+  <!-- Glitchy Neon Styles -->
   <style>
     :root {
-      --bg: #0b0d10;
-      --neon-fuchsia: #ff00ff;
-      --neon-green: #00ffc3;
-      --neon-cyan: #00ffff;
-      --glitch-white: #ffffff;
-      --font-main: 'Orbitron', sans-serif;
+      --neon-pink: #ff00cc;
+      --neon-blue: #00ffff;
+      --dark-bg: #0a0a0a;
+      --highlight: #39ff14;
+      --terminal: 'Space Mono', monospace;
     }
 
     * {
@@ -85,180 +31,166 @@
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--glitch-white);
-      font-family: var(--font-main);
-      text-align: center;
-      padding: 2rem;
-    }
-
-    h1.glitch-text {
-      font-size: 2.5rem;
-      text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-fuchsia), 0 0 15px var(--neon-fuchsia);
-      animation: flicker 2s infinite;
-    }
-
-    @keyframes flicker {
-      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-      20%, 24%, 55% { opacity: 0.4; }
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      color: var(--neon-green);
-      margin-top: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    /* GALLERY GRID */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 2rem;
-      margin: 2rem auto;
-      padding: 1rem;
-      max-width: 1200px;
-    }
-
-    .track-card {
-      background: #111;
-      border: 2px solid var(--neon-fuchsia);
-      border-radius: 8px;
-      padding: 1rem;
+      background: linear-gradient(180deg, #000 0%, #111 100%);
       color: white;
-      box-shadow: 0 0 12px var(--neon-fuchsia);
-      transition: transform 0.2s ease;
+      font-family: var(--terminal);
+      overflow-x: hidden;
     }
 
-    .track-card:hover {
-      transform: scale(1.03);
-    }
-
-    .track-cover {
-      width: 100%;
-      height: auto;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 8px var(--neon-cyan);
-    }
-
-    .track-card h3 {
-      margin: 0.5rem 0;
-      color: var(--neon-cyan);
-    }
-
-    .track-twitter {
-      display: inline-block;
-      color: var(--neon-green);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-      text-decoration: none;
-    }
-
-    .track-twitter:hover {
-      text-decoration: underline;
-    }
-
-    .audio-player {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .status-text {
-      color: var(--neon-cyan);
-      font-size: 1rem;
-    }
-
-    /* FOOTER */
-    .site-footer {
-      margin-top: 4rem;
-      padding: 2rem 1rem;
-      border-top: 1px solid var(--neon-fuchsia);
-      background: black;
+    header {
       text-align: center;
+      padding: 2rem 1rem 1rem;
+      background-color: #0a0a0a;
     }
 
-    .footer-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
+    header img {
+      width: 100%;
+      max-width: 1200px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
     }
 
-    .footer-logo {
-      width: 80px;
-      filter: drop-shadow(0 0 8px var(--neon-fuchsia));
+    .logo {
+      margin: 1.5rem auto;
+      width: 150px;
+      height: auto;
+      border-radius: 50%;
+      border: 2px solid var(--neon-pink);
+      box-shadow: 0 0 12px var(--neon-pink);
+    }
+
+    .intro {
+      text-align: center;
+      margin: 2rem auto;
+      max-width: 800px;
+      padding: 0 1rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .btn-glow {
+      background: var(--neon-pink);
+      color: #000;
+      padding: 12px 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-family: var(--terminal);
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px var(--neon-pink);
+      cursor: pointer;
       transition: transform 0.2s ease;
     }
 
-    .footer-logo:hover {
+    .btn-glow:hover {
       transform: scale(1.05);
     }
 
-    .footer-text {
-      font-size: 0.9rem;
-      color: var(--neon-cyan);
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-links {
-      font-size: 1rem;
+    .socials {
       display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
       justify-content: center;
-      color: var(--neon-green);
+      gap: 1.2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
     }
 
-    .footer-links a {
-      color: var(--neon-green);
+    .socials a {
       text-decoration: none;
-      position: relative;
+      font-weight: bold;
+      color: var(--neon-blue);
+      border: 2px solid var(--neon-blue);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
 
-    .footer-links a::after {
-      content: "";
-      display: block;
-      height: 2px;
-      width: 0;
-      background: var(--neon-fuchsia);
-      transition: width 0.3s ease;
-      position: absolute;
-      bottom: -3px;
-      left: 0;
+    .socials a:hover {
+      background: var(--neon-blue);
+      color: #000;
+      box-shadow: 0 0 12px var(--neon-blue);
     }
 
-    .footer-links a:hover::after {
-      width: 100%;
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
     }
   </style>
 </head>
 
+<!-- ============================= -->
+<!-- SECTION 2: PAGE STRUCTURE -->
+<!-- ============================= -->
 <body>
-  <!-- HEADER -->
-  <div class="hero">
-    <h1 class="glitch-text">Certified Tracks</h1>
-    <p class="subtitle">Official drops for the CROfam. All 🔥, all on-chain.</p>
 
-    <!-- GALLERY GRID -->
-    <div id="trackGallery" class="gallery-grid">
-      <!-- JS will inject certified tracks here -->
+  <!-- HEADER + BANNER -->
+  <header>
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
+    <img class="logo" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo" />
+  </header>
+
+  <!-- ============================== -->
+  <!-- SECTION 3: PROJECT INTRO -->
+  <!-- ============================== -->
+  <div class="intro">
+    <h2>🔥 Y2K Roast Records — Born on Cronos</h2>
+    <p>
+      Welcome to the underground label for the degens, dreamers, and disruptors. Submit a song request, pay 30 CRO, and watch us bring your project to life with a full-blown roast anthem.
+    </p>
+    <p>
+      Connect your wallet to submit, explore certified tracks, and support the Cronos music renaissance. All wallets holding $CRO are welcome — On-Chain, MetaMask, Trust, etc.
+    </p>
+    <button class="btn-glow" onclick="connectWallet()">Connect Wallet</button>
+
+    <!-- SOCIALS + LINKS -->
+    <div class="socials">
+      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏 / Twitter</a>
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy on Obsidian</a>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-content">
-      <img class="footer-logo" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo" />
-      <p class="footer-text">© 2025 Y2K | Roast Records — Built for the CROfam</p>
-      <div class="footer-links">
-        <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
-        <span>|</span>
-        <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
-        <span>|</span>
-        <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy $Y2K</a>
-      </div>
-    </div>
+  <!-- ============================== -->
+  <!-- SECTION 4: FOOTER -->
+  <!-- ============================== -->
+  <footer>
+    Powered by Roast Records | Contract: <code>0xB4Df7...Ac6d</code> | Admin: <code>0x7FC2...8198</code>
   </footer>
+
+  <!-- ============================== -->
+  <!-- SECTION 5: FIREBASE INIT + WALLET LOGIC -->
+  <!-- ============================== -->
+  <script type="module">
+    // FIREBASE INIT
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+      authDomain: "y2kroastrecords.firebaseapp.com",
+      projectId: "y2kroastrecords",
+      storageBucket: "y2kroastrecords.appspot.com",
+      messagingSenderId: "313829428782",
+      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+    };
+    const app = initializeApp(firebaseConfig);
+
+    // WALLET CONNECT PLACEHOLDER (next we’ll add viem / ethers support)
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const address = accounts[0];
+          alert(`Connected: ${address}`);
+        } catch (err) {
+          console.error(err);
+          alert('Connection rejected.');
+        }
+      } else {
+        alert('No wallet detected. Please install MetaMask or Trust Wallet.');
+      }
+    }
+  </script>
+
 </body>
 </html>
