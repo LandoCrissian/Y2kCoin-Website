@@ -5,197 +5,188 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
-  <meta name="description" content="The Official Music Submission Hub of Cronos" />
-  <meta name="theme-color" content="#000000" />
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- SEO + Meta -->
+  <meta name="description" content="Y2K | Roast Records is the ultimate Cronos-based glitch-dub-trap fusion label. Submit tracks, get certified, and mint your music legacy." />
+  <meta name="theme-color" content="#0b0d12" />
+  <link rel="canonical" href="https://y2kcoin.org/" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <style>
-    html, body {
-      margin: 0; padding: 0; box-sizing: border-box;
-      background: #000; color: white;
-      font-family: 'Inter', sans-serif;
+    :root {
+      --dark: #0b0d12;
+      --fuchsia: #ff00aa;
+      --neon-green: #00ffd5;
+      --white: #f2f2f2;
+      --gray: #999;
+      --accent: #ff0055;
+      --font: 'Space Grotesk', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      background-color: var(--dark);
+      color: var(--white);
+      font-family: var(--font);
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
-    h1, h2, h3, h4 {
-      font-family: 'Orbitron', sans-serif;
-      text-align: center;
+
+    section {
+      padding: 6vh 5vw;
     }
-    header {
-      background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/4A43DE30-8E4B-4379-8894-E1573EA57228.jpeg') center/cover no-repeat;
-      padding: 100px 20px 60px;
-      text-shadow: 0 0 8px #00fff7;
+
+    h1, h2 {
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
     }
-    header h1 {
-      font-size: 2.2rem;
-      background: linear-gradient(to right, #ff00ff, #00fff7);
-      -webkit-background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 0 6px #0ff);
+
+    h1 {
+      font-size: 3rem;
     }
-    .section {
-      padding: 40px 20px;
-      max-width: 960px;
-      margin: auto;
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
-    .glow {
-      color: #00fff7;
-      text-shadow: 0 0 8px #00fff7;
-    }
-    button, .btn {
-      padding: 12px 20px;
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--gray);
       font-size: 1rem;
-      background: #00fff7;
-      color: #000;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 10px;
     }
-    .card {
-      background: #111;
-      padding: 20px;
-      margin: 10px 0;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00fff766;
+
+    /* Hero Banner */
+    .hero {
+      background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png') center/cover no-repeat;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12vh 5vw;
+      text-shadow: 0 0 10px #000;
     }
-    audio {
-      width: 100%;
-      margin-top: 10px;
+
+    .hero h1 {
+      font-size: 3.5rem;
+      text-transform: uppercase;
+      color: white;
     }
-    .footer {
-      padding: 30px;
-      text-align: center;
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #ccc;
+      max-width: 600px;
+    }
+
+    .glow {
+      color: var(--neon-green);
+      text-shadow: 0 0 4px var(--neon-green), 0 0 10px var(--fuchsia);
+    }
+
+    .section {
+      border-top: 1px solid #1a1a1a;
+    }
+
+    footer {
+      padding: 4vh 5vw;
       font-size: 0.9rem;
-      opacity: 0.7;
+      text-align: center;
+      background: #0d0f14;
+      color: #888;
+      border-top: 1px solid #111;
     }
-    @media (max-width: 600px) {
-      header h1 { font-size: 1.6rem; }
+
+    /* Scroll Cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 3vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.85rem;
+      color: var(--gray);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>Y2K | Roast Records</h1>
-    <p style="text-align:center;">The Official Music Submission Hub of Cronos</p>
-    <div style="text-align:center;">
-      <button onclick="connectWallet()">Connect Wallet</button>
-    </div>
+  <!-- HERO -->
+  <header class="hero">
+    <h1 class="glow">Y2K | Roast Records</h1>
+    <p>The glitch-dub-trap label built on Cronos. Submit your song, mint your sound, and enter the archives.</p>
+    <div class="scroll-cue">▼ scroll</div>
   </header>
 
-  <section class="section">
-    <h2 class="glow">How It Works</h2>
-    <ol>
-      <li>Connect Wallet (CRO Chain)</li>
-      <li>Pay 30 CRO to Submit a Song</li>
-      <li>Wait for Admin to Certify + Upload</li>
-    </ol>
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <h2>About</h2>
+    <p>Y2K Roast Records is more than a music label — it's a movement. Built on the Cronos chain, our goal is to immortalize the most savage, cinematic, and glitch-infused tracks the metaverse has ever heard. From underground anthems to war-ready AI bangers, this is the future of music. Certified. On-chain. For the culture.</p>
   </section>
 
-  <section class="section">
-    <h2 class="glow">Live Submissions</h2>
-    <div id="liveSubmissions"></div>
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <h2>How It Works</h2>
+    <p>Got a track that slaps? Connect your wallet, pay 30 CRO, and submit your project name, vibe, and 𝕏 handle. Our team reviews, and if your sound passes the vibe check, we stamp it — forever.</p>
+    <p>Certified tracks get uploaded to IPFS with cover art, audio preview, and optional NFT link.</p>
   </section>
 
-  <section class="section">
-    <h2 class="glow">Certified Tracks</h2>
-    <div id="certifiedTracks"></div>
+  <!-- LIVE SUBMISSIONS -->
+  <section class="section" id="live-submissions">
+    <h2>Live Submissions</h2>
+    <p>This section will display real-time submissions as they come in from the community. Firestore integration coming soon.</p>
   </section>
 
-  <section class="section">
-    <h2 class="glow">FAQ</h2>
-    <p><strong>Q:</strong> How much does it cost?<br><strong>A:</strong> 30 CRO per track (paid to treasury)</p>
-    <p><strong>Q:</strong> What happens after submission?<br><strong>A:</strong> Admin reviews and posts to Certified section.</p>
+  <!-- CERTIFIED TRACKS -->
+  <section class="section" id="certified-tracks">
+    <h2>Certified Tracks</h2>
+    <p>Showcasing approved audio drops — hosted on IPFS, curated by the Y2K admin wallet. Each track is a sonic relic minted into the chain’s history.</p>
   </section>
 
-  <div class="footer">
-    Built with 🔥 for the <span class="glow">CROfam</span><br>
-    Powered by Firebase, IPFS, and the Cronos chain.
-  </div>
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <h2>FAQ</h2>
+    <p><strong>How much does it cost to submit?</strong><br>30 CRO per track submission.</p>
+    <p><strong>Can anyone submit?</strong><br>Yes — just connect your wallet. All wallets accepted.</p>
+    <p><strong>Where do approved tracks go?</strong><br>To IPFS with an official Y2K certification stamp. You’ll see them under Certified Tracks.</p>
+    <p><strong>Is this on Cronos chain?</strong><br>Yes. All minting and interactions use Cronos (Chain ID 25).</p>
+  </section>
 
-  <!-- Firebase + Wallet + Logic -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
-
-  <script>
-    const ADMIN_WALLET = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
-    const TREASURY = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-      authDomain: "y2kroastrecords.firebaseapp.com",
-      projectId: "y2kroastrecords",
-      storageBucket: "y2kroastrecords.appspot.com",
-      messagingSenderId: "313829428782",
-      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    let userAddress;
-
-    async function connectWallet() {
-      if (window.ethereum) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        userAddress = await signer.getAddress();
-        alert("Connected: " + userAddress);
-      } else {
-        alert("Install MetaMask or Trust Wallet");
-      }
-    }
-
-    async function submitTrack() {
-      if (!userAddress) return alert("Connect wallet first");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const tx = await provider.getSigner().sendTransaction({
-        to: TREASURY,
-        value: ethers.utils.parseEther("30")
-      });
-      await tx.wait();
-      await db.collection("submissions").add({
-        address: userAddress,
-        timestamp: Date.now()
-      });
-      alert("Track submitted. Share it on 𝕏!");
-    }
-
-    function loadSubmissions() {
-      db.collection("submissions").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-        const container = document.getElementById("liveSubmissions");
-        container.innerHTML = "";
-        snapshot.forEach(doc => {
-          const { address, trackName } = doc.data();
-          container.innerHTML += `<div class="card">
-            <strong>${trackName || "Unstamped Submission"}</strong><br/>
-            <code>${address.slice(0,6)}...${address.slice(-4)}</code>
-          </div>`;
-        });
-      });
-    }
-
-    function loadCertified() {
-      db.collection("certified").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-        const container = document.getElementById("certifiedTracks");
-        container.innerHTML = "";
-        snapshot.forEach(doc => {
-          const { image, audio, trackName, artist } = doc.data();
-          container.innerHTML += `<div class="card">
-            <img src="${image}" style="width:100%;border-radius:8px;" />
-            <h4>${trackName}</h4>
-            <p>By ${artist}</p>
-            <audio controls src="${audio}"></audio>
-          </div>`;
-        });
-      });
-    }
-
-    window.onload = () => {
-      loadSubmissions();
-      loadCertified();
-    };
-  </script>
+  <!-- FOOTER -->
+  <footer>
+    Y2K | Roast Records &mdash; Powered by Cronos. <br />
+    <a href="https://x.com/Y2Kcoin" target="_blank" style="color: var(--gray); text-decoration: none;">Follow us on 𝕏</a>
+  </footer>
 </body>
 </html>
