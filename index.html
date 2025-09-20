@@ -15,14 +15,13 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
   <style>
     :root {
       --dark: #0b0d12;
       --pink: #ff2aad;
       --teal: #00ffc3;
       --white: #f0f0f0;
-      --gray: #888;
+      --gray: #aaa;
       --font: 'Space Grotesk', sans-serif;
     }
 
@@ -32,10 +31,10 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       background: var(--dark);
-      color: var(--white);
       font-family: var(--font);
+      color: var(--white);
       overflow-x: hidden;
     }
 
@@ -45,79 +44,34 @@
     }
 
     header {
-      position: relative;
-      min-height: 100vh;
       background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png') center/cover no-repeat;
+      min-height: 55vh;
+      padding: 6vh 6vw 4vh;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 15vh 6vw 8vh;
+      text-shadow: 0 0 10px #000;
     }
 
     header h1 {
-      font-size: 2.6rem;
+      font-size: 2.2rem;
       font-weight: 700;
       color: var(--white);
       text-shadow: 0 0 8px var(--pink);
     }
 
     header p {
-      font-size: 1.1rem;
-      margin-top: 1rem;
-      max-width: 480px;
-      color: #ccc;
-    }
-
-    .scroll-cue {
-      font-size: 0.9rem;
-      color: var(--gray);
-      margin-top: 1rem;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
-    section {
-      padding: 6vh 6vw;
-      border-top: 1px solid #1a1a1a;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: var(--teal);
-    }
-
-    p {
       font-size: 1rem;
-      line-height: 1.6;
-      max-width: 700px;
-      color: #aaa;
+      color: #ccc;
+      margin-top: 0.7rem;
     }
 
-    footer {
-      text-align: center;
-      padding: 5vh 6vw;
-      font-size: 0.9rem;
-      color: var(--gray);
-      border-top: 1px solid #111;
-    }
-
-    footer a {
-      display: inline-block;
-      margin: 0.5rem;
-    }
-
-    /* Nav */
     .nav-toggle {
       position: absolute;
       top: 20px;
       right: 20px;
-      width: 32px;
-      height: 28px;
+      width: 30px;
+      height: 25px;
       cursor: pointer;
       z-index: 1001;
     }
@@ -126,9 +80,10 @@
       display: block;
       width: 100%;
       height: 4px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       background: var(--teal);
-      transition: all 0.3s ease;
+      border-radius: 2px;
+      transition: 0.3s ease;
     }
 
     .nav-menu {
@@ -156,13 +111,60 @@
       color: var(--white);
     }
 
-    /* Responsive */
+    .dropdown-section {
+      padding: 2vh 6vw;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    details {
+      background: #101114;
+      border: 1px solid #1f1f1f;
+      border-radius: 6px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--teal);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary {
+      background: #141518;
+    }
+
+    .dropdown-content {
+      padding: 0 1rem 1rem;
+      font-size: 0.95rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      padding: 4vh 6vw;
+      font-size: 0.9rem;
+      color: var(--gray);
+      border-top: 1px solid #111;
+    }
+
+    footer a {
+      margin: 0 0.5rem;
+    }
+
     @media (min-width: 768px) {
       .nav-toggle { display: none; }
     }
   </style>
 
-  <!-- Script -->
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const toggle = document.querySelector('.nav-toggle');
@@ -182,19 +184,18 @@
 </head>
 
 <body>
-  <!-- Hamburger -->
+  <!-- Nav -->
   <div class="nav-toggle">
     <span></span>
     <span></span>
     <span></span>
   </div>
 
-  <!-- Mobile Menu -->
   <nav class="nav-menu">
     <a href="#about">About</a>
-    <a href="#how-it-works">How It Works</a>
-    <a href="#submissions">Live Submissions</a>
-    <a href="#certified">Certified Tracks</a>
+    <a href="#how">How It Works</a>
+    <a href="#subs">Live Submissions</a>
+    <a href="#certs">Certified Tracks</a>
     <a href="#faq">FAQ</a>
     <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
     <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
@@ -205,44 +206,51 @@
   <header>
     <h1>Y2K | Roast Records</h1>
     <p>The glitch-dub-trap label built on Cronos. Submit your song, mint your sound, and enter the archives.</p>
-    <div class="scroll-cue">▼ scroll</div>
   </header>
 
-  <!-- About -->
-  <section id="about">
-    <h2>About</h2>
-    <p>Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.</p>
-  </section>
+  <!-- Drop-Down Sections -->
+  <div class="dropdown-section">
+    <details id="about">
+      <summary>About</summary>
+      <div class="dropdown-content">
+        Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.
+      </div>
+    </details>
 
-  <!-- How It Works -->
-  <section id="how-it-works">
-    <h2>How It Works</h2>
-    <p>Connect your wallet. Submit your track for 30 CRO. Include your project name, vibe, and 𝕏 handle. Our team listens, curates, and if it fits the energy — you're stamped into the label.</p>
-  </section>
+    <details id="how">
+      <summary>How It Works</summary>
+      <div class="dropdown-content">
+        Connect your wallet. Submit your track for 30 CRO. Include your project name, vibe, and 𝕏 handle. If it fits the energy — you're officially stamped into the label.
+      </div>
+    </details>
 
-  <!-- Live Submissions -->
-  <section id="submissions">
-    <h2>Live Submissions</h2>
-    <p>Community-submitted tracks will appear here in real-time. Submissions are currently open and visible soon.</p>
-  </section>
+    <details id="subs">
+      <summary>Live Submissions</summary>
+      <div class="dropdown-content">
+        Community-submitted tracks will appear here. This section updates in real-time once submissions open.
+      </div>
+    </details>
 
-  <!-- Certified Tracks -->
-  <section id="certified">
-    <h2>Certified Tracks</h2>
-    <p>Approved drops curated by the team. This section showcases the most savage sounds minted through Y2K certification.</p>
-  </section>
+    <details id="certs">
+      <summary>Certified Tracks</summary>
+      <div class="dropdown-content">
+        Approved drops curated by the team. These represent the most savage tracks officially minted into Y2K Roast Records history.
+      </div>
+    </details>
 
-  <!-- FAQ -->
-  <section id="faq">
-    <h2>FAQ</h2>
-    <p><strong>How much does it cost?</strong> 30 CRO per submission.</p>
-    <p><strong>Who can submit?</strong> Anyone with a wallet — all wallets welcome.</p>
-    <p><strong>What happens after approval?</strong> Your song is immortalized on our site and part of the official Y2K | Roast Records drop history.</p>
-  </section>
+    <details id="faq">
+      <summary>FAQ</summary>
+      <div class="dropdown-content">
+        <strong>How much does it cost?</strong> 30 CRO per submission.<br><br>
+        <strong>Who can submit?</strong> Anyone with a supported wallet.<br><br>
+        <strong>What happens after approval?</strong> Your music becomes part of our legacy drop list — forever.
+      </div>
+    </details>
+  </div>
 
   <!-- Footer -->
   <footer>
-    &copy; 2025 Y2K | Roast Records — Built on Cronos<br>
+    &copy; 2025 Y2K | Roast Records<br />
     <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a> • 
     <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a> • 
     <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
