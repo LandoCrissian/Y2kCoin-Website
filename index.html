@@ -1,112 +1,385 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
-  <meta name="theme-color" content="#000000" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" />
+
+  <!-- SEO + Open Graph -->
+  <meta name="description" content="The official site of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta property="og:title" content="Y2K | Roast Records" />
+  <meta property="og:description" content="Submit a track. Join the legacy. The future of on-chain music starts here." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" />
+  <meta property="og:url" content="https://y2kcoin.org" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+
   <style>
-    body {
+    :root {
+      --dark: #0b0d12;
+      --pink: #ff2aad;
+      --teal: #00ffc3;
+      --white: #f0f0f0;
+      --gray: #aaa;
+      --font: 'Space Grotesk', sans-serif;
+    }
+
+    * {
       margin: 0;
-      background: #0a0a0a;
-      font-family: 'Orbitron', sans-serif;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background: var(--dark);
+      font-family: var(--font);
+      color: var(--white);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    a:hover {
+      animation: glitch 0.3s steps(2, end) infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 1px 0 var(--teal); }
+      50% { text-shadow: -1px 0 var(--pink); }
+      100% { text-shadow: 1px 0 var(--teal); }
+    }
+
+    /* Wallet Connect */
+    .wallet-connect {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1002;
+    }
+
+    .wallet-connect button {
+      background: var(--teal);
+      color: #000;
+      padding: 8px 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .wallet-connect button:hover {
+      background: var(--pink);
       color: #fff;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      background: #000;
-      border-bottom: 1px solid #111;
-    }
-    .connect-btn {
-      background: #00ffcc;
-      color: #000;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-weight: bold;
+
+    /* Mobile Nav */
+    .nav-toggle {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 25px;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
-    .connect-btn:hover {
-      background: #00ddaa;
+
+    .nav-toggle span {
+      display: block;
+      height: 4px;
+      background: var(--teal);
+      border-radius: 2px;
+      transition: 0.4s ease;
     }
-    .banner {
+
+    .nav-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      height: 100vh;
+      background: #121318;
+      padding: 6vh 6vw;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transition: right 0.4s ease;
+      z-index: 1000;
+    }
+
+    .nav-menu.open {
+      right: 0;
+    }
+
+    .nav-menu a {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Banner */
+    .hero-banner {
       width: 100%;
-      max-width: 100%;
+      max-height: 60vh;
+      overflow: hidden;
+      animation: fadeUp 1.2s ease-out both;
+    }
+
+    .hero-banner img {
+      width: 100%;
+      height: auto;
       display: block;
     }
-    .section {
-      padding: 16px;
-      border-bottom: 1px solid #111;
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .title {
-      font-size: 18px;
-      font-weight: 800;
-      color: #00ffcc;
-      margin-bottom: 8px;
+
+    .neon-line {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--pink), var(--teal));
+      box-shadow: 0 0 12px var(--teal);
+      animation: pulseLine 2.5s infinite ease-in-out;
     }
-    .desc {
-      font-size: 14px;
-      color: #aaa;
+
+    @keyframes pulseLine {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .dropdown-section {
+      padding: 2vh 6vw;
+    }
+
+    details {
+      background: #101114;
+      border: 1px solid #1f1f1f;
+      border-radius: 6px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--teal);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary {
+      background: #141518;
+    }
+
+    .dropdown-content {
+      padding: 0 1rem 1rem;
+      font-size: 0.95rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* Admin */
+    .admin-tools {
+      background: #141518;
+      padding: 1rem;
+      border-left: 4px solid var(--pink);
+      margin-top: 2rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 4vh 6vw;
+      font-size: 0.9rem;
+      color: var(--gray);
+      border-top: 1px solid #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .footer-token {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      animation: pulse 3s infinite ease-in-out;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .footer-token:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 12px var(--teal);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    @media (min-width: 768px) {
+      .nav-toggle { display: none; }
     }
   </style>
 </head>
+
 <body>
-
-  <header>
-    <div></div>
-    <button class="connect-btn" id="connectWalletBtn">Connect Wallet</button>
-  </header>
-
-  <img class="banner" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Banner" />
-
-  <div class="section">
-    <div class="title">How It Works</div>
-    <div class="desc">
-      Connect your wallet. Submit your track for 30 CRO.<br>
-      Enter your project name, vibe, and 𝕏 handle.<br>
-      If it fits the energy — you’re officially stamped.
-    </div>
+  <!-- Wallet Connect -->
+  <div class="wallet-connect">
+    <button onclick="connectWallet()">Connect Wallet</button>
   </div>
 
+  <!-- Mobile Nav -->
+  <div class="nav-toggle"><span></span><span></span><span></span></div>
+  <nav class="nav-menu">
+    <a href="#about">About</a>
+    <a href="#how">How It Works</a>
+    <a href="#subs">Live Submissions</a>
+    <a href="#certs">Certified Tracks</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
+    <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+    <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
+  </nav>
+
+  <!-- Banner -->
+  <div class="hero-banner">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
+  </div>
+  <div class="neon-line"></div>
+
+  <!-- Sections -->
+  <main class="dropdown-section">
+    <details id="about"><summary>About</summary>
+      <div class="dropdown-content">Y2K | Roast Records is a music label born from the glitch. Focused on raw, aggressive, futuristic sound, our goal is to push the boundaries of what music on-chain can be — savage, cinematic, and unforgettable.</div>
+    </details>
+
+    <details id="how"><summary>How It Works</summary>
+      <div class="dropdown-content">Connect your wallet. Submit your track for 30 CRO. Include your project name, vibe, and 𝕏 handle. If it fits the energy — you're officially stamped into the label.</div>
+    </details>
+
+    <details id="subs"><summary>Live Submissions</summary>
+      <div class="dropdown-content" id="submissions">[ Submissions will appear here via Firestore... ]</div>
+    </details>
+
+    <details id="certs"><summary>Certified Tracks</summary>
+      <div class="dropdown-content" id="certified">[ Certified tracks will display IPFS audio + art... ]</div>
+    </details>
+
+    <details id="faq"><summary>FAQ</summary>
+      <div class="dropdown-content"><strong>How much does it cost?</strong> 30 CRO per submission.<br><br><strong>Who can submit?</strong> Anyone with a supported wallet.<br><br><strong>What happens after approval?</strong> Your music becomes part of our legacy drop list — forever.</div>
+    </details>
+
+    <div id="admin-tools" class="admin-tools" style="display:none;">
+      <strong>Admin Tools:</strong> You are logged in as the label admin.<br>
+      [ Approve submissions | Attach IPFS | Mint stamps... ]
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
+      <a href="/"><img class="footer-token" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Token" /></a>
+    </div>
+    <div>&copy; 2025 Y2K | Roast Records</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+      authDomain: "y2kroastrecords.firebaseapp.com",
+      projectId: "y2kroastrecords",
+      storageBucket: "y2kroastrecords.appspot.com",
+      messagingSenderId: "313829428782",
+      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+  </script>
+
   <script>
-    const connectButton = document.getElementById('connectWalletBtn');
-
     async function connectWallet() {
-      if (typeof window.ethereum === 'undefined') {
-        alert('No wallet found. Please install MetaMask or another Web3 wallet.');
-        return;
-      }
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const address = (await signer.getAddress()).toLowerCase();
+      console.log("Connected:", address);
 
-      try {
-        const provider = window.ethereum;
-        const accounts = await provider.request({ method: 'eth_requestAccounts' });
-        const address = accounts[0];
-
-        const chainId = await provider.request({ method: 'eth_chainId' });
-        if (chainId !== '0x19') { // 0x19 = 25 = Cronos mainnet
-          alert('Please switch to Cronos Mainnet.');
-          return;
-        }
-
-        const short = `${address.slice(0, 6)}...${address.slice(-4)}`;
-        connectButton.textContent = short;
-        connectButton.disabled = true;
-
-        // Optional: store address globally or trigger other logic
-        window.userWalletAddress = address;
-      } catch (err) {
-        console.error(err);
-        alert('Wallet connection failed.');
+      if (address === "0x7fc2ab08f46c10489bab5d694d574022f1048198") {
+        document.getElementById("admin-tools").style.display = "block";
       }
     }
 
-    connectButton.addEventListener('click', connectWallet);
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const menu = document.querySelector('.nav-menu');
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      menu.classList.toggle('open');
+      document.body.classList.toggle('menu-open');
+    });
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        toggle.classList.remove('open');
+        document.body.classList.remove('menu-open');
+      });
+    });
   </script>
-
 </body>
 </html>
