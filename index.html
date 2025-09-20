@@ -12,38 +12,93 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       font-family: 'Space Grotesk', sans-serif;
-      background-color: #000;
-      color: #fff;
+      background: black;
+      color: white;
       overflow-x: hidden;
     }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url('https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/4A43DE30-8E4B-4379-8894-E1573EA57228.jpeg') center/cover no-repeat;
+      opacity: 0.12;
+      z-index: -3;
+    }
     header {
-      background: url("https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_7318.png") center/cover no-repeat;
-      padding: 5vh 2rem;
       text-align: center;
+      padding: 4vh 2rem;
       border-bottom: 2px solid #0ff;
     }
-    header h1 { font-size: 2rem; text-shadow: 0 0 12px #0ff; }
-    .container { padding: 2rem; max-width: 600px; margin: auto; }
-    .btn {
-      background: #0ff; color: #000; padding: 0.75rem 1.5rem; border: none;
-      border-radius: 6px; cursor: pointer; font-weight: 700;
-      transition: background 0.2s;
+    header h1 {
+      font-size: 2rem;
+      color: #0ff;
+      text-shadow: 0 0 8px #0ff;
     }
-    .btn:hover { background: #00f0f0; }
+    header p {
+      color: #ccc;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    .btn {
+      background: #0ff;
+      color: #000;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 12px #0ff;
+    }
+    .btn:hover {
+      background: #00f0f0;
+    }
+    .glow {
+      text-shadow: 0 0 8px #0ff, 0 0 16px #0ff;
+    }
     input, textarea {
-      width: 100%; margin-bottom: 1rem; padding: 0.75rem;
-      background: #111; color: #fff; border: 1px solid #0ff;
-      border-radius: 4px; font-size: 1rem;
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      background: #111;
+      color: #fff;
+      border: 1px solid #0ff;
+      border-radius: 4px;
     }
     .card {
-      border: 1px solid #333; padding: 1rem; margin-bottom: 1rem;
-      border-radius: 6px; background: #111;
+      background: #111;
+      border: 1px solid #222;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
     }
-    .glow { text-shadow: 0 0 6px #0ff, 0 0 12px #0ff; }
-    .share-btn { background: transparent; color: #0ff; text-decoration: underline; cursor: pointer; margin-top: 0.5rem; }
+    audio {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    canvas#gridCanvas {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40vh;
+      z-index: -2;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
+  <canvas id="gridCanvas"></canvas>
   <header>
     <h1 class="glow">Y2K | Roast Records</h1>
     <p>The Official Music Submission Hub of Cronos</p>
@@ -52,32 +107,32 @@
   <div class="container">
     <button id="connectWalletBtn" class="btn">Connect Wallet</button>
 
-    <div id="submissionForm" style="display:none; margin-top:2rem;">
-      <h2>🎧 Request a Track</h2>
+    <div id="submissionForm" style="display:none;">
+      <h2 class="section-title glow">🎧 Submit a Request</h2>
       <input type="text" id="projectName" placeholder="Project Name" />
       <textarea id="vibeDesc" placeholder="Describe the vibe..."></textarea>
-      <input type="text" id="xHandle" placeholder="X (Twitter) Handle (optional)" />
+      <input type="text" id="xHandle" placeholder="X Handle (optional)" />
       <button class="btn" onclick="submitRequest()">Submit (30 CRO)</button>
     </div>
 
     <div id="liveFeed" style="margin-top:3rem;">
-      <h2 class="glow">Live Submissions</h2>
+      <h2 class="section-title glow">Live Submissions</h2>
       <div id="submissionsList"></div>
     </div>
 
     <div id="certifiedTracks" style="margin-top:3rem;">
-      <h2 class="glow">Certified Tracks</h2>
+      <h2 class="section-title glow">Certified Tracks</h2>
       <div id="certifiedList"></div>
     </div>
   </div>
 
-  <!-- Firebase + Wallet + App Logic -->
+  <!-- Firebase + Wallet + Submission Logic -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 
   <script>
-    // Firebase Config
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
       authDomain: "y2kroastrecords.firebaseapp.com",
@@ -88,29 +143,23 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     let currentWallet = null;
 
     async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        currentWallet = await signer.getAddress();
-        document.getElementById("connectWalletBtn").textContent = currentWallet.slice(0, 6) + "..." + currentWallet.slice(-4);
-        document.getElementById("submissionForm").style.display = "block";
-      } else {
-        alert("Please install MetaMask or use a dApp browser.");
-      }
+      if (!window.ethereum) return alert("Install MetaMask or use a Web3 browser.");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      currentWallet = await signer.getAddress();
+      document.getElementById("connectWalletBtn").textContent = currentWallet.slice(0,6) + "..." + currentWallet.slice(-4);
+      document.getElementById("submissionForm").style.display = "block";
     }
 
     async function submitRequest() {
-      if (!currentWallet) return alert("Connect your wallet first.");
-      const project = document.getElementById("projectName").value;
-      const vibe = document.getElementById("vibeDesc").value;
-      const xHandle = document.getElementById("xHandle").value;
-
-      if (!project || !vibe) return alert("Please complete all required fields.");
+      const project = document.getElementById("projectName").value.trim();
+      const vibe = document.getElementById("vibeDesc").value.trim();
+      const xHandle = document.getElementById("xHandle").value.trim();
+      if (!project || !vibe) return alert("Please complete all fields.");
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
@@ -121,10 +170,12 @@
       try {
         await signer.sendTransaction(tx);
         await db.collection("submissions").add({
-          project, vibe, xHandle, wallet: currentWallet, status: "pending", timestamp: Date.now()
+          project, vibe, xHandle, wallet: currentWallet,
+          status: "pending", timestamp: Date.now()
         });
         alert("Submission successful!");
         postToX(project, vibe);
+        fetchSubmissions();
       } catch (err) {
         console.error(err);
         alert("Submission failed.");
@@ -133,11 +184,11 @@
 
     function postToX(project, vibe) {
       const templates = [
-        `🎧 I just submitted "${project}" to Y2K Records.\n"${vibe}"\nThink your project deserves a song?\ny2kcoin.org`,
-        `🔥 Just dropped a music request for "${project}" at Y2K | Roast Records. Know a project that needs a track? #CROfam #Y2KRecords`,
-        `🎶 "${project}" about to get some 🔥. Submitted to Y2K Records — your project next?\ny2kcoin.org #CryptoMusic`,
-        `💽 "${project}" got that Y2K glow up. Need a song for your project?\ny2kcoin.org #Y2KRecords #Cronos`,
-        `🎙️ Just cooked up something wild for "${project}". Who’s next?\ny2kcoin.org #RoastRecords #CROfam`
+        `🎧 Submitted "${project}" to Y2K | Roast Records.\n"${vibe}"\nThink your project deserves a soundtrack?\ny2kcoin.org`,
+        `🔥 Just dropped a song request for "${project}" on Y2K Records. #CROfam`,
+        `🎶 "${project}" submitted to Y2K | Roast Records — your project next?\n#CryptoMusic #CROfam`,
+        `💽 "${project}" got the Y2K glow-up. Need a track?\ny2kcoin.org`,
+        `🎙️ Just cooked something for "${project}". Who’s next?\ny2kcoin.org`
       ];
       const tweet = encodeURIComponent(templates[Math.floor(Math.random() * templates.length)]);
       window.open(`https://twitter.com/intent/tweet?text=${tweet}`, "_blank");
@@ -159,14 +210,34 @@
       list.innerHTML = "";
       snap.forEach(doc => {
         const data = doc.data();
-        list.innerHTML += `
-          <div class="card">
-            <img src="${data.cover}" alt="cover" style="width:100%;border-radius:6px;margin-bottom:0.5rem;">
-            <audio controls src="${data.audio}" style="width:100%;"></audio>
-            <p><b>${data.project}</b><br><a href="${data.nft}" target="_blank" class="glow">View NFT</a></p>
-          </div>`;
+        list.innerHTML += `<div class="card"><img src="${data.cover}" style="width:100%;border-radius:6px;"><audio controls src="${data.audio}"></audio><p><b>${data.project}</b><br><a href="${data.nft}" target="_blank" class="glow">View NFT</a></p></div>`;
       });
     }
+
+    // Draw grid horizon effect
+    const canvas = document.getElementById('gridCanvas');
+    const ctx = canvas.getContext('2d');
+    function drawGrid() {
+      canvas.width = window.innerWidth;
+      canvas.height = canvas.offsetHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#0ff';
+      ctx.lineWidth = 0.5;
+      for (let y = canvas.height; y > 0; y -= 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+      for (let x = 0; x < canvas.width; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, canvas.height);
+        ctx.lineTo(canvas.width / 2, 0);
+        ctx.stroke();
+      }
+    }
+    drawGrid();
+    window.addEventListener('resize', drawGrid);
 
     document.getElementById("connectWalletBtn").onclick = connectWallet;
     fetchSubmissions();
