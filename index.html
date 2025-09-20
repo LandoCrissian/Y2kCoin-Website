@@ -1,258 +1,326 @@
-<!-- ===========================
-  SECTION 1: BASE SETUP + HEAD
-=========================== -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Y2K | Roast Records</title>
-  <meta name="description" content="Born on Cronos. Request a song. Support the CROfam. Discover the underground label built for the future." />
-  <meta name="theme-color" content="#0b0d12" />
+  <title>Y2K Roast Records</title>
 
-  <!-- Fonts + Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet" />
+  <meta name="description" content="The Official Y2K Roast Records – Where Web3 Music Gets Certified." />
+  <meta name="theme-color" content="#000000" />
 
-  <!-- Favicon -->
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
-
-  <!-- Ethers for Web3 -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
-  <!-- STYLES -->
-  <style>
-    :root {
-      --neon-pink: #ff00cc;
-      --neon-blue: #00ffff;
-      --bg-dark: #0b0d12;
-      --text-light: #ffffff;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      font-family: 'Space Mono', monospace;
-      background-color: var(--bg-dark);
-      color: var(--text-light);
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    button {
-      font-family: inherit;
-      border: none;
-      cursor: pointer;
-    }
-
-    /* Layout */
-    .container {
-      padding: 3rem 1rem;
-      max-width: 1000px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    /* Neon Buttons */
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      margin: 0.75rem;
-      border: 2px solid var(--neon-blue);
-      border-radius: 8px;
-      color: var(--neon-blue);
-      font-size: 1rem;
-      background: transparent;
-      transition: all 0.2s ease-in-out;
-    }
-    .btn:hover {
-      background-color: var(--neon-blue);
-      color: #000;
-      box-shadow: 0 0 12px var(--neon-blue);
-    }
-    .btn-primary {
-      border-color: var(--neon-pink);
-      color: var(--neon-pink);
-    }
-    .btn-primary:hover {
-      background-color: var(--neon-pink);
-      color: #000;
-      box-shadow: 0 0 12px var(--neon-pink);
-    }
-
-    /* Headings */
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    h2 {
-      font-size: 1.5rem;
-      margin: 2rem 0 1rem;
-    }
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    /* Certified Gallery */
-    .track-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-    .track-card {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 1rem;
-      transition: transform 0.3s;
-    }
-    .track-card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 12px var(--neon-blue);
-    }
-    .track-image {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-    }
-    .track-link {
-      display: block;
-      font-weight: bold;
-      color: var(--neon-blue);
-      margin-top: 0.25rem;
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 3rem;
-      font-size: 0.8rem;
-      opacity: 0.6;
-    }
-
-    /* Glitch FX */
-    .glitch {
-      position: relative;
-      display: inline-block;
-      color: white;
-    }
-    .glitch::before, .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0.7;
-    }
-    .glitch::before {
-      color: var(--neon-pink);
-      animation: glitch 2s infinite linear alternate-reverse;
-    }
-    .glitch::after {
-      color: var(--neon-blue);
-      animation: glitch 1.5s infinite linear alternate-reverse;
-    }
-    @keyframes glitch {
-      0% { transform: translate(0, 0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(-3px, 0); }
-      60% { transform: translate(3px, 2px); }
-      80% { transform: translate(1px, -1px); }
-      100% { transform: translate(0, 0); }
-    }
-  </style>
 </head>
-
-<!-- ===========================
-  SECTION 2: BODY + UI
-=========================== -->
 <body>
-  <div class="container">
-    <!-- HERO SECTION -->
-    <h1 class="glitch" data-text="Y2K Roast Records">Y2K Roast Records</h1>
-    <p>🔥 Born on Cronos. Welcome to the underground label for dreamers, degens, and disruptors.</p>
-    <p>Submit a roast request (30 CRO), connect your wallet, and explore certified bangers.</p>
-    <button class="btn-primary" onclick="connectWallet()">CONNECT WALLET</button>
+  <canvas id="bg"></canvas>
 
-    <!-- LINKS -->
-    <div>
-      <a href="https://x.com/y2kc0in?s=21" class="btn" target="_blank">𝕏 / Twitter</a>
-      <a href="https://discord.gg/jpFbSapSAh" class="btn" target="_blank">Discord</a>
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" class="btn" target="_blank">Buy on Obsidian</a>
-    </div>
+  <header class="hero">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_6957.png" alt="Banner" class="hero-banner" />
+    <div class="glitch-title">Y2K ROAST RECORDS</div>
+    <button id="connectWallet" class="neon-btn">CONNECT WALLET</button>
+  </header>
 
-    <!-- CERTIFIED GALLERY -->
-    <h2>🔥 Certified Tracks</h2>
-    <div class="track-grid" id="certifiedTracks">
-      <!-- Injected by Firebase -->
-    </div>
+  <main class="content">
+    <section id="submit-section">
+      <h2>🔥 Submit Your Request</h2>
+      <form id="submitForm">
+        <input type="text" placeholder="Project Name" id="projectName" required />
+        <input type="text" placeholder="Vibe (e.g. aggressive glitch, sexy dub, etc.)" id="vibe" required />
+        <input type="text" placeholder="Your Twitter Handle" id="twitter" required />
+        <button type="submit" class="neon-btn">Submit (30 CRO)</button>
+      </form>
+    </section>
 
-    <!-- FOOTER -->
-    <footer>
-      Powered by Roast Records | Contract: 0xB4Df7...Ac6d | Admin: 0x7FC2...8198
+    <section id="live-submissions">
+      <h2>📡 Live Submissions</h2>
+      <div id="submissionList"></div>
+    </section>
+
+    <section id="certified-tracks">
+      <h2>✅ Certified Tracks</h2>
+      <div id="certifiedGallery"></div>
+    </section>
+
+    <section id="adminStamp" style="display: none;">
+      <h2>🛡️ Admin: Stamp Certified Track</h2>
+      <form id="certForm">
+        <input type="text" id="certName" placeholder="Project Name" required />
+        <input type="url" id="audioURL" placeholder="IPFS Audio URL" required />
+        <input type="url" id="coverURL" placeholder="Cover Art URL" required />
+        <button type="submit" class="neon-btn">STAMP</button>
+      </form>
+    </section>
+
+    <footer id="nowPlaying">
+      <p>🎶 Now Playing: <span id="nowTrack">Loading...</span></p>
     </footer>
-  </div>
+  </main>
 
-<!-- ===========================
-  SECTION 3: FIREBASE + WALLET
-=========================== -->
-<script>
-  // FIREBASE INIT
-  const firebaseConfig = {
-    apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-    authDomain: "y2kroastrecords.firebaseapp.com",
-    projectId: "y2kroastrecords",
-    storageBucket: "y2kroastrecords.appspot.com",
-    messagingSenderId: "313829428782",
-    appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  // WALLET LOGIC
-  let userWallet = null;
-
-  async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        userWallet = await signer.getAddress();
-        alert("Wallet connected: " + userWallet);
-      } catch (err) {
-        alert("Connection failed");
-      }
-    } else {
-      alert("Install MetaMask or Trust Wallet to connect.");
-    }
-  }
-
-  // LOAD CERTIFIED TRACKS
-  async function loadCertifiedTracks() {
-    const container = document.getElementById("certifiedTracks");
-    const snapshot = await db.collection("certified").orderBy("timestamp", "desc").get();
-    snapshot.forEach((doc) => {
-      const track = doc.data();
-      const html = `
-        <div class="track-card">
-          <img src="${track.image}" alt="cover" class="track-image" />
-          <a href="${track.audio}" class="track-link" target="_blank">🎧 Listen</a>
-        </div>`;
-      container.innerHTML += html;
-    });
-  }
-
-  loadCertifiedTracks();
-</script>
+  <script src="app.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>
+
+:root {
+  --neon: #00fff7;
+  --dark: #050505;
+  --accent: #ff00ff;
+  --glitch: #f0f;
+  --text: #f8f8f8;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--dark);
+  font-family: 'Orbitron', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+canvas#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#050505, #0f0f0f);
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-banner {
+  width: 90%;
+  max-width: 900px;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.glitch-title {
+  font-size: 2.8rem;
+  color: var(--neon);
+  text-shadow: 0 0 10px var(--neon);
+  animation: glitch 2s infinite;
+}
+
+.neon-btn {
+  background: none;
+  color: var(--neon);
+  border: 2px solid var(--neon);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.neon-btn:hover {
+  background: var(--neon);
+  color: #000;
+}
+
+.content {
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+section {
+  margin-bottom: 4rem;
+}
+
+form input {
+  display: block;
+  margin: 1rem 0;
+  padding: 12px;
+  width: 100%;
+  max-width: 500px;
+  font-size: 1rem;
+  border: 1px solid var(--neon);
+  background: #111;
+  color: white;
+  border-radius: 6px;
+}
+
+#submissionList, #certifiedGallery {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  margin-top: 1rem;
+}
+
+footer#nowPlaying {
+  background: rgba(255,255,255,0.05);
+  padding: 1rem;
+  text-align: center;
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+}
+
+@keyframes glitch {
+  0% { text-shadow: 2px 2px var(--glitch); }
+  25% { text-shadow: -2px 2px var(--accent); }
+  50% { text-shadow: 2px -2px var(--glitch); }
+  75% { text-shadow: -2px -2px var(--accent); }
+  100% { text-shadow: 2px 2px var(--glitch); }
+}
+
+@media (max-width: 768px) {
+  .glitch-title { font-size: 2rem; }
+  form input, .neon-btn { width: 100%; }
+  section h2 { font-size: 1.25rem; }
+  footer#nowPlaying { font-size: 0.9rem; }
+}
+
+const firebaseConfig = {
+  apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+  authDomain: "y2kroastrecords.firebaseapp.com",
+  projectId: "y2kroastrecords",
+  storageBucket: "y2kroastrecords.appspot.com",
+  messagingSenderId: "313829428782",
+  appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const treasury = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+
+let currentAccount;
+
+const shareTemplates = [
+  `I just submitted a 🔥 track request for ${project} — vibe: ${vibe}. Certified heat coming soon.\n\nKnow a project that needs one?\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+  `Submitted a theme track for ${project} — vibe: ${vibe}. Let the Roast begin 🔥\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+  `Track locked in for ${project} — ${vibe} style loading…\nWho else wants a certified anthem?\n→ y2kcoin.org\n\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+  `${project} booked a glitch-dub-trap banger. Vibe: ${vibe}.\n→ y2kcoin.org\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+  `🎧 ${project} is next up. Vibe: ${vibe} → y2kcoin.org\nTag a project that needs theirs!\n#CROfam #Y2KRecords #RoastRecords #Web3Music`,
+  `${project} just submitted for an anthem. Vibe: ${vibe} → y2kcoin.org\n#CROfam #Y2KRecords #RoastRecords #Web3Music`
+];
+
+document.getElementById("connectWallet").addEventListener("click", async () => {
+  if (!window.ethereum) return alert("Install MetaMask or Crypto.com Wallet");
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+  currentAccount = await signer.getAddress();
+  const network = await provider.getNetwork();
+  if (network.chainId !== 25) return alert("Please switch to the Cronos Mainnet (Chain ID 25).");
+  document.getElementById("connectWallet").textContent = `Connected: ${currentAccount.slice(0, 6)}...`;
+  loadSubmissions();
+  loadCertified();
+});
+
+document.getElementById("submitForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!currentAccount) return alert("Please connect your wallet.");
+
+  const project = document.getElementById("projectName").value;
+  const vibe = document.getElementById("vibe").value;
+  const twitter = document.getElementById("twitter").value;
+
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const tx = await signer.sendTransaction({
+      to: treasury,
+      value: ethers.utils.parseEther("30")
+    });
+    await tx.wait();
+
+    await db.collection("requests").add({
+      project,
+      vibe,
+      twitter,
+      wallet: currentAccount,
+      timestamp: Date.now()
+    });
+
+    alert("Request submitted! 🔥");
+    document.getElementById("submitForm").reset();
+
+    const randomIndex = Math.floor(Math.random() * shareTemplates.length);
+    const tweetText = shareTemplates[randomIndex]
+      .replace(/\${project}/g, project)
+      .replace(/\${vibe}/g, vibe);
+    const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    if (confirm("Want to share your submission on 𝕏?")) window.open(tweetURL, "_blank");
+
+  } catch (err) {
+    console.error(err);
+    alert("Transaction failed.");
+  }
+});
+
+function loadSubmissions() {
+  db.collection("requests").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+    const list = document.getElementById("submissionList");
+    list.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const item = document.createElement("div");
+      item.className = "submission-card";
+      item.innerHTML = `<p><strong>${data.project}</strong></p><p>${data.vibe}</p><p>From: ${data.twitter}</p>`;
+      list.appendChild(item);
+    });
+  });
+}
+
+function loadCertified() {
+  db.collection("certified").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+    const gallery = document.getElementById("certifiedGallery");
+    gallery.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const item = document.createElement("div");
+      item.className = "certified-card";
+      item.innerHTML = `
+        <img src="${data.cover}" style="width:100%;border-radius:8px;" />
+        <audio controls src="${data.audio}" style="width:100%;margin-top:.5rem;"></audio>
+        <p>${data.project}</p>`;
+      gallery.appendChild(item);
+    });
+    if (snapshot.docs.length > 0) {
+      const now = snapshot.docs[0].data();
+      document.getElementById("nowTrack").textContent = `${now.project}`;
+    }
+  });
+}
+
+function isAdmin() {
+  return currentAccount?.toLowerCase() === adminWallet;
+}
+
+window.addEventListener("load", () => {
+  if (typeof isAdmin === "function" && isAdmin()) {
+    document.getElementById("adminStamp").style.display = "block";
+
+    document.getElementById("certForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const project = document.getElementById("certName").value;
+      const audio = document.getElementById("audioURL").value;
+      const cover = document.getElementById("coverURL").value;
+
+      await db.collection("certified").add({
+        project,
+        audio,
+        cover,
+        timestamp: Date.now()
+      });
+
+      alert("Certified 🔥");
+      document.getElementById("certForm").reset();
+    });
+  }
+});
