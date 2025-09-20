@@ -1,236 +1,176 @@
+<!-- index.html — Y2K | Roast Records -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Y2K Roast Records</title>
-  <meta name="theme-color" content="#0c0c0f" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Space+Mono&display=swap" rel="stylesheet" />
+  <title>Y2K | Roast Records</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
+  <meta name="theme-color" content="#000000" />
   <style>
-    :root {
-      --bg: #0b0d12;
-      --neon-cyan: #00ffe7;
-      --neon-pink: #ff00aa;
-      --glitch-purple: #b300ff;
-      --white: #f2f2f2;
-      --font-glitch: 'Orbitron', sans-serif;
-      --font-body: 'Space Mono', monospace;
-    }
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
-      background-color: var(--bg);
-      font-family: var(--font-body);
-      color: var(--white);
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #000;
+      color: #fff;
       overflow-x: hidden;
     }
     header {
+      background: url("https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/IMG_7318.png") center/cover no-repeat;
+      padding: 5vh 2rem;
       text-align: center;
-      padding: 1rem;
+      border-bottom: 2px solid #0ff;
     }
-    header img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
+    header h1 { font-size: 2rem; text-shadow: 0 0 12px #0ff; }
+    .container { padding: 2rem; max-width: 600px; margin: auto; }
+    .btn {
+      background: #0ff; color: #000; padding: 0.75rem 1.5rem; border: none;
+      border-radius: 6px; cursor: pointer; font-weight: 700;
+      transition: background 0.2s;
     }
-    #logo {
-      width: 128px;
-      margin: 2rem auto 0;
-      display: block;
-    }
-    h1 {
-      font-family: var(--font-glitch);
-      text-align: center;
-      font-size: 2.8rem;
-      margin: 1rem 0;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 8px var(--neon-cyan);
-    }
-    button {
-      background: transparent;
-      border: 2px solid var(--neon-pink);
-      color: var(--neon-pink);
-      font-family: var(--font-body);
-      font-weight: bold;
-      padding: 0.75rem 1.5rem;
-      margin-top: 1rem;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-    button:hover {
-      background: var(--neon-pink);
-      color: var(--bg);
-    }
-    .container {
-      max-width: 768px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
+    .btn:hover { background: #00f0f0; }
     input, textarea {
-      padding: 0.75rem;
-      font-family: var(--font-body);
-      border: 1px solid #333;
-      background: #111;
-      color: var(--white);
-      border-radius: 4px;
-    }
-    .section {
-      padding: 3rem 1rem;
-      text-align: center;
+      width: 100%; margin-bottom: 1rem; padding: 0.75rem;
+      background: #111; color: #fff; border: 1px solid #0ff;
+      border-radius: 4px; font-size: 1rem;
     }
     .card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid #444;
-      border-radius: 8px;
-      padding: 1rem;
-      margin: 1rem 0;
+      border: 1px solid #333; padding: 1rem; margin-bottom: 1rem;
+      border-radius: 6px; background: #111;
     }
-    audio {
-      width: 100%;
-      margin-top: 0.5rem;
-    }
-    @media (max-width: 480px) {
-      h1 { font-size: 2rem; }
-      button { width: 100%; }
-    }
+    .glow { text-shadow: 0 0 6px #0ff, 0 0 12px #0ff; }
+    .share-btn { background: transparent; color: #0ff; text-decoration: underline; cursor: pointer; margin-top: 0.5rem; }
   </style>
 </head>
 <body>
+  <header>
+    <h1 class="glow">Y2K | Roast Records</h1>
+    <p>The Official Music Submission Hub of Cronos</p>
+  </header>
 
-<header>
-  <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Banner" />
-  <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" alt="Logo" id="logo" />
-</header>
+  <div class="container">
+    <button id="connectWalletBtn" class="btn">Connect Wallet</button>
 
-<h1>Y2K Roast Records</h1>
+    <div id="submissionForm" style="display:none; margin-top:2rem;">
+      <h2>🎧 Request a Track</h2>
+      <input type="text" id="projectName" placeholder="Project Name" />
+      <textarea id="vibeDesc" placeholder="Describe the vibe..."></textarea>
+      <input type="text" id="xHandle" placeholder="X (Twitter) Handle (optional)" />
+      <button class="btn" onclick="submitRequest()">Submit (30 CRO)</button>
+    </div>
 
-<div class="container">
-  <button id="connectWallet">Connect Wallet</button>
+    <div id="liveFeed" style="margin-top:3rem;">
+      <h2 class="glow">Live Submissions</h2>
+      <div id="submissionsList"></div>
+    </div>
 
-  <form id="requestForm">
-    <input type="text" id="projectName" placeholder="Project Name" required />
-    <input type="text" id="vibe" placeholder="Describe the Vibe" required />
-    <input type="text" id="twitter" placeholder="𝕏 Handle (optional)" />
-    <button type="submit">Submit Song Request (30 CRO)</button>
-  </form>
-
-  <div class="section">
-    <h2>Live Submissions</h2>
-    <div id="submissions"></div>
+    <div id="certifiedTracks" style="margin-top:3rem;">
+      <h2 class="glow">Certified Tracks</h2>
+      <div id="certifiedList"></div>
+    </div>
   </div>
 
-  <div class="section">
-    <h2>🎧 Certified Tracks</h2>
-    <div id="certifiedGallery"></div>
-  </div>
-</div>
+  <!-- Firebase + Wallet + App Logic -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+      authDomain: "y2kroastrecords.firebaseapp.com",
+      projectId: "y2kroastrecords",
+      storageBucket: "y2kroastrecords.appspot.com",
+      messagingSenderId: "313829428782",
+      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-  authDomain: "y2kroastrecords.firebaseapp.com",
-  projectId: "y2kroastrecords",
-  storageBucket: "y2kroastrecords.appspot.com",
-  messagingSenderId: "313829428782",
-  appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+    let currentWallet = null;
 
-let currentAccount = null;
-const treasuryWallet = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        currentWallet = await signer.getAddress();
+        document.getElementById("connectWalletBtn").textContent = currentWallet.slice(0, 6) + "..." + currentWallet.slice(-4);
+        document.getElementById("submissionForm").style.display = "block";
+      } else {
+        alert("Please install MetaMask or use a dApp browser.");
+      }
+    }
 
-async function connectWallet() {
-  if (window.ethereum) {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    currentAccount = accounts[0];
-    document.getElementById('connectWallet').innerText = 'Connected: ' + currentAccount.slice(0, 6) + '...' + currentAccount.slice(-4);
-  }
-}
+    async function submitRequest() {
+      if (!currentWallet) return alert("Connect your wallet first.");
+      const project = document.getElementById("projectName").value;
+      const vibe = document.getElementById("vibeDesc").value;
+      const xHandle = document.getElementById("xHandle").value;
 
-document.getElementById('connectWallet').onclick = connectWallet;
+      if (!project || !vibe) return alert("Please complete all required fields.");
 
-document.getElementById('requestForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (!currentAccount) return alert("Connect your wallet first");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const tx = {
+        to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+        value: ethers.utils.parseUnits("30", "ether")
+      };
+      try {
+        await signer.sendTransaction(tx);
+        await db.collection("submissions").add({
+          project, vibe, xHandle, wallet: currentWallet, status: "pending", timestamp: Date.now()
+        });
+        alert("Submission successful!");
+        postToX(project, vibe);
+      } catch (err) {
+        console.error(err);
+        alert("Submission failed.");
+      }
+    }
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const tx = await signer.sendTransaction({
-    to: treasuryWallet,
-    value: ethers.utils.parseUnits("30", "ether")
-  });
-  await tx.wait();
+    function postToX(project, vibe) {
+      const templates = [
+        `🎧 I just submitted "${project}" to Y2K Records.\n"${vibe}"\nThink your project deserves a song?\ny2kcoin.org`,
+        `🔥 Just dropped a music request for "${project}" at Y2K | Roast Records. Know a project that needs a track? #CROfam #Y2KRecords`,
+        `🎶 "${project}" about to get some 🔥. Submitted to Y2K Records — your project next?\ny2kcoin.org #CryptoMusic`,
+        `💽 "${project}" got that Y2K glow up. Need a song for your project?\ny2kcoin.org #Y2KRecords #Cronos`,
+        `🎙️ Just cooked up something wild for "${project}". Who’s next?\ny2kcoin.org #RoastRecords #CROfam`
+      ];
+      const tweet = encodeURIComponent(templates[Math.floor(Math.random() * templates.length)]);
+      window.open(`https://twitter.com/intent/tweet?text=${tweet}`, "_blank");
+    }
 
-  const projectName = document.getElementById("projectName").value;
-  const vibe = document.getElementById("vibe").value;
-  const twitter = document.getElementById("twitter").value;
+    async function fetchSubmissions() {
+      const snap = await db.collection("submissions").orderBy("timestamp", "desc").limit(10).get();
+      const list = document.getElementById("submissionsList");
+      list.innerHTML = "";
+      snap.forEach(doc => {
+        const data = doc.data();
+        list.innerHTML += `<div class="card"><b>${data.project}</b><p>${data.vibe}</p><small>${data.xHandle || data.wallet}</small><br><i>${data.status}</i></div>`;
+      });
+    }
 
-  await db.collection("submissions").add({
-    projectName,
-    vibe,
-    twitter,
-    wallet: currentAccount,
-    timestamp: Date.now()
-  });
+    async function fetchCertified() {
+      const snap = await db.collection("certified").orderBy("timestamp", "desc").get();
+      const list = document.getElementById("certifiedList");
+      list.innerHTML = "";
+      snap.forEach(doc => {
+        const data = doc.data();
+        list.innerHTML += `
+          <div class="card">
+            <img src="${data.cover}" alt="cover" style="width:100%;border-radius:6px;margin-bottom:0.5rem;">
+            <audio controls src="${data.audio}" style="width:100%;"></audio>
+            <p><b>${data.project}</b><br><a href="${data.nft}" target="_blank" class="glow">View NFT</a></p>
+          </div>`;
+      });
+    }
 
-  alert("Request submitted successfully!");
-});
-
-function loadSubmissions() {
-  db.collection("submissions").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-    const container = document.getElementById("submissions");
-    container.innerHTML = "";
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      container.innerHTML += `<div class="card">
-        <strong>${d.projectName}</strong><br>
-        <em>${d.vibe}</em><br>
-        ${d.twitter ? `<p>𝕏: ${d.twitter}</p>` : ""}
-        <small>${d.wallet.slice(0, 6)}...${d.wallet.slice(-4)}</small>
-      </div>`;
-    });
-  });
-}
-
-function loadCertifiedTracks() {
-  db.collection("certified").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-    const gallery = document.getElementById("certifiedGallery");
-    gallery.innerHTML = "";
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      gallery.innerHTML += `<div class="card">
-        <strong>${d.projectName}</strong><br>
-        <img src="${d.imageURL}" alt="cover" style="max-width:100%; border-radius:6px;" />
-        <audio controls src="${d.audioURL}"></audio><br>
-        <a href="${d.nftURL}" target="_blank">View NFT</a>
-      </div>`;
-    });
-  });
-}
-
-window.onload = () => {
-  connectWallet();
-  loadSubmissions();
-  loadCertifiedTracks();
-};
-</script>
-
+    document.getElementById("connectWalletBtn").onclick = connectWallet;
+    fetchSubmissions();
+    fetchCertified();
+  </script>
 </body>
 </html>
