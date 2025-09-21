@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -6,225 +5,231 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
 
-  <!-- SEO + Open Graph -->
-  <meta name="description" content="The official home of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
+  <!-- SEO + Meta -->
+  <meta name="description" content="The official site of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
   <meta name="theme-color" content="#0b0d12" />
-  <meta property="og:title" content="Y2K | Roast Records" />
-  <meta property="og:description" content="Submit your track. Join the movement. Discover underground music on-chain." />
-  <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" />
-  <meta property="og:url" content="https://y2kcoin.org" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <!-- Favicon + Fonts -->
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
   <style>
-    :root {
-      --dark: #0b0d12;
-      --pink: #ff2aad;
-      --teal: #00ffc3;
-      --white: #f0f0f0;
-      --gray: #aaa;
-      --font: 'Space Grotesk', sans-serif;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
-      background: var(--dark);
-      font-family: var(--font);
-      color: var(--white);
-      scroll-behavior: smooth;
+      font-family: 'Inter', sans-serif;
+      background: #0b0d12;
+      color: white;
       overflow-x: hidden;
-    }
-
-    a {
-      color: var(--teal);
-      text-decoration: none;
-    }
-
-    a:hover {
-      animation: glitch 0.3s steps(2, end) infinite;
-    }
-
-    @keyframes glitch {
-      0% { text-shadow: 1px 0 var(--teal); }
-      50% { text-shadow: -1px 0 var(--pink); }
-      100% { text-shadow: 1px 0 var(--teal); }
-    }
-
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      background: var(--dark);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.2rem;
-    }
-
-    .wallet-btn {
-      background: var(--teal);
-      color: #000;
-      padding: 8px 14px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .wallet-btn:hover {
-      background: var(--pink);
-      color: #fff;
-    }
-
-    .hero {
-      margin-top: 64px;
-      width: 100%;
-      max-height: 60vh;
-      overflow: hidden;
-    }
-
-    .hero img {
-      width: 100%;
-      display: block;
-    }
-
-    .neon-line {
-      height: 3px;
-      width: 100%;
-      background: linear-gradient(90deg, var(--pink), var(--teal));
-      box-shadow: 0 0 12px var(--teal);
-      animation: pulseLine 2.5s infinite ease-in-out;
-    }
-
-    @keyframes pulseLine {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
-    section {
-      padding: 2rem 1.2rem;
-      border-bottom: 1px solid #111;
-    }
-
-    section h2 {
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-      color: var(--teal);
-    }
-
-    .track-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    .track-card {
-      background: #111214;
-      border: 1px solid #222;
       padding: 1rem;
-      border-radius: 8px;
     }
-
-    .footer {
-      text-align: center;
-      padding: 2rem 1.2rem;
-      font-size: 0.9rem;
-      color: var(--gray);
+    button, input, select {
+      background: #1c1e24;
+      color: white;
+      border: 1px solid #444;
+      padding: 0.5rem;
+      border-radius: 4px;
+      margin: 0.25rem 0;
     }
-
-    @media (min-width: 640px) {
-      .track-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .hidden { display: none; }
+    .certified, .pending {
+      padding: 0.75rem;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      background: #12151b;
     }
-
-    @media (min-width: 1024px) {
-      .track-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
+    .certified { border: 1px solid #39ff14; }
+    .pending { border: 1px solid #888; }
+    audio { width: 100%; margin-top: 0.5rem; }
+    .admin-controls { border-top: 1px solid #333; margin-top: 2rem; padding-top: 1rem; }
   </style>
-</head>
 
-<body>
-  <header>
-    <div><a href="#top" class="glitch-hover">Y2K | Roast Records</a></div>
-    <button class="wallet-btn" onclick="connectWallet()">Connect Wallet</button>
-  </header>
-
-  <div class="hero">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records Banner" />
-  </div>
-  <div class="neon-line"></div>
-
-  <main>
-    <section id="featured">
-      <h2>🔥 Certified Tracks</h2>
-      <div class="track-grid" id="certifiedTracks">
-        <!-- IPFS music cards will go here -->
-        <div class="track-card">Track 001 — Coming soon</div>
-        <div class="track-card">Track 002 — Glitchwave by V1RUS</div>
-        <div class="track-card">Track 003 — RawSignal by SYNAPS3</div>
-      </div>
-    </section>
-
-    <section id="submit">
-      <h2>📤 Submit a Track</h2>
-      <p>To submit your music to Y2K | Roast Records, connect your wallet and fill out the form. Cost: <strong>30 CRO</strong></p>
-      <!-- Placeholder form UI -->
-      <p>[Form goes here]</p>
-    </section>
-
-    <section id="live">
-      <h2>🔄 Live Submissions</h2>
-      <p>[Real-time feed from Firestore here]</p>
-    </section>
-
-    <section id="faq">
-      <h2>❓ FAQ</h2>
-      <p><strong>Q:</strong> Who can submit?<br><strong>A:</strong> Anyone with a Cronos wallet.</p>
-      <p><strong>Q:</strong> What happens after approval?<br><strong>A:</strong> You get immortalized in our on-chain catalog.</p>
-    </section>
-
-    <section id="admin" style="display:none;">
-      <h2>🔐 Admin Panel</h2>
-      <p>[Approve tracks, attach IPFS, verify status]</p>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>&copy; 2025 Y2K | Roast Records — Built for the CROfam</p>
-    <div style="margin-top: 1rem;">
-      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="glitch-hover">𝕏</a> • 
-      <a href="https://discord.gg/jpFbSapSAh" target="_blank" class="glitch-hover">Discord</a> • 
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="glitch-hover">Buy Token</a>
-    </div>
-  </footer>
-
+  <!-- Firebase -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script>
-    async function connectWallet() {
-      if (!window.ethereum) return alert("Please install MetaMask or a Web3 wallet.");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = (await signer.getAddress()).toLowerCase();
-      console.log("Wallet connected:", address);
-      if (address === "0x7fc2ab08f46c10489bab5d694d574022f1048198") {
-        document.getElementById('admin').style.display = 'block';
-      }
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+  <h1>🔥 Y2K | Roast Records</h1>
+  <button id="connectWallet">Connect Wallet</button>
+  <p id="walletStatus">Not connected</p>
+
+  <hr>
+
+  <div id="submissionForm" class="hidden">
+    <h2>🎤 Submit a Track</h2>
+    <input id="projectName" placeholder="Project Name" /><br>
+    <input id="twitterHandle" placeholder="Twitter @handle" /><br>
+    <select id="vibe">
+      <option value="">Select a Vibe</option>
+      <option>Glitch</option>
+      <option>Dub</option>
+      <option>Trap</option>
+      <option>Other</option>
+    </select><br>
+    <textarea id="idea" placeholder="Optional Ideas" rows="4" cols="50"></textarea><br>
+    <button id="submitTrack">Submit (30 CRO)</button>
+    <p id="submitStatus"></p>
+  </div>
+
+  <div id="liveSubmissions">
+    <h2>📡 Live Submissions</h2>
+    <div id="pendingList"></div>
+  </div>
+
+  <div id="certifiedTracks">
+    <h2>✅ Certified Tracks</h2>
+    <div id="certifiedList"></div>
+  </div>
+
+  <div id="adminPanel" class="admin-controls hidden">
+    <h2>👑 Admin Panel</h2>
+    <p>Stamp certified songs from user submissions:</p>
+    <div id="adminPendingList"></div>
+    <h3>Legacy Upload</h3>
+    <input id="legacyName" placeholder="Project Name" /><br>
+    <input id="legacyHandle" placeholder="Twitter @handle" /><br>
+    <input id="legacyIpfsAudio" placeholder="IPFS Audio Link" /><br>
+    <input id="legacyIpfsNft" placeholder="IPFS NFT Cover" /><br>
+    <button id="uploadLegacy">Upload</button>
+    <p id="legacyStatus"></p>
+  </div>
+
+<script>
+  const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+    authDomain: "y2kroastrecords.firebaseapp.com",
+    projectId: "y2kroastrecords",
+    storageBucket: "y2kroastrecords.appspot.com",
+    messagingSenderId: "313829428782",
+    appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  let userAddress = null;
+
+  async function connectWallet() {
+    if (!window.ethereum) return alert("Install MetaMask or Trust Wallet.");
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+    document.getElementById('walletStatus').innerText = "Connected: " + userAddress;
+    document.getElementById('connectWallet').classList.add('hidden');
+    document.getElementById('submissionForm').classList.remove('hidden');
+    if (userAddress.toLowerCase() === adminWallet.toLowerCase()) {
+      document.getElementById('adminPanel').classList.remove('hidden');
     }
-  </script>
+  }
+
+  async function submitTrack() {
+    const projectName = document.getElementById("projectName").value;
+    const twitter = document.getElementById("twitterHandle").value;
+    const vibe = document.getElementById("vibe").value;
+    const idea = document.getElementById("idea").value;
+    if (!projectName || !twitter || !vibe) return alert("Fill required fields.");
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const tx = await signer.sendTransaction({
+      to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
+      value: ethers.utils.parseEther("30")
+    });
+    await tx.wait();
+
+    await db.collection("submissions").add({
+      wallet: userAddress,
+      projectName, twitter, vibe, idea,
+      timestamp: Date.now(),
+      certified: false,
+      ipfsAudio: null,
+      ipfsNft: null
+    });
+    document.getElementById("submitStatus").innerText = "✅ Submitted!";
+  }
+
+  async function approveSubmission(docId) {
+    const ipfsAudio = prompt("Enter IPFS Audio Link:");
+    const ipfsNft = prompt("Enter IPFS NFT Cover Link:");
+    if (!ipfsAudio || !ipfsNft) return alert("IPFS links required.");
+    await db.collection("submissions").doc(docId).update({
+      certified: true,
+      ipfsAudio,
+      ipfsNft
+    });
+    alert("✅ Certified!");
+  }
+
+  async function uploadLegacy() {
+    const projectName = document.getElementById("legacyName").value;
+    const twitter = document.getElementById("legacyHandle").value;
+    const ipfsAudio = document.getElementById("legacyIpfsAudio").value;
+    const ipfsNft = document.getElementById("legacyIpfsNft").value;
+    if (!projectName || !twitter || !ipfsAudio || !ipfsNft) return;
+    await db.collection("submissions").add({
+      wallet: adminWallet,
+      projectName,
+      twitter,
+      vibe: "Legacy",
+      idea: "",
+      timestamp: Date.now(),
+      certified: true,
+      ipfsAudio,
+      ipfsNft
+    });
+    document.getElementById("legacyStatus").innerText = "✅ Uploaded!";
+  }
+
+  function renderTrack(doc) {
+    const data = doc.data();
+    const div = document.createElement("div");
+    div.className = data.certified ? "certified" : "pending";
+    div.innerHTML = `
+      <strong>${data.projectName}</strong><br>
+      ${data.twitter} — <em>${data.vibe}</em><br>
+      ${data.idea || ""}<br>
+      ${data.certified ? `
+        <img src="https://ipfs.io/ipfs/${data.ipfsNft}" width="100%" />
+        <audio controls src="https://ipfs.io/ipfs/${data.ipfsAudio}"></audio>
+      ` : ""}
+    `;
+    if (!data.certified && userAddress && userAddress.toLowerCase() === adminWallet.toLowerCase()) {
+      const btn = document.createElement("button");
+      btn.innerText = "Stamp This";
+      btn.onclick = () => approveSubmission(doc.id);
+      div.appendChild(btn);
+    }
+    return div;
+  }
+
+  async function loadSubmissions() {
+    const snap = await db.collection("submissions").orderBy("timestamp", "desc").get();
+    const certifiedList = document.getElementById("certifiedList");
+    const pendingList = document.getElementById("pendingList");
+    const adminPending = document.getElementById("adminPendingList");
+    certifiedList.innerHTML = "";
+    pendingList.innerHTML = "";
+    adminPending.innerHTML = "";
+
+    snap.forEach(doc => {
+      const el = renderTrack(doc);
+      if (doc.data().certified) {
+        certifiedList.appendChild(el);
+      } else {
+        pendingList.appendChild(el);
+        if (userAddress && userAddress.toLowerCase() === adminWallet.toLowerCase()) {
+          adminPending.appendChild(el.cloneNode(true));
+        }
+      }
+    });
+  }
+
+  document.getElementById("connectWallet").onclick = connectWallet;
+  document.getElementById("submitTrack").onclick = submitTrack;
+  document.getElementById("uploadLegacy").onclick = uploadLegacy;
+
+  loadSubmissions();
+</script>
+
 </body>
 </html>
