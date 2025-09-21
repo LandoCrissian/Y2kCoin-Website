@@ -6,10 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
 
+  <!-- SEO + Meta -->
   <meta name="description" content="Official Web3 submission portal for Y2K | Roast Records. Submit your glitch-dub-trap track and join the movement." />
   <meta name="theme-color" content="#0b0d12" />
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Space+Mono&display=swap" />
+
   <style>
     :root {
       --bg: #0b0d12;
@@ -19,21 +21,91 @@
       --verified: #00ff88;
       --card: #13151a;
     }
-    body {
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
       background: var(--bg);
       color: var(--txt);
       font-family: 'Space Mono', monospace;
-      padding: 1.5rem;
+      min-height: 100%;
+      scroll-behavior: smooth;
+      padding-bottom: 5rem;
     }
+
     h1, h2, h3 {
       font-family: 'Orbitron', sans-serif;
       text-transform: uppercase;
     }
-    .glitchy {
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(to right, #0b0d12 90%, transparent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #222;
+    }
+
+    .logo {
       font-size: 1.2rem;
+      font-weight: bold;
+      text-shadow: 0 0 3px var(--accent), 0 0 10px var(--accent);
+    }
+
+    #connectBtn {
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #connectBtn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    #walletStatus {
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      color: gray;
+      text-align: right;
+    }
+
+    .container {
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: auto;
+    }
+
+    .section {
+      margin-top: 2.5rem;
+    }
+
+    .glitchy {
+      font-size: 1.4rem;
       letter-spacing: 0.04em;
       text-shadow: 0 0 2px var(--accent), 0 0 10px var(--accent);
+      animation: glitch 2s infinite;
     }
+
+    @keyframes glitch {
+      0% { text-shadow: 0 0 1px var(--accent); }
+      50% { text-shadow: 0 0 6px var(--accent), 0 0 10px var(--accent); }
+      100% { text-shadow: 0 0 1px var(--accent); }
+    }
+
     .btn {
       padding: 0.6rem 1.2rem;
       border: none;
@@ -44,16 +116,20 @@
       cursor: pointer;
       margin: 0.25rem 0;
     }
+
     .btn:disabled {
       opacity: 0.4;
     }
+
     .card {
       background: var(--card);
       padding: 1rem;
       margin-bottom: 1rem;
       border-left: 3px solid var(--accent);
       border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 255, 195, 0.1);
     }
+
     input, select, textarea {
       width: 100%;
       padding: 0.6rem;
@@ -63,68 +139,84 @@
       border-radius: 4px;
       color: var(--txt);
     }
+
     audio {
       width: 100%;
       margin-top: 0.5rem;
+      border-radius: 6px;
     }
-    .section {
-      margin-top: 2rem;
-    }
+
     .admin-only {
       border-left: 3px solid var(--danger);
       padding-left: 1rem;
+      margin-top: 3rem;
     }
+
     .badge {
       color: var(--verified);
       font-weight: bold;
     }
-    #walletStatus {
-      margin-top: 0.3rem;
-      font-size: 0.85rem;
-      color: gray;
+
+    img {
+      border-radius: 6px;
+      margin-top: 0.5rem;
+      max-width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      .glitchy {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1 class="glitchy">🔥 Y2K | Roast Records</h1>
-  <button class="btn" onclick="connectWallet()">Connect Wallet</button>
-  <div id="walletStatus">Not connected</div>
+  <header>
+    <div class="logo glitchy">🔥 Y2K | Roast Records</div>
+    <div>
+      <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
+      <div id="walletStatus">Not connected</div>
+    </div>
+  </header>
 
-  <div class="section">
-    <h2>📡 Live Submissions</h2>
-    <div id="liveSubmissions"></div>
+  <div class="container">
+    <div class="section">
+      <h2>📡 Live Submissions</h2>
+      <div id="liveSubmissions"></div>
+    </div>
+
+    <div class="section">
+      <h2>✅ Certified Tracks</h2>
+      <div id="certifiedTracks"></div>
+    </div>
+
+    <div class="section">
+      <h2>🎶 Submit a Track</h2>
+      <form id="submissionForm" onsubmit="submitTrack(event)">
+        <input required placeholder="Track Title" id="trackName" />
+        <input required placeholder="Your X / Twitter @handle" id="handle" />
+        <select id="vibe">
+          <option disabled selected>Select Vibe</option>
+          <option>Glitch</option>
+          <option>Dub</option>
+          <option>Trap</option>
+          <option>Other</option>
+        </select>
+        <textarea id="notes" placeholder="Optional ideas, message, etc."></textarea>
+        <button class="btn" type="submit">Submit Track (30 CRO)</button>
+      </form>
+    </div>
+
+    <div id="adminPanel" class="admin-only" style="display: none;">
+      <h2>🛠️ Admin Panel</h2>
+      <input id="adminStampId" placeholder="Submission ID to stamp" />
+      <input id="ipfsAudio" placeholder="IPFS Audio URL" />
+      <input id="ipfsImage" placeholder="IPFS Cover Image URL" />
+      <button class="btn" onclick="certifyTrack()">Certify Track</button>
+    </div>
   </div>
 
-  <div class="section">
-    <h2>✅ Certified Tracks</h2>
-    <div id="certifiedTracks"></div>
-  </div>
-
-  <div class="section">
-    <h2>🎶 Submit a Track</h2>
-    <form id="submissionForm" onsubmit="submitTrack(event)">
-      <input required placeholder="Track Title" id="trackName" />
-      <input required placeholder="Your X / Twitter @handle" id="handle" />
-      <select id="vibe">
-        <option disabled selected>Select Vibe</option>
-        <option>Glitch</option>
-        <option>Dub</option>
-        <option>Trap</option>
-        <option>Other</option>
-      </select>
-      <textarea id="notes" placeholder="Optional ideas, message, etc."></textarea>
-      <button class="btn" type="submit">Submit Track (30 CRO)</button>
-    </form>
-  </div>
-
-  <div id="adminPanel" class="section admin-only" style="display: none;">
-    <h2>🛠️ Admin Panel</h2>
-    <input id="adminStampId" placeholder="Submission ID to stamp" />
-    <input id="ipfsAudio" placeholder="IPFS Audio URL" />
-    <input id="ipfsImage" placeholder="IPFS Cover Image URL" />
-    <button class="btn" onclick="certifyTrack()">Certify Track</button>
-  </div>
-
+  <!-- Firebase + Ethers -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
@@ -229,7 +321,7 @@
           <div class="card">
             <b>${d.track} <span class="badge">✔️</span></b><br/>
             <i>@${d.handle}</i><br/>
-            <img src="https://ipfs.io/ipfs/${d.image}" style="max-width:100%;border-radius:6px;" />
+            <img src="https://ipfs.io/ipfs/${d.image}" />
             <audio controls src="https://ipfs.io/ipfs/${d.audio}"></audio>
           </div>`;
       });
