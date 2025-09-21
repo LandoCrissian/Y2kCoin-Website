@@ -19,6 +19,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+        authDomain: "y2kroastrecords.firebaseapp.com",
+        projectId: "y2kroastrecords",
+        storageBucket: "y2kroastrecords.firebasestorage.app",
+        messagingSenderId: "313829428782",
+        appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+
     <style>
       html {
         font-family: 'Space Grotesk', sans-serif;
@@ -47,13 +64,13 @@
     <header class="fixed top-0 left-0 w-full z-50 bg-[#0b0d12] flex items-center justify-between px-4 py-3 border-b border-[#111]">
       <a href="#top" class="text-teal-300 font-semibold text-sm glitch-hover" tabindex="0" aria-label="Go to top" role="link">Y2K | Roast Records</a>
       <button
-  class="bg-teal-300 text-black font-semibold text-sm px-4 py-2 rounded-md hover:bg-pink-500 hover:text-white transition"
-  tabindex="0"
-  aria-label="Connect Wallet"
-  data-connected="false"
->
-  Connect Wallet
-</button>
+        class="bg-teal-300 text-black font-semibold text-sm px-4 py-2 rounded-md hover:bg-pink-500 hover:text-white transition"
+        tabindex="0"
+        aria-label="Connect Wallet"
+        data-connected="false"
+      >
+        Connect Wallet
+      </button>
     </header>
 
     <!-- Hero Banner -->
@@ -105,17 +122,12 @@
 
       <!-- Admin Panel -->
       <section id="adminPanel" class="hidden">
-  <h2 class="text-teal-300 text-xl font-semibold mb-4">🔐 Admin Panel</h2>
-
-  <p class="text-sm text-gray-400 mb-4">
-    Connected as admin. Manage all track submissions here.
-  </p>
-
-  <!-- Placeholder wrapper for dynamic entries -->
-  <div id="adminTrackContainer" class="space-y-6">
-    <p class="text-gray-500 italic">No pending submissions yet.</p>
-  </div>
-</section>
+        <h2 class="text-teal-300 text-xl font-semibold mb-4">🔐 Admin Panel</h2>
+        <p class="text-sm text-gray-400 mb-4">Connected as admin. Manage all track submissions here.</p>
+        <div id="adminTrackContainer" class="space-y-6">
+          <p class="text-gray-500 italic">No pending submissions yet.</p>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
@@ -128,93 +140,135 @@
       </div>
     </footer>
 
-    <!-- Ethers.js -->
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const ADMIN_ADDRESS = "0x7fc2ab08f46c10489bab5d694d574022f1048198".toLowerCase();
-    const adminPanel = document.getElementById("adminPanel");
+    <!-- Wallet Connect + Firestore Logic -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const ADMIN_ADDRESS = "0x7fc2ab08f46c10489bab5d694d574022f1048198".toLowerCase();
+        const adminPanel = document.getElementById("adminPanel");
+        const walletBtn = document.querySelector("[aria-label^='Connect']");
 
-    const walletBtn = document.querySelector("[aria-label='Connect Wallet']");
-    walletBtn.addEventListener("click", () => {
-      const isConnected = walletBtn.dataset.connected === "true";
-      if (isConnected) {
-        handleDisconnectWallet();
-      } else {
-        handleConnectWallet();
-      }
-    });
+        walletBtn.addEventListener("click", () => {
+          const isConnected = walletBtn.dataset.connected === "true";
+          if (isConnected) {
+            handleDisconnectWallet();
+          } else {
+            handleConnectWallet();
+          }
+        });
 
-    walletBtn.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        walletBtn.click();
-      }
-    });
+        walletBtn.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") walletBtn.click();
+        });
 
-    const updateButtonUI = (connected, address = "") => {
-      if (connected) {
-        walletBtn.textContent = "Disconnect";
-        walletBtn.dataset.connected = "true";
-        walletBtn.setAttribute("aria-label", `Disconnect Wallet ${address}`);
-      } else {
-        walletBtn.textContent = "Connect Wallet";
-        walletBtn.dataset.connected = "false";
-        walletBtn.setAttribute("aria-label", "Connect Wallet");
-        adminPanel.classList.add("hidden");
-      }
-    };
+        const updateButtonUI = (connected, address = "") => {
+          walletBtn.textContent = connected ? "Disconnect" : "Connect Wallet";
+          walletBtn.dataset.connected = connected ? "true" : "false";
+          walletBtn.setAttribute("aria-label", connected ? `Disconnect Wallet ${address}` : "Connect Wallet");
+          if (!connected) adminPanel.classList.add("hidden");
+        };
 
-    const handleConnectWallet = async () => {
-      if (!window.ethereum) {
-        alert("No wallet detected. Please install MetaMask or a Web3 wallet.");
-        return;
-      }
+        const handleConnectWallet = async () => {
+          if (!window.ethereum) return alert("Please install MetaMask.");
+          try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            const signer = provider.getSigner();
+            const address = (await signer.getAddress()).toLowerCase();
+            const message = `Sign in to Y2K | Roast Records\n\nWallet: ${address}`;
+            await signer.signMessage(message);
+            localStorage.setItem("connectedWallet", address);
+            updateButtonUI(true, address);
+            if (address === ADMIN_ADDRESS) {
+              adminPanel.classList.remove("hidden");
+              loadAdminTracks();
+            }
+          } catch (err) {
+            alert("Connection failed.");
+            console.error(err);
+          }
+        };
 
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const address = (await signer.getAddress()).toLowerCase();
+        const handleDisconnectWallet = () => {
+          localStorage.removeItem("connectedWallet");
+          updateButtonUI(false);
+          alert("Disconnected.");
+        };
 
-        const message = `Sign in to Y2K | Roast Records\n\nWallet: ${address}`;
-        const signature = await signer.signMessage(message);
+        const autoReconnect = () => {
+          const saved = localStorage.getItem("connectedWallet");
+          if (saved) {
+            updateButtonUI(true, saved);
+            if (saved === ADMIN_ADDRESS) {
+              adminPanel.classList.remove("hidden");
+              loadAdminTracks();
+            }
+          } else {
+            updateButtonUI(false);
+          }
+        };
 
-        console.log("✅ Signature:", signature);
-        alert(`✅ Wallet connected and verified.\nAddress: ${address}`);
+        autoReconnect();
+      });
 
-        localStorage.setItem("connectedWallet", address);
-        updateButtonUI(true, address);
+      const adminTrackContainer = document.getElementById("adminTrackContainer");
 
-        if (address === ADMIN_ADDRESS) {
-          adminPanel.classList.remove("hidden");
-          console.log("🛡️ Admin access granted.");
+      const renderTrackCard = (docId, data) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "bg-[#111214] border border-[#222] rounded-lg p-4 space-y-4 shadow-sm";
+
+        wrapper.innerHTML = `
+          <div class="flex flex-col gap-2">
+            <label class="text-sm text-gray-300 font-semibold">Track Title</label>
+            <input type="text" value="${data.title || ''}" class="bg-[#0b0d12] border border-[#333] text-white text-sm p-2 rounded-md" disabled />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm text-gray-300 font-semibold">IPFS URL</label>
+            <input type="text" value="${data.ipfsUrl || ''}" class="ipfs-url bg-[#0b0d12] border border-[#333] text-white text-sm p-2 rounded-md" placeholder="ipfs://..." />
+          </div>
+          <div class="flex gap-4 pt-2">
+            <button class="approve-btn bg-teal-500 text-black text-sm px-4 py-2 rounded-md font-semibold hover:bg-teal-400 transition">Approve</button>
+            <button class="reject-btn bg-pink-600 text-white text-sm px-4 py-2 rounded-md font-semibold hover:bg-pink-500 transition">Reject</button>
+          </div>
+        `;
+
+        wrapper.querySelector(".approve-btn").addEventListener("click", async () => {
+          const ipfsUrl = wrapper.querySelector(".ipfs-url").value.trim();
+          if (!ipfsUrl.startsWith("ipfs://")) return alert("Invalid IPFS URL.");
+          await db.collection("submissions").doc(docId).update({ status: "approved", ipfsUrl });
+          alert("✅ Approved.");
+          wrapper.remove();
+        });
+
+        wrapper.querySelector(".reject-btn").addEventListener("click", async () => {
+          await db.collection("submissions").doc(docId).update({ status: "rejected" });
+          alert("❌ Rejected.");
+          wrapper.remove();
+        });
+
+        adminTrackContainer.appendChild(wrapper);
+      };
+
+      const loadAdminTracks = async () => {
+        try {
+          const snapshot = await db.collection("submissions")
+            .where("status", "==", "pending")
+            .orderBy("timestamp", "desc")
+            .get();
+
+          adminTrackContainer.innerHTML = "";
+
+          if (snapshot.empty) {
+            adminTrackContainer.innerHTML = `<p class="text-gray-500 italic">No pending submissions yet.</p>`;
+            return;
+          }
+
+          snapshot.forEach(doc => renderTrackCard(doc.id, doc.data()));
+        } catch (err) {
+          console.error("Firestore error:", err);
+          adminTrackContainer.innerHTML = `<p class="text-pink-400">Error loading tracks.</p>`;
         }
-      } catch (err) {
-        console.error("❌ Connection error:", err);
-        alert("❌ Wallet connection failed or signature denied.");
-      }
-    };
-
-    const handleDisconnectWallet = () => {
-      localStorage.removeItem("connectedWallet");
-      updateButtonUI(false);
-      alert("👋 Wallet disconnected.");
-    };
-
-    const autoReconnect = () => {
-      const saved = localStorage.getItem("connectedWallet");
-      if (saved) {
-        updateButtonUI(true, saved);
-        if (saved === ADMIN_ADDRESS) {
-          adminPanel.classList.remove("hidden");
-        }
-      } else {
-        updateButtonUI(false);
-      }
-    };
-
-    autoReconnect(); // Run on load
-  });
-</script>
+      };
+    </script>
   </body>
 </html>
