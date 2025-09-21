@@ -6,155 +6,153 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
   <meta name="theme-color" content="#0b0d12" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Space+Mono&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --accent: #00ffc3;
-      --pink: #ff00cc;
-      --bg: #0b0d12;
-      --card: #14141a;
-      --text: #ffffff;
-    }
-    * { box-sizing: border-box; }
     body {
       margin: 0;
+      padding: 0;
       font-family: 'Orbitron', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding-bottom: 5rem;
+      background-color: #0b0d12;
+      color: #fff;
     }
-    h1, h2 {
-      font-weight: 800;
-      color: var(--accent);
-      margin: 1rem;
-      text-align: center;
-    }
-    button, input, select, textarea {
-      font-family: 'Orbitron', sans-serif;
-      background: #111;
-      color: white;
-      border: 1px solid #333;
-      padding: 0.75rem;
+
+    header {
+      position: relative;
       width: 100%;
-      margin-bottom: 1rem;
     }
-    button {
+
+    #banner {
+      width: 100%;
+      display: block;
+    }
+
+    #connectBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ff00cc;
+      color: black;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-weight: bold;
       cursor: pointer;
-      background: var(--pink);
-      font-weight: bold;
+      z-index: 2;
+      border-radius: 6px;
+      font-family: 'Orbitron', sans-serif;
     }
-    .admin-btn {
-      background: var(--accent);
-      color: #000;
-      font-weight: bold;
+
+    main {
+      padding: 1rem;
     }
-    .dropdown {
-      margin: 1rem;
-      border: 1px solid #222;
-      background: var(--card);
+
+    details {
+      background: #111;
       border-radius: 10px;
-      overflow: hidden;
+      margin-bottom: 1rem;
+      border: 1px solid #333;
     }
-    .dropdown summary {
-      background: #1a1a1a;
+
+    summary {
       padding: 1rem;
       cursor: pointer;
       font-size: 1.1rem;
     }
-    .dropdown[open] summary {
-      background: #222;
-    }
+
     .card {
-      background: var(--card);
+      background: #1a1a1a;
       padding: 1rem;
-      margin: 1rem;
+      margin: 1rem 0;
+      border: 1px solid #333;
       border-radius: 8px;
     }
+
+    input, select, textarea, button {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.7rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background: #000;
+      color: white;
+    }
+
+    button {
+      background: #ff00cc;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .admin-btn {
+      background: #00ffcc;
+      color: black;
+      margin-top: 0.5rem;
+    }
+
     audio {
       width: 100%;
       margin-top: 0.5rem;
     }
+
     #stampModal {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.9);
       display: none;
       align-items: center;
       justify-content: center;
+      z-index: 999;
     }
+
     #stampModalContent {
       background: #222;
       padding: 2rem;
+      border-radius: 8px;
       max-width: 400px;
       width: 90%;
-      border-radius: 8px;
-    }
-    header img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-    }
-    #connectBtn {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: var(--pink);
-      color: black;
-      border: none;
-      padding: 0.75rem 1rem;
-      font-weight: bold;
-      z-index: 999;
     }
   </style>
 </head>
 <body>
 
-  <!-- Banner -->
   <header>
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Roast Records" />
+    <img id="banner" src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Banner" />
+    <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
   </header>
 
-  <!-- Wallet Connect -->
-  <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
+  <main>
+    <details open>
+      <summary>🔥 Certified Tracks</summary>
+      <div id="certifiedTracks"></div>
+    </details>
 
-  <!-- 🔥 Certified Tracks -->
-  <details class="dropdown" open>
-    <summary>🔥 Certified Tracks</summary>
-    <div id="certifiedTracks"></div>
-  </details>
+    <details>
+      <summary>🎧 Live Submissions</summary>
+      <div id="submissionList"></div>
+    </details>
 
-  <!-- 🎧 Live Submissions -->
-  <details class="dropdown">
-    <summary>🎧 Live Submissions</summary>
-    <div id="submissionList"></div>
-  </details>
+    <details>
+      <summary>🎤 Submit a Track</summary>
+      <form id="submitForm">
+        <input id="title" placeholder="Track Title" required />
+        <input id="handle" placeholder="𝕏 Handle (optional)" />
+        <select id="vibe" required>
+          <option value="" disabled selected>Select vibe</option>
+          <option>Glitchwave</option>
+          <option>Dubtrap</option>
+          <option>Trancepunk</option>
+          <option>Other</option>
+        </select>
+        <textarea id="idea" placeholder="Track idea (optional)"></textarea>
+        <button type="submit">Submit Track</button>
+      </form>
+    </details>
+  </main>
 
-  <!-- 🎤 Submit a Track -->
-  <details class="dropdown">
-    <summary>🎤 Submit a Track</summary>
-    <form id="submitForm" style="padding: 1rem;">
-      <input id="title" placeholder="Track Title" required />
-      <input id="handle" placeholder="𝕏 Handle (optional)" />
-      <select id="vibe" required>
-        <option value="" disabled selected>Select vibe</option>
-        <option>Glitchwave</option>
-        <option>Dubtrap</option>
-        <option>Trancepunk</option>
-        <option>Other</option>
-      </select>
-      <textarea id="idea" placeholder="Track idea (optional)"></textarea>
-      <button type="submit">Submit Track</button>
-    </form>
-  </details>
-
-  <!-- 🔒 Admin Panel (hidden until wallet is admin) -->
-  <details class="dropdown" id="adminPanel" style="display:none;">
-    <summary>🔒 Admin Panel</summary>
-    <p style="padding: 1rem;">Use the STAMP button on any submission below to certify.</p>
-  </details>
-
-  <!-- STAMP MODAL -->
+  <!-- MODAL -->
   <div id="stampModal">
     <div id="stampModalContent">
       <h3>Stamp Submission</h3>
@@ -165,13 +163,12 @@
     </div>
   </div>
 
-  <!-- Firebase + Wallet -->
+  <!-- FIREBASE + ETH -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
-
   <script>
-    // Firebase Init
+    // Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
       authDomain: "y2kroastrecords.firebaseapp.com",
@@ -183,7 +180,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Wallet + Admin
+    // Global state
     let currentWallet = null;
     const adminWallet = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
     let stampDocId = null;
@@ -194,14 +191,11 @@
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
         currentWallet = (await signer.getAddress()).toLowerCase();
-        document.getElementById("connectBtn").innerText = "Connected";
-        if (currentWallet === adminWallet) {
-          document.getElementById("adminPanel").style.display = "block";
-        }
+        alert("Wallet connected: " + currentWallet);
       }
     }
 
-    // Submit Track
+    // Submit form
     document.getElementById('submitForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = {
@@ -218,7 +212,7 @@
       alert("Track submitted!");
     });
 
-    // Load Submissions
+    // Fetch and render submissions
     db.collection("submissions").onSnapshot(snapshot => {
       const list = document.getElementById("submissionList");
       const certified = document.getElementById("certifiedTracks");
@@ -259,15 +253,17 @@
       });
     });
 
-    // Modal Logic
+    // Modal logic
     function openModal(docId) {
       stampDocId = docId;
       document.getElementById("stampModal").style.display = "flex";
     }
+
     function closeModal() {
       stampDocId = null;
       document.getElementById("stampModal").style.display = "none";
     }
+
     async function confirmStamp() {
       const ipfsImage = document.getElementById("ipfsImage").value.trim().replace("https://gateway.pinata.cloud/ipfs/", "");
       const ipfsAudio = document.getElementById("ipfsAudio").value.trim().replace("https://gateway.pinata.cloud/ipfs/", "");
@@ -278,12 +274,10 @@
         ipfsAudio
       });
       closeModal();
-      alert("Stamped and approved!");
+      alert("Stamped!");
     }
 
-    // Auto Connect on Load
     window.addEventListener('load', connectWallet);
   </script>
-
 </body>
 </html>
