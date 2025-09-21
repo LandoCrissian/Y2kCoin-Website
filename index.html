@@ -9,7 +9,7 @@
   <!-- SEO + Meta -->
   <meta name="description" content="Official Web3 submission portal for Y2K | Roast Records. Submit your glitch-dub-trap track and join the movement." />
   <meta name="theme-color" content="#0b0d12" />
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Space+Mono&display=swap" />
 
   <style>
@@ -21,13 +21,7 @@
       --verified: #00ff88;
       --card: #13151a;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       background: var(--bg);
       color: var(--txt);
@@ -36,70 +30,30 @@
       scroll-behavior: smooth;
       padding-bottom: 5rem;
     }
-
-    h1, h2, h3 {
-      font-family: 'Orbitron', sans-serif;
-      text-transform: uppercase;
-    }
+    h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      position: sticky; top: 0; z-index: 1000;
       background: linear-gradient(to right, #0b0d12 90%, transparent);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid #222;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; border-bottom: 1px solid #222;
     }
-
-    .logo {
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-shadow: 0 0 3px var(--accent), 0 0 10px var(--accent);
-    }
+    .logo { font-size: 1.2rem; font-weight: bold;
+      text-shadow: 0 0 3px var(--accent), 0 0 10px var(--accent); }
 
     #connectBtn {
-      background: var(--accent);
-      color: #000;
-      font-weight: bold;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      background: var(--accent); color: #000; font-weight: bold;
+      padding: 0.5rem 1rem; border: none; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s ease;
     }
+    #connectBtn:hover { transform: scale(1.05); box-shadow: 0 0 6px var(--accent); }
+    #walletStatus { font-size: 0.8rem; margin-top: 0.3rem; color: gray; text-align: right; }
 
-    #connectBtn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 6px var(--accent);
-    }
-
-    #walletStatus {
-      font-size: 0.8rem;
-      margin-top: 0.3rem;
-      color: gray;
-      text-align: right;
-    }
-
-    .container {
-      padding: 1.5rem;
-      max-width: 720px;
-      margin: auto;
-    }
-
-    .section {
-      margin-top: 2.5rem;
-    }
-
-    .glitchy {
-      font-size: 1.4rem;
-      letter-spacing: 0.04em;
+    .container { padding: 1.5rem; max-width: 960px; margin: auto; }
+    .section { margin-top: 2.5rem; }
+    .glitchy { font-size: 1.4rem; letter-spacing: 0.04em;
       text-shadow: 0 0 2px var(--accent), 0 0 10px var(--accent);
-      animation: glitch 2s infinite;
-    }
-
+      animation: glitch 2s infinite; }
     @keyframes glitch {
       0% { text-shadow: 0 0 1px var(--accent); }
       50% { text-shadow: 0 0 6px var(--accent), 0 0 10px var(--accent); }
@@ -107,66 +61,55 @@
     }
 
     .btn {
-      padding: 0.6rem 1.2rem;
-      border: none;
-      background: var(--accent);
-      color: black;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      margin: 0.25rem 0;
+      padding: 0.6rem 1.2rem; border: none; background: var(--accent);
+      color: black; font-weight: bold; border-radius: 6px;
+      cursor: pointer; margin: 0.25rem 0;
     }
-
-    .btn:disabled {
-      opacity: 0.4;
-    }
+    .btn:disabled { opacity: 0.4; }
 
     .card {
-      background: var(--card);
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-left: 3px solid var(--accent);
-      border-radius: 8px;
+      background: var(--card); padding: 1rem; margin-bottom: 1rem;
+      border-left: 3px solid var(--accent); border-radius: 8px;
       box-shadow: 0 0 8px rgba(0, 255, 195, 0.1);
     }
 
     input, select, textarea {
-      width: 100%;
-      padding: 0.6rem;
-      margin: 0.25rem 0 1rem 0;
-      background: #1a1c20;
-      border: 1px solid #333;
-      border-radius: 4px;
+      width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem 0;
+      background: #1a1c20; border: 1px solid #333; border-radius: 4px;
       color: var(--txt);
     }
+    audio { width: 100%; margin-top: 0.5rem; border-radius: 6px; }
 
-    audio {
-      width: 100%;
-      margin-top: 0.5rem;
-      border-radius: 6px;
+    .admin-only { border-left: 3px solid var(--danger);
+      padding-left: 1rem; margin-top: 3rem; }
+    .badge { color: var(--verified); font-weight: bold; }
+    img { border-radius: 6px; margin-top: 0.5rem; max-width: 100%; }
+
+    /* Social + Buy Links */
+    .socials, .buy { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+    .socials a, .buy a {
+      text-decoration: none; color: var(--txt); padding: 0.6rem 1.2rem;
+      border: 1px solid var(--accent); border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .socials a:hover, .buy a:hover {
+      background: var(--accent); color: black; box-shadow: 0 0 8px var(--accent);
     }
 
-    .admin-only {
-      border-left: 3px solid var(--danger);
-      padding-left: 1rem;
-      margin-top: 3rem;
-    }
+    /* FAQ accordion */
+    details { margin: 0.5rem 0; background: #1a1c20; border-radius: 6px; padding: 0.5rem 1rem; }
+    summary { cursor: pointer; font-weight: bold; }
 
-    .badge {
-      color: var(--verified);
-      font-weight: bold;
+    footer {
+      background: #0b0d12; text-align: center; padding: 2rem 1rem;
+      border-top: 1px solid #222; margin-top: 4rem;
     }
-
-    img {
-      border-radius: 6px;
-      margin-top: 0.5rem;
-      max-width: 100%;
-    }
+    footer img { height: 40px; margin-bottom: 0.5rem; }
+    footer a { color: var(--accent); text-decoration: none; margin: 0 0.5rem; }
 
     @media (max-width: 600px) {
-      .glitchy {
-        font-size: 1.1rem;
-      }
+      .glitchy { font-size: 1.1rem; }
+      .socials, .buy { flex-direction: column; }
     }
   </style>
 </head>
@@ -180,16 +123,38 @@
   </header>
 
   <div class="container">
+
+    <!-- Socials -->
+    <div class="section">
+      <h2>🌐 Follow Us</h2>
+      <div class="socials">
+        <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏 (Twitter)</a>
+        <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
+      </div>
+    </div>
+
+    <!-- Where to Buy -->
+    <div class="section">
+      <h2>💸 Where to Buy</h2>
+      <div class="buy">
+        <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy on Obsidian</a>
+        <a href="https://cronoscan.com/token/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">View on Cronoscan</a>
+      </div>
+    </div>
+
+    <!-- Live Submissions -->
     <div class="section">
       <h2>📡 Live Submissions</h2>
       <div id="liveSubmissions"></div>
     </div>
 
+    <!-- Certified Tracks -->
     <div class="section">
       <h2>✅ Certified Tracks</h2>
-      <div id="certifiedTracks"></div>
+      <div id="certifiedTracks" style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"></div>
     </div>
 
+    <!-- Submit a Track -->
     <div class="section">
       <h2>🎶 Submit a Track</h2>
       <form id="submissionForm" onsubmit="submitTrack(event)">
@@ -207,6 +172,7 @@
       </form>
     </div>
 
+    <!-- Admin Panel -->
     <div id="adminPanel" class="admin-only" style="display: none;">
       <h2>🛠️ Admin Panel</h2>
       <input id="adminStampId" placeholder="Submission ID to stamp" />
@@ -214,7 +180,27 @@
       <input id="ipfsImage" placeholder="IPFS Cover Image URL" />
       <button class="btn" onclick="certifyTrack()">Certify Track</button>
     </div>
+
+    <!-- FAQ -->
+    <div class="section">
+      <h2>❓ FAQ</h2>
+      <details><summary>How do I submit?</summary><p>Connect your wallet, fill in details, and submit with 30 CRO. Admin will review and certify if approved.</p></details>
+      <details><summary>What happens after certification?</summary><p>Your track will move to the Certified Tracks gallery with cover + audio preview.</p></details>
+      <details><summary>Where are files stored?</summary><p>All audio and images are stored on IPFS via Pinata, making them permanent and decentralized.</p></details>
+    </div>
+
   </div>
+
+  <!-- Footer -->
+  <footer>
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" alt="Token Logo"/>
+    <p>&copy; 2025 Y2K | Roast Records</p>
+    <div>
+      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>|
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>|
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
+    </div>
+  </footer>
 
   <!-- Firebase + Ethers -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
@@ -223,7 +209,7 @@
 
   <script>
     const treasuryWallet = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-    const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+    const adminWallet = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
     let currentAccount;
 
     const firebaseConfig = {
@@ -246,7 +232,8 @@
       const message = "Sign to access Y2K Roast Records";
       await signer.signMessage(message);
       currentAccount = address.toLowerCase();
-      document.getElementById("walletStatus").innerText = `Connected: ${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
+      document.getElementById("walletStatus").innerText =
+        `Connected: ${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
       if (currentAccount === adminWallet) {
         document.getElementById("adminPanel").style.display = "block";
       }
@@ -274,6 +261,7 @@
       await db.collection("submissions").add(doc);
       alert("Track submitted!");
       document.getElementById("submissionForm").reset();
+      loadSubmissions();
     }
 
     async function certifyTrack() {
@@ -285,13 +273,12 @@
       if (!snap.exists) return alert("No submission found");
       const data = snap.data();
       await db.collection("certified").add({
-        ...data,
-        audio,
-        image,
-        certifiedAt: Date.now()
+        ...data, audio, image, certifiedAt: Date.now()
       });
       await ref.delete();
       alert("Certified & moved.");
+      loadCertified();
+      loadSubmissions();
     }
 
     async function loadSubmissions() {
@@ -321,7 +308,7 @@
           <div class="card">
             <b>${d.track} <span class="badge">✔️</span></b><br/>
             <i>@${d.handle}</i><br/>
-            <img src="https://ipfs.io/ipfs/${d.image}" />
+            <img src="https://ipfs.io/ipfs/${d.image}" alt="Cover"/>
             <audio controls src="https://ipfs.io/ipfs/${d.audio}"></audio>
           </div>`;
       });
