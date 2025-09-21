@@ -6,299 +6,237 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
 
-  <!-- Meta -->
-  <meta name="description" content="The official site of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
+  <meta name="description" content="Official Web3 submission portal for Y2K | Roast Records. Submit your glitch-dub-trap track and join the movement." />
   <meta name="theme-color" content="#0b0d12" />
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Space+Mono&display=swap" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      font-family: 'Inter', sans-serif;
-      background: #0b0d12;
-      color: white;
-      padding: 1rem;
+    :root {
+      --bg: #0b0d12;
+      --txt: #f1f1f1;
+      --accent: #00ffc3;
+      --danger: #ff0044;
+      --verified: #00ff88;
+      --card: #13151a;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 1rem;
+    body {
+      background: var(--bg);
+      color: var(--txt);
+      font-family: 'Space Mono', monospace;
+      padding: 1.5rem;
     }
-    h1 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    h1, h2, h3 {
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+    }
+    .glitchy {
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 2px var(--accent), 0 0 10px var(--accent);
     }
     .btn {
-      background: #1f1f25;
-      color: #fff;
-      padding: 0.6rem 1rem;
-      border-radius: 5px;
-      border: 1px solid #333;
-      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      background: var(--accent);
+      color: black;
+      font-weight: bold;
+      border-radius: 6px;
       cursor: pointer;
+      margin: 0.25rem 0;
     }
-    .btn:hover {
-      background: #2c2f36;
+    .btn:disabled {
+      opacity: 0.4;
+    }
+    .card {
+      background: var(--card);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
     }
     input, select, textarea {
       width: 100%;
       padding: 0.6rem;
-      background: #16181d;
-      color: white;
+      margin: 0.25rem 0 1rem 0;
+      background: #1a1c20;
       border: 1px solid #333;
       border-radius: 4px;
-      margin-bottom: 0.75rem;
+      color: var(--txt);
     }
-    section {
+    audio {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    .section {
       margin-top: 2rem;
     }
-    .hidden { display: none; }
-    .track {
-      background: #12151b;
-      border: 1px solid #333;
-      border-left: 5px solid #00ff88;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
+    .admin-only {
+      border-left: 3px solid var(--danger);
+      padding-left: 1rem;
     }
-    .pending { border-left-color: #555; }
-    audio { width: 100%; margin-top: 0.5rem; }
-    #adminPanel hr {
-      margin: 2rem 0 1rem;
-      border: none;
-      border-top: 1px solid #333;
+    .badge {
+      color: var(--verified);
+      font-weight: bold;
     }
-    label {
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.25rem;
-      display: block;
-    }
-    .status {
-      font-size: 0.9rem;
-      color: #00ff88;
+    #walletStatus {
+      margin-top: 0.3rem;
+      font-size: 0.85rem;
+      color: gray;
     }
   </style>
-
-  <!-- Firebase + Ethers -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 </head>
 <body>
+  <h1 class="glitchy">🔥 Y2K | Roast Records</h1>
+  <button class="btn" onclick="connectWallet()">Connect Wallet</button>
+  <div id="walletStatus">Not connected</div>
 
-  <header>
-    <h1>🔥 Y2K | Roast Records</h1>
-    <button id="connectWallet" class="btn">Connect Wallet</button>
-  </header>
-  <p id="walletStatus">Not connected</p>
+  <div class="section">
+    <h2>📡 Live Submissions</h2>
+    <div id="liveSubmissions"></div>
+  </div>
 
-  <div id="submissionForm" class="hidden">
-    <section>
-      <h2>🎤 Submit a Track</h2>
-      <label for="projectName">Project Name</label>
-      <input id="projectName" placeholder="E.g. CRO Bangers" />
+  <div class="section">
+    <h2>✅ Certified Tracks</h2>
+    <div id="certifiedTracks"></div>
+  </div>
 
-      <label for="twitterHandle">Twitter @handle</label>
-      <input id="twitterHandle" placeholder="@crolegend" />
-
-      <label for="vibe">Vibe</label>
+  <div class="section">
+    <h2>🎶 Submit a Track</h2>
+    <form id="submissionForm" onsubmit="submitTrack(event)">
+      <input required placeholder="Track Title" id="trackName" />
+      <input required placeholder="Your X / Twitter @handle" id="handle" />
       <select id="vibe">
-        <option value="">Select Vibe</option>
+        <option disabled selected>Select Vibe</option>
         <option>Glitch</option>
         <option>Dub</option>
         <option>Trap</option>
         <option>Other</option>
       </select>
-
-      <label for="idea">Optional Notes</label>
-      <textarea id="idea" placeholder="Lyrics, mood, influences, etc."></textarea>
-
-      <button id="submitTrack" class="btn">Submit (30 CRO)</button>
-      <p id="submitStatus" class="status"></p>
-    </section>
+      <textarea id="notes" placeholder="Optional ideas, message, etc."></textarea>
+      <button class="btn" type="submit">Submit Track (30 CRO)</button>
+    </form>
   </div>
 
-  <section>
-    <h2>📡 Live Submissions</h2>
-    <div id="pendingList"></div>
-  </section>
-
-  <section>
-    <h2>✅ Certified Tracks</h2>
-    <div id="certifiedList"></div>
-  </section>
-
-  <div id="adminPanel" class="hidden">
-    <hr />
-    <h2>👑 Admin Panel</h2>
-    <p>Stamp user submissions as certified:</p>
-    <div id="adminPendingList"></div>
-
-    <hr />
-    <h3>📥 Upload Legacy Entry</h3>
-    <input id="legacyName" placeholder="Project Name" />
-    <input id="legacyHandle" placeholder="Twitter @handle" />
-    <input id="legacyIpfsAudio" placeholder="IPFS Audio Link" />
-    <input id="legacyIpfsNft" placeholder="IPFS NFT Cover" />
-    <button id="uploadLegacy" class="btn">Upload</button>
-    <p id="legacyStatus" class="status"></p>
+  <div id="adminPanel" class="section admin-only" style="display: none;">
+    <h2>🛠️ Admin Panel</h2>
+    <input id="adminStampId" placeholder="Submission ID to stamp" />
+    <input id="ipfsAudio" placeholder="IPFS Audio URL" />
+    <input id="ipfsImage" placeholder="IPFS Cover Image URL" />
+    <button class="btn" onclick="certifyTrack()">Certify Track</button>
   </div>
 
-<script>
-const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
-const firebaseConfig = {
-  apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-  authDomain: "y2kroastrecords.firebaseapp.com",
-  projectId: "y2kroastrecords",
-  storageBucket: "y2kroastrecords.appspot.com",
-  messagingSenderId: "313829428782",
-  appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-let userAddress = null;
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 
-async function connectWallet() {
-  if (!window.ethereum) return alert("Please install MetaMask or another Web3 wallet.");
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
-  userAddress = await signer.getAddress();
-  document.getElementById("walletStatus").innerText = "Connected: " + userAddress;
-  document.getElementById("connectWallet").style.display = "none";
-  document.getElementById("submissionForm").classList.remove("hidden");
-  if (userAddress.toLowerCase() === adminWallet.toLowerCase()) {
-    document.getElementById("adminPanel").classList.remove("hidden");
-  }
-  loadSubmissions();
-}
+  <script>
+    const treasuryWallet = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+    const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+    let currentAccount;
 
-async function submitTrack() {
-  const projectName = document.getElementById("projectName").value.trim();
-  const twitter = document.getElementById("twitterHandle").value.trim();
-  const vibe = document.getElementById("vibe").value;
-  const idea = document.getElementById("idea").value.trim();
+    const firebaseConfig = {
+      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+      authDomain: "y2kroastrecords.firebaseapp.com",
+      projectId: "y2kroastrecords",
+      storageBucket: "y2kroastrecords.appspot.com",
+      messagingSenderId: "313829428782",
+      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-  if (!projectName || !twitter || !vibe) {
-    alert("Please complete all required fields.");
-    return;
-  }
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const tx = await signer.sendTransaction({
-    to: "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100",
-    value: ethers.utils.parseEther("30")
-  });
-  await tx.wait();
-
-  await db.collection("submissions").add({
-    wallet: userAddress,
-    projectName,
-    twitter,
-    vibe,
-    idea,
-    certified: false,
-    ipfsAudio: null,
-    ipfsNft: null,
-    timestamp: Date.now()
-  });
-
-  document.getElementById("submitStatus").innerText = "✅ Submission successful!";
-  loadSubmissions();
-}
-
-async function approveSubmission(docId) {
-  const ipfsAudio = prompt("Enter IPFS audio link:");
-  const ipfsNft = prompt("Enter IPFS cover art link:");
-  if (!ipfsAudio || !ipfsNft) return;
-  await db.collection("submissions").doc(docId).update({
-    certified: true,
-    ipfsAudio,
-    ipfsNft
-  });
-  alert("✅ Track certified.");
-  loadSubmissions();
-}
-
-async function uploadLegacy() {
-  const projectName = document.getElementById("legacyName").value.trim();
-  const twitter = document.getElementById("legacyHandle").value.trim();
-  const ipfsAudio = document.getElementById("legacyIpfsAudio").value.trim();
-  const ipfsNft = document.getElementById("legacyIpfsNft").value.trim();
-  if (!projectName || !twitter || !ipfsAudio || !ipfsNft) return alert("All legacy fields required.");
-
-  await db.collection("submissions").add({
-    wallet: adminWallet,
-    projectName,
-    twitter,
-    vibe: "Legacy",
-    idea: "",
-    certified: true,
-    ipfsAudio,
-    ipfsNft,
-    timestamp: Date.now()
-  });
-
-  document.getElementById("legacyStatus").innerText = "✅ Legacy uploaded!";
-  loadSubmissions();
-}
-
-function renderTrack(doc) {
-  const data = doc.data();
-  const div = document.createElement("div");
-  div.className = "track " + (data.certified ? "certified" : "pending");
-  div.innerHTML = `
-    <strong>${data.projectName}</strong><br/>
-    ${data.twitter} — <em>${data.vibe}</em><br/>
-    ${data.idea ? `<p>${data.idea}</p>` : ""}
-    ${data.certified ? `
-      <img src="https://ipfs.io/ipfs/${data.ipfsNft}" width="100%" style="margin-top:1rem;" />
-      <audio controls src="https://ipfs.io/ipfs/${data.ipfsAudio}"></audio>
-    ` : ""}
-  `;
-  if (!data.certified && userAddress && userAddress.toLowerCase() === adminWallet.toLowerCase()) {
-    const btn = document.createElement("button");
-    btn.className = "btn";
-    btn.innerText = "Stamp This";
-    btn.onclick = () => approveSubmission(doc.id);
-    div.appendChild(btn);
-  }
-  return div;
-}
-
-async function loadSubmissions() {
-  const snap = await db.collection("submissions").orderBy("timestamp", "desc").get();
-  const pendingList = document.getElementById("pendingList");
-  const certifiedList = document.getElementById("certifiedList");
-  const adminPendingList = document.getElementById("adminPendingList");
-
-  pendingList.innerHTML = "";
-  certifiedList.innerHTML = "";
-  adminPendingList.innerHTML = "";
-
-  snap.forEach(doc => {
-    const el = renderTrack(doc);
-    if (doc.data().certified) {
-      certifiedList.appendChild(el);
-    } else {
-      pendingList.appendChild(el);
-      if (userAddress && userAddress.toLowerCase() === adminWallet.toLowerCase()) {
-        adminPendingList.appendChild(el.cloneNode(true));
+    async function connectWallet() {
+      if (!window.ethereum) return alert("No wallet found");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      const message = "Sign to access Y2K Roast Records";
+      await signer.signMessage(message);
+      currentAccount = address.toLowerCase();
+      document.getElementById("walletStatus").innerText = `Connected: ${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
+      if (currentAccount === adminWallet) {
+        document.getElementById("adminPanel").style.display = "block";
       }
     }
-  });
-}
 
-document.getElementById("connectWallet").onclick = connectWallet;
-document.getElementById("submitTrack").onclick = submitTrack;
-document.getElementById("uploadLegacy").onclick = uploadLegacy;
-</script>
+    async function submitTrack(e) {
+      e.preventDefault();
+      if (!currentAccount) return alert("Connect wallet first");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const tx = await signer.sendTransaction({
+        to: treasuryWallet,
+        value: ethers.utils.parseEther("30")
+      });
+      await tx.wait();
 
+      const doc = {
+        track: document.getElementById("trackName").value,
+        handle: document.getElementById("handle").value,
+        vibe: document.getElementById("vibe").value,
+        notes: document.getElementById("notes").value,
+        wallet: currentAccount,
+        timestamp: Date.now()
+      };
+      await db.collection("submissions").add(doc);
+      alert("Track submitted!");
+      document.getElementById("submissionForm").reset();
+    }
+
+    async function certifyTrack() {
+      const id = document.getElementById("adminStampId").value;
+      const audio = document.getElementById("ipfsAudio").value;
+      const image = document.getElementById("ipfsImage").value;
+      const ref = db.collection("submissions").doc(id);
+      const snap = await ref.get();
+      if (!snap.exists) return alert("No submission found");
+      const data = snap.data();
+      await db.collection("certified").add({
+        ...data,
+        audio,
+        image,
+        certifiedAt: Date.now()
+      });
+      await ref.delete();
+      alert("Certified & moved.");
+    }
+
+    async function loadSubmissions() {
+      const subs = await db.collection("submissions").orderBy("timestamp", "desc").get();
+      const div = document.getElementById("liveSubmissions");
+      div.innerHTML = "";
+      subs.forEach(doc => {
+        const d = doc.data();
+        div.innerHTML += `
+          <div class="card">
+            <b>${d.track}</b><br/>
+            <i>@${d.handle}</i><br/>
+            <small>${d.wallet.slice(0,6)}...${d.wallet.slice(-4)}</small><br/>
+            <small>${d.vibe}</small><br/>
+            <small>ID: ${doc.id}</small>
+          </div>`;
+      });
+    }
+
+    async function loadCertified() {
+      const certs = await db.collection("certified").orderBy("certifiedAt", "desc").get();
+      const div = document.getElementById("certifiedTracks");
+      div.innerHTML = "";
+      certs.forEach(doc => {
+        const d = doc.data();
+        div.innerHTML += `
+          <div class="card">
+            <b>${d.track} <span class="badge">✔️</span></b><br/>
+            <i>@${d.handle}</i><br/>
+            <img src="https://ipfs.io/ipfs/${d.image}" style="max-width:100%;border-radius:6px;" />
+            <audio controls src="https://ipfs.io/ipfs/${d.audio}"></audio>
+          </div>`;
+      });
+    }
+
+    loadSubmissions();
+    loadCertified();
+  </script>
 </body>
 </html>
