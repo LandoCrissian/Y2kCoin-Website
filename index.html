@@ -91,6 +91,12 @@
       transition:opacity 0.3s ease,transform 0.3s ease;
     }
     .toast.show {opacity:1;transform:translateY(0);}
+
+    #adminPanel {
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(20px);
+}
   </style>
 </head>
 <body>
@@ -98,7 +104,7 @@
 
   <header>
     <div class="nav-links">
-      <a class="icon-btn" href="https://x.com/y2kc0in?s=21" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7358.jpeg" alt="X"/>𝕏</a>
+      <a class="icon-btn" href="https://x.com/y2kc0in?s=21" target="_blank"> <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7358.jpeg" alt="X"/> </a>
       <a class="icon-btn" href="https://discord.gg/jpFbSapSAh" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7356.jpeg" alt="Discord"/>Discord</a>
       <a class="icon-btn" href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7357.jpeg" alt="Obsidian"/>Buy</a>
     </div>
@@ -190,30 +196,47 @@
       setTimeout(()=>{toast.classList.remove("show");setTimeout(()=>toast.remove(),300);},4000);
     }
 
-    async function connectWallet(){
-      if(!window.ethereum){return alert("No wallet found");}
-      const provider=new ethers.providers.Web3Provider(window.ethereum);
-      const accounts=await provider.send("eth_requestAccounts",[]);
-      const signer=provider.getSigner();const address=await signer.getAddress();
+    let currentAccount = null;
+let hasSigned = false;
+
+async function connectWallet() {
+  if (!window.ethereum) return alert("No wallet found");
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const accounts = await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+
+    // Only sign once per session
+    if (!hasSigned) {
       await signer.signMessage("Sign to access Y2K Roast Records");
-      currentAccount=address.toLowerCase();
-      walletStatus.innerText=`${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
-      connectBtn.innerText="Disconnect";
-      connectBtn.classList.add("disconnect");
-      showToast("Wallet connected");
-      if(currentAccount===adminWallet){
-        gsap.to("#adminPanel",{autoAlpha:1,y:0,duration:0.6});
-      }
+      hasSigned = true;
     }
 
-    function disconnectWallet(){
-      currentAccount=null;
-      walletStatus.innerText="Not connected";
-      connectBtn.innerText="Connect Wallet";
-      connectBtn.classList.remove("disconnect");
-      adminPanel.style.display="none";
-      showToast("Wallet disconnected");
+    currentAccount = address.toLowerCase();
+    walletStatus.innerText = `${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
+    connectBtn.innerText = "Disconnect";
+    connectBtn.classList.add("disconnect");
+    showToast("Wallet connected");
+
+    if (currentAccount === adminWallet) {
+      gsap.to("#adminPanel",{autoAlpha:1,y:0,duration:0.6,display:"block"});
     }
+  } catch (err) {
+    console.error(err);
+    showToast("Wallet connection failed");
+  }
+}
+
+function disconnectWallet() {
+  currentAccount = null;
+  hasSigned = false;
+  walletStatus.innerText = "Not connected";
+  connectBtn.innerText = "Connect Wallet";
+  connectBtn.classList.remove("disconnect");
+  gsap.to("#adminPanel",{autoAlpha:0,duration:0.4,onComplete:()=>{adminPanel.style.display="none";}});
+  showToast("Wallet disconnected");
+}
 
     connectBtn.addEventListener("click",()=>{
       if(currentAccount){disconnectWallet();}else{connectWallet();}
