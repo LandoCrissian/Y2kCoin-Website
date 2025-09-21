@@ -8,116 +8,88 @@
   <!-- SEO -->
   <meta name="description" content="Official Web3 submission portal for Y2K | Roast Records. Submit your glitch-dub-trap track and join the movement." />
   <meta name="theme-color" content="#0b0d12" />
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" />
+  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
 
   <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Space+Mono&display=swap" />
 
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <style>
     :root {
-      --bg: #0b0d12;
-      --txt: #f1f1f1;
-      --accent: #00ffc3;
-      --danger: #ff0044;
-      --verified: #00ff88;
-      --card: #13151a;
-      --pink: #ff00aa;
+      --bg:#0b0d12; --txt:#f1f1f1;
+      --accent:#00ffc3; --pink:#ff00aa;
+      --danger:#ff0044; --verified:#00ff88;
+      --card:#13151a;
     }
-    * {margin:0;padding:0;box-sizing:border-box;}
-    html,body {
-      height:100%;width:100%;
-      background:var(--bg);color:var(--txt);
-      font-family:'Space Mono',monospace;
-      overflow-x:hidden;
-    }
-    h1,h2,h3 {font-family:'Orbitron',sans-serif;text-transform:uppercase;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Space Mono',monospace;overflow-x:hidden;}
+    h1,h2,h3{font-family:'Orbitron',sans-serif;text-transform:uppercase;}
 
-    /* Canvas Background */
-    #bgCanvas {
-      position:fixed;top:0;left:0;width:100%;height:100%;
-      z-index:-1;background:var(--bg);
-    }
+    /* Background Canvas */
+    #bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
 
-    header {
+    /* Header */
+    header{
       position:sticky;top:0;z-index:1000;
       display:flex;align-items:center;justify-content:space-between;
-      padding:1rem 1.5rem;background:rgba(11,13,18,0.85);
+      padding:0.8rem 1.2rem;background:rgba(11,13,18,0.85);
       backdrop-filter:blur(6px);border-bottom:1px solid #222;
     }
-    .logo {font-size:1.4rem;font-weight:bold;
-      text-shadow:0 0 3px var(--accent),0 0 10px var(--pink);}
-    #connectBtn {
-      background:var(--accent);color:#000;font-weight:bold;
-      padding:0.5rem 1rem;border:none;border-radius:6px;
-      cursor:pointer;transition:all 0.25s ease;
+    .nav-links{display:flex;gap:0.6rem;align-items:center;}
+    .icon-btn{
+      display:flex;align-items:center;gap:0.4rem;
+      padding:0.4rem 0.9rem;border-radius:20px;
+      border:1px solid var(--accent);color:var(--txt);
+      text-decoration:none;font-size:0.9rem;
+      transition:0.25s;background:transparent;
     }
-    #connectBtn:hover {transform:scale(1.05);box-shadow:0 0 8px var(--accent);}
-    #walletStatus {font-size:0.8rem;color:gray;text-align:right;}
+    .icon-btn:hover{background:var(--accent);color:#000;box-shadow:0 0 10px var(--accent);transform:translateY(-2px);}
+    .icon-btn svg{width:18px;height:18px;fill:currentColor;}
+    #connectBtn{margin-left:1rem;background:var(--accent);color:#000;font-weight:bold;padding:0.5rem 1rem;border:none;border-radius:20px;cursor:pointer;transition:0.25s;}
+    #connectBtn:hover{transform:scale(1.05);box-shadow:0 0 10px var(--accent);}
+    #walletStatus{text-align:right;font-size:0.75rem;color:gray;}
 
-    .container {max-width:1000px;margin:auto;padding:2rem 1rem;}
-    .section {margin-top:3rem;}
-    .glitchy {
-      text-shadow:0 0 2px var(--accent),0 0 10px var(--pink);
-      animation:glitch 2s infinite;
-    }
-    @keyframes glitch {
-      0%,100%{text-shadow:0 0 2px var(--accent);}
-      50%{text-shadow:0 0 8px var(--pink),0 0 12px var(--accent);}
-    }
+    /* Sections */
+    .container{max-width:1000px;margin:auto;padding:2rem 1rem;}
+    .section{margin-top:3rem;opacity:0;transform:translateY(40px);}
+    .btn{padding:0.6rem 1.2rem;background:var(--accent);color:#000;border:none;border-radius:20px;font-weight:bold;cursor:pointer;}
+    .card{background:var(--card);padding:1rem;border-radius:8px;box-shadow:0 0 8px rgba(0,255,195,0.2);margin-bottom:1rem;}
 
-    .btn {padding:0.6rem 1.2rem;background:var(--accent);color:#000;
-      border:none;border-radius:6px;font-weight:bold;cursor:pointer;}
-    .card {
-      background:var(--card);padding:1rem;border-radius:8px;
-      box-shadow:0 0 8px rgba(0,255,195,0.2);
-    }
+    input,select,textarea{width:100%;padding:0.6rem;margin:0.5rem 0;background:#1a1c20;border:1px solid #333;border-radius:4px;color:var(--txt);}
+    audio{width:100%;margin-top:0.5rem;border-radius:6px;}
 
-    input,select,textarea {
-      width:100%;padding:0.6rem;margin:0.5rem 0;
-      background:#1a1c20;border:1px solid #333;border-radius:4px;color:var(--txt);
-    }
-    audio {width:100%;margin-top:0.5rem;border-radius:6px;}
+    #certifiedTracks{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
+    #certifiedTracks .card{transition:transform 0.3s;}
+    #certifiedTracks .card:hover{transform:translateY(-6px) scale(1.02);}
 
-    /* Socials + Buy */
-    .socials,.buy {display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem;}
-    .socials a,.buy a {
-      text-decoration:none;color:var(--txt);
-      border:1px solid var(--accent);border-radius:6px;
-      padding:0.6rem 1.2rem;transition:0.2s;
-    }
-    .socials a:hover,.buy a:hover {
-      background:var(--accent);color:#000;box-shadow:0 0 12px var(--accent);
-    }
+    details{background:#1a1c20;margin:0.5rem 0;padding:0.5rem 1rem;border-radius:6px;}
+    summary{cursor:pointer;font-weight:bold;}
 
-    /* Grid for Certified Tracks */
-    #certifiedTracks {
-      display:grid;gap:1.5rem;
-      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-    }
-    #certifiedTracks .card {transition:transform 0.3s;}
-    #certifiedTracks .card:hover {transform:translateY(-6px) scale(1.02);}
-
-    /* FAQ */
-    details {background:#1a1c20;margin:0.5rem 0;padding:0.5rem 1rem;border-radius:6px;}
-    summary {cursor:pointer;font-weight:bold;}
-
-    footer {
-      text-align:center;padding:2rem 1rem;margin-top:4rem;
-      border-top:1px solid #222;background:rgba(11,13,18,0.85);
-    }
-    footer img {height:50px;margin-bottom:0.5rem;}
-    footer a {color:var(--accent);margin:0 0.5rem;text-decoration:none;}
-    footer a:hover {text-shadow:0 0 6px var(--accent);}
+    footer{text-align:center;padding:2rem 1rem;margin-top:4rem;border-top:1px solid #222;background:rgba(11,13,18,0.85);}
+    footer img{height:60px;margin-bottom:0.8rem;animation:pulse 3s infinite;}
+    footer a{color:var(--accent);margin:0 0.5rem;text-decoration:none;}
+    footer a:hover{text-shadow:0 0 6px var(--accent);}
+    @keyframes pulse{0%,100%{filter:drop-shadow(0 0 2px var(--accent));}50%{filter:drop-shadow(0 0 8px var(--pink));}}
   </style>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
 
   <header>
-    <div class="logo glitchy">🔥 Y2K | Roast Records</div>
+    <div class="nav-links">
+      <a class="icon-btn" href="https://x.com/y2kc0in?s=21" target="_blank" aria-label="Twitter">
+        <svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.6 8.7L23.5 22H16l-5.1-6.6L5 22H2l8.1-9.3L0.7 2h7l4.6 6L18.9 2z"/></svg>𝕏
+      </a>
+      <a class="icon-btn" href="https://discord.gg/jpFbSapSAh" target="_blank" aria-label="Discord">
+        <svg viewBox="0 0 24 24"><path d="M20 0H4C1.8 0 0 1.8 0 4v16c0 2.2 1.8 4 4 4h12l-.6-2.2 1.4 1.3 1.3 1.1L24 24V4c0-2.2-1.8-4-4-4zM8.5 18c-1.1 0-2-.9-2-2s.9-2 2-2c1.2 0 2.1.9 2 2 0 1.1-.9 2-2 2zm7 0c-1.1 0-2-.9-2-2s.9-2 2-2c1.2 0 2.1.9 2 2 0 1.1-.9 2-2 2z"/></svg>Discord
+      </a>
+      <a class="icon-btn" href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" aria-label="Buy">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13 10-13-10-7zm0 3.2l6.2 4.4-6.2 8.2-6.2-8.2L12 5.2z"/></svg>Buy
+      </a>
+    </div>
     <div>
       <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
       <div id="walletStatus">Not connected</div>
@@ -125,30 +97,11 @@
   </header>
 
   <!-- Hero Banner -->
-  <section style="text-align:center;margin-top:2rem;">
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png"
-         alt="Y2K Banner" style="max-width:100%;border-radius:10px;box-shadow:0 0 20px var(--accent);"/>
+  <section style="text-align:center;margin-top:1rem;" class="section">
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Banner" style="max-width:100%;border-radius:10px;box-shadow:0 0 20px var(--accent);"/>
   </section>
 
   <div class="container">
-    <!-- Socials -->
-    <div class="section">
-      <h2>🌐 Follow Us</h2>
-      <div class="socials">
-        <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏 (Twitter)</a>
-        <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>
-      </div>
-    </div>
-
-    <!-- Buy -->
-    <div class="section">
-      <h2>💸 Where to Buy</h2>
-      <div class="buy">
-        <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy on Obsidian</a>
-        <a href="https://cronoscan.com/token/0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">View on Cronoscan</a>
-      </div>
-    </div>
-
     <!-- Submissions -->
     <div class="section">
       <h2>📡 Live Submissions</h2>
@@ -167,10 +120,7 @@
       <form id="submissionForm" onsubmit="submitTrack(event)">
         <input required placeholder="Track Title" id="trackName"/>
         <input required placeholder="Your X / Twitter @handle" id="handle"/>
-        <select id="vibe">
-          <option disabled selected>Select Vibe</option>
-          <option>Glitch</option><option>Dub</option><option>Trap</option><option>Other</option>
-        </select>
+        <select id="vibe"><option disabled selected>Select Vibe</option><option>Glitch</option><option>Dub</option><option>Trap</option><option>Other</option></select>
         <textarea id="notes" placeholder="Optional notes..."></textarea>
         <button class="btn" type="submit">Submit Track (30 CRO)</button>
       </form>
@@ -188,15 +138,15 @@
     <!-- FAQ -->
     <div class="section">
       <h2>❓ FAQ</h2>
-      <details><summary>How do I submit?</summary><p>Connect your wallet, fill details, and send 30 CRO. Admin reviews and certifies.</p></details>
+      <details><summary>How do I submit?</summary><p>Connect wallet, fill details, send 30 CRO. Admin reviews and certifies.</p></details>
       <details><summary>What happens after certification?</summary><p>Your track moves to Certified with art + audio preview.</p></details>
-      <details><summary>Where are files stored?</summary><p>All files go to IPFS via Pinata, permanent + decentralized.</p></details>
+      <details><summary>Where are files stored?</summary><p>All files are hosted via IPFS (Pinata).</p></details>
     </div>
   </div>
 
   <!-- Footer -->
   <footer>
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/main/BD8E5D25-877A-427E-B1EA-C3FF422859C5.png" alt="Token"/>
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo"/>
     <p>&copy; 2025 Y2K | Roast Records</p>
     <div>
       <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>|
@@ -209,86 +159,30 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
-
   <script>
-    // Firebase
     const treasuryWallet="0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
     const adminWallet="0x7fc2ab08f46c10489bab5d694d574022f1048198";
     let currentAccount;
     const firebaseConfig={apiKey:"AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",authDomain:"y2kroastrecords.firebaseapp.com",projectId:"y2kroastrecords",storageBucket:"y2kroastrecords.appspot.com",messagingSenderId:"313829428782",appId:"1:313829428782:web:4e42771ba525f6f297d9bf"};
-    firebase.initializeApp(firebaseConfig);
-    const db=firebase.firestore();
+    firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
 
-    async function connectWallet(){
-      if(!window.ethereum) return alert("No wallet found");
-      const provider=new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts",[]);
-      const signer=provider.getSigner();const address=await signer.getAddress();
-      await signer.signMessage("Sign to access Y2K Roast Records");
-      currentAccount=address.toLowerCase();
-      document.getElementById("walletStatus").innerText=`${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
-      if(currentAccount===adminWallet){document.getElementById("adminPanel").style.display="block";}
-    }
+    async function connectWallet(){if(!window.ethereum)return alert("No wallet");const provider=new ethers.providers.Web3Provider(window.ethereum);await provider.send("eth_requestAccounts",[]);const signer=provider.getSigner();const address=await signer.getAddress();await signer.signMessage("Sign to access Y2K Roast Records");currentAccount=address.toLowerCase();walletStatus.innerText=`${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;if(currentAccount===adminWallet){adminPanel.style.display="block";}}
 
-    async function submitTrack(e){
-      e.preventDefault();if(!currentAccount)return alert("Connect wallet first");
-      const provider=new ethers.providers.Web3Provider(window.ethereum);
-      const signer=provider.getSigner();
-      const tx=await signer.sendTransaction({to:treasuryWallet,value:ethers.utils.parseEther("30")});
-      await tx.wait();
-      const doc={track:trackName.value,handle:handle.value,vibe:vibe.value,notes:notes.value,wallet:currentAccount,timestamp:Date.now()};
-      await db.collection("submissions").add(doc);
-      alert("Track submitted!");submissionForm.reset();loadSubmissions();
-    }
+    async function submitTrack(e){e.preventDefault();if(!currentAccount)return alert("Connect wallet");const provider=new ethers.providers.Web3Provider(window.ethereum);const signer=provider.getSigner();const tx=await signer.sendTransaction({to:treasuryWallet,value:ethers.utils.parseEther("30")});await tx.wait();const doc={track:trackName.value,handle:handle.value,vibe:vibe.value,notes:notes.value,wallet:currentAccount,timestamp:Date.now()};await db.collection("submissions").add(doc);alert("Track submitted!");submissionForm.reset();loadSubmissions();}
 
-    async function certifyTrack(){
-      const id=adminStampId.value,audio=ipfsAudio.value,image=ipfsImage.value;
-      const ref=db.collection("submissions").doc(id),snap=await ref.get();
-      if(!snap.exists)return alert("No submission found");const data=snap.data();
-      await db.collection("certified").add({...data,audio,image,certifiedAt:Date.now()});
-      await ref.delete();alert("Certified!");loadCertified();loadSubmissions();
-    }
+    async function certifyTrack(){const id=adminStampId.value,audio=ipfsAudio.value,image=ipfsImage.value;const ref=db.collection("submissions").doc(id),snap=await ref.get();if(!snap.exists)return alert("No submission found");const data=snap.data();await db.collection("certified").add({...data,audio,image,certifiedAt:Date.now()});await ref.delete();alert("Certified!");loadCertified();loadSubmissions();}
 
-    async function loadSubmissions(){
-      const subs=await db.collection("submissions").orderBy("timestamp","desc").get();
-      liveSubmissions.innerHTML="";subs.forEach(doc=>{
-        const d=doc.data();
-        liveSubmissions.innerHTML+=`<div class="card"><b>${d.track}</b><br/><i>@${d.handle}</i><br/><small>${d.wallet.slice(0,6)}...${d.wallet.slice(-4)}</small><br/><small>${d.vibe}</small><br/><small>ID:${doc.id}</small></div>`;
-      });
-    }
-    async function loadCertified(){
-      const certs=await db.collection("certified").orderBy("certifiedAt","desc").get();
-      certifiedTracks.innerHTML="";certs.forEach(doc=>{
-        const d=doc.data();
-        certifiedTracks.innerHTML+=`<div class="card"><b>${d.track} ✔️</b><br/><i>@${d.handle}</i><br/><img src="https://ipfs.io/ipfs/${d.image}" alt="Cover"/><audio controls src="https://ipfs.io/ipfs/${d.audio}"></audio></div>`;
-      });
-    }
+    async function loadSubmissions(){const subs=await db.collection("submissions").orderBy("timestamp","desc").get();liveSubmissions.innerHTML="";subs.forEach(doc=>{const d=doc.data();liveSubmissions.innerHTML+=`<div class="card"><b>${d.track}</b><br/><i>@${d.handle}</i><br/><small>${d.wallet.slice(0,6)}...${d.wallet.slice(-4)}</small><br/><small>${d.vibe}</small><br/><small>ID:${doc.id}</small></div>`;});}
+    async function loadCertified(){const certs=await db.collection("certified").orderBy("certifiedAt","desc").get();certifiedTracks.innerHTML="";certs.forEach(doc=>{const d=doc.data();certifiedTracks.innerHTML+=`<div class="card"><b>${d.track} ✔️</b><br/><i>@${d.handle}</i><br/><img src="https://ipfs.io/ipfs/${d.image}" alt="Cover"/><audio controls src="https://ipfs.io/ipfs/${d.audio}"></audio></div>`;});}
     loadSubmissions();loadCertified();
 
-    // Canvas Background: glitch grid + waveform
-    const canvas=document.getElementById("bgCanvas"),ctx=canvas.getContext("2d");
-    let w,h;function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}
-    window.addEventListener("resize",resize);resize();
-    let t=0;
-    function draw(){
-      ctx.fillStyle="rgba(11,13,18,0.6)";ctx.fillRect(0,0,w,h);
-      ctx.strokeStyle="rgba(0,255,195,0.4)";ctx.lineWidth=1;
-      for(let i=0;i<30;i++){
-        ctx.beginPath();
-        ctx.moveTo(0,h/2+i*20+Math.sin(t/20+i)*10);
-        ctx.lineTo(w,h/2+i*20+Math.sin(t/20+i)*10);
-        ctx.stroke();
-      }
-      ctx.strokeStyle="rgba(255,0,170,0.4)";
-      ctx.beginPath();
-      for(let x=0;x<w;x+=10){
-        const y=h/2+Math.sin((x+t)/40)*60;
-        ctx.lineTo(x,y);
-      }
-      ctx.stroke();t+=2;
-      requestAnimationFrame(draw);
-    }
-    draw();
+    // Background Canvas
+    const canvas=document.getElementById("bgCanvas"),ctx=canvas.getContext("2d");let w,h;function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}window.addEventListener("resize",resize);resize();let t=0;function draw(){ctx.fillStyle="rgba(11,13,18,0.6)";ctx.fillRect(0,0,w,h);ctx.strokeStyle="rgba(0,255,195,0.4)";for(let i=0;i<30;i++){ctx.beginPath();ctx.moveTo(0,h/2+i*20+Math.sin(t/20+i)*10);ctx.lineTo(w,h/2+i*20+Math.sin(t/20+i)*10);ctx.stroke();}ctx.strokeStyle="rgba(255,0,170,0.4)";ctx.beginPath();for(let x=0;x<w;x+=10){ctx.lineTo(x,h/2+Math.sin((x+t)/40)*60);}ctx.stroke();t+=2;requestAnimationFrame(draw);}draw();
+
+    // GSAP smooth section reveals
+    gsap.utils.toArray('.section').forEach((sec)=>{
+      gsap.to(sec,{scrollTrigger:{trigger:sec,start:"top 80%"},opacity:1,y:0,duration:1.2,ease:"power2.out"});
+    });
   </script>
 </body>
 </html>
