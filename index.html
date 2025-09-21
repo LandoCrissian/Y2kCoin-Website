@@ -1,253 +1,224 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
-
-  <!-- SEO + Open Graph -->
-  <meta name="description" content="The official home of Y2K | Roast Records — glitch-dub-trap music label on Cronos." />
   <meta name="theme-color" content="#0b0d12" />
-  <meta property="og:title" content="Y2K | Roast Records" />
-  <meta property="og:description" content="Submit your track. Join the movement. Discover underground music on-chain." />
-  <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" />
-  <meta property="og:url" content="https://y2kcoin.org" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0d12;
+      color: #fff;
+      margin: 0;
+      padding: 1rem;
+    }
+    h1, h2 {
+      color: #ff00cc;
+    }
+    input, select, textarea, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background: #111;
+      color: #fff;
+      border: 1px solid #444;
+    }
+    button {
+      cursor: pointer;
+      background: #ff00cc;
+      color: #000;
+      font-weight: bold;
+    }
+    .card {
+      background: #111;
+      padding: 1rem;
+      border: 1px solid #444;
+      margin-bottom: 1rem;
+    }
+    .admin-btn {
+      background: #00ffcc;
+      color: #000;
+      margin-top: 0.5rem;
+    }
+    audio {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    #stampModal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #stampModalContent {
+      background: #222;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+    }
+  </style>
+</head>
+<body>
 
-  <!-- Favicon + Fonts -->
-  <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <h1>🎵 Y2K Roast Records</h1>
+  <h2>Submit a Track</h2>
 
-  <!-- Firebase SDK -->
+  <form id="submitForm">
+    <input id="title" placeholder="Track Title" required />
+    <input id="handle" placeholder="𝕏 Handle (optional)" />
+    <select id="vibe" required>
+      <option value="" disabled selected>Select vibe</option>
+      <option>Glitchwave</option>
+      <option>Dubtrap</option>
+      <option>Trancepunk</option>
+      <option>Other</option>
+    </select>
+    <textarea id="idea" placeholder="Track idea (optional)"></textarea>
+    <button type="submit">Submit Track</button>
+  </form>
+
+  <h2>🔥 Live Submissions</h2>
+  <div id="submissionList"></div>
+
+  <h2>✅ Certified Tracks</h2>
+  <div id="certifiedTracks"></div>
+
+  <!-- STAMP MODAL -->
+  <div id="stampModal">
+    <div id="stampModalContent">
+      <h3>Stamp Submission</h3>
+      <input id="ipfsImage" placeholder="IPFS Image URL" />
+      <input id="ipfsAudio" placeholder="IPFS Audio URL" />
+      <button onclick="confirmStamp()">Confirm Stamp</button>
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Firebase + Wallet -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+
   <script>
+    // Init Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
       authDomain: "y2kroastrecords.firebaseapp.com",
       projectId: "y2kroastrecords",
-      storageBucket: "y2kroastrecords.firebasestorage.app",
+      storageBucket: "y2kroastrecords.appspot.com",
       messagingSenderId: "313829428782",
       appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-  </script>
 
-  <style>
-    html {
-      font-family: 'Space Grotesk', sans-serif;
-      scroll-behavior: smooth;
-    }
+    // Global
+    let currentWallet = null;
+    const adminWallet = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
+    let stampDocId = null;
 
-    .glitch-hover:hover {
-      animation: glitch 0.3s steps(2, end) infinite;
-    }
-
-    @keyframes glitch {
-      0% { text-shadow: 1px 0 #00ffc3; }
-      50% { text-shadow: -1px 0 #ff2aad; }
-      100% { text-shadow: 1px 0 #00ffc3; }
-    }
-
-    @keyframes pulseLine {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-  </style>
-</head>
-<body class="bg-[#0b0d12] text-white overflow-x-hidden">
-  <!-- Header -->
-  <header class="fixed top-0 left-0 w-full z-50 bg-[#0b0d12] flex items-center justify-between px-4 py-3 border-b border-[#111]">
-    <a href="#top" class="text-teal-300 font-semibold text-sm glitch-hover">Y2K | Roast Records</a>
-    <button
-      class="bg-teal-300 text-black font-semibold text-sm px-4 py-2 rounded-md hover:bg-pink-500 hover:text-white transition"
-      data-connected="false"
-    >
-      Connect Wallet
-    </button>
-  </header>
-
-  <!-- Banner -->
-  <div class="mt-[64px] w-full max-h-[60vh] overflow-hidden">
-    <img
-      src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png"
-      alt="Y2K Roast Records Banner"
-      class="w-full object-cover aspect-[3/1]"
-    />
-  </div>
-
-  <div class="h-[3px] w-full bg-gradient-to-r from-pink-500 to-teal-300 shadow-md animate-[pulseLine_2.5s_ease-in-out_infinite]"></div>
-
-  <!-- Content -->
-  <main class="px-4 space-y-10 mt-6 pb-12">
-    <!-- Certified Tracks -->
-    <section>
-      <h2 class="text-teal-300 text-xl font-semibold mb-4">🔥 Certified Tracks</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="certifiedTracks">
-        <div class="bg-[#111214] border border-[#222] p-4 rounded-lg">Track 001 — Coming soon</div>
-        <div class="bg-[#111214] border border-[#222] p-4 rounded-lg">Track 002 — Glitchwave by V1RUS</div>
-        <div class="bg-[#111214] border border-[#222] p-4 rounded-lg">Track 003 — RawSignal by SYNAPS3</div>
-      </div>
-    </section>
-
-    <!-- Submit -->
-    <section>
-      <h2 class="text-teal-300 text-xl font-semibold mb-4">📤 Submit a Track</h2>
-      <p class="mb-2">
-        Connect your wallet and fill out the submission form to join Roast Records. Cost:
-        <strong class="text-pink-400">30 CRO</strong>
-      </p>
-      <p class="italic text-gray-400">[Form coming soon]</p>
-    </section>
-
-    <!-- Live Submissions -->
-    <section>
-      <h2 class="text-teal-300 text-xl font-semibold mb-4">🔄 Live Submissions</h2>
-      <p class="italic text-gray-400">[Dynamic Firestore integration here]</p>
-    </section>
-
-    <!-- FAQ -->
-    <section>
-      <h2 class="text-teal-300 text-xl font-semibold mb-4">❓ FAQ</h2>
-      <p class="mb-2"><strong>Q:</strong> Who can submit?<br /><strong>A:</strong> Anyone with a Cronos wallet.</p>
-      <p><strong>Q:</strong> What happens after approval?<br /><strong>A:</strong> You get immortalized in our on-chain catalog.</p>
-    </section>
-
-    <!-- Admin Panel -->
-    <section id="adminPanel" class="hidden">
-      <h2 class="text-teal-300 text-xl font-semibold mb-4">🔐 Admin Panel</h2>
-      <p class="text-sm text-gray-400 mb-4">Connected as admin. Manage all track submissions below.</p>
-      <div id="adminTrackContainer" class="space-y-6">
-        <p class="text-gray-500 italic">No pending submissions yet.</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="text-center text-sm text-gray-400 border-t border-[#111] py-8 px-4">
-    <p>&copy; 2025 Y2K | Roast Records — Built for the CROfam</p>
-    <div class="mt-4 space-x-4">
-      <a href="https://x.com/y2kc0in?s=21" target="_blank" class="text-teal-300 glitch-hover">𝕏</a>
-      <a href="https://discord.gg/jpFbSapSAh" target="_blank" class="text-teal-300 glitch-hover">Discord</a>
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" class="text-teal-300 glitch-hover">Buy Token</a>
-    </div>
-  </footer>
-
-  <!-- Wallet + Admin Logic -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script>
-    const ADMIN_ADDRESS = "0x7fc2ab08f46c10489bab5d694d574022f1048198".toLowerCase();
-    const walletBtn = document.querySelector("button[data-connected]");
-    const adminPanel = document.getElementById("adminPanel");
-    const adminTrackContainer = document.getElementById("adminTrackContainer");
-
-    const updateButtonUI = (connected, address = "") => {
-      walletBtn.textContent = connected ? "Disconnect" : "Connect Wallet";
-      walletBtn.dataset.connected = connected ? "true" : "false";
-      if (!connected) adminPanel.classList.add("hidden");
-    };
-
-    walletBtn.addEventListener("click", () => {
-      walletBtn.dataset.connected === "true" ? disconnectWallet() : connectWallet();
-    });
-
+    // Connect Wallet
     async function connectWallet() {
-      if (!window.ethereum) return alert("Install MetaMask.");
-      try {
+      if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
-        const address = (await signer.getAddress()).toLowerCase();
-        const msg = `Sign in to Y2K | Roast Records\nWallet: ${address}`;
-        await signer.signMessage(msg);
-        localStorage.setItem("connectedWallet", address);
-        updateButtonUI(true, address);
-        if (address === ADMIN_ADDRESS) {
-          adminPanel.classList.remove("hidden");
-          loadAdminTracks();
-        }
-      } catch (err) {
-        alert("Connection failed."); console.error(err);
+        currentWallet = (await signer.getAddress()).toLowerCase();
+        alert("Wallet connected: " + currentWallet);
       }
     }
 
-    function disconnectWallet() {
-      localStorage.removeItem("connectedWallet");
-      updateButtonUI(false);
-      alert("Disconnected.");
-    }
+    // Submission
+    document.getElementById('submitForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        title: title.value.trim(),
+        handle: handle.value.trim(),
+        vibe: vibe.value,
+        idea: idea.value.trim(),
+        wallet: currentWallet || "anon",
+        timestamp: Date.now(),
+        status: "pending"
+      };
+      await db.collection("submissions").add(data);
+      e.target.reset();
+      alert("Submitted!");
+    });
 
-    function autoReconnect() {
-      const saved = localStorage.getItem("connectedWallet");
-      if (saved) {
-        updateButtonUI(true, saved);
-        if (saved === ADMIN_ADDRESS) {
-          adminPanel.classList.remove("hidden");
-          loadAdminTracks();
-        }
-      }
-    }
+    // Load all submissions
+    db.collection("submissions").onSnapshot(snapshot => {
+      const list = document.getElementById("submissionList");
+      const certified = document.getElementById("certifiedTracks");
+      list.innerHTML = '';
+      certified.innerHTML = '';
 
-    async function loadAdminTracks() {
-      try {
-        const snapshot = await db.collection("submissions")
-          .where("status", "==", "pending")
-          .orderBy("timestamp", "desc")
-          .get();
+      snapshot.forEach(doc => {
+        const s = doc.data();
+        const div = document.createElement("div");
+        div.className = "card";
 
-        adminTrackContainer.innerHTML = "";
-        if (snapshot.empty) return adminTrackContainer.innerHTML = `<p class="text-gray-500 italic">No pending submissions yet.</p>`;
-
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const card = document.createElement("div");
-          card.className = "bg-[#111214] border border-[#222] rounded-lg p-4 space-y-4";
-          card.innerHTML = `
-            <div class="flex flex-col gap-2">
-              <label class="text-sm text-gray-300 font-semibold">Track Title</label>
-              <input type="text" value="${data.title || ''}" class="bg-[#0b0d12] border border-[#333] text-white text-sm p-2 rounded-md" disabled />
-            </div>
-            <div class="flex flex-col gap-2">
-              <label class="text-sm text-gray-300 font-semibold">Track IPFS URL</label>
-              <input type="text" value="${data.ipfsUrl || ''}" class="ipfs-url bg-[#0b0d12] border border-[#333] text-white text-sm p-2 rounded-md" placeholder="ipfs://..." />
-            </div>
-            <div class="flex flex-col gap-2">
-              <label class="text-sm text-gray-300 font-semibold">NFT IPFS URL</label>
-              <input type="text" value="${data.nftUrl || ''}" class="nft-url bg-[#0b0d12] border border-[#333] text-white text-sm p-2 rounded-md" placeholder="ipfs://..." />
-            </div>
-            <div class="flex gap-4 pt-2">
-              <button class="approve-btn bg-teal-500 text-black text-sm px-4 py-2 rounded-md font-semibold hover:bg-teal-400 transition">Approve</button>
-              <button class="reject-btn bg-pink-600 text-white text-sm px-4 py-2 rounded-md font-semibold hover:bg-pink-500 transition">Reject</button>
-            </div>
+        if (s.status === "certified" && s.ipfsAudio && s.ipfsImage) {
+          div.innerHTML = `
+            <strong>${s.title}</strong><br/>
+            <em>@${s.handle || "unknown"}</em><br/>
+            <img src="https://gateway.pinata.cloud/ipfs/${s.ipfsImage}" width="100%" />
+            <audio controls src="https://gateway.pinata.cloud/ipfs/${s.ipfsAudio}"></audio>
           `;
+          certified.appendChild(div);
+        } else {
+          div.innerHTML = `
+            <strong>${s.title}</strong><br/>
+            <em>@${s.handle || "unknown"}</em><br/>
+            Vibe: ${s.vibe}<br/>
+            Idea: ${s.idea || "–"}<br/>
+            Wallet: ${s.wallet}<br/>
+            <small>${new Date(s.timestamp).toLocaleString()}</small>
+          `;
+          // Show STAMP button only to admin
+          if (currentWallet === adminWallet) {
+            const btn = document.createElement("button");
+            btn.innerText = "STAMP";
+            btn.className = "admin-btn";
+            btn.onclick = () => openModal(doc.id);
+            div.appendChild(btn);
+          }
+          list.appendChild(div);
+        }
+      });
+    });
 
-          card.querySelector(".approve-btn").addEventListener("click", async () => {
-            const ipfsUrl = card.querySelector(".ipfs-url").value.trim();
-            const nftUrl = card.querySelector(".nft-url").value.trim();
-            if (!ipfsUrl.startsWith("ipfs://") || !nftUrl.startsWith("ipfs://")) return alert("Invalid IPFS URLs.");
-            await db.collection("submissions").doc(doc.id).update({ status: "approved", ipfsUrl, nftUrl });
-            alert("✅ Approved.");
-            card.remove();
-          });
+    // Modal Logic
+    function openModal(docId) {
+      stampDocId = docId;
+      document.getElementById("stampModal").style.display = "flex";
+    }
+    function closeModal() {
+      stampDocId = null;
+      document.getElementById("stampModal").style.display = "none";
+    }
+    async function confirmStamp() {
+      const ipfsImage = document.getElementById("ipfsImage").value.trim().replace("https://gateway.pinata.cloud/ipfs/", "");
+      const ipfsAudio = document.getElementById("ipfsAudio").value.trim().replace("https://gateway.pinata.cloud/ipfs/", "");
 
-          card.querySelector(".reject-btn").addEventListener("click", async () => {
-            await db.collection("submissions").doc(doc.id).update({ status: "rejected" });
-            alert("❌ Rejected.");
-            card.remove();
-          });
-
-          adminTrackContainer.appendChild(card);
-        });
-      } catch (err) {
-        console.error("Firestore error:", err);
-        adminTrackContainer.innerHTML = `<p class="text-pink-400">Error loading tracks.</p>`;
-      }
+      if (!ipfsImage || !ipfsAudio || !stampDocId) return alert("Missing fields");
+      await db.collection("submissions").doc(stampDocId).update({
+        status: "certified",
+        ipfsImage,
+        ipfsAudio
+      });
+      closeModal();
+      alert("Stamped and approved!");
     }
 
-    autoReconnect();
+    // Auto-connect wallet on load
+    window.addEventListener('load', connectWallet);
   </script>
+
 </body>
 </html>
