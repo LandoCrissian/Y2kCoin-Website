@@ -12,35 +12,76 @@
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.pong" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
       font-family: 'Inter', sans-serif;
       background: #0b0d12;
       color: white;
-      margin: 0;
       padding: 1rem;
     }
-    button, input, select, textarea {
-      background: #1c1e24;
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn {
+      background: #1f1f25;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      border-radius: 5px;
+      border: 1px solid #333;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #2c2f36;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      background: #16181d;
       color: white;
       border: 1px solid #333;
-      padding: 0.5rem;
       border-radius: 4px;
-      margin: 0.5rem 0;
-      width: 100%;
+      margin-bottom: 0.75rem;
+    }
+    section {
+      margin-top: 2rem;
     }
     .hidden { display: none; }
-    .certified, .pending {
+    .track {
       background: #12151b;
+      border: 1px solid #333;
+      border-left: 5px solid #00ff88;
       padding: 1rem;
-      margin-bottom: 1rem;
       border-radius: 6px;
+      margin-bottom: 1rem;
     }
-    .certified { border: 1px solid #00ff88; }
-    .pending { border: 1px solid #555; }
+    .pending { border-left-color: #555; }
     audio { width: 100%; margin-top: 0.5rem; }
-    h1, h2 { margin-top: 1.5rem; }
-    hr { margin: 2rem 0; border: none; border-top: 1px solid #222; }
-    .admin-controls { margin-top: 2rem; border-top: 1px solid #333; padding-top: 1rem; }
+    #adminPanel hr {
+      margin: 2rem 0 1rem;
+      border: none;
+      border-top: 1px solid #333;
+    }
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+    .status {
+      font-size: 0.9rem;
+      color: #00ff88;
+    }
   </style>
 
   <!-- Firebase + Ethers -->
@@ -50,51 +91,66 @@
 </head>
 <body>
 
-  <h1>🔥 Y2K | Roast Records</h1>
-  <button id="connectWallet">Connect Wallet</button>
+  <header>
+    <h1>🔥 Y2K | Roast Records</h1>
+    <button id="connectWallet" class="btn">Connect Wallet</button>
+  </header>
   <p id="walletStatus">Not connected</p>
 
   <div id="submissionForm" class="hidden">
-    <h2>🎤 Submit a Track</h2>
-    <input id="projectName" placeholder="Project Name" />
-    <input id="twitterHandle" placeholder="Twitter @handle" />
-    <select id="vibe">
-      <option value="">Select a Vibe</option>
-      <option>Glitch</option>
-      <option>Dub</option>
-      <option>Trap</option>
-      <option>Other</option>
-    </select>
-    <textarea id="idea" placeholder="Optional Ideas (Lyrics, Concept, etc.)"></textarea>
-    <button id="submitTrack">Submit (30 CRO)</button>
-    <p id="submitStatus"></p>
+    <section>
+      <h2>🎤 Submit a Track</h2>
+      <label for="projectName">Project Name</label>
+      <input id="projectName" placeholder="E.g. CRO Bangers" />
+
+      <label for="twitterHandle">Twitter @handle</label>
+      <input id="twitterHandle" placeholder="@crolegend" />
+
+      <label for="vibe">Vibe</label>
+      <select id="vibe">
+        <option value="">Select Vibe</option>
+        <option>Glitch</option>
+        <option>Dub</option>
+        <option>Trap</option>
+        <option>Other</option>
+      </select>
+
+      <label for="idea">Optional Notes</label>
+      <textarea id="idea" placeholder="Lyrics, mood, influences, etc."></textarea>
+
+      <button id="submitTrack" class="btn">Submit (30 CRO)</button>
+      <p id="submitStatus" class="status"></p>
+    </section>
   </div>
 
-  <hr />
+  <section>
+    <h2>📡 Live Submissions</h2>
+    <div id="pendingList"></div>
+  </section>
 
-  <h2>📡 Live Submissions</h2>
-  <div id="pendingList"></div>
+  <section>
+    <h2>✅ Certified Tracks</h2>
+    <div id="certifiedList"></div>
+  </section>
 
-  <h2>✅ Certified Tracks</h2>
-  <div id="certifiedList"></div>
-
-  <div id="adminPanel" class="admin-controls hidden">
+  <div id="adminPanel" class="hidden">
+    <hr />
     <h2>👑 Admin Panel</h2>
-    <p>Stamp certified songs from user submissions:</p>
+    <p>Stamp user submissions as certified:</p>
     <div id="adminPendingList"></div>
 
-    <h3>📥 Legacy Upload</h3>
+    <hr />
+    <h3>📥 Upload Legacy Entry</h3>
     <input id="legacyName" placeholder="Project Name" />
     <input id="legacyHandle" placeholder="Twitter @handle" />
     <input id="legacyIpfsAudio" placeholder="IPFS Audio Link" />
     <input id="legacyIpfsNft" placeholder="IPFS NFT Cover" />
-    <button id="uploadLegacy">Upload</button>
-    <p id="legacyStatus"></p>
+    <button id="uploadLegacy" class="btn">Upload</button>
+    <p id="legacyStatus" class="status"></p>
   </div>
 
 <script>
 const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198";
-
 const firebaseConfig = {
   apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
   authDomain: "y2kroastrecords.firebaseapp.com",
@@ -108,13 +164,13 @@ const db = firebase.firestore();
 let userAddress = null;
 
 async function connectWallet() {
-  if (!window.ethereum) return alert("Please install MetaMask or a compatible wallet.");
+  if (!window.ethereum) return alert("Please install MetaMask or another Web3 wallet.");
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
   userAddress = await signer.getAddress();
   document.getElementById("walletStatus").innerText = "Connected: " + userAddress;
-  document.getElementById("connectWallet").classList.add("hidden");
+  document.getElementById("connectWallet").style.display = "none";
   document.getElementById("submissionForm").classList.remove("hidden");
   if (userAddress.toLowerCase() === adminWallet.toLowerCase()) {
     document.getElementById("adminPanel").classList.remove("hidden");
@@ -129,7 +185,7 @@ async function submitTrack() {
   const idea = document.getElementById("idea").value.trim();
 
   if (!projectName || !twitter || !vibe) {
-    alert("All fields except idea are required.");
+    alert("Please complete all required fields.");
     return;
   }
 
@@ -153,14 +209,14 @@ async function submitTrack() {
     timestamp: Date.now()
   });
 
-  document.getElementById("submitStatus").innerText = "✅ Track submitted!";
+  document.getElementById("submitStatus").innerText = "✅ Submission successful!";
   loadSubmissions();
 }
 
 async function approveSubmission(docId) {
   const ipfsAudio = prompt("Enter IPFS audio link:");
-  const ipfsNft = prompt("Enter IPFS NFT cover link:");
-  if (!ipfsAudio || !ipfsNft) return alert("Both IPFS links are required.");
+  const ipfsNft = prompt("Enter IPFS cover art link:");
+  if (!ipfsAudio || !ipfsNft) return;
   await db.collection("submissions").doc(docId).update({
     certified: true,
     ipfsAudio,
@@ -175,8 +231,7 @@ async function uploadLegacy() {
   const twitter = document.getElementById("legacyHandle").value.trim();
   const ipfsAudio = document.getElementById("legacyIpfsAudio").value.trim();
   const ipfsNft = document.getElementById("legacyIpfsNft").value.trim();
-
-  if (!projectName || !twitter || !ipfsAudio || !ipfsNft) return alert("All fields required for legacy upload.");
+  if (!projectName || !twitter || !ipfsAudio || !ipfsNft) return alert("All legacy fields required.");
 
   await db.collection("submissions").add({
     wallet: adminWallet,
@@ -190,30 +245,31 @@ async function uploadLegacy() {
     timestamp: Date.now()
   });
 
-  document.getElementById("legacyStatus").innerText = "✅ Legacy track uploaded!";
+  document.getElementById("legacyStatus").innerText = "✅ Legacy uploaded!";
   loadSubmissions();
 }
 
 function renderTrack(doc) {
   const data = doc.data();
-  const container = document.createElement("div");
-  container.className = data.certified ? "certified" : "pending";
-  container.innerHTML = `
-    <strong>${data.projectName || "Untitled"}</strong><br/>
-    ${data.twitter || "Unknown"} — <em>${data.vibe || "No vibe"}</em><br/>
+  const div = document.createElement("div");
+  div.className = "track " + (data.certified ? "certified" : "pending");
+  div.innerHTML = `
+    <strong>${data.projectName}</strong><br/>
+    ${data.twitter} — <em>${data.vibe}</em><br/>
     ${data.idea ? `<p>${data.idea}</p>` : ""}
     ${data.certified ? `
-      <img src="https://ipfs.io/ipfs/${data.ipfsNft}" width="100%" style="margin-top:1rem;"/>
+      <img src="https://ipfs.io/ipfs/${data.ipfsNft}" width="100%" style="margin-top:1rem;" />
       <audio controls src="https://ipfs.io/ipfs/${data.ipfsAudio}"></audio>
     ` : ""}
   `;
   if (!data.certified && userAddress && userAddress.toLowerCase() === adminWallet.toLowerCase()) {
     const btn = document.createElement("button");
+    btn.className = "btn";
     btn.innerText = "Stamp This";
     btn.onclick = () => approveSubmission(doc.id);
-    container.appendChild(btn);
+    div.appendChild(btn);
   }
-  return container;
+  return div;
 }
 
 async function loadSubmissions() {
@@ -242,7 +298,7 @@ async function loadSubmissions() {
 document.getElementById("connectWallet").onclick = connectWallet;
 document.getElementById("submitTrack").onclick = submitTrack;
 document.getElementById("uploadLegacy").onclick = uploadLegacy;
-
 </script>
+
 </body>
 </html>
