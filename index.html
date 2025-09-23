@@ -71,6 +71,23 @@
   margin: 0;
   height: 100%;
 }
+
+    .carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-item {
+  min-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  height: 550px; /* ✅ Force same height for every card */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
   </style>
 </head>
 <body>
@@ -310,59 +327,65 @@ async function loadCertified() {
 
 loadSubmissions();loadCertified();
 
-  let currentIndex = 0;
-let autoplayInterval;
+   let currentIndex = 0;
+  let autoSwipeDelay = 10000; // 10 seconds if idle
+  let audioElements = [];
+  let swipeInterval;
+  let userInteracted = false;
 
-function updateSwiperPosition() {
-  const swiper = document.getElementById("trackSwiper");
-  const totalSlides = swiper.children.length;
-  swiper.style.transform = `translateX(-${currentIndex * 100}%)`;
+  function updateCarousel() {
+    const track = document.querySelector('.carousel-track');
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
 
-  // Stop all audio, play only current
-  const audios = swiper.querySelectorAll("audio");
-  audios.forEach((audio, i) => {
-    if (i === currentIndex) {
-      audio.play().catch(() => {});
-    } else {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-  });
-}
+  function stopAutoplay() {
+    clearInterval(swipeInterval);
+  }
 
-function initSwiper() {
-  const swiper = document.getElementById("trackSwiper");
-  const total = swiper.children.length;
+  function resetAutoplay() {
+    stopAutoplay();
+    swipeInterval = setInterval(() => {
+      if (!audioElements[currentIndex].paused) return; // Wait until song ends
+      goToNext();
+    }, autoSwipeDelay);
+  }
 
-  document.getElementById("prevTrack").onclick = () => {
-    currentIndex = (currentIndex - 1 + total) % total;
-    updateSwiperPosition();
+  function goToNext() {
+    currentIndex = (currentIndex + 1) % audioElements.length;
+    updateCarousel();
+  }
+
+  function goToPrev() {
+    currentIndex = (currentIndex - 1 + audioElements.length) % audioElements.length;
+    updateCarousel();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    audioElements = Array.from(document.querySelectorAll('audio'));
+
+    // Pause autoplay when user interacts with audio
+    audioElements.forEach(audio => {
+      audio.addEventListener('play', () => {
+        stopAutoplay();
+      });
+      audio.addEventListener('ended', () => {
+        goToNext();
+        resetAutoplay();
+      });
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      goToNext();
+      resetAutoplay();
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      goToPrev();
+      resetAutoplay();
+    });
+
     resetAutoplay();
-  };
-
-  document.getElementById("nextTrack").onclick = () => {
-    currentIndex = (currentIndex + 1) % total;
-    updateSwiperPosition();
-    resetAutoplay();
-  };
-
-  startAutoplay();
-  updateSwiperPosition();
-}
-
-function startAutoplay() {
-  autoplayInterval = setInterval(() => {
-    const swiper = document.getElementById("trackSwiper");
-    const total = swiper.children.length;
-    currentIndex = (currentIndex + 1) % total;
-    updateSwiperPosition();
-  }, 12000);
-}
-
-function resetAutoplay() {
-  clearInterval(autoplayInterval);
-  setTimeout(startAutoplay, 30000); // Resume autoplay after 30s idle
-}
+  })
 
 // Background Canvas
 const canvas=document.getElementById("bgCanvas"),ctx=canvas.getContext("2d");let w,h;
