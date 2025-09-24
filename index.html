@@ -4,12 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
-
   <meta name="description" content="Official Web3 submission portal for Y2K | Roast Records. Submit your glitch-dub-trap track and join the movement." />
   <meta name="theme-color" content="#0b0d12" />
+  
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Space+Mono&display=swap" />
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
@@ -18,38 +17,217 @@
       --bg: #0b0d12; 
       --txt: #f1f1f1;
       --accent: #00ffc3; 
-      --pink: #ff00aa;
+      --highlight: #ff00aa;
       --danger: #ff0044; 
       --verified: #00ff88;
-      --card: #13151a;
+      --card: #1a1c20; 
+      --shadow: rgba(0, 0, 0, 0.5);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; background: var(--bg); color: var(--txt); font-family: 'Space Mono', monospace; overflow-x: hidden; }
-    h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
-    #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    header { position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1.2rem; background: rgba(11,13,18,0.85); backdrop-filter: blur(6px); border-bottom: 1px solid #222; }
-    .nav-links { display: flex; gap: 0.6rem; align-items: center; }
-    .icon-btn { display: flex; align-items: center; justify-content: center; padding: 0.4rem 0.9rem; border-radius: 20px; border: 1px solid var(--accent); background: transparent; transition: 0.25s; }
-    .icon-btn img { height: 20px; width: 20px; }
-    .icon-btn:hover { background: var(--accent); box-shadow: 0 0 10px var(--accent); transform: translateY(-2px); }
-    #connectBtn { margin-left: 1rem; background: var(--accent); color: #000; font-weight: bold; padding: 0.5rem 1rem; border: none; border-radius: 20px; cursor: pointer; transition: 0.25s; }
-    #connectBtn.disconnect { background: var(--danger); color: #fff; }
-    #walletStatus { text-align: right; font-size: 0.75rem; color: gray; }
-    .container { max-width: 1000px; margin: auto; padding: 2rem 1rem; }
-    .section { margin-top: 3rem; opacity: 0; transform: translateY(40px); }
-    .btn { padding: 0.6rem 1.2rem; background: var(--accent); color: #000; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; }
-    .card { background: var(--card); padding: 1rem; border-radius: 8px; box-shadow: 0 0 8px rgba(0, 255, 195, 0.2); margin-bottom: 1rem; }
-    input, select, textarea { font-size: 16px; padding: 0.55rem 0.75rem; margin: 0.5rem 0; background: #1a1c20; border: 1px solid #333; border-radius: 6px; color: var(--txt); width: 100%; box-sizing: border-box; }
-    audio { width: 100%; margin-top: 0.5rem; border-radius: 6px; }
-    footer { text-align: center; padding: 2rem 1rem; margin-top: 4rem; border-top: 1px solid #222; background: rgba(11, 13, 18, 0.85); }
-    footer img { height: 60px; margin-bottom: 0.8rem; animation: pulse 3s infinite; }
-    footer a { color: var(--accent); margin: 0 0.5rem; text-decoration: none; }
-    footer a:hover { text-shadow: 0 0 6px var(--accent); }
-    @keyframes pulse { 0%, 100% { filter: drop-shadow(0 0 2px var(--accent)); } 50% { filter: drop-shadow(0 0 8px var(--pink)); } }
-    #toast-container { position: fixed; bottom: 1.2rem; right: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 2000; }
-    .toast { background: #1c1c1c; color: #fff; padding: 0.8rem 1rem; border-radius: 6px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); font-size: 0.85rem; min-width: 180px; opacity: 0; transform: translateY(20px); transition: opacity 0.3s ease, transform 0.3s ease; }
-    .toast.show { opacity: 1; transform: translateY(0); }
     
+    body, html { 
+      height: 100%; 
+      background: var(--bg); 
+      color: var(--txt); 
+      font-family: 'Space Mono', monospace; 
+      overflow-x: hidden; 
+      font-size: 16px;
+    }
+    
+    h1, h2, h3 { 
+      font-family: 'Orbitron', sans-serif; 
+      text-transform: uppercase; 
+      text-shadow: 0 1px 3px var(--shadow);
+    }
+
+    #bgCanvas { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      z-index: -1; 
+    }
+    
+    header { 
+      position: sticky; 
+      top: 0; 
+      z-index: 1000; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 1rem 1.5rem; 
+      background: rgba(11, 13, 18, 0.85); 
+      backdrop-filter: blur(10px); 
+      border-bottom: 2px solid #222; 
+    }
+    
+    .nav-links { 
+      display: flex; 
+      gap: 1rem; 
+    }
+    
+    .icon-btn { 
+      padding: 0.5rem; 
+      border-radius: 50%; 
+      border: 2px solid var(--accent); 
+      background: transparent; 
+      transition: 0.3s; 
+      display: flex; justify-content: center; align-items: center; 
+    }
+    
+    .icon-btn img { 
+      height: 24px; 
+      width: 24px; 
+    }
+    
+    .icon-btn:hover { 
+      background: var(--accent); 
+      box-shadow: 0 0 10px var(--accent);
+    }
+    
+    #connectBtn { 
+      margin-left: 1rem; 
+      background: var(--accent); 
+      color: #000; 
+      font-weight: bold; 
+      padding: 0.5rem 1rem; 
+      border: none; 
+      border-radius: 20px; 
+      cursor: pointer; 
+      transition: 0.3s; 
+    }
+
+    #connectBtn.disconnect { 
+      background: var(--danger); 
+      color: #fff; 
+    }
+
+    #walletStatus { 
+      margin-left: 1rem; 
+      font-size: 0.85rem; 
+      color: gray; 
+    }
+
+    .container { 
+      max-width: 1200px; 
+      margin: auto; 
+      padding: 3rem 1.5rem; 
+    }
+
+    .section { 
+      margin-top: 5rem; 
+      opacity: 0; 
+      transform: translateY(40px); 
+      border-bottom: 1px solid #333; 
+      padding-bottom: 2rem;
+    }
+    
+    .btn { 
+      padding: 0.75rem 1.5rem; 
+      background: var(--accent); 
+      color: #000; 
+      border: none; 
+      border-radius: 20px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      transition: 0.3s; 
+    }
+    
+    .card { 
+      background: var(--card); 
+      padding: 1.5rem; 
+      border-radius: 12px; 
+      box-shadow: 0 0 20px var(--shadow); 
+      margin-bottom: 1.5rem; 
+    }
+    
+    input, select, textarea { 
+      font-size: 16px; 
+      padding: 0.75rem; 
+      margin: 1rem 0; 
+      background: #1c1e22; 
+      border: 1px solid #444; 
+      border-radius: 6px; 
+      color: var(--txt); 
+      width: 100%; 
+      box-sizing: border-box; 
+    }
+    
+    audio { 
+      width: 100%; 
+      margin: 1rem 0; 
+      border-radius: 6px; 
+    }
+    
+    footer { 
+      text-align: center; 
+      padding: 3rem 1rem; 
+      margin-top: 4rem; 
+      border-top: 1px solid #222; 
+      background: rgba(11, 13, 18, 0.85); 
+      position: relative;
+    }
+    
+    footer img { 
+      height: 80px; 
+      margin-bottom: 1rem; 
+      animation: pulse 3s infinite; 
+    }
+
+    footer a { 
+      color: var(--accent); 
+      margin: 0 0.5rem; 
+      text-decoration: none; 
+      transition: 0.3s; 
+    }
+    
+    footer a:hover { 
+      text-shadow: 0 0 6px var(--accent); 
+    }
+
+    @keyframes pulse { 
+      0%, 100% { 
+        filter: drop-shadow(0 0 8px var(--accent)); 
+      } 
+      50% { 
+        filter: drop-shadow(0 0 12px var(--highlight)); 
+      } 
+    }
+
+    #toast-container { 
+      position: fixed; 
+      bottom: 1.5rem; 
+      right: 1.5rem; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 0.75rem; 
+      z-index: 2000; 
+    }
+    
+    .toast { 
+      background: #1c1c1c; 
+      color: #fff; 
+      padding: 1rem; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 20px var(--shadow); 
+      font-size: 0.9rem; 
+      min-width: 200px; 
+      opacity: 0; 
+      transform: translateY(20px); 
+      transition: opacity 0.4s ease, transform 0.4s ease; 
+    }
+    
+    .toast.show { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+
+    @media (max-width: 768px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .nav-links { margin-bottom: 0.5rem; }
+      .section { padding-bottom: 1rem; }
+    }
   </style>
 </head>
 <body>
@@ -67,8 +245,8 @@
 </header>
 
 <!-- Hero Banner -->
-<section style="text-align:center;margin-top:1rem;" class="section">
-  <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Banner" style="max-width:100%;border-radius:10px;box-shadow:0 0 20px var(--accent);"/>
+<section style="text-align:center;margin-top:2rem;" class="section">
+  <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Banner" style="max-width:100%;border-radius:12px;box-shadow:0 0 20px var(--accent);"/>
 </section>
 
 <div class="container">
@@ -83,8 +261,8 @@
     <h2 style="text-align:center;">✅ Certified Tracks</h2>
     <div id="trackVault" style="position:relative;overflow:hidden;">
       <div id="trackSwiper" style="display:flex;transition:transform 0.6s ease-in-out;"></div>
-      <button id="prevTrack" style="position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:10;font-size:1.5rem;">⬅️</button>
-      <button id="nextTrack" style="position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:10;font-size:1.5rem;">➡️</button>
+      <button id="prevTrack" style="position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:10;font-size:2rem;">⬅️</button>
+      <button id="nextTrack" style="position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:10;font-size:2rem;">➡️</button>
     </div>
   </div>
 
@@ -95,7 +273,7 @@
       <input required placeholder="Track Title" id="trackName"/>
       <input required placeholder="Your X / Twitter @handle" id="handle"/>
       <select id="vibe"><option disabled selected>Select Vibe</option><option>Glitch</option><option>Dub</option><option>Trap</option><option>Other</option></select>
-      <textarea id="notes" placeholder="Optional notes..."></textarea>
+      <textarea id="notes" placeholder="Optional notes..." rows="3"></textarea>
       <button class="btn" type="submit">Submit Track (30 CRO)</button>
     </form>
   </div>
@@ -103,8 +281,6 @@
   <!-- Admin Panel -->
   <div id="adminPanel" class="section">
     <h2>🛠️ Admin Panel</h2>
-
-    <!-- Fast Upload (Admin Shortcut) -->
     <div class="card">
       <h3>🚀 Fast Upload to Certified</h3>
       <input id="certTrackName" placeholder="Track Title" />
@@ -115,10 +291,8 @@
       </select>
       <input id="certAudio" placeholder="IPFS Audio URL (e.g. Qm...)" />
       <input id="certImage" placeholder="IPFS Cover Image URL (e.g. Qm...)" />
-      <button class="btn" onclick="fastUploadTrack()">Upload Track to Certified</button>
-    </div>
-
-    <!-- Manual Certify Flow -->
+      <button class="btn" onclick="fastUploadTrack()">Upload Track</button>
+    </div >
     <div class="card" style="margin-top:2rem;">
       <h3>📥 Certify User Submission</h3>
       <input id="adminStampId" placeholder="Submission ID (from below)" />
@@ -131,19 +305,19 @@
   <!-- FAQ -->
   <div class="section">
     <h2>❓ FAQ</h2>
-    <details><summary>How do I submit?</summary><p>Connect wallet, fill details, send 30 CRO. Admin reviews and certifies.</p></details>
-    <details><summary>What happens after certification?</summary><p>Your track moves to Certified with art + audio preview.</p></details>
-    <details><summary>Where are files stored?</summary><p>All files are hosted via IPFS (Pinata).</p></details>
+    <details><summary>How do I submit?</summary><p>Connect your wallet, fill out the form, and send 30 CRO. Admin will review and certify your track.</p></details>
+    <details><summary>What happens after certification?</summary><p>Your track will be added to the Certified section with artwork and audio preview.</p></details>
+    <details><summary>Where are files stored?</summary><p>All submissions are hosted via IPFS (Pinata).</p></details>
   </div>
 </div>
 
 <!-- Footer -->
 <footer>
   <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo"/>
-  <p>&copy; 2025 Y2K | Roast Records</p>
+  <p>&copy; 2025 Y2K | Roast Records. All rights reserved.</p>
   <div>
-    <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a>|
-    <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a>|
+    <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a> |
+    <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a> |
     <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
   </div>
 </footer>
@@ -155,6 +329,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 <script>
+// Place your JavaScript code here...
 const treasuryWallet="0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
 const adminWallet="0x7fc2ab08f46c10489bab5d694d574022f1048198";
 let currentAccount = null;
@@ -167,7 +342,8 @@ const db=firebase.firestore();
 function showToast(msg){
   const container=document.getElementById("toast-container");
   const toast=document.createElement("div");
-  toast.className="toast"; toast.innerText=msg;
+  toast.className="toast"; 
+  toast.innerText=msg;
   container.appendChild(toast);
   setTimeout(()=>toast.classList.add("show"),50);
   setTimeout(()=>{toast.classList.remove("show"); setTimeout(()=>toast.remove(),300);},4000);
@@ -187,7 +363,7 @@ async function connectWallet() {
     }
 
     currentAccount = address.toLowerCase();
-    walletStatus.innerText = `${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
+    walletStatus.innerText = `${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`;
     connectBtn.innerText = "Disconnect";
     connectBtn.classList.add("disconnect");
     showToast("Wallet connected");
@@ -212,7 +388,7 @@ function disconnectWallet() {
 }
 
 connectBtn.addEventListener("click",()=>{
-  if(currentAccount){disconnectWallet();}else{connectWallet();}
+  if(currentAccount){disconnectWallet();} else {connectWallet();}
 });
 
 async function submitTrack(e){
@@ -230,14 +406,15 @@ async function submitTrack(e){
 }
 
 async function certifyTrack(){
-  const id=adminStampId.value.trim(),audio=ipfsAudio.value.trim(),image=ipfsImage.value.trim();
-  const ref=db.collection("submissions").doc(id),snap=await ref.get();
+  const id=adminStampId.value.trim(), audio=ipfsAudio.value.trim(), image=ipfsImage.value.trim();
+  const ref=db.collection("submissions").doc(id), snap=await ref.get();
   if(!snap.exists) return alert("No submission found");
   const data=snap.data();
-  await db.collection("certified").add({...data,audio,image,certifiedAt:Date.now()});
+  await db.collection("certified").add({...data, audio, image, certifiedAt: Date.now()});
   await ref.delete();
   showToast("Certified!");
-  loadCertified(); loadSubmissions();
+  loadCertified(); 
+  loadSubmissions();
 }
 
 async function fastUploadTrack(){
@@ -276,7 +453,7 @@ async function loadCertified() {
     card.innerHTML = `
       <b style="font-size:1.2rem;">${d.track} <span style="color:var(--verified)">[Certified]</span></b>
       <br/><i>@${d.handle}</i>
-      <img src="https://ipfs.io/ipfs/${d.image}" alt="Cover" style="margin:0.5rem 0;width:80%;max-width:300px;border-radius:8px;"/>
+      <img src="https://ipfs.io/ipfs/${d.image}" alt="Cover" style="margin:0.5rem 0;width:80%;max-width:300px;border-radius:12px;"/>
       <audio controls style="width:90%;max-width:300px;border-radius:8px;" src="https://ipfs.io/ipfs/${d.audio}"></audio>
     `;
     swiper.appendChild(card);
@@ -285,9 +462,9 @@ async function loadCertified() {
   initSwiper();
 }
 
-loadSubmissions(); loadCertified();
+loadSubmissions(); 
+loadCertified();
 
-// Carousel Functions
 let swipeInterval;
 const autoSwipeDelay = 10000; // 10 seconds
 let currentIndex = 0;
@@ -341,19 +518,19 @@ resize();
 
 let t = 0;
 function draw() {
-  ctx.fillStyle = "rgba(11,13,18,0.6)";
+  ctx.fillStyle = "rgba(11, 13, 18, 0.8)";
   ctx.fillRect(0, 0, w, h);
-  ctx.strokeStyle = "rgba(0,255,195,0.4)";
+  ctx strokeStyle = "rgba(0, 255, 195, 0.6)";
   for (let i = 0; i < 30; i++) {
     ctx.beginPath();
     ctx.moveTo(0, h / 2 + i * 20 + Math.sin(t / 20 + i) * 10);
     ctx.lineTo(w, h / 2 + i * 20 + Math.sin(t / 20 + i) * 10);
     ctx.stroke();
   }
-  ctx.strokeStyle = "rgba(255,0,170,0.4)";
+  ctx.strokeStyle = "rgba(255, 0, 170, 0.6)";
   ctx.beginPath();
   for (let x = 0; x < w; x += 10) {
-    ctx.lineTo(x, h / 2 + Math.sin((x + t) / 40) * 60);
+    ctx.lineTo(x, h / 2 + Math.sin((x + t) / 40) * 80);
   }
   ctx.stroke();
   t += 2;
