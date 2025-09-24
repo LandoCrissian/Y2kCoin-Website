@@ -15,79 +15,41 @@
 
   <style>
     :root {
-      --bg:#0b0d12; --txt:#f1f1f1;
-      --accent:#00ffc3; --pink:#ff00aa;
-      --danger:#ff0044; --verified:#00ff88;
-      --card:#13151a;
+      --bg: #0b0d12; 
+      --txt: #f1f1f1;
+      --accent: #00ffc3; 
+      --pink: #ff00aa;
+      --danger: #ff0044; 
+      --verified: #00ff88;
+      --card: #13151a;
     }
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Space Mono',monospace;overflow-x:hidden;}
-    h1,h2,h3{font-family:'Orbitron',sans-serif;text-transform:uppercase;}
-    #bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
-    header{position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0.8rem 1.2rem;background:rgba(11,13,18,0.85);backdrop-filter:blur(6px);border-bottom:1px solid #222;}
-    .nav-links{display:flex;gap:0.6rem;align-items:center;}
-    .icon-btn{display:flex;align-items:center;justify-content:center;padding:0.4rem 0.9rem;border-radius:20px;border:1px solid var(--accent);background:transparent;transition:0.25s;}
-    .icon-btn img {height:18px;width:18px;}
-    .icon-btn:hover{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:translateY(-2px);}
-    #connectBtn{margin-left:1rem;background:var(--accent);color:#000;font-weight:bold;padding:0.5rem 1rem;border:none;border-radius:20px;cursor:pointer;transition:0.25s;}
-    #connectBtn.disconnect{background:var(--danger);color:#fff;}
-    #connectBtn:hover{transform:scale(1.05);box-shadow:0 0 10px var(--accent);}
-    #connectBtn.disconnect:hover{box-shadow:0 0 10px var(--danger);}
-    #walletStatus{text-align:right;font-size:0.75rem;color:gray;}
-    .container{max-width:1000px;margin:auto;padding:2rem 1rem;}
-    .section{margin-top:3rem;opacity:0;transform:translateY(40px);}
-    .btn{padding:0.6rem 1.2rem;background:var(--accent);color:#000;border:none;border-radius:20px;font-weight:bold;cursor:pointer;}
-    .card{background:var(--card);padding:1rem;border-radius:8px;box-shadow:0 0 8px rgba(0,255,195,0.2);margin-bottom:1rem;}
-    input, select, textarea {font-size:16px;padding:0.55rem 0.75rem;margin:0.5rem 0;background:#1a1c20;border:1px solid #333;border-radius:6px;color:var(--txt);width:100%;box-sizing:border-box;}
-    audio{width:100%;margin-top:0.5rem;border-radius:6px;}
-    #certifiedTracks{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
-    #certifiedTracks .card{transition:transform 0.3s;}
-    #certifiedTracks .card:hover{transform:translateY(-6px) scale(1.02);}
-    details{background:#1a1c20;margin:0.5rem 0;padding:0.5rem 1rem;border-radius:6px;}
-    summary{cursor:pointer;font-weight:bold;}
-    footer{text-align:center;padding:2rem 1rem;margin-top:4rem;border-top:1px solid #222;background:rgba(11,13,18,0.85);}
-    footer img{height:60px;margin-bottom:0.8rem;animation:pulse 3s infinite;}
-    footer a{color:var(--accent);margin:0 0.5rem;text-decoration:none;}
-    footer a:hover{text-shadow:0 0 6px var(--accent);}
-    @keyframes pulse{0%,100%{filter:drop-shadow(0 0 2px var(--accent));}50%{filter:drop-shadow(0 0 8px var(--pink));}}
-    #toast-container {position:fixed;bottom:1.2rem;right:1.2rem;display:flex;flex-direction:column;gap:0.5rem;z-index:2000;}
-    .toast {background:#1c1c1c;color:#fff;padding:0.8rem 1rem;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,0.4);font-size:0.85rem;min-width:180px;opacity:0;transform:translateY(20px);transition:opacity 0.3s ease,transform 0.3s ease;}
-    .toast.show {opacity:1;transform:translateY(0);}
-    #adminPanel {opacity:0;visibility:hidden;transform:translateY(20px);}
-
-    #trackVault {
-  max-width: 100%;
-  height: auto;
-  position: relative;
-  overflow: hidden;
-}
-#trackSwiper {
-  display: flex;
-  transition: transform 0.6s ease-in-out;
-}
-#trackSwiper .card {
-  box-shadow: 0 0 20px rgba(0, 255, 195, 0.2);
-  background-color: var(--card);
-  margin: 0;
-  height: 100%;
-}
-
-    .carousel-track {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-  width: 100%;
-  overflow: hidden;
-}
-
-.carousel-item {
-  min-width: 100%;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  height: 550px; /* ✅ Force same height for every card */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: var(--bg); color: var(--txt); font-family: 'Space Mono', monospace; overflow-x: hidden; }
+    h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
+    #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    header { position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1.2rem; background: rgba(11,13,18,0.85); backdrop-filter: blur(6px); border-bottom: 1px solid #222; }
+    .nav-links { display: flex; gap: 0.6rem; align-items: center; }
+    .icon-btn { display: flex; align-items: center; justify-content: center; padding: 0.4rem 0.9rem; border-radius: 20px; border: 1px solid var(--accent); background: transparent; transition: 0.25s; }
+    .icon-btn img { height: 20px; width: 20px; }
+    .icon-btn:hover { background: var(--accent); box-shadow: 0 0 10px var(--accent); transform: translateY(-2px); }
+    #connectBtn { margin-left: 1rem; background: var(--accent); color: #000; font-weight: bold; padding: 0.5rem 1rem; border: none; border-radius: 20px; cursor: pointer; transition: 0.25s; }
+    #connectBtn.disconnect { background: var(--danger); color: #fff; }
+    #walletStatus { text-align: right; font-size: 0.75rem; color: gray; }
+    .container { max-width: 1000px; margin: auto; padding: 2rem 1rem; }
+    .section { margin-top: 3rem; opacity: 0; transform: translateY(40px); }
+    .btn { padding: 0.6rem 1.2rem; background: var(--accent); color: #000; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; }
+    .card { background: var(--card); padding: 1rem; border-radius: 8px; box-shadow: 0 0 8px rgba(0, 255, 195, 0.2); margin-bottom: 1rem; }
+    input, select, textarea { font-size: 16px; padding: 0.55rem 0.75rem; margin: 0.5rem 0; background: #1a1c20; border: 1px solid #333; border-radius: 6px; color: var(--txt); width: 100%; box-sizing: border-box; }
+    audio { width: 100%; margin-top: 0.5rem; border-radius: 6px; }
+    footer { text-align: center; padding: 2rem 1rem; margin-top: 4rem; border-top: 1px solid #222; background: rgba(11, 13, 18, 0.85); }
+    footer img { height: 60px; margin-bottom: 0.8rem; animation: pulse 3s infinite; }
+    footer a { color: var(--accent); margin: 0 0.5rem; text-decoration: none; }
+    footer a:hover { text-shadow: 0 0 6px var(--accent); }
+    @keyframes pulse { 0%, 100% { filter: drop-shadow(0 0 2px var(--accent)); } 50% { filter: drop-shadow(0 0 8px var(--pink)); } }
+    #toast-container { position: fixed; bottom: 1.2rem; right: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 2000; }
+    .toast { background: #1c1c1c; color: #fff; padding: 0.8rem 1rem; border-radius: 6px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); font-size: 0.85rem; min-width: 180px; opacity: 0; transform: translateY(20px); transition: opacity 0.3s ease, transform 0.3s ease; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    
   </style>
 </head>
 <body>
@@ -104,7 +66,7 @@
   </div>
 </header>
 
-  <!-- Hero Banner -->
+<!-- Hero Banner -->
 <section style="text-align:center;margin-top:1rem;" class="section">
   <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7318.png" alt="Y2K Banner" style="max-width:100%;border-radius:10px;box-shadow:0 0 20px var(--accent);"/>
 </section>
@@ -117,14 +79,14 @@
   </div>
 
   <!-- Certified: Swipeable Vault -->
-<div class="section">
-  <h2 style="text-align:center;">✅ Certified Tracks</h2>
-  <div id="trackVault" style="position:relative;overflow:hidden;">
-    <div id="trackSwiper" style="display:flex;transition:transform 0.6s ease-in-out;"></div>
-    <button id="prevTrack" style="position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:10;font-size:1.5rem;">⬅️</button>
-    <button id="nextTrack" style="position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:10;font-size:1.5rem;">➡️</button>
+  <div class="section">
+    <h2 style="text-align:center;">✅ Certified Tracks</h2>
+    <div id="trackVault" style="position:relative;overflow:hidden;">
+      <div id="trackSwiper" style="display:flex;transition:transform 0.6s ease-in-out;"></div>
+      <button id="prevTrack" style="position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:10;font-size:1.5rem;">⬅️</button>
+      <button id="nextTrack" style="position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:10;font-size:1.5rem;">➡️</button>
+    </div>
   </div>
-</div>
 
   <!-- Submit -->
   <div class="section">
@@ -175,7 +137,7 @@
   </div>
 </div>
 
-  <!-- Footer -->
+<!-- Footer -->
 <footer>
   <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo"/>
   <p>&copy; 2025 Y2K | Roast Records</p>
@@ -199,15 +161,16 @@ let currentAccount = null;
 let hasSigned = false;
 
 const firebaseConfig={apiKey:"AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",authDomain:"y2kroastrecords.firebaseapp.com",projectId:"y2kroastrecords",storageBucket:"y2kroastrecords.appspot.com",messagingSenderId:"313829428782",appId:"1:313829428782:web:4e42771ba525f6f297d9bf"};
-firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
 
 function showToast(msg){
   const container=document.getElementById("toast-container");
   const toast=document.createElement("div");
-  toast.className="toast";toast.innerText=msg;
+  toast.className="toast"; toast.innerText=msg;
   container.appendChild(toast);
   setTimeout(()=>toast.classList.add("show"),50);
-  setTimeout(()=>{toast.classList.remove("show");setTimeout(()=>toast.remove(),300);},4000);
+  setTimeout(()=>{toast.classList.remove("show"); setTimeout(()=>toast.remove(),300);},4000);
 }
 
 async function connectWallet() {
@@ -274,15 +237,12 @@ async function certifyTrack(){
   await db.collection("certified").add({...data,audio,image,certifiedAt:Date.now()});
   await ref.delete();
   showToast("Certified!");
-  loadCertified();loadSubmissions();
+  loadCertified(); loadSubmissions();
 }
 
 async function fastUploadTrack(){
-  const track = certTrackName.value.trim(),
-        handle = certHandle.value.trim(),
-        vibe = certVibe.value,
-        audio = certAudio.value.trim(),
-        image = certImage.value.trim();
+  const track = certTrackName.value.trim(), handle = certHandle.value.trim(), vibe = certVibe.value,
+        audio = certAudio.value.trim(), image = certImage.value.trim();
 
   if (!track || !handle || !audio || !image || !vibe) return showToast("Fill out all fields");
 
@@ -325,98 +285,90 @@ async function loadCertified() {
   initSwiper();
 }
 
-loadSubmissions();loadCertified();
+loadSubmissions(); loadCertified();
 
-   let currentIndex = 0;
-  let autoSwipeDelay = 10000; // 10 seconds if idle
-  let audioElements = [];
-  let swipeInterval;
-  let userInteracted = false;
+// Carousel Functions
+let swipeInterval;
+const autoSwipeDelay = 10000; // 10 seconds
+let currentIndex = 0;
 
-  function updateCarousel() {
-    const track = document.querySelector('.carousel-track');
-    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+// Carousel Functionality
+const resetAutoplay = () => {
+  clearInterval(swipeInterval);
+  swipeInterval = setInterval(() => {
+    goToNextTrack();
+  }, autoSwipeDelay);
+};
+
+const goToNextTrack = () => {
+  currentIndex = (currentIndex + 1) % document.querySelectorAll('audio').length;
+  updateTrackDisplay();
+};
+
+const goToPrevTrack = () => {
+  currentIndex = (currentIndex - 1 + document.querySelectorAll('audio').length) % document.querySelectorAll('audio').length;
+  updateTrackDisplay();
+};
+
+const updateTrackDisplay = () => {
+  const track = document.querySelector('#trackSwiper');
+  const cards = track.children;
+  for (let i = 0; i < cards.length; i++) {
+    cards[i].style.display = (i === currentIndex) ? 'flex' : 'none';
   }
+};
 
-  function stopAutoplay() {
-    clearInterval(swipeInterval);
-  }
+// Event Listeners
+document.getElementById('nextTrack').addEventListener('click', () => {
+  goToNextTrack();
+  resetAutoplay();
+});
+document.getElementById('prevTrack').addEventListener('click', () => {
+  goToPrevTrack();
+  resetAutoplay();
+});
 
-  function resetAutoplay() {
-    stopAutoplay();
-    swipeInterval = setInterval(() => {
-      if (!audioElements[currentIndex].paused) return; // Wait until song ends
-      goToNext();
-    }, autoSwipeDelay);
-  }
+// Background Canvas Animation
+const canvas = document.getElementById("bgCanvas");
+const ctx = canvas.getContext("2d");
+let w, h;
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
 
-  function goToNext() {
-    currentIndex = (currentIndex + 1) % audioElements.length;
-    updateCarousel();
-  }
-
-  function goToPrev() {
-    currentIndex = (currentIndex - 1 + audioElements.length) % audioElements.length;
-    updateCarousel();
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    audioElements = Array.from(document.querySelectorAll('audio'));
-
-    // Pause autoplay when user interacts with audio
-    audioElements.forEach(audio => {
-      audio.addEventListener('play', () => {
-        stopAutoplay();
-      });
-      audio.addEventListener('ended', () => {
-        goToNext();
-        resetAutoplay();
-      });
-    });
-
-    document.getElementById('next-btn').addEventListener('click', () => {
-      goToNext();
-      resetAutoplay();
-    });
-
-    document.getElementById('prev-btn').addEventListener('click', () => {
-      goToPrev();
-      resetAutoplay();
-    });
-
-    resetAutoplay();
-  })
-
-// Background Canvas
-const canvas=document.getElementById("bgCanvas"),ctx=canvas.getContext("2d");let w,h;
-function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}
-window.addEventListener("resize",resize);resize();
-let t=0;
-function draw(){
-  ctx.fillStyle="rgba(11,13,18,0.6)";ctx.fillRect(0,0,w,h);
-  ctx.strokeStyle="rgba(0,255,195,0.4)";
-  for(let i=0;i<30;i++){
+let t = 0;
+function draw() {
+  ctx.fillStyle = "rgba(11,13,18,0.6)";
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = "rgba(0,255,195,0.4)";
+  for (let i = 0; i < 30; i++) {
     ctx.beginPath();
-    ctx.moveTo(0,h/2+i*20+Math.sin(t/20+i)*10);
-    ctx.lineTo(w,h/2+i*20+Math.sin(t/20+i)*10);
+    ctx.moveTo(0, h / 2 + i * 20 + Math.sin(t / 20 + i) * 10);
+    ctx.lineTo(w, h / 2 + i * 20 + Math.sin(t / 20 + i) * 10);
     ctx.stroke();
   }
-  ctx.strokeStyle="rgba(255,0,170,0.4)";
+  ctx.strokeStyle = "rgba(255,0,170,0.4)";
   ctx.beginPath();
-  for(let x=0;x<w;x+=10){ctx.lineTo(x,h/2+Math.sin((x+t)/40)*60);}
+  for (let x = 0; x < w; x += 10) {
+    ctx.lineTo(x, h / 2 + Math.sin((x + t) / 40) * 60);
+  }
   ctx.stroke();
-  t+=2;requestAnimationFrame(draw);
+  t += 2;
+  requestAnimationFrame(draw);
 }
 draw();
 
-// GSAP reveal
-gsap.utils.toArray('.section').forEach((sec)=>{
-  gsap.to(sec,{
-    scrollTrigger:{trigger:sec,start:"top 80%"},
-    opacity:1,
-    y:0,
-    duration:1.2,
-    ease:"power2.out"
+// GSAP Scroll Reveal
+gsap.utils.toArray('.section').forEach((sec) => {
+  gsap.to(sec, {
+    scrollTrigger: { trigger: sec, start: "top 80%" },
+    opacity: 1,
+    y: 0,
+    duration: 1.2,
+    ease: "power2.out"
   });
 });
 </script>
