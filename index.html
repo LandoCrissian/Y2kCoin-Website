@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <!-- ✅ Basic Metadata -->
+  <!-- ✅ Metadata -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
@@ -20,7 +20,6 @@
 
   <!-- ✅ Core Styles -->
   <style>
-    /* 🎨 Theme Variables */
     :root {
       --bg:#0b0d12;
       --txt:#f1f1f1;
@@ -30,55 +29,19 @@
       --verified:#00ff88;
       --card:#13151a;
     }
-
-    /* 🧱 Reset + Base */
     * { margin:0; padding:0; box-sizing:border-box; }
-    html,body {
-      height:100%;
-      background:var(--bg);
-      color:var(--txt);
-      font-family:'Space Mono', monospace;
-      overflow-x:hidden;
-    }
-    h1,h2,h3 { font-family:'Orbitron',sans-serif; text-transform:uppercase; }
-  </style>
-</head>
-
-    <style>
-    /* 🎨 Theme Variables */
-    :root {
-      --bg:#0b0d12;
-      --txt:#f1f1f1;
-      --accent:#00ffc3;
-      --pink:#ff00aa;
-      --danger:#ff0044;
-      --verified:#00ff88;
-      --card:#13151a;
-    }
-
-    /* 🧱 Reset + Base */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html,body {
-      height:100%;
-      background:var(--bg);
-      color:var(--txt);
-      font-family:'Space Mono', monospace;
-      overflow-x:hidden;
-    }
+    html,body { height:100%; background:var(--bg); color:var(--txt); font-family:'Space Mono', monospace; overflow-x:hidden; }
     h1,h2,h3 { font-family:'Orbitron',sans-serif; text-transform:uppercase; }
 
-    /* 🖼 Background Canvas */
-    #bgCanvas {
-      position:fixed;top:0;left:0;width:100%;height:100%;z-index:-3;
-    }
+    /* 🎨 Background Canvas */
+    #bgCanvas { position:fixed;top:0;left:0;width:100%;height:100%;z-index:-3; }
 
     /* 🔝 Header */
     header {
       position:sticky;top:0;z-index:1000;
       display:flex;align-items:center;justify-content:space-between;
       padding:0.8rem 1.2rem;
-      background:rgba(11,13,18,0.85);
-      backdrop-filter:blur(6px);
+      background:rgba(11,13,18,0.85); backdrop-filter:blur(6px);
       border-bottom:1px solid #222;
     }
     nav { display:flex;gap:0.6rem;align-items:center; }
@@ -89,10 +52,7 @@
       transition:0.25s;
     }
     .icon-btn img { height:20px;width:20px; }
-    .icon-btn:hover {
-      background:var(--accent);box-shadow:0 0 10px var(--accent);
-      transform:translateY(-2px);
-    }
+    .icon-btn:hover { background:var(--accent);box-shadow:0 0 10px var(--accent);transform:translateY(-2px); }
     #connectBtn {
       margin-left:1rem;background:var(--accent);color:#000;
       font-weight:bold;padding:0.5rem 1rem;border:none;
@@ -103,11 +63,8 @@
 
     /* 📦 Layout */
     main { max-width:1000px;margin:auto;padding:2rem 1rem; }
-    .section { margin-top:3rem;opacity:1;transform:none; }
-    .btn {
-      padding:0.6rem 1.2rem;background:var(--accent);color:#000;
-      border:none;border-radius:20px;font-weight:bold;cursor:pointer;
-    }
+    .section { margin-top:3rem; }
+    .btn { padding:0.6rem 1.2rem;background:var(--accent);color:#000;border:none;border-radius:20px;font-weight:bold;cursor:pointer; }
     .card {
       background:var(--card);padding:1rem;border-radius:8px;
       box-shadow:0 0 8px rgba(0,255,195,0.2);margin-bottom:1rem;
@@ -120,31 +77,17 @@
     audio { width:100%;margin-top:0.5rem;border-radius:6px; }
 
     /* ⬇️ Footer */
-    footer {
-      text-align:center;padding:2rem 1rem;margin-top:4rem;
-      border-top:1px solid #222;background:rgba(11,13,18,0.85);
-    }
+    footer { text-align:center;padding:2rem 1rem;margin-top:4rem;border-top:1px solid #222;background:rgba(11,13,18,0.85); }
     footer img { height:60px;margin-bottom:0.8rem;animation:pulse 3s infinite; }
     footer a { color:var(--accent);margin:0 0.5rem;text-decoration:none; }
     footer a:hover { text-shadow:0 0 6px var(--accent); }
 
     /* ✨ Animations */
-    @keyframes pulse {
-      0%,100%{filter:drop-shadow(0 0 2px var(--accent));}
-      50%{filter:drop-shadow(0 0 8px var(--pink));}
-    }
+    @keyframes pulse { 0%,100%{filter:drop-shadow(0 0 2px var(--accent));} 50%{filter:drop-shadow(0 0 8px var(--pink));} }
 
     /* 🍞 Toast Notifications */
-    #toast-container {
-      position:fixed;bottom:1.2rem;right:1.2rem;
-      display:flex;flex-direction:column;gap:0.5rem;z-index:2000;
-    }
-    .toast {
-      background:#1c1c1c;color:#fff;padding:0.8rem 1rem;border-radius:6px;
-      box-shadow:0 2px 10px rgba(0,0,0,0.4);font-size:0.85rem;min-width:180px;
-      opacity:0;transform:translateY(20px);
-      transition:opacity 0.3s ease,transform 0.3s ease;
-    }
+    #toast-container { position:fixed;bottom:1.2rem;right:1.2rem;display:flex;flex-direction:column;gap:0.5rem;z-index:2000; }
+    .toast { background:#1c1c1c;color:#fff;padding:0.8rem 1rem;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,0.4);font-size:0.85rem;min-width:180px;opacity:0;transform:translateY(20px);transition:opacity 0.3s ease,transform 0.3s ease; }
     .toast.show { opacity:1;transform:translateY(0); }
 
     /* 🎶 Certified Track Carousel */
@@ -152,23 +95,17 @@
     #trackSwiper { display:flex;transition:transform 0.6s ease-in-out; }
     .track-card { min-width:100%;flex-shrink:0;padding:1rem;text-align:center; }
   </style>
-
-  <body>
-  <!-- 🎨 Background Canvas Animation -->
+</head>
+<body>
+  <!-- 🎨 Background Canvas -->
   <canvas id="bgCanvas"></canvas>
 
-  <!-- 🔝 Header (Logo links + Wallet Connect) -->
+  <!-- 🔝 Header -->
   <header>
     <nav>
-      <a class="icon-btn" href="https://x.com/y2kc0in?s=21" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7358.jpeg" alt="X"/>
-      </a>
-      <a class="icon-btn" href="https://discord.gg/jpFbSapSAh" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7356.jpeg" alt="Discord"/>
-      </a>
-      <a class="icon-btn" href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">
-        <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7357.jpeg" alt="Obsidian"/>
-      </a>
+      <a class="icon-btn" href="https://x.com/y2kc0in?s=21" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7358.jpeg" alt="X"/></a>
+      <a class="icon-btn" href="https://discord.gg/jpFbSapSAh" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7356.jpeg" alt="Discord"/></a>
+      <a class="icon-btn" href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7357.jpeg" alt="Obsidian"/></a>
     </nav>
     <div>
       <button id="connectBtn">Connect Wallet</button>
@@ -176,50 +113,21 @@
     </div>
   </header>
 
-  <!-- 🎬 Hero Section -->
+  <!-- 🎬 Hero -->
   <section id="studioHero" style="position:relative;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;">
-    <div style="position:absolute;top:0;left:0;width:100%;height:100%;
-                background:radial-gradient(circle at center,rgba(0,255,195,0.15)0%,transparent 70%),
-                           linear-gradient(135deg,rgba(255,0,170,0.15)0%,transparent 60%);
-                mix-blend-mode:screen;">
-    </div>
     <div style="position:relative;z-index:2;color:var(--txt);">
-      <h1 style="font-size:clamp(2rem,6vw,4rem);color:var(--accent);
-                 text-shadow:0 0 12px var(--pink);">
-        Y2K | Roast Records
-      </h1>
-      <p style="margin-top:1rem;font-size:1rem;color:#aaa;">
-        Enter the Studio. Submit. Get Certified. Go Global.
-      </p>
-      <div style="margin-top:3rem;font-size:2rem;color:var(--accent);animation:bounce 1.5s infinite;">
-        ▼
-      </div>
+      <h1 style="font-size:clamp(2rem,6vw,4rem);color:var(--accent);text-shadow:0 0 12px var(--pink);">Y2K | Roast Records</h1>
+      <p style="margin-top:1rem;font-size:1rem;color:#aaa;">Enter the Studio. Submit. Get Certified. Go Global.</p>
+      <div style="margin-top:3rem;font-size:2rem;color:var(--accent);animation:bounce 1.5s infinite;">▼</div>
     </div>
   </section>
 
-      <main>
+  <main>
     <!-- 📡 Live Submissions -->
-    <section class="section">
-      <h2>📡 Live Submissions</h2>
-      <div id="liveSubmissions">
-        <!-- Placeholder so it's never blank -->
-        <div class="card">No live submissions yet 🚀</div>
-      </div>
-    </section>
+    <section class="section"><h2>📡 Live Submissions</h2><div id="liveSubmissions"><div class="card">No live submissions yet 🚀</div></div></section>
 
     <!-- ✅ Certified Tracks -->
-    <section class="section">
-      <h2 style="text-align:center;">✅ Certified Tracks</h2>
-      <div id="trackVault">
-        <div id="trackSwiper">
-          <!-- Placeholder so it's never blank -->
-          <div class="card">No certified tracks yet 🎶</div>
-        </div>
-        <!-- Carousel controls -->
-        <button id="prevTrack" style="position:absolute;left:0;top:50%;transform:translateY(-50%);">⬅️</button>
-        <button id="nextTrack" style="position:absolute;right:0;top:50%;transform:translateY(-50%);">➡️</button>
-      </div>
-    </section>
+    <section class="section"><h2 style="text-align:center;">✅ Certified Tracks</h2><div id="trackVault"><div id="trackSwiper"><div class="card">No certified tracks yet 🎶</div></div><button id="prevTrack">⬅️</button><button id="nextTrack">➡️</button></div></section>
 
     <!-- 🎶 Submit Form -->
     <section class="section">
@@ -227,96 +135,34 @@
       <form id="submissionForm" onsubmit="submitTrack(event)">
         <input required placeholder="Track Title" id="trackName"/>
         <input required placeholder="Your X / Twitter @handle" id="handle"/>
-        <select id="vibe">
-          <option disabled selected>Select Vibe</option>
-          <option>Glitch</option>
-          <option>Dub</option>
-          <option>Trap</option>
-          <option>Other</option>
-        </select>
+        <select id="vibe"><option disabled selected>Select Vibe</option><option>Glitch</option><option>Dub</option><option>Trap</option><option>Other</option></select>
         <textarea id="notes" placeholder="Optional notes..."></textarea>
         <button class="btn" type="submit">Submit Track (30 CRO)</button>
       </form>
     </section>
 
     <!-- 🛠️ Admin Panel -->
-    <section id="adminPanel" class="section" style="display:none;">
-      <h2>🛠️ Admin Panel</h2>
-
-      <!-- Fast Upload (Admin shortcut) -->
-      <div class="card">
-        <h3>🚀 Fast Upload to Certified</h3>
-        <input id="certTrackName" placeholder="Track Title"/>
-        <input id="certHandle" placeholder="Twitter @handle"/>
-        <select id="certVibe">
-          <option disabled selected>Select Vibe</option>
-          <option>Glitch</option>
-          <option>Dub</option>
-          <option>Trap</option>
-          <option>Other</option>
-        </select>
-        <input id="certAudio" placeholder="IPFS Audio URL"/>
-        <input id="certImage" placeholder="IPFS Cover Image URL"/>
-        <button class="btn" onclick="fastUploadTrack()">Upload Track to Certified</button>
-      </div>
-
-      <!-- Manual Certify Flow -->
-      <div class="card" style="margin-top:2rem;">
-        <h3>📥 Certify User Submission</h3>
-        <input id="adminStampId" placeholder="Submission ID"/>
-        <input id="ipfsAudio" placeholder="IPFS Audio URL"/>
-        <input id="ipfsImage" placeholder="IPFS Cover Image URL"/>
-        <button class="btn" onclick="certifyTrack()">Certify Submission</button>
-      </div>
+    <section id="adminPanel" class="section" style="display:none;"><h2>🛠️ Admin Panel</h2>
+      <div class="card"><h3>🚀 Fast Upload</h3><input id="certTrackName" placeholder="Track Title"/><input id="certHandle" placeholder="Twitter @handle"/><select id="certVibe"><option disabled selected>Select Vibe</option><option>Glitch</option><option>Dub</option><option>Trap</option><option>Other</option></select><input id="certAudio" placeholder="IPFS Audio URL"/><input id="certImage" placeholder="IPFS Cover Image URL"/><button class="btn" onclick="fastUploadTrack()">Upload</button></div>
+      <div class="card"><h3>📥 Certify Submission</h3><input id="adminStampId" placeholder="Submission ID"/><input id="ipfsAudio" placeholder="IPFS Audio URL"/><input id="ipfsImage" placeholder="IPFS Cover Image URL"/><button class="btn" onclick="certifyTrack()">Certify</button></div>
     </section>
 
     <!-- ❓ FAQ -->
-    <section class="section">
-      <h2>❓ FAQ</h2>
-      <details>
-        <summary>How do I submit?</summary>
-        <p>Connect wallet, fill details, send 30 CRO. Admin reviews and certifies.</p>
-      </details>
-      <details>
-        <summary>What happens after certification?</summary>
-        <p>Your track moves to Certified with art + audio preview.</p>
-      </details>
-      <details>
-        <summary>Where are files stored?</summary>
-        <p>All files are hosted via IPFS (Pinata).</p>
-      </details>
-    </section>
+    <section class="section"><h2>❓ FAQ</h2><details><summary>How do I submit?</summary><p>Connect wallet, fill details, send 30 CRO. Admin reviews and certifies.</p></details></section>
 
-    <!-- 📈 Future Plans Board -->
-    <section class="section">
-      <h2 style="text-align:center;">📈 Future Plans Board</h2>
-      <p style="text-align:center;color:#aaa;margin-bottom:1rem;">
-        Certified tracks will reach Spotify, Apple, YouTube, Amazon.  
-        Earnings go back into CRO.
-      </p>
-      <div class="card">
-        🔄 The CRO Loop: Streams → Earnings → Y2K Token → CroFam Growth
-      </div>
-    </section>
+    <!-- 📈 Future Plans -->
+    <section class="section"><h2 style="text-align:center;">📈 Future Plans Board</h2><p style="text-align:center;color:#aaa;">Certified tracks will reach Spotify, Apple, YouTube, Amazon. Earnings go back into CRO.</p><div class="card">🔄 The CRO Loop: Streams → Earnings → Y2K Token → CroFam Growth</div></section>
   </main>
 
-      <!-- ⬇️ Footer -->
+  <!-- ⬇️ Footer -->
   <footer>
-    <img 
-      src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" 
-      alt="Y2K Logo"/>
+    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo"/>
     <p>&copy; 2025 Y2K | Roast Records</p>
-    <div>
-      <a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a> |
-      <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a> |
-      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a>
-    </div>
+    <div><a href="https://x.com/y2kc0in?s=21" target="_blank">𝕏</a> | <a href="https://discord.gg/jpFbSapSAh" target="_blank">Discord</a> | <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank">Buy</a></div>
   </footer>
-
-  <!-- 🍞 Toast Notifications -->
   <div id="toast-container"></div>
 
-      <!-- 🔌 Web3 + Firebase Scripts -->
+  <!-- 🔌 Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
@@ -325,34 +171,26 @@
     /* 🔑 Wallet + Admin Setup */
     const treasuryWallet = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
     const adminWallet = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
-    let currentAccount = null;
-    let hasSigned = false;
+    let currentAccount = null, hasSigned = false;
 
     /* 🔥 Firebase Config */
-    const firebaseConfig = {
+    firebase.initializeApp({
       apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
       authDomain: "y2kroastrecords.firebaseapp.com",
       projectId: "y2kroastrecords",
       storageBucket: "y2kroastrecords.appspot.com",
       messagingSenderId: "313829428782",
       appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-    };
-    firebase.initializeApp(firebaseConfig);
+    });
     const db = firebase.firestore();
 
-    /* 🍞 Toast Notifications */
+    /* 🍞 Toasts */
     function showToast(msg) {
-      const container = document.getElementById("toast-container");
-      const toast = document.createElement("div");
-      toast.className = "toast";
-      toast.innerText = msg;
-      container.appendChild(toast);
-
-      setTimeout(() => toast.classList.add("show"), 50);
-      setTimeout(() => {
-        toast.classList.remove("show");
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
+      const c = document.getElementById("toast-container");
+      const t = document.createElement("div");
+      t.className = "toast"; t.innerText = msg; c.appendChild(t);
+      setTimeout(()=>t.classList.add("show"),50);
+      setTimeout(()=>{t.classList.remove("show"); setTimeout(()=>t.remove(),300);},4000);
     }
 
     /* 🔗 Wallet Connect */
@@ -363,139 +201,57 @@
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
         const address = await signer.getAddress();
-
-        if (!hasSigned) {
-          await signer.signMessage("Sign to access Y2K Roast Records");
-          hasSigned = true;
-        }
-
+        if (!hasSigned) { await signer.signMessage("Sign to access Y2K Roast Records"); hasSigned = true; }
         currentAccount = address.toLowerCase();
         walletStatus.innerText = `${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
-        connectBtn.innerText = "Disconnect";
-        connectBtn.classList.add("disconnect");
+        connectBtn.innerText = "Disconnect"; connectBtn.classList.add("disconnect");
         showToast("Wallet connected");
-
-        // Unlock Admin Panel if Admin Wallet
-        if (currentAccount === adminWallet) {
-          document.getElementById("adminPanel").style.display = "block";
-        }
-      } catch (err) {
-        console.error(err);
-        showToast("Wallet connection failed");
-      }
+        if (currentAccount === adminWallet) document.getElementById("adminPanel").style.display = "block";
+      } catch (err) { console.error(err); showToast("Wallet connection failed"); }
     }
-
-    /* 🔌 Wallet Disconnect */
     function disconnectWallet() {
-      currentAccount = null;
-      hasSigned = false;
-      walletStatus.innerText = "Not connected";
-      connectBtn.innerText = "Connect Wallet";
-      connectBtn.classList.remove("disconnect");
-      document.getElementById("adminPanel").style.display = "none";
-      showToast("Wallet disconnected");
+      currentAccount=null; hasSigned=false;
+      walletStatus.innerText="Not connected"; connectBtn.innerText="Connect Wallet"; connectBtn.classList.remove("disconnect");
+      document.getElementById("adminPanel").style.display="none"; showToast("Wallet disconnected");
+    }
+    connectBtn.addEventListener("click",()=>{ currentAccount?disconnectWallet():connectWallet(); });
+
+    /* 🎶 Submit */
+    async function submitTrack(e){
+      e.preventDefault(); if(!currentAccount) return alert("Connect wallet first");
+      const provider=new ethers.providers.Web3Provider(window.ethereum); const signer=provider.getSigner();
+      const tx=await signer.sendTransaction({to:treasuryWallet,value:ethers.utils.parseEther("30")}); await tx.wait();
+      await db.collection("submissions").add({track:trackName.value,handle:handle.value,vibe:vibe.value,notes:notes.value,wallet:currentAccount,timestamp:Date.now()});
+      showToast("Track submitted!"); submissionForm.reset(); loadSubmissions();
     }
 
-    /* 🔘 Button Logic */
-    connectBtn.addEventListener("click", () => {
-      if (currentAccount) { disconnectWallet(); }
-      else { connectWallet(); }
-    });
-
-        /* 🎶 Submit Track */
-    async function submitTrack(e) {
-      e.preventDefault();
-      if (!currentAccount) return alert("Connect wallet first");
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-
-      // 💸 Require 30 CRO to treasury
-      const tx = await signer.sendTransaction({
-        to: treasuryWallet,
-        value: ethers.utils.parseEther("30")
-      });
-      await tx.wait();
-
-      // 📝 Save submission in Firestore
-      const doc = {
-        track: trackName.value,
-        handle: handle.value,
-        vibe: vibe.value,
-        notes: notes.value,
-        wallet: currentAccount,
-        timestamp: Date.now()
-      };
-      await db.collection("submissions").add(doc);
-
-      showToast("Track submitted!");
-      submissionForm.reset();
-      loadSubmissions();
+    /* ✅ Certify */
+    async function certifyTrack(){
+      const id=adminStampId.value.trim(),audio=ipfsAudio.value.trim(),image=ipfsImage.value.trim();
+      const ref=db.collection("submissions").doc(id),snap=await ref.get(); if(!snap.exists) return alert("No submission found");
+      const data=snap.data(); await db.collection("certified").add({...data,audio,image,certifiedAt:Date.now()}); await ref.delete();
+      showToast("Certified!"); loadCertified(); loadSubmissions();
     }
 
-    /* ✅ Certify Track (admin flow) */
-    async function certifyTrack() {
-      const id = adminStampId.value.trim(),
-            audio = ipfsAudio.value.trim(),
-            image = ipfsImage.value.trim();
-
-      const ref = db.collection("submissions").doc(id);
-      const snap = await ref.get();
-      if (!snap.exists) return alert("No submission found");
-
-      const data = snap.data();
-
-      // Move to certified collection
-      await db.collection("certified").add({
-        ...data,
-        audio,
-        image,
-        certifiedAt: Date.now()
-      });
-
-      await ref.delete();
-      showToast("Certified!");
-      loadCertified();
-      loadSubmissions();
+    /* 🚀 Fast Upload */
+    async function fastUploadTrack(){
+      const track=certTrackName.value.trim(),handle=certHandle.value.trim(),vibe=certVibe.value,audio=certAudio.value.trim(),image=certImage.value.trim();
+      if(!track||!handle||!audio||!image||!vibe) return showToast("Fill out all fields");
+      await db.collection("certified").add({track,handle,vibe,audio,image,wallet:adminWallet,certifiedAt:Date.now()});
+      showToast("Track uploaded to Certified!"); loadCertified();
     }
 
-    /* 🚀 Fast Upload (admin shortcut) */
-    async function fastUploadTrack() {
-      const track = certTrackName.value.trim(),
-            handle = certHandle.value.trim(),
-            vibe = certVibe.value,
-            audio = certAudio.value.trim(),
-            image = certImage.value.trim();
-
-      if (!track || !handle || !audio || !image || !vibe)
-        return showToast("Fill out all fields");
-
-      const doc = {
-        track, handle, vibe, audio, image,
-        wallet: adminWallet,
-        certifiedAt: Date.now()
-      };
-
-      await db.collection("certified").add(doc);
-      showToast("Track uploaded to Certified!");
-      loadCertified();
-    }
-
-        /* 📡 Load Live Submissions */
-    async function loadSubmissions() {
-      const subs = await db.collection("submissions")
-        .orderBy("timestamp","desc").get();
-
-      liveSubmissions.innerHTML = "";
-      if (subs.empty) {
-        liveSubmissions.innerHTML =
-          '<div class="card">No live submissions yet 🚀</div>';
+        /* 📡 Load Submissions */
+    async function loadSubmissions(){
+      const subs=await db.collection("submissions").orderBy("timestamp","desc").get();
+      liveSubmissions.innerHTML="";
+      if(subs.empty){
+        liveSubmissions.innerHTML='<div class="card">No live submissions yet 🚀</div>';
         return;
       }
-
-      subs.forEach(doc => {
-        const d = doc.data();
-        liveSubmissions.innerHTML += `
+      subs.forEach(doc=>{
+        const d=doc.data();
+        liveSubmissions.innerHTML+=`
           <div class="card">
             <b>${d.track}</b><br/>
             <i>@${d.handle}</i><br/>
@@ -507,98 +263,76 @@
     }
 
     /* 🎶 Load Certified Tracks */
-    async function loadCertified() {
-      const certs = await db.collection("certified")
-        .orderBy("certifiedAt","desc").get();
-
-      const swiper = document.getElementById("trackSwiper");
-      swiper.innerHTML = "";
-
-      if (certs.empty) {
-        swiper.innerHTML = '<div class="card">No certified tracks yet 🎶</div>';
+    async function loadCertified(){
+      const certs=await db.collection("certified").orderBy("certifiedAt","desc").get();
+      const swiper=document.getElementById("trackSwiper");
+      swiper.innerHTML="";
+      if(certs.empty){
+        swiper.innerHTML='<div class="card">No certified tracks yet 🎶</div>';
         return;
       }
-
-      certs.forEach(doc => {
-        const d = doc.data();
-        const card = document.createElement("div");
-        card.className = "track-card card";
-        card.innerHTML = `
-          <b class="track-title">${d.track} 
-            <span class="badge">[Certified]</span>
-          </b><br/>
+      certs.forEach(doc=>{
+        const d=doc.data();
+        const card=document.createElement("div");
+        card.className="track-card card";
+        card.innerHTML=`
+          <b class="track-title">${d.track} <span style="color:var(--verified)">[Certified]</span></b><br/>
           <i>@${d.handle}</i>
-          <img src="https://ipfs.io/ipfs/${d.image}" 
-               alt="Cover" class="track-cover"/>
-          <audio controls class="track-audio" 
-                 src="https://ipfs.io/ipfs/${d.audio}"></audio>
+          <img src="https://ipfs.io/ipfs/${d.image}" alt="Cover" style="margin:0.5rem 0;width:80%;max-width:300px;border-radius:8px;"/>
+          <audio controls style="width:90%;max-width:300px;border-radius:8px;" src="https://ipfs.io/ipfs/${d.audio}"></audio>
         `;
         swiper.appendChild(card);
       });
     }
 
     /* 🔄 Carousel Controls */
-    document.getElementById('nextTrack').addEventListener('click', () => {
-      const track = document.getElementById("trackSwiper");
-      if (track.children.length > 1) {
-        track.appendChild(track.firstElementChild);
-      }
+    document.getElementById('nextTrack').addEventListener('click',()=>{
+      const track=document.getElementById("trackSwiper");
+      if(track.children.length>1){ track.appendChild(track.firstElementChild); }
     });
-
-    document.getElementById('prevTrack').addEventListener('click', () => {
-      const track = document.getElementById("trackSwiper");
-      if (track.children.length > 1) {
-        track.insertBefore(track.lastElementChild, track.firstElementChild);
-      }
+    document.getElementById('prevTrack').addEventListener('click',()=>{
+      const track=document.getElementById("trackSwiper");
+      if(track.children.length>1){ track.insertBefore(track.lastElementChild, track.firstElementChild); }
     });
 
     /* 🚀 Initial Load */
     loadSubmissions();
     loadCertified();
 
-        /* 🌌 Background Canvas Animation */
-    const canvas = document.getElementById("bgCanvas");
-    const ctx = canvas.getContext("2d");
-    let w, h;
-
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resize);
+    /* 🌌 Background Canvas Animation */
+    const canvas=document.getElementById("bgCanvas");
+    const ctx=canvas.getContext("2d");
+    let w,h;
+    function resize(){ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
+    window.addEventListener("resize",resize);
     resize();
-
-    let t = 0;
-    function draw() {
-      ctx.fillStyle = "rgba(11,13,18,0.6)";
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.strokeStyle = "rgba(0,255,195,0.4)";
-      for (let i = 0; i < 30; i++) {
+    let t=0;
+    function draw(){
+      ctx.fillStyle="rgba(11,13,18,0.6)";
+      ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle="rgba(0,255,195,0.4)";
+      for(let i=0;i<30;i++){
         ctx.beginPath();
-        ctx.moveTo(0, h/2 + i*20 + Math.sin(t/20+i)*10);
-        ctx.lineTo(w, h/2 + i*20 + Math.sin(t/20+i)*10);
+        ctx.moveTo(0,h/2+i*20+Math.sin(t/20+i)*10);
+        ctx.lineTo(w,h/2+i*20+Math.sin(t/20+i)*10);
         ctx.stroke();
       }
-
-      ctx.strokeStyle = "rgba(255,0,170,0.4)";
+      ctx.strokeStyle="rgba(255,0,170,0.4)";
       ctx.beginPath();
-      for (let x = 0; x < w; x += 10) {
-        ctx.lineTo(x, h/2 + Math.sin((x+t)/40)*60);
+      for(let x=0;x<w;x+=10){
+        ctx.lineTo(x,h/2+Math.sin((x+t)/40)*60);
       }
       ctx.stroke();
-
-      t += 2;
+      t+=2;
       requestAnimationFrame(draw);
     }
     draw();
 
     /* 🎥 GSAP Scroll Reveal */
-    gsap.utils.toArray('.section').forEach(sec => {
-      gsap.from(sec, {
-        scrollTrigger: { trigger: sec, start: "top 80%" },
-        opacity: 0, y: 40,
-        duration: 1.2, ease: "power2.out"
+    gsap.utils.toArray('.section').forEach(sec=>{
+      gsap.from(sec,{
+        scrollTrigger:{trigger:sec,start:"top 80%"},
+        opacity:0,y:40,duration:1.2,ease:"power2.out"
       });
     });
   </script>
