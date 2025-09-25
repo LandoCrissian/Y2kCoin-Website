@@ -5,266 +5,868 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Y2K | Roast Records</title>
-  <meta name="description" content="Official Web3 submission portal for Y2K | Roast Records." />
+  <meta name="description" content="Official Web3 music label portal for Y2K | Roast Records – submit tracks, get certified, go global." />
   <meta name="theme-color" content="#0b0d12" />
-
+  <!-- Open Graph & Twitter for better sharing -->
+  <meta property="og:title" content="Y2K | Roast Records" />
+  <meta property="og:description" content="A Web3-driven music label for glitch, dub, and trap anthems. Enter the studio, submit your track, get certified." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://y2kroastrecords.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Y2K | Roast Records" />
+  <meta name="twitter:description" content="Y2K Roast Records – a dark, cinematic Web3 music label curating glitch, dub & trap. Submit your track and get certified." />
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
+  <!-- Structured Data: Organization/MusicGroup Schema -->
+  <script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "MusicGroup",
+    "name": "Y2K | Roast Records",
+    "description": "A Web3-driven record label for glitch, dub, and trap music.",
+    "url": "https://y2kroastrecords.com",
+    "logo": "https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png",
+    "sameAs": [
+      "https://x.com/y2kc0in",
+      "https://discord.gg/jpFbSapSAh"
+    ]
+  }</script>
   <!-- ✅ Favicon -->
   <link rel="icon" href="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" />
-
-  <!-- ✅ Fonts -->
+  <!-- ✅ Fonts & Preconnects -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Space+Mono&display=swap" />
-
-  <!-- ✅ GSAP -->
+  <!-- ✅ GSAP (for animations) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
   <!-- ✅ Core Styles -->
   <style>
+    /* 🎨 Color Theme Variables */
     :root {
-      --bg:#0b0d12; --txt:#f1f1f1; --accent:#00ffc3; --pink:#ff00aa;
-      --danger:#ff0044; --verified:#00ff88; --card:#13151a;
+      --bg: #0b0d12;
+      --txt: #f1f1f1;
+      --accent: #00ffc3;
+      --pink: #ff00aa;
+      --danger: #ff0044;
+      --verified: #00ff88;
+      --card: #13151a;
     }
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Space Mono',monospace;overflow-x:hidden;}
-    h1,h2,h3{font-family:'Orbitron',sans-serif;text-transform:uppercase;}
-
+    /* Reset & Base Typography */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: var(--bg); color: var(--txt); font-family: 'Space Mono', monospace; overflow-x: hidden; }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-shadow: 0 0 6px var(--accent); }
+    p { line-height: 1.6; margin-bottom: 1rem; }
+    /* Focus outline for accessibility */
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px dashed var(--accent);
+      outline-offset: 2px;
+    }
     /* 🎨 Background Canvas */
-    #bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:linear-gradient(180deg,#0b0d12,#13151a);}
-
+    #bgCanvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      background: linear-gradient(180deg, #0b0d12, #13151a);
+    }
     /* 🔝 Header */
-    header{position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0.8rem 1.2rem;background:rgba(11,13,18,0.85);backdrop-filter:blur(6px);border-bottom:1px solid #222;}
-    nav{display:flex;gap:0.6rem;align-items:center;}
-    .icon-btn{display:flex;align-items:center;justify-content:center;padding:0.4rem 0.9rem;border-radius:20px;border:1px solid var(--accent);background:transparent;transition:0.25s;}
-    .icon-btn img{height:20px;width:20px;}
-    .icon-btn:hover{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:translateY(-2px);}
-    #connectBtn{margin-left:1rem;background:var(--accent);color:#000;font-weight:bold;padding:0.5rem 1rem;border:none;border-radius:20px;cursor:pointer;transition:0.25s;}
-    #connectBtn.disconnect{background:var(--danger);color:#fff;}
-    #walletStatus{text-align:right;font-size:0.75rem;color:gray;}
-
-    /* 📦 Layout */
-    main{max-width:1000px;margin:auto;padding:2rem 1rem;}
-    .section{margin-top:3rem;opacity:1 !important;}
-    .btn{padding:0.6rem 1.2rem;background:var(--accent);color:#000;border:none;border-radius:20px;font-weight:bold;cursor:pointer;}
-    .card{background:var(--card);padding:1rem;border-radius:8px;box-shadow:0 0 8px rgba(0,255,195,0.2);margin-bottom:1rem;}
-    input,select,textarea{font-size:16px;padding:0.55rem 0.75rem;margin:0.5rem 0;background:#1a1c20;border:1px solid #333;border-radius:6px;color:var(--txt);width:100%;}
-    audio{width:100%;margin-top:0.5rem;border-radius:6px;}
-
+    header {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 1.2rem;
+      background: rgba(11,13,18,0.85);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid #222;
+    }
+    .logo { font-size: 1.2rem; font-weight: bold; color: var(--accent); text-decoration: none; }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    /* Site nav links */
+    .nav-menu { display: flex; gap: 1rem; }
+    .nav-menu a { font-size: 0.9rem; }
+    /* Hamburger (for mobile) */
+    #hamburger {
+      display: none;
+      font-size: 1.5rem; line-height: 1;
+      background: none; color: var(--txt);
+      border: none; cursor: pointer;
+    }
+    /* Wallet Connect Button */
+    #connectBtn {
+      background: var(--accent); color: #000;
+      font-weight: bold; padding: 0.5rem 1rem;
+      border: none; border-radius: 20px;
+      cursor: pointer; transition: 0.25s;
+    }
+    #connectBtn:hover { filter: brightness(1.1); }
+    #connectBtn.disconnect { background: var(--danger); color: #fff; }
+    #walletStatus { font-size: 0.75rem; color: gray; text-align: right; }
+    /* Responsive header: hide nav links on mobile, show hamburger */
+    @media (max-width: 768px) {
+      .nav-menu { 
+        display: none;
+        position: absolute; top: 60px; right: 1.2rem;
+        background: #0b0d12; padding: 1rem; border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        flex-direction: column;
+      }
+      .nav-menu.open { display: flex; }
+      #hamburger { display: block; }
+      #walletStatus { display: none; } /* hide wallet address on small screens to save space */
+    }
+    /* 📦 Layout Wrapper */
+    main { max-width: 1000px; margin: auto; padding: 2rem 1rem; }
+    section { margin-bottom: 4rem; }
+    .section-title { text-align: center; margin-bottom: 2rem; }
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background: var(--accent); color: #000;
+      border: none; border-radius: 20px;
+      font-weight: bold; cursor: pointer;
+      text-decoration: none; text-align: center;
+      transition: 0.2s;
+    }
+    .btn:hover { filter: brightness(1.1); }
+    .card {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,255,195,0.2);
+      margin-bottom: 1rem;
+    }
+    /* Form elements */
+    input, select, textarea {
+      font-size: 16px; font-family: 'Space Mono', monospace;
+      padding: 0.55rem 0.75rem;
+      margin: 0.5rem 0;
+      background: #1a1c20;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: var(--txt);
+      width: 100%;
+    }
+    select { cursor: pointer; }
+    textarea { resize: vertical; }
+    /* 🎬 Hero Section */
+    #studioHero {
+      position: relative;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: radial-gradient(circle at center, rgba(0,255,195,0.15) 0%, transparent 70%);
+    }
+    #studioHero .hero-content { position: relative; z-index: 2; }
+    #studioHero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      color: var(--accent);
+      text-shadow: 0 0 12px var(--pink);
+    }
+    #studioHero p { 
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #aaa;
+    }
+    #studioHero .hero-cta { margin-top: 2rem; }
+    #studioHero .scroll-indicator {
+      margin-top: 3rem;
+      font-size: 2rem;
+      color: var(--accent);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 
+      0%, 100% { opacity: 1; } 
+      50% { opacity: 0.4; } 
+    }
+    /* 🎵 Releases Section */
+    #releases .release-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .release-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .release-cover {
+      width: 100%; padding-top: 100%;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 4px;
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+    .release-cover::after {
+      content: "Cover";
+      color: #555; font-size: 0.8rem;
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .release-card b { font-size: 1rem; }
+    .release-card .release-artist { font-size: 0.85rem; color: #aaa; }
+    .release-card .release-date { font-size: 0.75rem; color: #555; }
+    /* 🎶 Certified Tracks (Carousel) */
+    #trackVault { position: relative; overflow: hidden; }
+    #trackSwiper {
+      display: flex;
+      transition: transform 0.6s ease-in-out;
+    }
+    .track-card {
+      min-width: 100%;
+      flex-shrink: 0;
+      padding: 1rem;
+      text-align: center;
+    }
+    .track-card b { font-size: 1rem; }
+    .track-card i { font-size: 0.9rem; color: #ccc; }
+    .track-card img.cover {
+      width: 80%; max-width: 300px;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+    }
+    .track-card .player {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .track-card .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.3rem;
+    }
+    .track-card .play-btn {
+      background: var(--accent); color: #000;
+      border: none; border-radius: 50%;
+      width: 40px; height: 40px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .track-card .time { font-size: 0.8rem; }
+    .track-card .progress-bar {
+      width: 100%; max-width: 300px;
+    }
+    /* Carousel nav buttons */
+    #prevTrack, #nextTrack {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      border: none; color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+    #prevTrack { left: 10px; }
+    #nextTrack { right: 10px; }
+    #prevTrack:hover, #nextTrack:hover { background: rgba(0,0,0,0.7); }
+    /* 🧑‍🎤 Artists Section */
+    .artist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      text-align: center;
+    }
+    .artist-card { padding: 1rem; }
+    .artist-photo {
+      width: 100%; padding-top: 100%;
+      background: #222;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .artist-photo::after {
+      content: "Artist";
+      color: #555; font-size: 0.8rem;
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .artist-name { font-size: 1rem; font-weight: bold; }
+    .artist-genre { font-size: 0.85rem; color: #aaa; }
+    /* 📰 News Section */
+    .news-list { list-style: none; padding: 0; max-width: 800px; margin: auto; }
+    .news-item { margin-bottom: 1.5rem; }
+    .news-item h3 { font-size: 1.1rem; margin-bottom: 0.2rem; }
+    .news-item .news-date { font-size: 0.8rem; color: #777; margin-bottom: 0.5rem; }
+    .news-item p { font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .news-item a.read-more {
+      font-size: 0.85rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: bold;
+    }
     /* ⬇️ Footer */
-    footer{text-align:center;padding:2rem 1rem;margin-top:4rem;border-top:1px solid #222;background:rgba(11,13,18,0.85);}
-    footer img{height:60px;margin-bottom:0.8rem;animation:pulse 3s infinite;}
-    footer a{color:var(--accent);margin:0 0.5rem;text-decoration:none;}
-    footer a:hover{text-shadow:0 0 6px var(--accent);}
-    @keyframes pulse{0%,100%{filter:drop-shadow(0 0 2px var(--accent));}50%{filter:drop-shadow(0 0 8px var(--pink));}}
-
-    /* 🍞 Toasts */
-    #toast-container{position:fixed;bottom:1.2rem;right:1.2rem;display:flex;flex-direction:column;gap:0.5rem;z-index:2000;}
-    .toast{background:#1c1c1c;color:#fff;padding:0.8rem 1rem;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,0.4);font-size:0.85rem;min-width:180px;opacity:0;transform:translateY(20px);transition:opacity 0.3s ease,transform 0.3s ease;}
-    .toast.show{opacity:1;transform:translateY(0);}
-
-    /* 🎶 Carousel */
-    #trackVault{position:relative;overflow:hidden;}
-    #trackSwiper{display:flex;transition:transform 0.6s ease-in-out;}
-    .track-card{min-width:100%;flex-shrink:0;padding:1rem;text-align:center;}
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid #222;
+      background: rgba(11,13,18,0.85);
+    }
+    footer .social-links img {
+      height: 24px; width: 24px;
+      margin: 0 0.5rem;
+      vertical-align: middle;
+      filter: brightness(0.8);
+      transition: filter 0.2s;
+    }
+    footer .social-links img:hover { filter: brightness(1); }
+    footer p { margin: 0.5rem 0; color: #555; }
+    /* 🍞 Toast Notifications */
+    #toast-container {
+      position: fixed;
+      bottom: 1.2rem; right: 1.2rem;
+      display: flex; flex-direction: column;
+      gap: 0.5rem;
+      z-index: 2000;
+    }
+    .toast {
+      background: #1c1c1c; color: #fff;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+      font-size: 0.85rem;
+      min-width: 180px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
   </style>
 </head>
-<body class="">
+<body>
   <!-- 🎨 Background Canvas -->
   <canvas id="bgCanvas"></canvas>
 
-  <!-- 🔝 Header -->
+  <!-- 🔝 Header (Navigation + Wallet) -->
   <header>
-    <nav>
-      <a class="icon-btn" href="https://x.com/y2kc0in?s=21" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7358.jpeg" alt="X"/></a>
-      <a class="icon-btn" href="https://discord.gg/jpFbSapSAh" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7356.jpeg" alt="Discord"/></a>
-      <a class="icon-btn" href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7357.jpeg" alt="Obsidian"/></a>
-    </nav>
-    <div>
+    <a href="#" class="logo">Y2K | Roast Records</a>
+    <div class="header-right">
+      <nav id="siteNav" class="nav-menu">
+        <a href="#releases">Releases</a>
+        <a href="#artists">Artists</a>
+        <a href="#news">News</a>
+        <a href="#about">About</a>
+        <a href="#submit">Submit</a>
+      </nav>
       <button id="connectBtn">Connect Wallet</button>
       <div id="walletStatus">Not connected</div>
+      <button id="hamburger" aria-label="Toggle menu">&#9776;</button>
     </div>
   </header>
 
-  <!-- 🎬 Hero -->
-  <section id="studioHero" style="position:relative;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:radial-gradient(circle at center,rgba(0,255,195,0.15)0%,transparent 70%);">
-    <div style="position:relative;z-index:2;color:var(--txt);">
-      <h1 style="font-size:clamp(2rem,6vw,4rem);color:var(--accent);text-shadow:0 0 12px var(--pink);">Y2K | Roast Records</h1>
-      <p style="margin-top:1rem;font-size:1rem;color:#aaa;">Enter the Studio. Submit. Get Certified. Go Global.</p>
-      <div style="margin-top:3rem;font-size:2rem;color:var(--accent);animation:pulse 1.5s infinite;">▼</div>
+  <!-- 🎬 Hero Section -->
+  <section id="studioHero">
+    <div class="hero-content">
+      <h1>Y2K | Roast Records</h1>
+      <p>Enter the Studio. Submit. Get Certified. Go Global.</p>
+      <a href="#submit" class="btn hero-cta">Submit Your Track</a>
+      <div class="scroll-indicator">▼</div>
     </div>
   </section>
 
   <main>
-    <section class="section"><h2>📡 Live Submissions</h2><div id="liveSubmissions"><div class="card">No live submissions yet 🚀</div></div></section>
-    <section class="section"><h2 style="text-align:center;">✅ Certified Tracks</h2><div id="trackVault"><div id="trackSwiper"><div class="card">No certified tracks yet 🎶</div></div><button id="prevTrack">⬅️</button><button id="nextTrack">➡️</button></div></section>
-    <section class="section"><h2>🎶 Submit a Track</h2><form id="submissionForm" onsubmit="submitTrack(event)"><input required placeholder="Track Title" id="trackName"/><input required placeholder="Your X / Twitter @handle" id="handle"/><select id="vibe"><option disabled selected>Select Vibe</option><option>Glitch</option><option>Dub</option><option>Trap</option><option>Other</option></select><textarea id="notes" placeholder="Optional notes..."></textarea><button class="btn" type="submit">Submit Track (30 CRO)</button></form></section>
-    <section id="adminPanel" class="section" style="display:none;"><h2>🛠️ Admin Panel</h2><div class="card"><h3>🚀 Fast Upload</h3><input id="certTrackName" placeholder="Track Title"/><input id="certHandle" placeholder="Twitter @handle"/><select id="certVibe"><option disabled selected>Select Vibe</option><option>Glitch</option><option>Dub</option><option>Trap</option><option>Other</option></select><input id="certAudio" placeholder="IPFS Audio URL"/><input id="certImage" placeholder="IPFS Cover Image URL"/><button class="btn" onclick="fastUploadTrack()">Upload</button></div><div class="card"><h3>📥 Certify Submission</h3><input id="adminStampId" placeholder="Submission ID"/><input id="ipfsAudio" placeholder="IPFS Audio URL"/><input id="ipfsImage" placeholder="IPFS Cover Image URL"/><button class="btn" onclick="certifyTrack()">Certify</button></div></section>
+    <!-- SECTION: Latest Releases -->
+    <section id="releases" class="section">
+      <h2 class="section-title">Latest Releases</h2>
+      <div class="release-grid">
+        <div class="card release-card">
+          <div class="release-cover"></div>
+          <b>Certified Vol. 1</b>
+          <div class="release-artist">Various Artists</div>
+          <div class="release-date">2025</div>
+        </div>
+        <div class="card release-card">
+          <div class="release-cover"></div>
+          <b>Glitch &amp; Bass</b>
+          <div class="release-artist">DJ Y2K</div>
+          <div class="release-date">2025</div>
+        </div>
+        <div class="card release-card">
+          <div class="release-cover"></div>
+          <b>Dub Kingdom</b>
+          <div class="release-artist">Roast Squad</div>
+          <div class="release-date">2024</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Certified Tracks Carousel -->
+    <section id="certified" class="section">
+      <h2 class="section-title">Certified Tracks</h2>
+      <div id="trackVault">
+        <div id="trackSwiper">
+          <div class="card track-card">Loading tracks...</div>
+        </div>
+        <button id="prevTrack" aria-label="Previous track">⬅️</button>
+        <button id="nextTrack" aria-label="Next track">➡️</button>
+      </div>
+    </section>
+
+    <!-- SECTION: Artists Roster -->
+    <section id="artists" class="section">
+      <h2 class="section-title">Artists</h2>
+      <div class="artist-grid">
+        <div class="card artist-card">
+          <div class="artist-photo"></div>
+          <div class="artist-name">Artist Name</div>
+          <div class="artist-genre">Genre</div>
+        </div>
+        <div class="card artist-card">
+          <div class="artist-photo"></div>
+          <div class="artist-name">Artist Name</div>
+          <div class="artist-genre">Genre</div>
+        </div>
+        <div class="card artist-card">
+          <div class="artist-photo"></div>
+          <div class="artist-name">Artist Name</div>
+          <div class="artist-genre">Genre</div>
+        </div>
+        <!-- More artist cards can be added here -->
+      </div>
+    </section>
+
+    <!-- SECTION: News & Press -->
+    <section id="news" class="section">
+      <h2 class="section-title">News &amp; Press</h2>
+      <ul class="news-list">
+        <li class="news-item">
+          <h3>Roast Records Launches Web3 Label</h3>
+          <div class="news-date">Oct 1, 2025</div>
+          <p>Y2K Roast Records officially launches its Web3-powered music label, bridging crypto and music for a new era of sound.</p>
+          <a href="#" class="read-more">Read More</a>
+        </li>
+        <li class="news-item">
+          <h3>First Wave of Certified Tracks Released</h3>
+          <div class="news-date">Oct 15, 2025</div>
+          <p>The first batch of community-submitted tracks have been certified and dropped on all major streaming platforms worldwide.</p>
+          <a href="#" class="read-more">Read More</a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- SECTION: Live Submissions (community pipeline) -->
+    <section id="liveSubmissionsSection" class="section">
+      <h2 class="section-title">Live Submissions</h2>
+      <div id="liveSubmissions">
+        <div class="card">No live submissions yet 🚀</div>
+      </div>
+    </section>
+
+    <!-- SECTION: Submit a Track Form -->
+    <section id="submit" class="section">
+      <h2 class="section-title">Submit a Track</h2>
+      <form id="submissionForm" onsubmit="submitTrack(event)">
+        <input id="trackName" placeholder="Track Title" required />
+        <input id="handle" placeholder="Your X / Twitter @handle" required />
+        <select id="vibe" required>
+          <option disabled selected>Select Vibe</option>
+          <option>Glitch</option>
+          <option>Dub</option>
+          <option>Trap</option>
+          <option>Other</option>
+        </select>
+        <textarea id="notes" placeholder="Optional notes..."></textarea>
+        <button class="btn" type="submit">Submit Track (30 CRO)</button>
+      </form>
+    </section>
+
+    <!-- SECTION: About / Contact -->
+    <section id="about" class="section">
+      <h2 class="section-title">About &amp; Contact</h2>
+      <p>Y2K | Roast Records is a Web3-driven record label curating glitch, dub, and trap anthems. We blend blockchain technology with underground music culture to empower independent artists and reward our community. Each certified track represents our commitment to quality and innovation in sound.</p>
+      <p>For press or licensing inquiries, please contact <a href="mailto:info@y2kroastrecords.com">info@y2kroastrecords.com</a>.</p>
+      <p>Follow us on social media or join our Discord to stay updated on new releases and events.</p>
+    </section>
+
+    <!-- SECTION: Admin Panel (only visible to admin user) -->
+    <section id="adminPanel" class="section" style="display: none;">
+      <h2 class="section-title">Admin Panel</h2>
+      <div class="card">
+        <h3>🚀 Fast Upload</h3>
+        <input id="certTrackName" placeholder="Track Title" />
+        <input id="certHandle" placeholder="Twitter @handle" />
+        <select id="certVibe">
+          <option disabled selected>Select Vibe</option>
+          <option>Glitch</option>
+          <option>Dub</option>
+          <option>Trap</option>
+          <option>Other</option>
+        </select>
+        <input id="certAudio" placeholder="IPFS Audio URL" />
+        <input id="certImage" placeholder="IPFS Cover Image URL" />
+        <button class="btn" onclick="fastUploadTrack()">Upload</button>
+      </div>
+      <div class="card">
+        <h3>✅ Certify Submission</h3>
+        <input id="adminStampId" placeholder="Submission ID" />
+        <input id="ipfsAudio" placeholder="IPFS Audio URL" />
+        <input id="ipfsImage" placeholder="IPFS Cover Image URL" />
+        <button class="btn" onclick="certifyTrack()">Certify</button>
+      </div>
+    </section>
   </main>
 
   <!-- ⬇️ Footer -->
   <footer>
-    <img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/AC6583AD-EE37-486D-8220-6555D24B0D9D.png" alt="Y2K Logo"/>
+    <div class="social-links">
+      <a href="https://x.com/y2kc0in?s=21" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7358.jpeg" alt="X"/></a>
+      <a href="https://discord.gg/jpFbSapSAh" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7356.jpeg" alt="Discord"/></a>
+      <a href="https://obsidian.finance/?outputCurrency=0xB4Df7d2A736Cc391146bB0dF4277E8F68247Ac6d" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/LandoCrissian/Y2kCoin-Website/refs/heads/main/IMG_7357.jpeg" alt="Obsidian"/></a>
+    </div>
     <p>&copy; 2025 Y2K | Roast Records</p>
   </footer>
 
-  <!-- 🔌 Scripts -->
+  <!-- 🔌 Scripts (External libs and our main script) -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
   <script>
     /* 🛡️ Debug Mode */
     const DEBUG = true;
-    if(DEBUG){ document.body.classList.add("debug"); }
+    if (DEBUG) { document.body.classList.add("debug"); }
+
+    // Element selectors
+    const connectBtn = document.getElementById('connectBtn'), walletStatus = document.getElementById('walletStatus');
+    const siteNav = document.getElementById('siteNav'), hamburgerBtn = document.getElementById('hamburger');
+    const trackSwiperEl = document.getElementById('trackSwiper'), nextTrackBtn = document.getElementById('nextTrack'), prevTrackBtn = document.getElementById('prevTrack');
 
     /* 🔑 Wallet + Admin Setup */
-    const treasuryWallet="0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
-    const adminWallet="0x7fc2ab08f46c10489bab5d694d574022f1048198";
-    let currentAccount=null,hasSigned=false;
+    const treasuryWallet = "0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100";
+    const adminWallet = "0x7fc2ab08f46c10489bab5d694d574022f1048198";
+    let currentAccount = null, hasSigned = false;
 
     /* 🔥 Firebase Config */
     firebase.initializeApp({
-      apiKey:"AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-      authDomain:"y2kroastrecords.firebaseapp.com",
-      projectId:"y2kroastrecords",
-      storageBucket:"y2kroastrecords.appspot.com",
-      messagingSenderId:"313829428782",
-      appId:"1:313829428782:web:4e42771ba525f6f297d9bf"
+      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+      authDomain: "y2kroastrecords.firebaseapp.com",
+      projectId: "y2kroastrecords",
+      storageBucket: "y2kroastrecords.appspot.com",
+      messagingSenderId: "313829428782",
+      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
     });
-    const db=firebase.firestore();
+    const db = firebase.firestore();
 
-    /* 🍞 Toast */
-    function showToast(msg){
-      const c=document.getElementById("toast-container")||document.body.appendChild(Object.assign(document.createElement("div"),{id:"toast-container"}));
-      const t=document.createElement("div");t.className="toast";t.innerText=msg;c.appendChild(t);
-      setTimeout(()=>t.classList.add("show"),50);
-      setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),300);},4000);
+    /* 🍞 Toast utility */
+    function showToast(msg) {
+      const c = document.getElementById("toast-container") || document.body.appendChild(Object.assign(document.createElement("div"), { id: "toast-container" }));
+      const t = document.createElement("div");
+      t.className = "toast";
+      t.innerText = msg;
+      c.appendChild(t);
+      // Animate toast in and out
+      setTimeout(() => t.classList.add("show"), 50);
+      setTimeout(() => {
+        t.classList.remove("show");
+        setTimeout(() => t.remove(), 300);
+      }, 4000);
     }
 
-    /* 🔗 Wallet */
-    async function connectWallet(){
-      if(!window.ethereum)return alert("No wallet found");
-      try{
-        const provider=new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts",[]);
-        const signer=provider.getSigner();const address=await signer.getAddress();
-        if(!hasSigned){await signer.signMessage("Sign to access Y2K Roast Records");hasSigned=true;}
-        currentAccount=address.toLowerCase();
-        walletStatus.innerText=`${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
-        connectBtn.innerText="Disconnect";connectBtn.classList.add("disconnect");showToast("Wallet connected");
-        if(currentAccount===adminWallet)document.getElementById("adminPanel").style.display="block";
-      }catch(err){console.error(err);showToast("Wallet failed");}
+    /* 🔗 Wallet Connect/Disconnect */
+    async function connectWallet() {
+      if (!window.ethereum) {
+        alert("No wallet found. Please install a Web3 wallet.");
+        return;
+      }
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        // Sign a message once per session for simple auth
+        if (!hasSigned) {
+          await signer.signMessage("Sign to access Y2K Roast Records");
+          hasSigned = true;
+        }
+        currentAccount = address.toLowerCase();
+        walletStatus.innerText = `${currentAccount.slice(0,6)}...${currentAccount.slice(-4)}`;
+        connectBtn.innerText = "Disconnect";
+        connectBtn.classList.add("disconnect");
+        showToast("Wallet connected");
+        if (currentAccount === adminWallet) {
+          document.getElementById("adminPanel").style.display = "block";
+        }
+      } catch (err) {
+        console.error(err);
+        showToast("Wallet connection failed");
+      }
     }
-    function disconnectWallet(){
-      currentAccount=null;hasSigned=false;walletStatus.innerText="Not connected";
-      connectBtn.innerText="Connect Wallet";connectBtn.classList.remove("disconnect");
-      document.getElementById("adminPanel").style.display="none";showToast("Wallet disconnected");
+    function disconnectWallet() {
+      currentAccount = null;
+      hasSigned = false;
+      walletStatus.innerText = "Not connected";
+      connectBtn.innerText = "Connect Wallet";
+      connectBtn.classList.remove("disconnect");
+      document.getElementById("adminPanel").style.display = "none";
+      showToast("Wallet disconnected");
     }
-    connectBtn.addEventListener("click",()=>{currentAccount?disconnectWallet():connectWallet();});
+    connectBtn.addEventListener("click", () => {
+      currentAccount ? disconnectWallet() : connectWallet();
+    });
 
-    /* 🎶 Submit */
-    async function submitTrack(e){
-      e.preventDefault();if(!currentAccount)return alert("Connect wallet first");
-      const provider=new ethers.providers.Web3Provider(window.ethereum);const signer=provider.getSigner();
-      const tx=await signer.sendTransaction({to:treasuryWallet,value:ethers.utils.parseEther("30")});await tx.wait();
-      await db.collection("submissions").add({track:trackName.value,handle:handle.value,vibe:vibe.value,notes:notes.value,wallet:currentAccount,timestamp:Date.now()});
-      showToast("Track submitted!");submissionForm.reset();loadSubmissions();
+    /* 🎶 Submission Flow */
+    async function submitTrack(e) {
+      e.preventDefault();
+      if (!currentAccount) return alert("Connect wallet first to submit");
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        // Payment transaction for submission fee
+        const tx = await signer.sendTransaction({
+          to: treasuryWallet,
+          value: ethers.utils.parseEther("30")
+        });
+        await tx.wait();
+        // Add submission to Firestore
+        await db.collection("submissions").add({
+          track: trackName.value.trim(),
+          handle: handle.value.trim(),
+          vibe: vibe.value,
+          notes: notes.value.trim(),
+          wallet: currentAccount,
+          timestamp: Date.now()
+        });
+        showToast("Track submitted! 🔥");
+        submissionForm.reset();
+        loadSubmissions();
+      } catch (err) {
+        console.error(err);
+        showToast("Submission failed");
+      }
     }
 
-    /* ✅ Certify */
-    async function certifyTrack(){
-      const id=adminStampId.value.trim(),audio=ipfsAudio.value.trim(),image=ipfsImage.value.trim();
-      const ref=db.collection("submissions").doc(id),snap=await ref.get();if(!snap.exists)return alert("No submission found");
-      const data=snap.data();await db.collection("certified").add({...data,audio,image,certifiedAt:Date.now()});await ref.delete();
-      showToast("Certified!");loadCertified();loadSubmissions();
+    /* ✅ Certify a pending submission (Admin) */
+    async function certifyTrack() {
+      const id = adminStampId.value.trim(),
+            audio = ipfsAudio.value.trim(),
+            image = ipfsImage.value.trim();
+      if (!id || !audio || !image) {
+        return alert("Please provide Submission ID, IPFS Audio URL, and IPFS Image URL");
+      }
+      const ref = db.collection("submissions").doc(id);
+      const snap = await ref.get();
+      if (!snap.exists) {
+        return alert("No submission found with that ID");
+      }
+      const data = snap.data();
+      // Move data to certified collection
+      await db.collection("certified").add({
+        ...data,
+        audio, image,
+        certifiedAt: Date.now()
+      });
+      await ref.delete();
+      showToast("Track certified ✅");
+      loadCertified();
+      loadSubmissions();
     }
 
-    /* 🚀 Fast Upload */
-    async function fastUploadTrack(){
-      const track=certTrackName.value.trim(),handle=certHandle.value.trim(),vibe=certVibe.value,audio=certAudio.value.trim(),image=certImage.value.trim();
-      if(!track||!handle||!audio||!image||!vibe)return showToast("Fill out all fields");
-      await db.collection("certified").add({track,handle,vibe,audio,image,wallet:adminWallet,certifiedAt:Date.now()});
-      showToast("Uploaded!");loadCertified();
+    /* 🚀 Fast Upload (Admin direct add) */
+    async function fastUploadTrack() {
+      const track = certTrackName.value.trim(),
+            handle = certHandle.value.trim(),
+            vibe = certVibe.value,
+            audio = certAudio.value.trim(),
+            image = certImage.value.trim();
+      if (!track || !handle || !audio || !image || !vibe) {
+        return showToast("Fill out all fields");
+      }
+      await db.collection("certified").add({
+        track, handle, vibe, audio, image,
+        wallet: adminWallet,
+        certifiedAt: Date.now()
+      });
+      showToast("Uploaded to certified ✅");
+      loadCertified();
     }
 
-    /* 📡 Load Submissions */
-    async function loadSubmissions(){
-      const subs=await db.collection("submissions").orderBy("timestamp","desc").get();
-      liveSubmissions.innerHTML="";
-      if(subs.empty){liveSubmissions.innerHTML='<div class="card">No live submissions yet 🚀</div>';return;}
-      subs.forEach(doc=>{
-        const d=doc.data();
-        liveSubmissions.innerHTML+=`<div class="card"><b>${d.track}</b><br/><i>@${d.handle}</i><br/><small>${d.wallet.slice(0,6)}...${d.wallet.slice(-4)}</small><br/><small>${d.vibe}</small><br/><small>ID:<code>${doc.id}</code></small></div>`;
+    /* 📡 Load Live Submissions (pending tracks list) */
+    async function loadSubmissions() {
+      const subs = await db.collection("submissions").orderBy("timestamp", "desc").get();
+      const container = document.getElementById("liveSubmissions");
+      container.innerHTML = "";
+      if (subs.empty) {
+        container.innerHTML = '<div class="card">No live submissions yet 🚀</div>';
+        return;
+      }
+      subs.forEach(doc => {
+        const d = doc.data();
+        container.innerHTML += `<div class="card">
+          <b>${d.track}</b><br/>
+          <i>@${d.handle}</i><br/>
+          <small>${d.wallet.slice(0,6)}...${d.wallet.slice(-4)}</small><br/>
+          <small>${d.vibe}</small><br/>
+          <small>ID: <code>${doc.id}</code></small>
+        </div>`;
       });
     }
 
-    /* 🎶 Load Certified */
-    async function loadCertified(){
-      const certs=await db.collection("certified").orderBy("certifiedAt","desc").get();
-      const swiper=document.getElementById("trackSwiper");swiper.innerHTML="";
-      if(certs.empty){swiper.innerHTML='<div class="card">No certified tracks yet 🎶</div>';return;}
-      certs.forEach(doc=>{
-        const d=doc.data();const card=document.createElement("div");card.className="track-card card";
-        card.innerHTML=`<b>${d.track} <span style="color:var(--verified)">[Certified]</span></b><br/><i>@${d.handle}</i><br/><img src="https://ipfs.io/ipfs/${d.image}" alt="Cover" style="margin:0.5rem 0;width:80%;max-width:300px;border-radius:8px;"/><audio controls style="width:90%;max-width:300px;border-radius:8px;" src="https://ipfs.io/ipfs/${d.audio}"></audio>`;
+    /* 🎶 Load Certified Tracks into Carousel */
+    async function loadCertified() {
+      const certs = await db.collection("certified").orderBy("certifiedAt", "desc").get();
+      const swiper = document.getElementById("trackSwiper");
+      swiper.innerHTML = "";
+      if (certs.empty) {
+        swiper.innerHTML = '<div class="card track-card">No certified tracks yet 🎶</div>';
+        return;
+      }
+      certs.forEach(doc => {
+        const d = doc.data();
+        // Build track card element
+        const card = document.createElement("div");
+        card.className = "track-card card";
+        card.innerHTML = `
+          <b>${d.track} <span style="color: var(--verified)">[Certified]</span></b><br/>
+          <i>@${d.handle}</i><br/>
+          <img loading="lazy" class="cover" src="https://ipfs.io/ipfs/${d.image}" alt="Cover"/><br/>
+          <div class="player">
+            <div class="controls">
+              <button class="play-btn" aria-label="Play/Pause">▶</button>
+              <span class="time time-current">0:00</span> / <span class="time time-total">0:00</span>
+            </div>
+            <input type="range" class="progress-bar" value="0" min="0" max="100" aria-label="Track progress">
+          </div>
+          <audio src="https://ipfs.io/ipfs/${d.audio}" preload="none"></audio>
+        `;
         swiper.appendChild(card);
+        // Set up audio player functionality for this card
+        const audio = card.querySelector("audio");
+        const playBtn = card.querySelector(".play-btn");
+        const progressBar = card.querySelector(".progress-bar");
+        const currentTimeEl = card.querySelector(".time-current");
+        const totalTimeEl = card.querySelector(".time-total");
+        // When metadata is loaded, display total duration
+        audio.addEventListener("loadedmetadata", () => {
+          const totalSec = Math.floor(audio.duration);
+          const min = Math.floor(totalSec / 60);
+          const sec = totalSec % 60;
+          totalTimeEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+          progressBar.max = totalSec;
+        });
+        // Update progress as audio plays
+        audio.addEventListener("timeupdate", () => {
+          const currentSec = Math.floor(audio.currentTime);
+          const min = Math.floor(currentSec / 60);
+          const sec = currentSec % 60;
+          currentTimeEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+          progressBar.value = currentSec;
+        });
+        // Play/Pause toggle
+        let isPlaying = false;
+        playBtn.addEventListener("click", () => {
+          if (!isPlaying) {
+            // Pause any other playing tracks
+            document.querySelectorAll("#trackSwiper audio").forEach(a => {
+              if (!a.paused && a !== audio) {
+                a.pause();
+                a.currentTime = 0;
+              }
+            });
+            // Reset other play buttons
+            document.querySelectorAll(".play-btn").forEach(btn => {
+              if (btn !== playBtn) btn.textContent = "▶";
+            });
+            // Play this track
+            audio.play();
+            playBtn.textContent = "⏸";
+            playBtn.setAttribute("aria-label", "Pause");
+            isPlaying = true;
+          } else {
+            audio.pause();
+            playBtn.textContent = "▶";
+            playBtn.setAttribute("aria-label", "Play");
+            isPlaying = false;
+          }
+        });
+        // Scrub track position
+        progressBar.addEventListener("input", () => {
+          audio.currentTime = progressBar.value;
+        });
+        // When track ends, reset play button
+        audio.addEventListener("ended", () => {
+          playBtn.textContent = "▶";
+          playBtn.setAttribute("aria-label", "Play");
+          isPlaying = false;
+          audio.currentTime = 0;
+        });
       });
     }
 
-    /* 🔄 Carousel */
-    nextTrack.addEventListener("click",()=>{const t=trackSwiper;if(t.children.length>1){t.appendChild(t.firstElementChild);}});
-    prevTrack.addEventListener("click",()=>{const t=trackSwiper;if(t.children.length>1){t.insertBefore(t.lastElementChild,t.first
-
-         prevTrack.addEventListener("click",()=>{
-      const t=trackSwiper;
-      if(t.children.length>1){
-        t.insertBefore(t.lastElementChild,t.firstElementChild);
+    /* 🔄 Carousel Navigation */
+    nextTrackBtn.addEventListener("click", () => {
+      const t = trackSwiperEl;
+      if (t.children.length > 1) {
+        t.appendChild(t.firstElementChild);
+      }
+    });
+    prevTrackBtn.addEventListener("click", () => {
+      const t = trackSwiperEl;
+      if (t.children.length > 1) {
+        t.insertBefore(t.lastElementChild, t.firstElementChild);
       }
     });
 
-    /* 🚀 Initial Load */
+    /* 🍔 Mobile Menu Toggle */
+    hamburgerBtn.addEventListener("click", () => {
+      siteNav.classList.toggle("open");
+    });
+
+    /* 🚀 Initial Load Actions */
     loadSubmissions();
     loadCertified();
 
     /* 🌌 Background Canvas Animation */
-    const canvas=document.getElementById("bgCanvas");
-    const ctx=canvas.getContext("2d");
-    let w,h;
-    function resize(){
-      w=canvas.width=window.innerWidth;
-      h=canvas.height=window.innerHeight;
+    const canvas = document.getElementById("bgCanvas");
+    const ctx = canvas.getContext("2d");
+    let w, h;
+    function resizeCanvas() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
     }
-    window.addEventListener("resize",resize);
-    resize();
-    let t=0;
-    function draw(){
-      ctx.fillStyle="rgba(11,13,18,0.6)";
-      ctx.fillRect(0,0,w,h);
-
-      ctx.strokeStyle="rgba(0,255,195,0.4)";
-      for(let i=0;i<30;i++){
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    let t = 0;
+    function drawBackground() {
+      ctx.fillStyle = "rgba(11,13,18,0.6)";
+      ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = "rgba(0,255,195,0.4)";
+      for (let i = 0; i < 30; i++) {
         ctx.beginPath();
-        ctx.moveTo(0,h/2+i*20+Math.sin(t/20+i)*10);
-        ctx.lineTo(w,h/2+i*20+Math.sin(t/20+i)*10);
+        ctx.moveTo(0, h/2 + i*20 + Math.sin(t/20 + i) * 10);
+        ctx.lineTo(w, h/2 + i*20 + Math.sin(t/20 + i) * 10);
         ctx.stroke();
       }
-
-      ctx.strokeStyle="rgba(255,0,170,0.4)";
+      ctx.strokeStyle = "rgba(255,0,170,0.4)";
       ctx.beginPath();
-      for(let x=0;x<w;x+=10){
-        ctx.lineTo(x,h/2+Math.sin((x+t)/40)*60);
+      for (let x = 0; x < w; x += 10) {
+        ctx.lineTo(x, h/2 + Math.sin((x + t) / 40) * 60);
       }
       ctx.stroke();
-
-      t+=2;
-      requestAnimationFrame(draw);
+      t += 2;
+      requestAnimationFrame(drawBackground);
     }
-    draw();
+    // Start canvas animation if user has not reduced motion
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      requestAnimationFrame(drawBackground);
+    }
 
-    /* 🎥 GSAP Scroll Reveal */
-    gsap.utils.toArray('.section').forEach(sec=>{
-      gsap.from(sec,{
-        scrollTrigger:{trigger:sec,start:"top 80%"},
-        opacity:0,y:40,duration:1.2,ease:"power2.out"
+    /* 🎥 GSAP Scroll Reveal Animations */
+    if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+      gsap.utils.toArray('.section').forEach(sec => {
+        gsap.from(sec, {
+          scrollTrigger: { trigger: sec, start: "top 80%" },
+          opacity: 0,
+          y: 40,
+          duration: 1.2,
+          ease: "power2.out"
+        });
       });
-    });
+    }
   </script>
 </body>
-</html>                                                                                                  
+</html>
