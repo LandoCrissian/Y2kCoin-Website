@@ -307,7 +307,6 @@
       return;
     }
 
-    // Attempt signature request
     try {
       const message = "Sign to connect to Y2K | Roast Records";
       await web3.eth.personal.sign(message, selectedAccount, "");
@@ -317,28 +316,27 @@
       return;
     }
 
-    // ✅ Successful connection and signing
+    // ✅ Connection + signature successful
     userAddress = selectedAccount;
     const short = `${selectedAccount.slice(0, 6)}...${selectedAccount.slice(-4)}`;
     connectBtn.textContent = short;
     connectBtn.onclick = disconnectWallet;
 
-    // Show submit section always
     submissionSection.classList.remove("hidden");
 
-    // Show admin panel if admin
     if (selectedAccount === adminWallet) {
       adminPanel.classList.remove("hidden");
       loadPendingTracks();
     }
 
-    loadCertifiedTracks(); // Load verified tracks regardless of who connects
-
-    showToast("Wallet connected successfully ✅", 2000);
+    loadCertifiedTracks();
+    showToast("Wallet connected successfully ✅");
 
   } catch (err) {
-    console.error("Wallet connection failed:", err);
-    showToast("Failed to connect to wallet. Try again.");
+    console.error("Unexpected connection error:", err);
+    if (!userAddress) {
+      showToast("Failed to connect to wallet. Try again.");
+    }
   }
 }
 
