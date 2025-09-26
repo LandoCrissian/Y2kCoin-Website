@@ -99,6 +99,11 @@
     }
     .hidden { display: none; }
   </style>
+
+  <!-- WalletConnect / Web3Modal v2 -->
+<script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.5/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
 </head>
 <body>
   <header>
@@ -187,28 +192,82 @@
     const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
         // 🔌 Wallet Connect Logic
-    connectBtn.addEventListener("click", async () => {
-      if (typeof window.ethereum === "undefined") {
-        alert("Please install MetaMask.");
+     let web3Modal;
+  let provider;
+  let web3;
+  let selectedAccount = null;
+  const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+
+  async function initWalletModal() {
+    const providerOptions = {
+      walletconnect: {
+        package: window.WalletConnectProvider.default,
+        options: {
+          rpc: {
+            25: "https://evm.cronos.org"
+          },
+          chainId: 25
+        }
+      }
+    };
+
+    web3Modal = new window.Web3Modal.default({
+      cacheProvider: false,
+      providerOptions
+    });
+  }
+
+  async function connectWallet() {
+    try {
+      provider = await web3Modal.connect();
+      web3 = new Web3(provider);
+
+      const accounts = await web3.eth.getAccounts();
+      selectedAccount = accounts[0].toLowerCase();
+
+      const chainId = await web3.eth.getChainId();
+      if (chainId !== 25) {
+        showToast("Please switch to Cronos network (Chain ID 25)");
         return;
       }
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      userAddress = address.toLowerCase();
-      connectBtn.textContent = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+      // SIGN MESSAGE
+      const message = "Sign to connect to Y2K | Roast Records";
+      await web3.eth.personal.sign(message, selectedAccount, "");
+
+      // UI Updates
+      const short = `${selectedAccount.slice(0, 6)}...${selectedAccount.slice(-4)}`;
+      connectBtn.textContent = short;
+      connectBtn.onclick = disconnectWallet;
 
       submissionSection.classList.remove("hidden");
-
-      if (userAddress === adminWallet) {
+      if (selectedAccount === adminWallet) {
         adminPanel.classList.remove("hidden");
         loadPendingTracks();
       }
-
       loadCertifiedTracks();
-    });
+
+    } catch (err) {
+      console.error("Wallet connection failed:", err);
+      showToast("Connection failed.");
+    }
+  }
+
+  function disconnectWallet() {
+    provider = null;
+    selectedAccount = null;
+    web3Modal.clearCachedProvider();
+    connectBtn.textContent = "Connect Wallet";
+    connectBtn.onclick = connectWallet;
+    submissionSection.classList.add("hidden");
+    adminPanel.classList.add("hidden");
+  }
+
+  // Init modal on page load
+  window.addEventListener("load", () => {
+    initWalletModal();
+    connectBtn.onclick = connectWallet;
+  });
 
     // 📝 Submit Track to Firestore
     document.getElementById("trackForm").addEventListener("submit", async (e) => {
