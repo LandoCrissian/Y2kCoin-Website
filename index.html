@@ -140,6 +140,15 @@
 .audio-wrapper {
   margin-top: 10px;
 }
+
+    .cro-payment-instructions {
+  background-color: #111;
+  border-left: 4px solid #00ffd0;
+  padding: 12px;
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
   </style>
 
   <!-- WalletConnect / Web3Modal v2 -->
@@ -176,23 +185,45 @@
     <p>Y2K | Roast Records is the first premium Web3 label for real and AI artists — built on Cronos, powered by community, and open to anyone who dares to drop heat.</p>
   </div>
 
-    <section id="submissionSection" class="hidden">
-    <h2>Submit Your Track</h2>
-    <form id="trackForm">
-      <input type="text" id="projectName" placeholder="Project / Artist Name" required />
-      <input type="text" id="twitterHandle" placeholder="𝕏 / Twitter Handle" required />
-      <select id="vibeSelect" required>
-        <option value="">Select Genre Vibe</option>
-        <option value="glitch">Glitch</option>
-        <option value="dub">Dub</option>
-        <option value="trap">Trap</option>
-        <option value="ai">AI Generated</option>
-        <option value="other">Other</option>
-      </select>
-      <textarea id="notes" rows="3" placeholder="Optional Notes or Ideas"></textarea>
-      <button type="submit">Submit Track</button>
-    </form>
-  </section>
+    <section class="section" id="submit">
+  <h2>Submit a Track</h2>
+  <form id="submission-form">
+    <label for="name">Project / Artist Name</label>
+    <input type="text" id="name" required placeholder="Enter artist or project name" />
+
+    <label for="twitter">Twitter / X Handle</label>
+    <input type="text" id="twitter" required placeholder="@yourhandle" />
+
+    <label for="vibe">Select Genre / Vibe</label>
+    <select id="vibe" required>
+      <option value="" disabled selected>Select a genre</option>
+      <option value="Glitch">Glitch</option>
+      <option value="Dub">Dub</option>
+      <option value="Trap">Trap</option>
+      <option value="Hip-Hop">Hip-Hop</option>
+      <option value="R&B / Soul">R&B / Soul</option>
+      <option value="Rock / Metal">Rock / Metal</option>
+      <option value="Pop">Pop</option>
+      <option value="EDM / Dance">EDM / Dance</option>
+      <option value="Country">Country</option>
+      <option value="Reggaeton">Reggaeton</option>
+      <option value="Afrobeats">Afrobeats</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="notes">Optional Notes</label>
+    <textarea id="notes" placeholder="Add any extra context or vibe requests..."></textarea>
+
+    <button type="submit">Submit Track Request</button>
+
+    <p class="cro-payment-instructions">
+      <strong>⚠️ 30 CRO Required:</strong><br>
+      After submitting, send <strong>30 CRO</strong> to:<br>
+      <code>0x99FD6Daaa57ebE7f10Ee94E6c1b7522Fa2b0d100</code><br>
+      This funds the anthem and supports buybacks.
+    </p>
+  </form>
+</section>
 
   <section id="certifiedTracks">
     <h2>Certified Tracks</h2>
