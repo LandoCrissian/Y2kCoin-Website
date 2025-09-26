@@ -170,33 +170,31 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
   <script>
-    // 🔐 Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
-      authDomain: "y2kroastrecords.firebaseapp.com",
-      projectId: "y2kroastrecords",
-      storageBucket: "y2kroastrecords.appspot.com",
-      messagingSenderId: "313829428782",
-      appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+  // 🔐 Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyByE3Z0Ui_aFr1JUgVzw3ZDatGv8DzqVcE",
+    authDomain: "y2kroastrecords.firebaseapp.com",
+    projectId: "y2kroastrecords",
+    storageBucket: "y2kroastrecords.appspot.com",
+    messagingSenderId: "313829428782",
+    appId: "1:313829428782:web:4e42771ba525f6f297d9bf"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    const connectBtn = document.getElementById("connectWallet");
-    const submissionSection = document.getElementById("submissionSection");
-    const adminPanel = document.getElementById("adminPanel");
-    const certifiedList = document.getElementById("certifiedList");
-    const pendingList = document.getElementById("pendingList");
+  const connectBtn = document.getElementById("connectWallet");
+  const submissionSection = document.getElementById("submissionSection");
+  const adminPanel = document.getElementById("adminPanel");
+  const certifiedList = document.getElementById("certifiedList");
+  const pendingList = document.getElementById("pendingList");
 
-    let userAddress = null;
-    const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
+  let userAddress = null;
+  const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
-        // 🔌 Wallet Connect Logic
-     let web3Modal;
+  let web3Modal;
   let provider;
   let web3;
   let selectedAccount = null;
-  const adminWallet = "0x7FC2AB08F46C10489Bab5D694D574022f1048198".toLowerCase();
 
   async function initWalletModal() {
     const providerOptions = {
@@ -234,6 +232,7 @@
       // SIGN MESSAGE
       const message = "Sign to connect to Y2K | Roast Records";
       await web3.eth.personal.sign(message, selectedAccount, "");
+      userAddress = selectedAccount;
 
       // UI Updates
       const short = `${selectedAccount.slice(0, 6)}...${selectedAccount.slice(-4)}`;
@@ -263,99 +262,98 @@
     adminPanel.classList.add("hidden");
   }
 
-  // Init modal on page load
   window.addEventListener("load", () => {
     initWalletModal();
     connectBtn.onclick = connectWallet;
   });
 
-    // 📝 Submit Track to Firestore
-    document.getElementById("trackForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("projectName").value;
-      const twitter = document.getElementById("twitterHandle").value;
-      const vibe = document.getElementById("vibeSelect").value;
-      const notes = document.getElementById("notes").value;
+  // 📝 Submit Track to Firestore
+  document.getElementById("trackForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("projectName").value;
+    const twitter = document.getElementById("twitterHandle").value;
+    const vibe = document.getElementById("vibeSelect").value;
+    const notes = document.getElementById("notes").value;
 
-      await db.collection("tracks").add({
-        name,
-        twitter,
-        vibe,
-        notes,
-        wallet: userAddress,
-        timestamp: Date.now(),
-        certified: false,
-        ipfs: ""
-      });
-
-      alert("Track submitted!");
-      e.target.reset();
+    await db.collection("tracks").add({
+      name,
+      twitter,
+      vibe,
+      notes,
+      wallet: userAddress,
+      timestamp: Date.now(),
+      certified: false,
+      ipfs: ""
     });
 
-    // 🎧 Load Certified Tracks
-    async function loadCertifiedTracks() {
-      const snapshot = await db.collection("tracks").where("certified", "==", true).orderBy("timestamp", "desc").get();
-      certifiedList.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const card = document.createElement("div");
-        card.className = "track-card";
-        card.innerHTML = `
-          <strong>${data.name}</strong><br/>
-          <small>${data.vibe} — ${data.twitter}</small><br/><br/>
-          <audio controls src="https://ipfs.io/ipfs/${data.ipfs}" style="width:100%"></audio>
-        `;
-        certifiedList.appendChild(card);
-      });
-    }
+    showToast("Track submitted!");
+    e.target.reset();
+  });
 
-    // 🛠️ Load & Certify Tracks (Admin Only)
-    async function loadPendingTracks() {
-      const snapshot = await db.collection("tracks").where("certified", "==", false).orderBy("timestamp", "desc").get();
-      pendingList.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const card = document.createElement("div");
-        card.className = "track-card";
-        card.innerHTML = `
-          <strong>${data.name}</strong><br/>
-          <small>${data.vibe} — ${data.twitter}</small><br/>
-          Wallet: ${data.wallet}<br/>
-          Notes: ${data.notes || "—"}<br/><br/>
-          <input type="text" placeholder="IPFS link" id="ipfs-${doc.id}" />
-          <button onclick="certifyTrack('${doc.id}')">Certify</button>
-        `;
-        pendingList.appendChild(card);
-      });
-    }
+  // 🎧 Load Certified Tracks
+  async function loadCertifiedTracks() {
+    const snapshot = await db.collection("tracks").where("certified", "==", true).orderBy("timestamp", "desc").get();
+    certifiedList.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const card = document.createElement("div");
+      card.className = "track-card";
+      card.innerHTML = `
+        <strong>${data.name}</strong><br/>
+        <small>${data.vibe} — ${data.twitter}</small><br/><br/>
+        <audio controls src="https://ipfs.io/ipfs/${data.ipfs}" style="width:100%"></audio>
+      `;
+      certifiedList.appendChild(card);
+    });
+  }
 
-    // ✅ Certify Track
-    async function certifyTrack(docId) {
-      const ipfs = document.getElementById(`ipfs-${docId}`).value.trim();
-      if (!ipfs) return alert("Please enter IPFS link.");
-      await db.collection("tracks").doc(docId).update({
-        certified: true,
-        ipfs
-      });
-      showToast("Track submitted!");
-      loadPendingTracks();
-      loadCertifiedTracks();
-    }
+  // 🛠️ Load & Certify Tracks (Admin Only)
+  async function loadPendingTracks() {
+    const snapshot = await db.collection("tracks").where("certified", "==", false).orderBy("timestamp", "desc").get();
+    pendingList.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const card = document.createElement("div");
+      card.className = "track-card";
+      card.innerHTML = `
+        <strong>${data.name}</strong><br/>
+        <small>${data.vibe} — ${data.twitter}</small><br/>
+        Wallet: ${data.wallet}<br/>
+        Notes: ${data.notes || "—"}<br/><br/>
+        <input type="text" placeholder="IPFS link" id="ipfs-${doc.id}" />
+        <button onclick="certifyTrack('${doc.id}')">Certify</button>
+      `;
+      pendingList.appendChild(card);
+    });
+  }
 
-    // ✅ Toast Handler
-function showToast(message, duration = 3000) {
-  const toast = document.getElementById("toast");
-  toast.innerText = message;
-  toast.style.display = "block";
-  toast.style.opacity = "1";
+  // ✅ Certify Track
+  async function certifyTrack(docId) {
+    const ipfs = document.getElementById(`ipfs-${docId}`).value.trim();
+    if (!ipfs) return showToast("Please enter IPFS link.");
+    await db.collection("tracks").doc(docId).update({
+      certified: true,
+      ipfs
+    });
+    showToast("Track certified!");
+    loadPendingTracks();
+    loadCertifiedTracks();
+  }
 
-  setTimeout(() => {
-    toast.style.opacity = "0";
+  // ✅ Toast Handler
+  function showToast(message, duration = 3000) {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.style.display = "block";
+    toast.style.opacity = "1";
+
     setTimeout(() => {
-      toast.style.display = "none";
-    }, 300);
-  }, duration);
-}
-  </script>
+      toast.style.opacity = "0";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 300);
+    }, duration);
+  }
+</script>
 </body>
 </html>
