@@ -294,41 +294,51 @@
     web3 = new Web3(provider);
 
     const accounts = await web3.eth.getAccounts();
-    selectedAccount = accounts[0].toLowerCase();
-
-    const chainId = await web3.eth.getChainId();
-    if (chainId !== 25) {
-      showToast("Please switch to Cronos network (Chain ID 25)");
+    if (!accounts || accounts.length === 0) {
+      showToast("No accounts found.");
       return;
     }
 
-    const message = "Sign to connect to Y2K | Roast Records";
+    selectedAccount = accounts[0].toLowerCase();
+    const chainId = await web3.eth.getChainId();
+
+    if (chainId !== 25) {
+      showToast("Please switch to Cronos (Chain ID 25)");
+      return;
+    }
+
+    // Attempt signature request
     try {
+      const message = "Sign to connect to Y2K | Roast Records";
       await web3.eth.personal.sign(message, selectedAccount, "");
     } catch (signError) {
-      console.warn("User rejected signature:", signError);
-      showToast("Signature required to connect.");
+      console.warn("Signature rejected:", signError);
+      showToast("Signature required to continue.");
       return;
     }
 
+    // ✅ Successful connection and signing
     userAddress = selectedAccount;
-
     const short = `${selectedAccount.slice(0, 6)}...${selectedAccount.slice(-4)}`;
     connectBtn.textContent = short;
     connectBtn.onclick = disconnectWallet;
 
+    // Show submit section always
     submissionSection.classList.remove("hidden");
+
+    // Show admin panel if admin
     if (selectedAccount === adminWallet) {
       adminPanel.classList.remove("hidden");
       loadPendingTracks();
     }
 
-    loadCertifiedTracks();
-    showToast("Connected", 2000);
+    loadCertifiedTracks(); // Load verified tracks regardless of who connects
+
+    showToast("Wallet connected successfully ✅", 2000);
 
   } catch (err) {
-    console.error("Wallet connect error:", err);
-    showToast("Failed to connect to wallet.");
+    console.error("Wallet connection failed:", err);
+    showToast("Failed to connect to wallet. Try again.");
   }
 }
 
