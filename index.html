@@ -98,6 +98,48 @@
       border: 1px solid #333;
     }
     .hidden { display: none; }
+
+    .track-card {
+  background-color: #111;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+.track-card:hover {
+  transform: translateY(-2px);
+}
+.track-meta {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+.genre-pill {
+  display: inline-block;
+  background-color: #d6b66c;
+  color: #000;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 20px;
+  margin-right: 6px;
+  text-transform: uppercase;
+}
+.certified-badge {
+  background-color: #d6b66c;
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-top: 6px;
+}
+.audio-wrapper {
+  margin-top: 10px;
+}
   </style>
 
   <!-- WalletConnect / Web3Modal v2 -->
@@ -291,21 +333,30 @@
   });
 
   // 🎧 Load Certified Tracks
-  async function loadCertifiedTracks() {
-    const snapshot = await db.collection("tracks").where("certified", "==", true).orderBy("timestamp", "desc").get();
-    certifiedList.innerHTML = "";
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const card = document.createElement("div");
-      card.className = "track-card";
-      card.innerHTML = `
-        <strong>${data.name}</strong><br/>
-        <small>${data.vibe} — ${data.twitter}</small><br/><br/>
+async function loadCertifiedTracks() {
+  const snapshot = await db.collection("tracks").where("certified", "==", true).orderBy("timestamp", "desc").get();
+  certifiedList.innerHTML = "";
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const date = new Date(data.timestamp).toLocaleDateString();
+
+    const card = document.createElement("div");
+    card.className = "track-card";
+    card.innerHTML = `
+      <div class="track-meta">
+        <span class="genre-pill">#${data.vibe}</span>
+        <span>${date}</span>
+      </div>
+      <strong>${data.name}</strong><br/>
+      <small>${data.twitter}</small>
+      <div class="audio-wrapper">
         <audio controls src="https://ipfs.io/ipfs/${data.ipfs}" style="width:100%"></audio>
-      `;
-      certifiedList.appendChild(card);
-    });
-  }
+      </div>
+      <div class="certified-badge">✓ Certified</div>
+    `;
+    certifiedList.appendChild(card);
+  });
+}
 
   // 🛠️ Load & Certify Tracks (Admin Only)
   async function loadPendingTracks() {
