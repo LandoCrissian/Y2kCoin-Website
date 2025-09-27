@@ -431,22 +431,14 @@ async function loadCertifiedTracks() {
   }
 
   // ✅ Certify Track
-  async function certifyTrack(docId) {
-    const ipfs = document.getElementById(`ipfs-${docId}`).value.trim();
-    if (!ipfs) return showToast("Please enter IPFS link.");
-    await db.collection("tracks").doc(docId).update({
-      certified: true,
-      ipfs
-    });
-    showToast("Track certified!");
-    loadPendingTracks();
-    loadCertifiedTracks();
-  }
+  function showToast(message, duration = 3000) {
+  const toast = document.getElementById("toast");
+  toast.innerText = message;
+  toast.classList.add("showing");
 
-  // ✅ Toast Handler
-  #toast.showing {
-  opacity: 1 !important;
-  display: block !important;
+  setTimeout(() => {
+    toast.classList.remove("showing");
+  }, duration);
 }
 </script>
 </body>
