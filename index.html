@@ -149,6 +149,11 @@
   font-size: 0.9rem;
   color: #ccc;
 }
+
+    #toast.showing {
+  opacity: 1 !important;
+  display: block !important;
+}
   </style>
 
   <!-- WalletConnect / Web3Modal v2 -->
@@ -322,15 +327,16 @@
     connectBtn.textContent = short;
     connectBtn.onclick = disconnectWallet;
 
-    submissionSection.classList.remove("hidden");
+    const submissionSection = document.getElementById("submit");
 
     if (selectedAccount === adminWallet) {
       adminPanel.classList.remove("hidden");
       loadPendingTracks();
     }
 
+    
     loadCertifiedTracks();
-    showToast("Wallet connected successfully ✅");
+    showToast("✅ Wallet connected!", 3000);
 
   } catch (err) {
     console.error("Unexpected connection error:", err);
@@ -438,19 +444,10 @@ async function loadCertifiedTracks() {
   }
 
   // ✅ Toast Handler
-  function showToast(message, duration = 3000) {
-    const toast = document.getElementById("toast");
-    toast.innerText = message;
-    toast.style.display = "block";
-    toast.style.opacity = "1";
-
-    setTimeout(() => {
-      toast.style.opacity = "0";
-      setTimeout(() => {
-        toast.style.display = "none";
-      }, 300);
-    }, duration);
-  }
+  #toast.showing {
+  opacity: 1 !important;
+  display: block !important;
+}
 </script>
 </body>
 </html>
